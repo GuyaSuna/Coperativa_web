@@ -8,14 +8,14 @@ const Header = () => {
     <header className="header">
       <div className="logo">
         <Link href="/">
-          <Image className="logo-Img"src={logo} alt="Coviamuro Logo" width={150} height={60} />
+          <Image className="logo-Img"src={logo} alt="Coviamuro Logo" width={65} height={65} />
         </Link>
       </div>
       <nav className="nav">
         <ul>
           <li>
-            <Link href="/about">
-              <button className="navBtn">Acerca de</button>
+            <Link href="/Form">
+              <button className="navBtn">Form</button>
             </Link>
           </li>
           <li>

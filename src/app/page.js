@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import Header from '../app/Components/header';
-import Footer from '../app/Components/footer';
 import  '../../public/Styles.css';
 import imagen from '../../public/LogoApp.jpg'
 
@@ -17,14 +16,16 @@ export default function Home() {
               <button className="btn">Acerca de Nosotros</button>
             </Link>
           </div>
-          <div className="heroImage">
-            <Image
-              src={imagen}
-              alt="Viviendas"
-              width={600}
-              height={400}
-            />
-          </div>
+          <iframe
+        className="heroVideo"
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/w5B9cPEaEss"
+        
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
         </section>
         <section className="services">
           <h2>Nuestros Servicios</h2>
@@ -44,7 +45,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <Footer />
     </div>
   );
 }
