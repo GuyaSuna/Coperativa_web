@@ -1,8 +1,7 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import Header from '../app/Components/header';
-import  '../../public/Styles.css';
-import imagen from '../../public/LogoApp.jpg'
+import Image from "next/image";
+import Link from "next/link";
+import Header from "../app/Components/header";
+import imagen from "../../public/LogoApp.jpg";
 
 export default function Home() {
   return (
@@ -16,16 +15,16 @@ export default function Home() {
               <button className="btn">Acerca de Nosotros</button>
             </Link>
           </div>
+
           <iframe
-        className="heroVideo"
-        width="560"
-        height="315"
-        src="https://www.youtube.com/embed/w5B9cPEaEss"
-        
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowFullScreen
-      ></iframe>
+            className="heroVideo"
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/w5B9cPEaEss"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </section>
         <section className="services">
           <h2>Nuestros Servicios</h2>
