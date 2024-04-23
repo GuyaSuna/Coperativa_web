@@ -93,9 +93,8 @@ const Form = () => {
       HouseNumber,
       NumberOfBedrooms
     };
-    router.push({
-      pathname: '../UserInfo/page',
-    });
+    console.log(data)
+    router.push('../UserInfo');
   };
   ;
 
