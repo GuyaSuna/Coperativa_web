@@ -3,31 +3,33 @@
   max-width: 600px;
   height: 100%;
   margin: auto;
-  margin-top: 150px;
+  margin-top: 30px;
+
   border-radius: 10px;
-  background-color: #f7f7f7;
+  background-color: #ca9d58;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   align-items: center;
 }
 
-
 .label {
+  margin-left: 5px;
   margin-bottom: 8px;
   color: #333;
 }
 
 .input {
-  width: calc(100% - 22px); /* Resta el padding y el borde del ancho total */
+  width: 90%; /* Resta el padding y el borde del ancho total */
   padding: 10px;
+  margin:10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
 }
 
-
 .checkbox {
   margin-right: 5px;
 }
+
 .button {
   display: inline-block;
   padding: 10px 20px;
@@ -36,8 +38,6 @@
   border: none;
   border-radius: 5px;
   font-size: 16px;
-
   margin-top: 40px;
-
 }
 

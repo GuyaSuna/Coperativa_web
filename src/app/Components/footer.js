@@ -1,5 +1,3 @@
-import "../globals.css";
-
 const Footer = () => {
   return (
     <footer className="footer">

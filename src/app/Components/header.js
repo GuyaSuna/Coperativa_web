@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "../../../public/LogoApp.jpg"; // Importa la imagen del logo
-import "../globals.css";
 
 const Header = () => {
   return (
