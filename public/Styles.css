@@ -126,29 +126,10 @@
   background-color: beige;
 }
 
-/* Estilo del Form */
-.form {
-  max-width: 700px;
-  margin: 150px auto;
-  padding: 20px;
-  border: 1px solid #4b4a4a;
-  border-radius: 15px;
-  background-color: rgb(243, 243, 242);
-}
 
-.label {
-  display: block;
-  margin-bottom: 10px;
-  /* Agrega un espacio entre las etiquetas */
-}
 
-.input {
-  margin-left: 0;
-  /* Elimina los márgenes horizontales */
-  margin-right: 0;
-  width: calc(100% - 20px);
-  /* Establece el ancho del input teniendo en cuenta el margen izquierdo de la etiqueta */
-}
+
+
 .header{
   position: fixed;
   left: 0;

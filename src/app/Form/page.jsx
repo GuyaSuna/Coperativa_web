@@ -2,9 +2,12 @@
 
 import React from "react";
 import { useState } from "react";
-import "../../../public/Styles.css";
+import "./FormStyle.css";
 
 const Form = () => {
+  const [Conyuge , setConyuge] = useState(false)
+  const [Concubino , setConcubino] = useState(false)
+  const [ConcubinoName, setConcubinoName] = useState("")
   const [userData, setUserData] = useState({
     userNumber: "",
     userName: "",
@@ -17,6 +20,26 @@ const Form = () => {
     houseNumber: "",
     numberOfBedrooms: 0,
   });
+
+  const handleChangeConyuge = (e) => {
+    const { name, value, type, checked } = e.target;
+    if(checked){
+      setConyuge(true)
+      setConcubino(false)
+    }else{
+      setConyuge(false)
+    }
+  } 
+
+  const handleChangeConcubino = (e) => {
+    const { name, value, type, checked } = e.target;
+    if(checked == true){
+      setConyuge(false)
+      setConcubino(true)
+    }else{
+      setConcubino(false)
+    }
+  } 
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -80,6 +103,7 @@ const Form = () => {
     numberOfBedrooms,
   } = userData;
   return (
+    <div className="general-container">
     <form onSubmit={handleSubmit} className="form">
       <label className="label">
         Nro. Usuario:
@@ -119,8 +143,8 @@ const Form = () => {
         <input
           type="checkbox"
           name="hasSpouse"
-          checked={hasSpouse}
-          onChange={handleChange}
+          checked={Conyuge}
+          onChange={handleChangeConyuge}
           className="checkbox"
         />
       </label>
@@ -129,40 +153,36 @@ const Form = () => {
         <input
           type="checkbox"
           name="hasSpouse"
-          checked={hasSpouse}
-          onChange={handleChange}
+          checked={Concubino}
+          onChange={handleChangeConcubino}
           className="checkbox"
         />
+        <br/>
       </label>
-      <br />
-      {hasSpouse && (
+        {Concubino && 
         <label className="label">
-          Cantidad de Integrantes:
+          Nombre Concubino:
           <input
-            type="number"
-            name="numberOfFamilyMembers"
-            value={numberOfFamilyMembers}
+            type="text"
+            name="SuplenteName"
+            value={ConcubinoName}
             onChange={handleChange}
             className="input"
           />
         </label>
-      )}
-      <br />
-      {[...Array(numberOfFamilyMembers)].map((_, index) => (
-        <div key={index}>
-          <label className="label">
-            Nombre y Apellidos de los Integrantes {index + 1}:
-            <input
-              type="text"
-              name="name"
-              value={familyMembers[index]?.name || ""}
-              onChange={(e) => handleFamilyMemberChange(e, index)}
-              className="input"
-            />
-          </label>
-          <br />
-        </div>
-      ))}
+        }
+        {Conyuge && 
+        <label className="label">
+          Nombre Conyuge:
+          <input
+            type="text"
+            name="SuplenteName"
+            value={entryDate}
+            onChange={handleChange}
+            className="input"
+          />
+        </label>
+        }
       <label className="label">
         Fecha de Ingreso:
         <input
@@ -210,7 +230,7 @@ const Form = () => {
       <button type="submit" className="button">
         Submit
       </button>
-    </form>
+    </form></div>
   );
 };
 
