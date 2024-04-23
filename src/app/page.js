@@ -1,8 +1,6 @@
-import Image from 'next/image';
+
 import Link from 'next/link';
-import Header from '../app/Components/header';
-import  '../../public/Styles.css';
-import imagen from '../../public/LogoApp.jpg'
+
 
 export default function Home() {
   return (

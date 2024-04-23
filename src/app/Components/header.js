@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import '../../../public/Styles.css'; // Importa el archivo correcto de estilos
 import logo from '../../../public/LogoApp.jpg'; // Importa la imagen del logo
 
 const Header = () => {

@@ -1,25 +1,64 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "./FormStyle.css";
+import { useRouter } from 'next/navigation';
 
 const Form = () => {
+  const router = useRouter();
   const [Conyuge , setConyuge] = useState(false)
   const [Concubino , setConcubino] = useState(false)
-  const [ConcubinoName, setConcubinoName] = useState("")
-  const [userData, setUserData] = useState({
-    userNumber: "",
-    userName: "",
-    userLastName: "",
-    hasSpouse: false,
-    numberOfFamilyMembers: 0,
-    familyMembers: [],
-    entryDate: "",
-    ciNumber: "",
-    houseNumber: "",
-    numberOfBedrooms: 0,
-  });
+  const [Substitutename, setSubstituteName] = useState("")
+  const [Username , setUsername] = useState("")
+  const [UserLastName , setUserLastName] = useState("")
+  const [UserNumber , setUserNumber] = useState()
+  const [EntryDate , setEntryDate] = useState("")
+  const [CiNumber , setCiNumber] = useState()
+  const [HouseNumber , setHouseNumber] = useState()
+  const [ NumberOfBedrooms , setNumbersOfBedrooms] = useState()  
+
+
+
+  const handleChangesubstitutename = (e) =>{
+    setSubstituteName(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeNumberBedrooms = (e) =>{
+    setNumbersOfBedrooms(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeHouseNumber = (e) =>{
+    setHouseNumber(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeCiNumber = (e) =>{
+    setCiNumber(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeEntryDate = (e) =>{
+    setEntryDate(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeUserNumber = (e) =>{
+    setUserNumber(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeLastName = (e) =>{
+    setUserLastName(e.target.value)
+    console.log(e.target.value)
+  }
+
+  const handleChangeUserName = (e) =>{
+    setUsername(e.target.value)
+    console.log(e.target.value)
+  }
 
   const handleChangeConyuge = (e) => {
     const { name, value, type, checked } = e.target;
@@ -41,67 +80,25 @@ const Form = () => {
     }
   } 
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
 
-    // Si es un checkbox, maneja la selección exclusiva
-    if (type === "checkbox") {
-      if (name === "hasSpouse" && checked) {
-        // Si se selecciona el checkbox "Cónyuge", deselecciona "Concubino"
-        setUserData((prevData) => ({
-          ...prevData,
-          hasSpouse: true,
-          hasConcubine: false,
-        }));
-      } else if (name === "hasConcubine" && checked) {
-        // Si se selecciona el checkbox "Concubino", deselecciona "Cónyuge"
-        setUserData((prevData) => ({
-          ...prevData,
-          hasSpouse: false,
-          hasConcubine: true,
-        }));
-      } else {
-        // Si se deselecciona un checkbox, actualiza su valor directamente
-        setUserData((prevData) => ({
-          ...prevData,
-          [name]: checked,
-        }));
-      }
-    } else {
-      // Si no es un checkbox, actualiza el estado normalmente
-      setUserData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleFamilyMemberChange = (e, index) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => {
-      const familyMembers = [...prevData.familyMembers];
-      familyMembers[index][name] = value;
-      return { ...prevData, familyMembers };
-    });
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(userData);
-    // Aquí puedes enviar los datos a tu backend o hacer lo que necesites con ellos
+    const data = {
+      Username,
+      UserLastName,
+      UserNumber,
+      EntryDate,
+      CiNumber,
+      HouseNumber,
+      NumberOfBedrooms
+    };
+    router.push({
+      pathname: '../UserInfo/page',
+    });
   };
-  const {
-    userNumber,
-    userName,
-    userLastName,
-    hasSpouse,
-    numberOfFamilyMembers,
-    familyMembers,
-    entryDate,
-    ciNumber,
-    houseNumber,
-    numberOfBedrooms,
-  } = userData;
+  ;
+
   return (
     <div className="general-container">
     <form onSubmit={handleSubmit} className="form">
@@ -110,8 +107,8 @@ const Form = () => {
         <input
           type="text"
           name="userNumber"
-          value={userNumber}
-          onChange={handleChange}
+          value={UserNumber}
+          onChange={handleChangeUserNumber}
           className="input"
         />
       </label>
@@ -121,8 +118,8 @@ const Form = () => {
         <input
           type="text"
           name="userName"
-          value={userName}
-          onChange={handleChange}
+          value={Username}
+          onChange={handleChangeUserName}
           className="input"
         />
       </label>
@@ -132,8 +129,8 @@ const Form = () => {
         <input
           type="text"
           name="userLastName"
-          value={userLastName}
-          onChange={handleChange}
+          value={UserLastName}
+          onChange={handleChangeLastName}
           className="input"
         />
       </label>
@@ -165,8 +162,8 @@ const Form = () => {
           <input
             type="text"
             name="SuplenteName"
-            value={ConcubinoName}
-            onChange={handleChange}
+            value={Substitutename}
+            onChange={handleChangesubstitutename}
             className="input"
           />
         </label>
@@ -177,8 +174,8 @@ const Form = () => {
           <input
             type="text"
             name="SuplenteName"
-            value={entryDate}
-            onChange={handleChange}
+            value={Substitutename}
+            onChange={handleChangesubstitutename}
             className="input"
           />
         </label>
@@ -188,8 +185,8 @@ const Form = () => {
         <input
           type="date"
           name="entryDate"
-          value={entryDate}
-          onChange={handleChange}
+          value={EntryDate}
+          onChange={handleChangeEntryDate}
           className="input"
         />
       </label>
@@ -199,8 +196,8 @@ const Form = () => {
         <input
           type="text"
           name="ciNumber"
-          value={ciNumber}
-          onChange={handleChange}
+          value={CiNumber}
+          onChange={handleChangeCiNumber}
           className="input"
         />
       </label>
@@ -210,8 +207,8 @@ const Form = () => {
         <input
           type="text"
           name="houseNumber"
-          value={houseNumber}
-          onChange={handleChange}
+          value={HouseNumber}
+          onChange={handleChangeHouseNumber}
           className="input"
         />
       </label>
@@ -221,8 +218,8 @@ const Form = () => {
         <input
           type="number"
           name="numberOfBedrooms"
-          value={numberOfBedrooms}
-          onChange={handleChange}
+          value={NumberOfBedrooms}
+          onChange={handleChangeNumberBedrooms}
           className="input"
         />
       </label>
