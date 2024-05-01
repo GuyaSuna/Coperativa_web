@@ -94,9 +94,10 @@ const Form = () => {
       NumberOfBedrooms
     };
     console.log(data)
-    router.push('../UserInfo');
+    
+    router.push('../UserInfo/1');
   };
-  ;
+  
 
   return (
     <div className="general-container">

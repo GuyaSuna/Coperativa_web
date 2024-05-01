@@ -21,6 +21,7 @@ body {
   text-align: center;
 }
 
+<<<<<<< HEAD
 .hero {
   display: flex;
   justify-content: center;
@@ -131,3 +132,13 @@ body {
   width: 100%;
   background-color: beige;
 }
+=======
+    text-align: center;
+    padding: 1rem 0;
+    background-color: #193974;
+    color: #fff;
+  }
+  
+
+  
+>>>>>>> GuyaBranch
