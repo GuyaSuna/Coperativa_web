@@ -95,7 +95,7 @@ const Form = () => {
     };
     console.log(data)
     
-    router.push('../UserInfo/1');
+    router.push(`/UserInfo/${UserNumber}`);
   };
   
 
