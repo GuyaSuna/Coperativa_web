@@ -4,24 +4,31 @@ import React,{ useEffect, useState } from "react";
 import getSocio from '../../Api/api'
 const UserInfo = () => {
 
-    const [ userData , setUserData] = useState ({
-      UserNumber : 0,
-      Username : "pepe",
-      UserLastName :"Pica piedra" ,
-      EntryDate : "01/01/2024",
-      CiNumber : 12345678,
-      HouseNumber : 127,
-      NumberOfBedrooms : 2
-    })  
+    const [ userData , setUserData] = useState ({})  
 
-useEffect(() => {
-    const data =  getSocio(1)
-    setUserData(data)
-},[])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await getSocio(1);
+                console.log(data);
+                setUserData(data);
+            } catch (error) {
+                console.error("Error al obtener los datos:", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     return(
     <div>
-        {userData.CiNumber}
+        <h1>Datos del Usuario</h1>
+       <div>{userData.nombre}</div>
+       <div>{userData.apellido}</div>
+       <div>{userData.cedula}</div>
+       <div>{userData.nroSocio}</div>
     </div>
     )
 
