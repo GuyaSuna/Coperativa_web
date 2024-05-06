@@ -1,4 +1,6 @@
-import Link from "next/link";
+
+import Link from 'next/link';
+
 
 export default function Home() {
   return (
@@ -12,16 +14,16 @@ export default function Home() {
               <button className="btn">Acerca de Nosotros</button>
             </Link>
           </div>
-
           <iframe
-            className="heroVideo"
-            width="560"
-            height="315"
-            src="https://www.youtube.com/embed/w5B9cPEaEss"
-            title="YouTube video player"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe>
+        className="heroVideo"
+        width="560"
+        height="315"
+        src="https://www.youtube.com/embed/w5B9cPEaEss"
+        
+        title="YouTube video player"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      ></iframe>
         </section>
         <section className="services">
           <h2>Nuestros Servicios</h2>
