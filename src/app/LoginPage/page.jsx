@@ -10,7 +10,6 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     console.log("Usuario", adminName);
     console.log("Contraseña", password);
   };

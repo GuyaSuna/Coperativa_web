@@ -50,6 +50,7 @@ const login = async (adminName , password) => {
 };
 
 
-
-
-export default getSocio ;
+export default {
+    getSocio,
+    login
+};
