@@ -10,7 +10,7 @@ const getSocio = async (UserNumber) => {
         });
 
         if (!response.ok) {
-            throw new Error("The peticion has failed, response is not ok");
+            throw new Error("The peticion has failed, response isn't ok");
         }
 
         const data = await response.json();
@@ -22,11 +22,11 @@ const getSocio = async (UserNumber) => {
     }
 };
 
-const login = async (adminName , adminPassword) => {
+const login = async (adminName , password) => {
     try {
        const body = {
             adminName : adminName,
-            adminPassword : adminPassword, 
+            password : password, 
         }
         const response = await fetch(`${URL}/login}`, {
             method: 'GET',
