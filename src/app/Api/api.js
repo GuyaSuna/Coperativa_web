@@ -10,7 +10,7 @@ const getSocio = async (UserNumber) => {
         });
 
         if (!response.ok) {
-            throw new Error("The peticion has failed, response isn't ok");
+            throw new Error("The petition has failed, response isn't ok");
         }
 
         const data = await response.json();
@@ -50,7 +50,7 @@ const login = async (adminName , password) => {
 };
 
 
-export default {
+export {
     getSocio,
     login
 };
