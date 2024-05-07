@@ -37,7 +37,7 @@ const login = async (adminName , password) => {
         });
 
         if (!response.ok) {
-            throw new Error("Te jodiste");
+            throw new Error("No funciona Login");
         }
 
         const data = await response.json();

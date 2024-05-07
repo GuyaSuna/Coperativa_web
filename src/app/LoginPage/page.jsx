@@ -2,7 +2,6 @@
 import React from "react";
 import { useState } from "react";
 import "./LoginStyle.css";
-import Link from "next/link";
 import { login } from "../Api/api";
 import { useRouter } from 'next/navigation';
 
