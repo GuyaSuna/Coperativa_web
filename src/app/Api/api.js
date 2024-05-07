@@ -28,8 +28,8 @@ const login = async (adminName , password) => {
             adminName : adminName,
             password : password, 
         }
-        const response = await fetch(`${URL}/login}`, {
-            method: 'GET',
+        const response = await fetch(`${URL}/login`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },

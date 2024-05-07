@@ -3,21 +3,35 @@ import React from "react";
 import { useState } from "react";
 import "./LoginStyle.css";
 import Link from "next/link";
+import { login } from "../Api/api";
+import { useRouter } from 'next/navigation';
 
 const LoginPage = () => {
+  const router = useRouter();
   const [adminName, setAdminName] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Usuario", adminName);
     console.log("Contraseña", password);
+
+    const data = await login(adminName , password)
+
+    if(data == null){
+      console.log("Nope")
+    }else{
+      console.log("apa si")
+      router.push("/");
+    }
+
+
   };
 
   return (
     <div>
       <h2> Iniciar Sesión </h2>
-      <form onSubmit={handleSubmit}>
+      <form >
         <label>
           Usuario:
           <input
@@ -37,9 +51,9 @@ const LoginPage = () => {
         </label>
         <br />
 
-        <Link href="/" className="buttonLogin">
+        <button  className="buttonLogin" onClick={handleSubmit}>
           Iniciar Sesión
-        </Link>
+        </button>
       </form>
     </div>
   );
