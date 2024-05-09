@@ -86,15 +86,15 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-      UserNumber,
-      Username,
-      UserLastName,
-      CiNumber,
-      HouseNumber,
+      nroSocio: UserNumber,
+      nombre: Username,
+      apellido: UserLastName,
+      cedula: CiNumber,
+
     };
     console.log(data);
     
-    const response = await PostSocio( data ,0 , HouseNumber);
+    const response = await PostSocio( data ,1 , HouseNumber);
 
     console.log(response);
     // router.push(`/UserInfo/${UserNumber}`);

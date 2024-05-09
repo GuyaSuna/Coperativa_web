@@ -22,14 +22,15 @@ const getSocio = async (UserNumber) => {
     }
 };
 
-const PostSocio = async (Data , suplente , vivienda) => {
+const PostSocio = async (socioEntity , suplente , vivienda) => {
     try {
+        console.log(socioEntity)
         const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(Data),
+            body: JSON.stringify(socioEntity),
         });
 
         if (!response.ok) {
