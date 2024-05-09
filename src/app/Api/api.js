@@ -41,8 +41,8 @@ const PostSocio = async (socioEntity , suplente , vivienda) => {
 
         return data;
     } catch (error) {
-        console.error("Error en getSocio:", error);
-        throw new Error("Error al obtener los datos del socio");
+        console.error("Error en postSocio:", error);
+        throw new Error("Error al enviar los datos del socio");
     }
 };
 

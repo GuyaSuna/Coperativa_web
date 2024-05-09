@@ -8,16 +8,16 @@ import { PostSocio } from "../Api/api";
 
 const Form = () => {
   const router = useRouter();
-  const [Conyuge , setConyuge] = useState(false)
-  const [Concubino , setConcubino] = useState(false)
-  const [Substitutename, setSubstituteName] = useState("")
-  const [Username , setUsername] = useState("")
-  const [UserLastName , setUserLastName] = useState("")
-  const [UserNumber , setUserNumber] = useState()
-  const [EntryDate , setEntryDate] = useState("")
-  const [CiNumber , setCiNumber] = useState()
-  const [HouseNumber , setHouseNumber] = useState()
-  const [ NumberOfBedrooms , setNumbersOfBedrooms] = useState()  
+  const [Conyuge , setConyuge] = useState(false);
+  const [Concubino , setConcubino] = useState(false);
+  const [Substitutename, setSubstituteName] = useState("");
+  const [Username , setUsername] = useState("");
+  const [UserLastName , setUserLastName] = useState("");
+  const [UserNumber , setUserNumber] = useState();
+  const [EntryDate , setEntryDate] = useState("");
+  const [CiNumber , setCiNumber] = useState();
+  const [HouseNumber , setHouseNumber] = useState();
+  const [ NumberOfBedrooms , setNumbersOfBedrooms] = useState(); 
 
 
 
@@ -94,10 +94,10 @@ const Form = () => {
     };
     console.log(data);
     
-    const response = await PostSocio( data ,1 , HouseNumber);
+    const response = await PostSocio( data ,null , null);
 
     console.log(response);
-    // router.push(`/UserInfo/${UserNumber}`);
+  //  router.push(`/UserInfo/${UserNumber}`);
   };
   
 

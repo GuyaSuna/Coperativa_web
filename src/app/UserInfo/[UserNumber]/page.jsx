@@ -10,7 +10,7 @@ const UserInfo = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const data = await getSocio(1);
+                const data = await getSocio(2);
                 console.log(data);
                 setUserData(data);
             } catch (error) {
