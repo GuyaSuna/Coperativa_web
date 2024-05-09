@@ -22,6 +22,30 @@ const getSocio = async (UserNumber) => {
     }
 };
 
+const PostSocio = async (socioEntity , suplente , vivienda) => {
+    try {
+        console.log(socioEntity)
+        const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(socioEntity),
+        });
+
+        if (!response.ok) {
+            throw new Error("The petition has failed, response isn't ok");
+        }
+
+        const data = await response.json();
+
+        return data;
+    } catch (error) {
+        console.error("Error en getSocio:", error);
+        throw new Error("Error al obtener los datos del socio");
+    }
+};
+
 const login = async (adminName , password) => {
     try {
        const body = {
@@ -52,5 +76,6 @@ const login = async (adminName , password) => {
 
 export {
     getSocio,
-    login
+    login,
+    PostSocio
 };

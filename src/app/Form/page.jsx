@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import "./FormStyle.css";
 import { useRouter } from 'next/navigation';
+import { PostSocio } from "../Api/api";
 
 const Form = () => {
   const router = useRouter();
@@ -82,20 +83,21 @@ const Form = () => {
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-      Username,
-      UserLastName,
-      UserNumber,
-      EntryDate,
-      CiNumber,
-      HouseNumber,
-      NumberOfBedrooms
+      nroSocio: UserNumber,
+      nombre: Username,
+      apellido: UserLastName,
+      cedula: CiNumber,
+
     };
-    console.log(data)
+    console.log(data);
     
-    router.push(`/UserInfo/${UserNumber}`);
+    const response = await PostSocio( data ,1 , HouseNumber);
+
+    console.log(response);
+    // router.push(`/UserInfo/${UserNumber}`);
   };
   
 
@@ -180,16 +182,7 @@ const Form = () => {
           />
         </label>
         }
-      <label className="label">
-        Fecha de Ingreso:
-        <input
-          type="date"
-          name="entryDate"
-          value={EntryDate}
-          onChange={handleChangeEntryDate}
-          className="input"
-        />
-      </label>
+     
       <br />
       <label className="label">
         Numero de CI.:
@@ -213,16 +206,7 @@ const Form = () => {
         />
       </label>
       <br />
-      <label className="label">
-        Cantidad de dormitorios:
-        <input
-          type="number"
-          name="numberOfBedrooms"
-          value={NumberOfBedrooms}
-          onChange={handleChangeNumberBedrooms}
-          className="input"
-        />
-      </label>
+    
       <br />
       <button type="submit" className="button">
         Submit
@@ -232,3 +216,24 @@ const Form = () => {
 };
 
 export default Form;
+  // <label className="label">
+  //       Cantidad de dormitorios:
+  //       <input
+  //         type="number"
+  //         name="numberOfBedrooms"
+  //         value={NumberOfBedrooms}
+  //         onChange={handleChangeNumberBedrooms}
+  //         className="input"
+  //       />
+  //     </label> 
+  
+  // <label className="label">
+  //       Fecha de Ingreso:
+  //       <input
+  //         type="date"
+  //         name="entryDate"
+  //         value={EntryDate}
+  //         onChange={handleChangeEntryDate}
+  //         className="input"
+  //       />
+  //     </label>
