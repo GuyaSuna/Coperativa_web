@@ -1,55 +1,125 @@
-const URL = "http://localhost:5000/";
+const URL = "http://localhost:5000";
 
 const getSocio = async (UserNumber) => {
   try {
-    const response = await fetch(`${URL}/socio/${UserNumber}`);
-    console.log("Al menos entró");
+    const response = await fetch(`${URL}/socio/${UserNumber}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
     if (!response.ok) {
-      throw new Error("Error al obtener el socio");
+      throw new Error("The petition has failed, response isn't ok");
     }
+
     const data = await response.json();
+
     return data;
   } catch (error) {
-    console.error("Error en getSocio:", error.message);
-    throw new Error("Te re jodiste");
+    console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
   }
 };
 
-const postSocio = async (idSuplente, nroVivienda) => {
+const PostSocio = async (socioEntity, suplente, vivienda) => {
   try {
-    const response = await fetch(`${URL}/socio/${idSuplente}/${nroVivienda}`, {
+    console.log(socioEntity);
+    const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(Socio),
+      body: JSON.stringify(socioEntity),
     });
+
     if (!response.ok) {
-      throw new Error("Error al publicar el socio");
+      throw new Error("The petition has failed, response isn't ok");
     }
+
     const data = await response.json();
+
     return data;
   } catch (error) {
-    console.error("Error en postSocio:", error.message);
-    throw new Error("Te re jodiste");
+    console.error("Error en postSocio:", error);
+    throw new Error("Error al enviar los datos del socio");
   }
 };
 
-const signInUser = async (adminName, password) => {
+const login = async (adminName, password) => {
   try {
-    const response = await fetch(`${URL}/users/login`, {
+    const body = {
+      adminName: adminName,
+      password: password,
+    };
+    const response = await fetch(`${URL}/login`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        adminName: adminName,
-        password: password,
-      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
     });
 
-    return response.json();
+    if (!response.ok) {
+      throw new Error("Te jodiste");
+    }
+
+    const data = await response.json();
+
+    return data;
   } catch (error) {
-    console.log("error on searchProduct", error);
+    console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
   }
 };
 
-export { getSocio, postSocio, signInUser }; // Exportar ambas funciones
+// suplente
+
+const PostSubtitute = async (subtituteEntity) => {
+  try {
+    console.log(subtituteEntity);
+    const response = await fetch(`${URL}/suplente}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(subtituteEntity),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postSubtitute:", error);
+    throw new Error("Error al enviar los datos del socio");
+  }
+};
+
+const PostHouse = async (houseEntity) => {
+  try {
+    console.log(houseEntity);
+    const response = await fetch(`${URL}/vivienda`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(houseEntity),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postVivienda:", error);
+    throw new Error("Error al enviar los datos de la vivienda");
+  }
+};
+export { getSocio, login, PostSocio, PostSubtitute, PostHouse };

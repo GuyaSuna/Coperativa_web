@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
-import { PostHouse } from "../Api/api";
+import { PostHouse } from "../api/api";
 
 const Form = () => {
   const router = useRouter();
