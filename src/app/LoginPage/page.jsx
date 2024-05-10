@@ -1,10 +1,9 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+
+import React, { useState } from "react";
 import "./LoginStyle.css";
-import Link from "next/link";
 import { login } from "../Api/api";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -16,28 +15,27 @@ const LoginPage = () => {
     console.log("Usuario", adminName);
     console.log("Contraseña", password);
 
-    const data = await login(adminName , password)
+    const data = await login(adminName, password);
 
-    if(data == null){
-      console.log("Nope")
-    }else{
-      console.log("apa si")
+    if (data == null) {
+      console.log("Nope");
+    } else {
+      console.log("apa si");
       router.push("/");
     }
-
-
   };
 
   return (
     <div>
       <h2> Iniciar Sesión </h2>
-      <form >
+      <form>
         <label>
           Usuario:
           <input
             type="text"
             value={adminName}
-            onChange={(e) => setAdminName(e.target.value)}
+            onChange={handleChange}
+            id="adminName"
           />
         </label>
         <br />
@@ -46,12 +44,13 @@ const LoginPage = () => {
           <input
             type="password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handleChange}
+            id="password"
           />
         </label>
         <br />
 
-        <button  className="buttonLogin" onClick={handleSubmit}>
+        <button className="buttonLogin" onClick={handleSubmit}>
           Iniciar Sesión
         </button>
       </form>

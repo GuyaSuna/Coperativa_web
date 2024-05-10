@@ -4,34 +4,28 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { PostSocio, PostSubtitute } from "../Api/api";
+import { PostSocio } from "../Api/api";
 
 const Form = () => {
   const router = useRouter();
   const [Conyuge, setConyuge] = useState(false);
   const [Concubino, setConcubino] = useState(false);
   const [Substitutename, setSubstituteName] = useState("");
-  const [SubstituteLastName, setSubstituteLastName] = useState("");
-  const [SubstituteCi, setSubstituteCi] = useState("");
   const [Username, setUsername] = useState("");
   const [UserLastName, setUserLastName] = useState("");
   const [UserNumber, setUserNumber] = useState();
   const [EntryDate, setEntryDate] = useState("");
   const [CiNumber, setCiNumber] = useState();
   const [HouseNumber, setHouseNumber] = useState();
+  const [NumberOfBedrooms, setNumbersOfBedrooms] = useState();
 
   const handleChangesubstitutename = (e) => {
     setSubstituteName(e.target.value);
     console.log(e.target.value);
   };
 
-  const handleChangesubstituteLastName = (e) => {
-    setSubstituteLastName(e.target.value);
-    console.log(e.target.value);
-  };
-
-  const handleChangesubstituteCi = (e) => {
-    setSubstituteCi(e.target.value);
+  const handleChangeNumberBedrooms = (e) => {
+    setNumbersOfBedrooms(e.target.value);
     console.log(e.target.value);
   };
 
@@ -97,27 +91,10 @@ const Form = () => {
 
     if (Concubino || Conyuge) {
       // post suplente
-      const SubtituteData = {
-        nombreSuplente: Substitutename,
-        apellidoSuplente: SubstituteLastName,
-        cedulaSuplente: SubstituteCi,
-      };
-      const Subtituteresponse = await PostSubtitute(SubtituteData);
-
-      console.log(Subtituteresponse);
-
-
-      
-
-
-      const response = await PostSocio(data, HouseNumber,);
-      console.log(response);
-
-    } else {
-      const response = await PostSocio(data, HouseNumber);
-      console.log(response);
     }
+    const response = await PostSocio(data, null, null);
 
+    console.log(response);
     //  router.push(`/UserInfo/${UserNumber}`);
   };
 
@@ -179,72 +156,28 @@ const Form = () => {
           <br />
         </label>
         {Concubino && (
-          <>
-            <label className="label">
-              Nombre Concubino:
-              <input
-                type="text"
-                name="SuplenteName"
-                value={Substitutename}
-                onChange={handleChangesubstitutename}
-                className="input"
-              />
-            </label>
-            <label className="label">
-              apellido Concubino:
-              <input
-                type="text"
-                name="SuplenteName"
-                value={Substitutename}
-                onChange={handleChangesubstituteLastName}
-                className="input"
-              />
-            </label>
-            <label className="label">
-              cedula Concubino:
-              <input
-                type="text"
-                name="SuplenteName"
-                value={Substitutename}
-                onChange={handleChangesubstituteCi}
-                className="input"
-              />
-            </label>
-          </>
+          <label className="label">
+            Nombre Concubino:
+            <input
+              type="text"
+              name="SuplenteName"
+              value={Substitutename}
+              onChange={handleChangesubstitutename}
+              className="input"
+            />
+          </label>
         )}
         {Conyuge && (
-          <>
-            <label className="label">
-              Nombre Conyuge:
-              <input
-                type="text"
-                name="SuplenteName"
-                value={Substitutename}
-                onChange={handleChangesubstitutename}
-                className="input"
-              />
-            </label>
-            <label className="label">
-              apellido Conyuge:
-              <input
-                type="text"
-                name="SuplenteName"
-                value={Substitutename}
-                onChange={handleChangesubstitutename}
-                className="input"
-              />
-            </label>
-            <label className="label">
-              cedula Conyuge:
-              <input
-                type="text"
-                name="SuplenteName"
-                value={Substitutename}
-                onChange={handleChangesubstitutename}
-                className="input"
-              />
-            </label>
-          </>
+          <label className="label">
+            Nombre Conyuge:
+            <input
+              type="text"
+              name="SuplenteName"
+              value={Substitutename}
+              onChange={handleChangesubstitutename}
+              className="input"
+            />
+          </label>
         )}
 
         <br />
