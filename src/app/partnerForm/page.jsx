@@ -3,85 +3,81 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import "./FormStyle.css";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { PostSocio } from "../Api/api";
 
 const Form = () => {
   const router = useRouter();
-  const [Conyuge , setConyuge] = useState(false);
-  const [Concubino , setConcubino] = useState(false);
+  const [Conyuge, setConyuge] = useState(false);
+  const [Concubino, setConcubino] = useState(false);
   const [Substitutename, setSubstituteName] = useState("");
-  const [Username , setUsername] = useState("");
-  const [UserLastName , setUserLastName] = useState("");
-  const [UserNumber , setUserNumber] = useState();
-  const [EntryDate , setEntryDate] = useState("");
-  const [CiNumber , setCiNumber] = useState();
-  const [HouseNumber , setHouseNumber] = useState();
-  const [ NumberOfBedrooms , setNumbersOfBedrooms] = useState(); 
+  const [Username, setUsername] = useState("");
+  const [UserLastName, setUserLastName] = useState("");
+  const [UserNumber, setUserNumber] = useState();
+  const [EntryDate, setEntryDate] = useState("");
+  const [CiNumber, setCiNumber] = useState();
+  const [HouseNumber, setHouseNumber] = useState();
+  const [NumberOfBedrooms, setNumbersOfBedrooms] = useState();
 
+  const handleChangesubstitutename = (e) => {
+    setSubstituteName(e.target.value);
+    console.log(e.target.value);
+  };
 
+  const handleChangeNumberBedrooms = (e) => {
+    setNumbersOfBedrooms(e.target.value);
+    console.log(e.target.value);
+  };
 
-  const handleChangesubstitutename = (e) =>{
-    setSubstituteName(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleChangeHouseNumber = (e) => {
+    setHouseNumber(e.target.value);
+    console.log(e.target.value);
+  };
 
-  const handleChangeNumberBedrooms = (e) =>{
-    setNumbersOfBedrooms(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleChangeCiNumber = (e) => {
+    setCiNumber(e.target.value);
+    console.log(e.target.value);
+  };
 
-  const handleChangeHouseNumber = (e) =>{
-    setHouseNumber(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleChangeEntryDate = (e) => {
+    setEntryDate(e.target.value);
+    console.log(e.target.value);
+  };
 
-  const handleChangeCiNumber = (e) =>{
-    setCiNumber(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleChangeUserNumber = (e) => {
+    setUserNumber(e.target.value);
+    console.log(e.target.value);
+  };
 
-  const handleChangeEntryDate = (e) =>{
-    setEntryDate(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleChangeLastName = (e) => {
+    setUserLastName(e.target.value);
+    console.log(e.target.value);
+  };
 
-  const handleChangeUserNumber = (e) =>{
-    setUserNumber(e.target.value)
-    console.log(e.target.value)
-  }
-
-  const handleChangeLastName = (e) =>{
-    setUserLastName(e.target.value)
-    console.log(e.target.value)
-  }
-
-  const handleChangeUserName = (e) =>{
-    setUsername(e.target.value)
-    console.log(e.target.value)
-  }
+  const handleChangeUserName = (e) => {
+    setUsername(e.target.value);
+    console.log(e.target.value);
+  };
 
   const handleChangeConyuge = (e) => {
     const { name, value, type, checked } = e.target;
-    if(checked){
-      setConyuge(true)
-      setConcubino(false)
-    }else{
-      setConyuge(false)
+    if (checked) {
+      setConyuge(true);
+      setConcubino(false);
+    } else {
+      setConyuge(false);
     }
-  } 
+  };
 
   const handleChangeConcubino = (e) => {
     const { name, value, type, checked } = e.target;
-    if(checked == true){
-      setConyuge(false)
-      setConcubino(true)
-    }else{
-      setConcubino(false)
+    if (checked == true) {
+      setConyuge(false);
+      setConcubino(true);
+    } else {
+      setConcubino(false);
     }
-  } 
-
-
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,153 +86,152 @@ const Form = () => {
       nombre: Username,
       apellido: UserLastName,
       cedula: CiNumber,
-
     };
     console.log(data);
-    
-    if(Concubino || Conyuge){
+
+    if (Concubino || Conyuge) {
       // post suplente
     }
-    const response = await PostSocio( data ,null , null);
+    const response = await PostSocio(data, null, null);
 
     console.log(response);
-  //  router.push(`/UserInfo/${UserNumber}`);
+    //  router.push(`/UserInfo/${UserNumber}`);
   };
-  
 
   return (
     <div className="general-container">
-    <form onSubmit={handleSubmit} className="form">
-      <label className="label">
-        Nro. Usuario:
-        <input
-          type="text"
-          name="userNumber"
-          value={UserNumber}
-          onChange={handleChangeUserNumber}
-          className="input"
-        />
-      </label>
-      <br />
-      <label className="label">
-        Nombres:
-        <input
-          type="text"
-          name="userName"
-          value={Username}
-          onChange={handleChangeUserName}
-          className="input"
-        />
-      </label>
-      <br />
-      <label className="label">
-        Apellidos:
-        <input
-          type="text"
-          name="userLastName"
-          value={UserLastName}
-          onChange={handleChangeLastName}
-          className="input"
-        />
-      </label>
-      <br />
-      <label className="label">
-        Cónyuge:
-        <input
-          type="checkbox"
-          name="hasSpouse"
-          checked={Conyuge}
-          onChange={handleChangeConyuge}
-          className="checkbox"
-        />
-      </label>
-      <label className="label">
-        Concubino:
-        <input
-          type="checkbox"
-          name="hasSpouse"
-          checked={Concubino}
-          onChange={handleChangeConcubino}
-          className="checkbox"
-        />
-        <br/>
-      </label>
-        {Concubino && 
+      <form onSubmit={handleSubmit} className="form">
         <label className="label">
-          Nombre Concubino:
+          Nro. Usuario:
           <input
             type="text"
-            name="SuplenteName"
-            value={Substitutename}
-            onChange={handleChangesubstitutename}
+            name="userNumber"
+            value={UserNumber}
+            onChange={handleChangeUserNumber}
             className="input"
           />
         </label>
-        }
-        {Conyuge && 
+        <br />
         <label className="label">
-          Nombre Conyuge:
+          Nombres:
           <input
             type="text"
-            name="SuplenteName"
-            value={Substitutename}
-            onChange={handleChangesubstitutename}
+            name="userName"
+            value={Username}
+            onChange={handleChangeUserName}
             className="input"
           />
         </label>
-        }
-     
-      <br />
-      <label className="label">
-        Numero de CI.:
-        <input
-          type="text"
-          name="ciNumber"
-          value={CiNumber}
-          onChange={handleChangeCiNumber}
-          className="input"
-        />
-      </label>
-      <br />
-      <label className="label">
-        Número de vivienda:
-        <input
-          type="text"
-          name="houseNumber"
-          value={HouseNumber}
-          onChange={handleChangeHouseNumber}
-          className="input"
-        />
-      </label>
-      <br />
-    
-      <br />
-      <button type="submit" className="button">
-        Submit
-      </button>
-    </form></div>
+        <br />
+        <label className="label">
+          Apellidos:
+          <input
+            type="text"
+            name="userLastName"
+            value={UserLastName}
+            onChange={handleChangeLastName}
+            className="input"
+          />
+        </label>
+        <br />
+        <label className="label">
+          Cónyuge:
+          <input
+            type="checkbox"
+            name="hasSpouse"
+            checked={Conyuge}
+            onChange={handleChangeConyuge}
+            className="checkbox"
+          />
+        </label>
+        <label className="label">
+          Concubino:
+          <input
+            type="checkbox"
+            name="hasSpouse"
+            checked={Concubino}
+            onChange={handleChangeConcubino}
+            className="checkbox"
+          />
+          <br />
+        </label>
+        {Concubino && (
+          <label className="label">
+            Nombre Concubino:
+            <input
+              type="text"
+              name="SuplenteName"
+              value={Substitutename}
+              onChange={handleChangesubstitutename}
+              className="input"
+            />
+          </label>
+        )}
+        {Conyuge && (
+          <label className="label">
+            Nombre Conyuge:
+            <input
+              type="text"
+              name="SuplenteName"
+              value={Substitutename}
+              onChange={handleChangesubstitutename}
+              className="input"
+            />
+          </label>
+        )}
+
+        <br />
+        <label className="label">
+          Numero de CI.:
+          <input
+            type="text"
+            name="ciNumber"
+            value={CiNumber}
+            onChange={handleChangeCiNumber}
+            className="input"
+          />
+        </label>
+        <br />
+        <label className="label">
+          Número de vivienda:
+          <input
+            type="text"
+            name="houseNumber"
+            value={HouseNumber}
+            onChange={handleChangeHouseNumber}
+            className="input"
+          />
+        </label>
+        <br />
+
+        <br />
+        <button type="submit" className="button">
+          Submit
+        </button>
+      </form>
+    </div>
   );
 };
 
 export default Form;
-  // <label className="label">
-  //       Cantidad de dormitorios:
-  //       <input
-  //         type="number"
-  //         name="numberOfBedrooms"
-  //         value={NumberOfBedrooms}
-  //         onChange={handleChangeNumberBedrooms}
-  //         className="input"
-  //       />
-  //     </label> 
-  
-  // <label className="label">
-  //       Fecha de Ingreso:
-  //       <input
-  //         type="date"
-  //         name="entryDate"
-  //         value={EntryDate}
-  //         onChange={handleChangeEntryDate}
-  //         className="input"
-  //       />
-  //     </label>
+// <label className="label">
+//       Cantidad de dormitorios:
+//       <input
+//         type="number"
+//         name="numberOfBedrooms"
+//         value={NumberOfBedrooms}
+//         onChange={handleChangeNumberBedrooms}
+//         className="input"
+//       />
+//     </label>
+
+// <label className="label">
+//       Fecha de Ingreso:
+//       <input
+//         type="date"
+//         name="entryDate"
+//         value={EntryDate}
+//         onChange={handleChangeEntryDate}
+//         className="input"
+//       />
+//     </label>
