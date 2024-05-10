@@ -1,0 +1,55 @@
+const URL = "http://localhost:5000/";
+
+const getSocio = async (UserNumber) => {
+  try {
+    const response = await fetch(`${URL}/socio/${UserNumber}`);
+    console.log("Al menos entró");
+    if (!response.ok) {
+      throw new Error("Error al obtener el socio");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en getSocio:", error.message);
+    throw new Error("Te re jodiste");
+  }
+};
+
+const postSocio = async (idSuplente, nroVivienda) => {
+  try {
+    const response = await fetch(`${URL}/socio/${idSuplente}/${nroVivienda}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(Socio),
+    });
+    if (!response.ok) {
+      throw new Error("Error al publicar el socio");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en postSocio:", error.message);
+    throw new Error("Te re jodiste");
+  }
+};
+
+const signInUser = async (adminName, password) => {
+  try {
+    const response = await fetch(`${URL}/users/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        adminName: adminName,
+        password: password,
+      }),
+    });
+
+    return response.json();
+  } catch (error) {
+    console.log("error on searchProduct", error);
+  }
+};
+
+export { getSocio, postSocio, signInUser }; // Exportar ambas funciones
