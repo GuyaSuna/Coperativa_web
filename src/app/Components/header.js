@@ -19,8 +19,8 @@ const Header = () => {
       <nav className="nav">
         <ul>
           <li>
-            <Link href="/Form">
-              <button className="navBtn">Form</button>
+            <Link href="/partnerForm">
+              <button className="navBtn">Partner Form</button>
             </Link>
           </li>
           <li>
@@ -31,6 +31,11 @@ const Header = () => {
           <li>
             <Link href="/LoginPage">
               <button className="navBtn">Login</button>
+            </Link>
+          </li>
+          <li>
+            <Link href="/livingPlaceForm">
+              <button className="navBtn">Living Place Form</button>
             </Link>
           </li>
         </ul>

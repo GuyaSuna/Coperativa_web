@@ -2,46 +2,33 @@
 
 import React, { useState } from "react";
 import "./LoginStyle.css";
+import { login } from "../Api/api";
 import { useRouter } from "next/navigation";
-import { signInUser } from "../api/api";
 
 const LoginPage = () => {
+  const router = useRouter();
   const [adminName, setAdminName] = useState("");
   const [password, setPassword] = useState("");
 
-  const router = useRouter();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Usuario", adminName);
+    console.log("Contraseña", password);
 
-    console.log("adminName", adminName);
-    console.log("password", password);
+    const data = await login(adminName, password);
 
-    const response = await signInUser(adminName, password);
-
-    console.log("response from service", response);
-    if (response && response.status === 200) {
-      router.push("../home");
+    if (data == null) {
+      console.log("Nope");
     } else {
-      window.confirm("No puedes loguearte, intenta nuevamente");
-    }
-  };
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    const element = e.target.id;
-
-    if (element === "adminName") {
-      setAdminName(value);
-    } else if (element === "password") {
-      setPassword(value);
+      console.log("apa si");
+      router.push("/");
     }
   };
 
   return (
     <div>
       <h2> Iniciar Sesión </h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <label>
           Usuario:
           <input
@@ -63,7 +50,7 @@ const LoginPage = () => {
         </label>
         <br />
 
-        <button type="submit" className="buttonLogin">
+        <button className="buttonLogin" onClick={handleSubmit}>
           Iniciar Sesión
         </button>
       </form>
