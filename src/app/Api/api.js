@@ -73,7 +73,7 @@ const login = async (adminName , password) => {
     }
 };
 
-
+// suplente 
 export {
     getSocio,
     login,

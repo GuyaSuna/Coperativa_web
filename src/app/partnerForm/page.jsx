@@ -94,6 +94,9 @@ const Form = () => {
     };
     console.log(data);
     
+    if(Concubino || Conyuge){
+      // post suplente
+    }
     const response = await PostSocio( data ,null , null);
 
     console.log(response);
