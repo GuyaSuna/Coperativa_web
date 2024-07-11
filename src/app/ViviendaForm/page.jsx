@@ -6,7 +6,7 @@ import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
 import { PostHouse } from "../api/api";
 
-const Form = () => {
+const ViviendaForm = () => {
   const router = useRouter();
 
   const [HouseNumber, setHouseNumber] = useState();
@@ -68,4 +68,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default ViviendaForm;

@@ -2,7 +2,7 @@
 import React,{ useEffect, useState } from "react";
 
 import {getSocio} from '../../Api/api'
-const UserInfo = () => {
+const UsuarioInfo = () => {
 
     const [ userData , setUserData] = useState ({})  
 

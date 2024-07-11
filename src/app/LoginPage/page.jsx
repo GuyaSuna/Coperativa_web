@@ -14,7 +14,6 @@ const LoginPage = () => {
     e.preventDefault();
     console.log("Usuario", adminName);
     console.log("Contraseña", password);
-
     const data = await login(adminName, password);
 
     if (data == null) {
@@ -25,8 +24,12 @@ const LoginPage = () => {
     }
   };
 
+  const handleChange = () => {
+    console.log("Anda")
+  }
+
   return (
-    <div>
+    <div className="container">
       <h2> Iniciar Sesión </h2>
       <form>
         <label>
