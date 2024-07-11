@@ -1,3 +1,7 @@
+
+.container{
+}
+
 h2 {
   margin-top: 5em;
   text-align: center;
@@ -8,6 +12,7 @@ h2 {
 form {
   display: flex;
   flex-direction: column;
+  border-color: black;
 }
 
 label {
