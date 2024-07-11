@@ -1,51 +1,6 @@
 const URL = "http://localhost:5000";
 
-const getSocio = async (UserNumber) => {
-  try {
-    const response = await fetch(`${URL}/socio/${UserNumber}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
-  }
-};
-
-const PostSocio = async (socioEntity, suplente, vivienda) => {
-  try {
-    console.log(socioEntity);
-    const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(socioEntity),
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postSocio:", error);
-    throw new Error("Error al enviar los datos del socio");
-  }
-};
-
+//LOGIN
 const login = async (adminName, password) => {
   try {
     const body = {
@@ -73,11 +28,58 @@ const login = async (adminName, password) => {
   }
 };
 
-// suplente
-
-const PostSubtitute = async (subtituteEntity) => {
+//SOCIO
+const getSocio = async (cedulaSocio) => {
   try {
-    console.log(subtituteEntity);
+    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
+  }
+};
+
+const postSocio = async (socioEntity, suplente) => {
+  try {
+    console.log(socioEntity);
+    const response = await fetch(`${URL}/socio/${suplente}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(socioEntity),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postSocio:", error);
+    throw new Error("Error al enviar los datos del socio");
+  }
+};
+
+//SUPLENTE
+
+const postSuplente = async (suplenteEntity) => {
+  try {
+    console.log(suplenteEntity);
     const response = await fetch(`${URL}/suplente}`, {
       method: "POST",
       headers: {
@@ -94,20 +96,20 @@ const PostSubtitute = async (subtituteEntity) => {
 
     return data;
   } catch (error) {
-    console.error("Error en postSubtitute:", error);
+    console.error("Error en postSuplente:", error);
     throw new Error("Error al enviar los datos del socio");
   }
 };
 
-const PostHouse = async (houseEntity) => {
+const postVivienda = async (viviendaEntity) => {
   try {
-    console.log(houseEntity);
+    console.log(viviendaEntity);
     const response = await fetch(`${URL}/vivienda`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(houseEntity),
+      body: JSON.stringify(viviendaEntity),
     });
 
     if (!response.ok) {
@@ -122,4 +124,5 @@ const PostHouse = async (houseEntity) => {
     throw new Error("Error al enviar los datos de la vivienda");
   }
 };
-export { getSocio, login, PostSocio, PostSubtitute, PostHouse };
+
+export { getSocio, login, postSocio, postSuplente, postVivienda };
