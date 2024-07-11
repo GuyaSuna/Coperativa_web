@@ -15,7 +15,7 @@ const LoginPage = () => {
     console.log("Usuario", adminName);
     console.log("Contraseña", password);
     const data = await login(adminName, password);
-
+    console.log(data)
     if (data == null) {
       console.log("Nope");
     } else {
@@ -24,36 +24,41 @@ const LoginPage = () => {
     }
   };
 
-  const handleChange = () => {
-    console.log("Anda")
-  }
+  //checkbox
+
+  const handleAdminNameChange = (e) => {
+    setAdminName(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
 
   return (
     <div className="container">
-      <h2> Iniciar Sesión </h2>
-      <form>
+      <h2>Iniciar Sesión</h2>
+      <form onSubmit={handleSubmit}>
         <label>
           Usuario:
           <input
             type="text"
             value={adminName}
-            onChange={handleChange}
+            onChange={handleAdminNameChange}
             id="adminName"
+            required
           />
         </label>
-        <br />
         <label>
           Contraseña:
           <input
             type="password"
             value={password}
-            onChange={handleChange}
+            onChange={handlePasswordChange}
             id="password"
+            required
           />
         </label>
-        <br />
-
-        <button className="buttonLogin" onClick={handleSubmit}>
+        <button type="submit" className="buttonLogin">
           Iniciar Sesión
         </button>
       </form>

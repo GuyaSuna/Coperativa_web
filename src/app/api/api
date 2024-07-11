@@ -46,13 +46,13 @@ const PostSocio = async (socioEntity, suplente, vivienda) => {
   }
 };
 
-const login = async (adminName, password) => {
+const login = async (nombreDeUsuario, contraseña) => {
   try {
     const body = {
-      adminName: adminName,
-      password: password,
+      nombreDeUsuario: nombreDeUsuario,
+      contraseña: contraseña,
     };
-    const response = await fetch(`${URL}/login`, {
+    const response = await fetch(`${URL}/administrador/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,7 @@ const login = async (adminName, password) => {
     });
 
     if (!response.ok) {
-      throw new Error("Te jodiste");
+      throw new Error("Respuesta no es ok");
     }
 
     const data = await response.json();

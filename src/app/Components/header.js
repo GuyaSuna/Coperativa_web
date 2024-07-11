@@ -19,7 +19,7 @@ const Header = () => {
       <nav className="nav">
         <ul>
           <li>
-            <Link href="/partnerForm">
+            <Link href="/SocioForm">
               <button className="navBtn">Partner Form</button>
             </Link>
           </li>
@@ -34,7 +34,7 @@ const Header = () => {
             </Link>
           </li>
           <li>
-            <Link href="/livingPlaceForm">
+            <Link href="/ViviendaForm">
               <button className="navBtn">Living Place Form</button>
             </Link>
           </li>
