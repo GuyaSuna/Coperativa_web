@@ -1,7 +1,7 @@
 "use client";
 import './globals.css';
 import React, { useState } from "react";
-import {loginAdministrador, loginUsuario} from "./Api/api.js"
+import {loginAdministrador, loginUsuario} from "../Api/api.js"
 import { useRouter } from "next/navigation";
 
 const Home = () => {

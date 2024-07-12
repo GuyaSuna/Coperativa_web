@@ -1,7 +1,7 @@
 'use client'
 import React,{ useEffect, useState } from "react";
 
-import {getSocio} from '../../Api/api.js'
+import {getSocio} from '../../../Api/api.js'
 const UsuarioInfo = () => {
 
     const [ userData , setUserData] = useState ({})  
