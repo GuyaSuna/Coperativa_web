@@ -4,7 +4,7 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { PostSocio } from "../Api/api";
+import { PostSocio } from "../Api/api.js";
 
 const Form = () => {
   const router = useRouter();
