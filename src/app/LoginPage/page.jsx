@@ -7,14 +7,14 @@ import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
   const router = useRouter();
-  const [adminName, setAdminName] = useState("");
-  const [password, setPassword] = useState("");
+  const [nombreMiembro, setNombreMiembro] = useState("");
+  const [contraseña, setContraseña] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Usuario", adminName);
-    console.log("Contraseña", password);
-    const data = await login(adminName, password);
+    console.log("Usuario", nombreMiembro);
+    console.log("Contraseña", contraseña);
+    const data = await login(nombreMiembro, contraseña);
 
     if (data == null) {
       console.log("Nope");
@@ -25,8 +25,8 @@ const LoginPage = () => {
   };
 
   const handleChange = () => {
-    console.log("Anda")
-  }
+    console.log("Anda");
+  };
 
   return (
     <div className="container">
@@ -36,9 +36,9 @@ const LoginPage = () => {
           Usuario:
           <input
             type="text"
-            value={adminName}
+            value={nombreMiembro}
             onChange={handleChange}
-            id="adminName"
+            id="nombreMiembro"
           />
         </label>
         <br />
@@ -46,9 +46,9 @@ const LoginPage = () => {
           Contraseña:
           <input
             type="password"
-            value={password}
+            value={contraseña}
             onChange={handleChange}
-            id="password"
+            id="contraseña"
           />
         </label>
         <br />
