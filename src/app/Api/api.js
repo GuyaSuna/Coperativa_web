@@ -101,9 +101,11 @@ const loginUsuario = async (nombreDeUsuario, contraseña) => {
   }
 };
 
-const postSuplente = async (suplenteEntity) => {
+// suplente
+
+const PostSubtitute = async (subtituteEntity) => {
   try {
-    console.log(suplenteEntity);
+    console.log(subtituteEntity);
     const response = await fetch(`${URL}/suplente}`, {
       method: "POST",
       headers: {
@@ -120,20 +122,20 @@ const postSuplente = async (suplenteEntity) => {
 
     return data;
   } catch (error) {
-    console.error("Error en postSuplente:", error);
+    console.error("Error en postSubtitute:", error);
     throw new Error("Error al enviar los datos del socio");
   }
 };
 
-const postVivienda = async (viviendaEntity) => {
+const PostHouse = async (houseEntity) => {
   try {
-    console.log(viviendaEntity);
+    console.log(houseEntity);
     const response = await fetch(`${URL}/vivienda`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(viviendaEntity),
+      body: JSON.stringify(houseEntity),
     });
 
     if (!response.ok) {
@@ -148,6 +150,4 @@ const postVivienda = async (viviendaEntity) => {
     throw new Error("Error al enviar los datos de la vivienda");
   }
 };
-
-
-export { getSocio, loginAdministrador, loginUsuario, PostSocio, postSuplente, postVivienda };
+export { getSocio, loginAdministrador, loginUsuario, PostSocio, PostSubtitute, PostHouse };
