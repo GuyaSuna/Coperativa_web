@@ -2,7 +2,6 @@
 
 import React, { useEffect } from "react";
 import { useState } from "react";
-import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
 import { postVivienda } from "../../Api/api.js";
 

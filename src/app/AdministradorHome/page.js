@@ -81,23 +81,23 @@ export default function AdminHome() {
       <div className="flex-grow overflow-hidden h-full flex flex-col">
         <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden px-10">
           <div className="flex h-full text-gray-600 dark:text-gray-400">
-            <a
-              href="#"
+            <Link
+              href="../ViviendaForm"
               className="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-8"
             >
-              Cooperativa
-            </a>
-            <a
-              href="#"
+              Agregar Viviendas
+            </Link>
+            <Link
+              href="../SocioForm"
               className="cursor-pointer h-full border-b-2 border-blue-500 text-blue-500 dark:text-white dark:border-white inline-flex mr-8 items-center"
             >
-              Socios
-            </a>
+              Agregar Socios
+            </Link>
             <a
               href="#"
               className="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-8"
             >
-              Viviendas
+              Crear Usuario
             </a>
             <a
               href="#"
@@ -107,7 +107,10 @@ export default function AdminHome() {
             </a>
           </div>
           <div className="ml-auto flex items-center space-x-7">
-            <Link href={"/LoginPage"} className="h-8 px-3 rounded-md shadow text-white bg-blue-500">
+            <Link
+              href={"/LoginPage"}
+              className="h-8 px-3 rounded-md shadow text-white bg-blue-500"
+            >
               Login
             </Link>
             <button className="flex items-center">

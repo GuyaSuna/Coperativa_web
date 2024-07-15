@@ -1,51 +1,6 @@
 const URL = "http://localhost:5000";
 
-const getSocio = async (UserNumber) => {
-  try {
-    const response = await fetch(`${URL}/socio/${UserNumber}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
-  }
-};
-
-const PostSocio = async (socioEntity, suplente, vivienda) => {
-  try {
-    console.log(socioEntity);
-    const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(socioEntity),
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postSocio:", error);
-    throw new Error("Error al enviar los datos del socio");
-  }
-};
-
+//logins
 const loginAdministrador = async (nombreDeUsuario, contraseña) => {
   try {
     const body = {
@@ -72,7 +27,6 @@ const loginAdministrador = async (nombreDeUsuario, contraseña) => {
     throw new Error("Error al obtener los datos del socio");
   }
 };
-
 
 const loginUsuario = async (nombreDeUsuario, contraseña) => {
   try {
@@ -101,17 +55,14 @@ const loginUsuario = async (nombreDeUsuario, contraseña) => {
   }
 };
 
-// suplente
-
-const PostSubtitute = async (subtituteEntity) => {
+//socio
+const getSocio = async (UserNumber) => {
   try {
-    console.log(subtituteEntity);
-    const response = await fetch(`${URL}/suplente}`, {
-      method: "POST",
+    const response = await fetch(`${URL}/socio/${UserNumber}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(subtituteEntity),
     });
 
     if (!response.ok) {
@@ -122,20 +73,70 @@ const PostSubtitute = async (subtituteEntity) => {
 
     return data;
   } catch (error) {
-    console.error("Error en postSubtitute:", error);
+    console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
+  }
+};
+
+const postSocio = async (socioEntity, suplente) => {
+  try {
+    console.log(socioEntity);
+    const response = await fetch(`${URL}/socio/${suplente}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(socioEntity),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postSocio:", error);
     throw new Error("Error al enviar los datos del socio");
   }
 };
 
-const PostHouse = async (houseEntity) => {
+// suplente
+const postSuplente = async (suplenteEntity, CedulaSocio) => {
   try {
-    console.log(houseEntity);
+    console.log(suplenteEntity);
+    const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(suplenteEntity),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postSuplente:", error);
+    throw new Error("Error al enviar los datos del socio");
+  }
+};
+
+//vivienda
+const postVivienda = async (viviendaEntity) => {
+  try {
+    console.log(viviendaEntity);
     const response = await fetch(`${URL}/vivienda`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(houseEntity),
+      body: JSON.stringify(viviendaEntity),
     });
 
     if (!response.ok) {
@@ -150,4 +151,84 @@ const PostHouse = async (houseEntity) => {
     throw new Error("Error al enviar los datos de la vivienda");
   }
 };
-export { getSocio, loginAdministrador, loginUsuario, PostSocio, PostSubtitute, PostHouse };
+
+const getVivienda = async (nroVivienda) => {
+  try {
+    const response = await fetch(`${URL}/viviendas/${nroVivienda}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
+  }
+};
+
+const getAllViviendas = async () => {
+  try {
+    const response = await fetch(`${URL}/vivienda/allViviendas`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllViviendas:", error);
+    throw new Error("Error al obtener los datos de las viviendas.");
+  }
+};
+
+// usuario
+
+// const postUsuario = async (socioEntity, suplente, vivienda) => {
+//   try {
+//     console.log(socioEntity);
+//     const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(socioEntity),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postSocio:", error);
+//     throw new Error("Error al enviar los datos del socio");
+//   }
+// };
+
+export {
+  getSocio,
+  loginAdministrador,
+  loginUsuario,
+  postSocio,
+  postSuplente,
+  postVivienda,
+  getVivienda,
+  getAllViviendas,
+};
