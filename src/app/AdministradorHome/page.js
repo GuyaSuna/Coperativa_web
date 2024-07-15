@@ -1,9 +1,13 @@
+'use client'
 import Link from "next/link";
-
+import React, { useContext } from "react";
+import { MiembroContext } from "@/Provider/provider";
 import logo from "../../../public/LogoApp.jpg";
 import Image from "next/image";
 
-export default function AdminHome() {
+const AdminHome = () => {
+  const { miembro } = useContext(MiembroContext);
+  console.log(miembro)
   return (
     <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
       <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
@@ -1575,3 +1579,5 @@ export default function AdminHome() {
     </div>
   );
 }
+
+export default AdminHome;

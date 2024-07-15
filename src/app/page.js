@@ -1,11 +1,13 @@
 "use client";
 import './globals.css';
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import {loginAdministrador, loginUsuario} from "../Api/api.js"
 import { useRouter } from "next/navigation";
+import { MiembroContext } from '@/Provider/provider';
 
 const Home = () => {
   const router = useRouter();
+  const {loginMiembro} = useContext(MiembroContext);
   const [Nombre, setAdminNombre] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,7 +18,7 @@ const Home = () => {
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      console.log("apa si");
+      loginMiembro(data)
       router.push("./AdministradorHome");
     }
   };
@@ -28,6 +30,7 @@ const Home = () => {
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
+      loginMiembro(data)
       router.push("./UsuarioHome");
     }
   };
