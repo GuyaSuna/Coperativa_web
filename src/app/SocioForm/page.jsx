@@ -30,6 +30,7 @@ const SocioForm = () => {
     try {
       const response = await getAllViviendas();
       setViviendasDisponibles(response.data);
+      console.log(response.data, "no anda response");
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -218,7 +219,7 @@ const SocioForm = () => {
             <option value="">Seleccione una vivienda</option>
             {ViviendasDisponibles.map((vivienda) => (
               <option key={vivienda.nroVivienda} value={vivienda.nroVivienda}>
-                {`Vivienda ${vivienda.nroVivienda} - ${vivienda.cantidadDormitorios} dormitorios`}
+                {`Vivienda Nro.: ${vivienda.nroVivienda} - ${vivienda.cantidadDormitorios} dormitorios`}
               </option>
             ))}
           </select>
