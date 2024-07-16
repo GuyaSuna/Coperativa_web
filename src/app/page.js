@@ -1,44 +1,44 @@
 "use client";
-import './globals.css';
-import React, { useState , useContext } from "react";
-import {loginAdministrador, loginUsuario} from "../Api/api.js"
+import "./globals.css";
+import React, { useState, useContext } from "react";
+import { loginAdministrador, loginUsuario } from "../Api/api.js";
 import { useRouter } from "next/navigation";
-import { MiembroContext } from '@/Provider/provider';
+import { MiembroContext } from "@/Provider/provider";
 
 const Home = () => {
   const router = useRouter();
-  const {loginMiembro} = useContext(MiembroContext);
-  const [Nombre, setAdminNombre] = useState("");
+  const { loginMiembro } = useContext(MiembroContext);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
-    const data = await loginAdministrador(Nombre, password);
-    console.log(data)
+    const data = await loginAdministrador(email, password);
+    console.log(data);
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      loginMiembro(data)
+      loginMiembro(data);
       router.push("./AdministradorHome");
     }
   };
 
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();
-    const data = await loginUsuario(Nombre, password);
-    console.log(data)
+    const data = await loginUsuario(email, password);
+    console.log(data);
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      loginMiembro(data)
+      loginMiembro(data);
       router.push("./UsuarioHome");
     }
   };
 
   //checkbox
 
-  const handleAdminNombreChange = (e) => {
-    setAdminNombre(e.target.value);
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -46,36 +46,128 @@ const Home = () => {
   };
 
   return (
-    <div className="container">
-      <h2>Iniciar Sesión</h2>
-      <form>
-        <label>
-          Usuario:
-          <input
-            type="text"
-            value={Nombre}
-            onChange={handleAdminNombreChange}
-            id="Nombre"
-            required
+    // <div className="container">
+    //   <h2>Iniciar Sesión</h2>
+    //   <form>
+    //     <label>
+    //       Usuario:
+    //       <input
+    //         type="text"
+    //         value={Nombre}
+    //         onChange={handleAdminNombreChange}
+    //         id="Nombre"
+    //         required
+    //       />
+    //     </label>
+    //     <label>
+    //       Contraseña:
+    //       <input
+    //         type="password"
+    //         value={password}
+    //         onChange={handlePasswordChange}
+    //         id="password"
+    //         required
+    //       />
+    //     </label>
+    //     <button type="submit" onClick={handleSubmitAdministrador} className="buttonLogin">
+    //       Iniciar Sesión Administrador
+    //     </button>
+    //     <button type="submit" onClick={handleSubmitUsuario} className="buttonLogin">
+    //       Iniciar Sesión Usuario
+    //     </button>
+    //   </form>
+    // </div>
+    <div>
+      <div className="lg:flex">
+        <div className="lg:w-1/2 xl:max-w-screen-sm">
+          <div className="py-12 bg-indigo-100 lg:bg-white flex justify-center lg:justify-start lg:px-12">
+            <div className="cursor-pointer flex items-center">
+              <div>
+                <img className="h-16 w-16" src="./techito.png" />
+              </div>
+              <div className="text-4xl text-[#71675D] tracking-wide ml-2 font-semibold">
+                visoft
+              </div>
+            </div>
+          </div>
+          <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
+            <h2
+              className="text-center text-4xl text-[#71675D] font-display font-semibold lg:text-left xl:text-5xl
+              xl:text-bold"
+            >
+              Iniciar Sesion
+            </h2>
+            <div className="mt-12">
+              <form>
+                <div>
+                  <div className="text-sm font-bold text-gray-700 tracking-wide">
+                    Correo electronico
+                  </div>
+                  <input
+                    className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                    type="email"
+                    placeholder="mike@gmail.com"
+                    value={email}
+                    onChange={handleEmailChange}
+                    id="Email"
+                    required
+                  />
+                </div>
+                <div className="mt-8">
+                  <div className="flex justify-between items-center">
+                    <div className="text-sm font-bold text-gray-700 tracking-wide">
+                      Contraseña
+                    </div>
+                    <div>
+                      <a
+                        className="text-xs font-display font-semibold text-[#71675D] hover:text-black
+                                  cursor-pointer"
+                      >
+                        Olvidaste la contraseña?
+                      </a>
+                    </div>
+                  </div>
+                  <input
+                    className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                    placeholder="Ingresar contraseña"
+                    type="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    id="password"
+                    required
+                  />
+                </div>
+                <div className="grid gap-3 mt-10">
+                  <button
+                    className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide
+                          font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400
+                          shadow-lg"
+                    type="submit"
+                    onClick={handleSubmitAdministrador}
+                  >
+                    Inicias sesion como Administrador
+                  </button>
+                  <button
+                    className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide
+                          font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400
+                          shadow-lg"
+                    type="submit"
+                    onClick={handleSubmitUsuario}
+                  >
+                    Inicias sesion como Usuario
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div>
+          <img
+            src="./visoft.png"
+            className="hidden lg:flex items-center justify-center bg-indigo-100 flex-1 h-screen hover:scale-90 transform duration-700"
           />
-        </label>
-        <label>
-          Contraseña:
-          <input
-            type="password"
-            value={password}
-            onChange={handlePasswordChange}
-            id="password"
-            required
-          />
-        </label>
-        <button type="submit" onClick={handleSubmitAdministrador} className="buttonLogin">
-          Iniciar Sesión Administrador
-        </button>
-        <button type="submit" onClick={handleSubmitUsuario} className="buttonLogin">
-          Iniciar Sesión Usuario
-        </button>
-      </form>
+        </div>
+      </div>
     </div>
   );
 };

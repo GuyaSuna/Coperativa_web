@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Link from "next/link";
 import React, { useContext } from "react";
 import { MiembroContext } from "@/Provider/provider";
@@ -7,7 +7,7 @@ import Image from "next/image";
 
 const AdminHome = () => {
   const { miembro } = useContext(MiembroContext);
-  console.log(miembro)
+  console.log(miembro);
   return (
     <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
       <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
@@ -21,7 +21,7 @@ const AdminHome = () => {
           />
         </div>
         <div className="flex mx-auto flex-grow mt-4 flex-col text-gray-400 space-y-4">
-          <button className="h-10 w-12 dark:text-gray-500 rounded-md flex items-center justify-center">
+          <button className="h-10 w-12 dark:text-gray-300 rounded-md flex items-center justify-center hover:bg-blue-100 hover:text-blue-500">
             <svg
               viewBox="0 0 24 24"
               className="h-5"
@@ -35,7 +35,7 @@ const AdminHome = () => {
               <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
           </button>
-          <button className="h-10 w-12 dark:bg-gray-700 dark:text-white rounded-md flex items-center justify-center bg-blue-100 text-blue-500">
+          <button className="h-10 w-12 dark:text-gray-300  rounded-md flex items-center justify-center hover:bg-blue-100 hover:text-blue-500">
             <svg
               viewBox="0 0 24 24"
               className="h-5"
@@ -49,7 +49,7 @@ const AdminHome = () => {
               <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
             </svg>
           </button>
-          <button className="h-10 w-12 dark:text-gray-500 rounded-md flex items-center justify-center">
+          <button className="h-10 w-12 dark:text-gray-300 rounded-md flex items-center justify-center hover:bg-blue-100 hover:text-blue-500">
             <svg
               viewBox="0 0 24 24"
               className="h-5"
@@ -64,7 +64,7 @@ const AdminHome = () => {
               <line x1={9} y1={14} x2={15} y2={14} />
             </svg>
           </button>
-          <button className="h-10 w-12 dark:text-gray-500 rounded-md flex items-center justify-center">
+          <button className="h-10 w-12 dark:text-gray-300 rounded-md flex items-center justify-center hover:bg-blue-100 hover:text-blue-500">
             <svg
               viewBox="0 0 24 24"
               className="h-5"
@@ -87,35 +87,35 @@ const AdminHome = () => {
           <div className="flex h-full text-gray-600 dark:text-gray-400">
             <Link
               href="../ViviendaForm"
-              className="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-8"
+              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Agregar Viviendas
             </Link>
             <Link
               href="../SocioForm"
-              className="cursor-pointer h-full border-b-2 border-blue-500 text-blue-500 dark:text-white dark:border-white inline-flex mr-8 items-center"
+              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex mr-8 items-center"
             >
               Agregar Socios
             </Link>
             <a
               href="#"
-              className="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-8"
+              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Crear Usuario
             </a>
             <a
               href="#"
-              className="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center"
+              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center"
             >
               Generar Recibo
             </a>
           </div>
           <div className="ml-auto flex items-center space-x-7">
             <Link
-              href={"/LoginPage"}
-              className="h-8 px-3 rounded-md shadow text-white bg-blue-500"
+              href={"/page"}
+              className="h-6 px-3 items-center rounded-md shadow text-white bg-blue-500 hover:bg-black"
             >
-              Login
+              Cerrar Sesion
             </Link>
             <button className="flex items-center">
               <span className="relative flex-shrink-0">
@@ -286,31 +286,31 @@ const AdminHome = () => {
               <div className="flex items-center space-x-3 sm:mt-7 mt-4">
                 <a
                   href="#"
-                  className="px-3 border-b-2 border-blue-500 text-blue-500 dark:text-white dark:border-white pb-1.5"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5"
                 >
                   Socios
                 </a>
                 <a
                   href="#"
-                  className="px-3 border-b-2 border-transparent text-gray-600 dark:text-gray-400 pb-1.5"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5"
                 >
                   Viviendas
                 </a>
                 <a
                   href="#"
-                  className="px-3 border-b-2 border-transparent text-gray-600 dark:text-gray-400 pb-1.5 sm:block hidden"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5 sm:block hidden"
                 >
                   Recibos
                 </a>
                 <a
                   href="#"
-                  className="px-3 border-b-2 border-transparent text-gray-600 dark:text-gray-400 pb-1.5 sm:block hidden"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white  pb-1.5 sm:block hidden"
                 >
                   Suplentes
                 </a>
                 <a
                   href="#"
-                  className="px-3 border-b-2 border-transparent text-gray-600 dark:text-gray-400 pb-1.5 sm:block hidden"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white  pb-1.5 sm:block hidden"
                 >
                   Informes
                 </a>
@@ -1536,7 +1536,7 @@ const AdminHome = () => {
                 </tbody>
               </table>
               <div className="flex w-full mt-5 space-x-2 justify-end">
-                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none">
+                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 hover:bg-gray-400 hover:text-white leading-none">
                   <svg
                     className="w-4"
                     viewBox="0 0 24 24"
@@ -1549,19 +1549,19 @@ const AdminHome = () => {
                     <polyline points="15 18 9 12 15 6" />
                   </svg>
                 </button>
-                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none">
+                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 hover:bg-gray-400 hover:text-white leading-none">
                   1
                 </button>
-                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-800 dark:text-white leading-none">
+                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800  hover:bg-gray-400 hover:text-white leading-none">
                   2
                 </button>
-                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none">
+                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 hover:bg-gray-400 hover:text-white leading-none">
                   3
                 </button>
-                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none">
+                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-500 rounded-md shadow border border-gray-200 dark:border-gray-800 hover:bg-gray-400 hover:text-white leading-none">
                   4
                 </button>
-                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none">
+                <button className="inline-flex items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 hover:bg-gray-400 hover:text-white leading-none">
                   <svg
                     className="w-4"
                     viewBox="0 0 24 24"
@@ -1581,6 +1581,6 @@ const AdminHome = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AdminHome;
