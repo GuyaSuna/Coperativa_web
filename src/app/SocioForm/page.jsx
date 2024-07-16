@@ -133,7 +133,7 @@ const SocioForm = () => {
       nroSocio: NroSocio,
       nombreSocio: NombreSocio,
       apellidoSocio: ApellidoSocio,
-      telefonoSocio: TelefonoSocio,
+      telefono: TelefonoSocio,
       capitalSocio: CapitalSocio,
       fechaIngreso: FechaIngreso,
     };
@@ -149,23 +149,22 @@ const SocioForm = () => {
         ViviendasDisponibles.find((v) => v.nroVivienda === SeleccionVivienda)
           ?.cantidadDormitorios || 0,
     };
-    console.log(SocioData);
+    console.log(ViviendaData.nroVivienda);
 
     try {
-      const response = await postSocio(SocioData);
+      const response = await postSocio(SocioData, ViviendaData.nroVivienda);
       console.log(response);
       if (TieneSuplente === true) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
         console.log(responseSuplente);
       }
-      const responseVivienda = await postVivienda(ViviendaData, CedulaSocio);
-      console.log(responseVivienda);
-      router.push(`/UserInfo/${NroSocio}`);
+      alert("Dado de alta correctamente")
     } catch (error) {
       console.error("Error al enviar los datos del socio:", error);
     }
   };
-
+//      ruta dinamica 
+//      router.push(`/UserInfo/${NroSocio}`);
   return (
     <div className="general-container">
       <form onSubmit={handleSubmit} className="form">

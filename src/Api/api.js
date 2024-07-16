@@ -78,10 +78,10 @@ const getSocio = async (UserNumber) => {
   }
 };
 
-const postSocio = async (socioEntity, suplente) => {
+const postSocio = async (socioEntity, nroVivienda) => {
   try {
     console.log(socioEntity);
-    const response = await fetch(`${URL}/socio/${suplente}`, {
+    const response = await fetch(`${URL}/socio/${nroVivienda}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
