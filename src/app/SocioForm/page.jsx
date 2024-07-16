@@ -21,6 +21,7 @@ const SocioForm = () => {
   const [TieneSuplente, setTieneSuplente] = useState(false);
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
+  const [Errores, setErrores] = useState({});
 
   useEffect(() => {
     fetchViviendasDisponibles();
@@ -29,8 +30,15 @@ const SocioForm = () => {
   const fetchViviendasDisponibles = async () => {
     try {
       const response = await getAllViviendas();
-      setViviendasDisponibles(response.data);
-      console.log(response.data, "no anda response");
+      console.log(response);
+      let viviendasDisponibles = [];
+      response.forEach((vivienda) => {
+        if (vivienda.socioTitular === null) {
+          viviendasDisponibles.push(vivienda);
+        }
+      });
+      setViviendasDisponibles(viviendasDisponibles);
+      console.log(response, "no anda response");
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -88,8 +96,38 @@ const SocioForm = () => {
     setTieneSuplente(e.target.checked);
   };
 
+  const validarFormulario = () => {
+    const errores = {};
+
+    if (!CedulaSocio) errores.cedulaSocio = "La cédula es obligatoria";
+    if (!NroSocio) errores.nroSocio = "El número de socio es obligatorio";
+    if (!NombreSocio) errores.nombreSocio = "El nombre es obligatorio";
+    if (!ApellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
+    if (!TelefonoSocio) errores.telefonoSocio = "El teléfono es obligatorio";
+    if (!CapitalSocio) errores.capitalSocio = "El capital es obligatorio";
+    if (!FechaIngreso)
+      errores.fechaIngreso = "La fecha de ingreso es obligatoria";
+    if (!SeleccionVivienda)
+      errores.seleccionVivienda = "La selección de vivienda es obligatoria";
+
+    if (TieneSuplente) {
+      if (!CedulaSuplente)
+        errores.cedulaSuplente = "La cédula del suplente es obligatoria";
+      if (!NombreSuplente)
+        errores.nombreSuplente = "El nombre del suplente es obligatorio";
+      if (!ApellidoSuplente)
+        errores.apellidoSuplente = "El apellido del suplente es obligatorio";
+      if (!TelefonoSuplente)
+        errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
+    }
+    setErrores(errores);
+
+    return Object.keys(errores).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validarFormulario()) return;
     const SocioData = {
       cedulaSocio: CedulaSocio,
       nroSocio: NroSocio,
@@ -140,6 +178,9 @@ const SocioForm = () => {
             onChange={handleChangeNroSocio}
             className="input"
           />
+          {Errores.nroSocio && (
+            <span className="error">{Errores.nroSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -151,6 +192,9 @@ const SocioForm = () => {
             onChange={handleChangeNombreSocio}
             className="input"
           />
+          {Errores.nombreSocio && (
+            <span className="error">{Errores.nombreSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -162,6 +206,9 @@ const SocioForm = () => {
             onChange={handleChangeApellidoSocio}
             className="input"
           />
+          {Errores.apellidoSocio && (
+            <span className="error">{Errores.apellidoSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -173,6 +220,9 @@ const SocioForm = () => {
             onChange={handleChangeCedulaSocio}
             className="input"
           />
+          {Errores.cedulaSocio && (
+            <span className="error">{Errores.cedulaSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -184,6 +234,9 @@ const SocioForm = () => {
             onChange={handleChangeTelefonoSocio}
             className="input"
           />
+          {Errores.telefonoSocio && (
+            <span className="error">{Errores.telefonoSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -195,6 +248,9 @@ const SocioForm = () => {
             onChange={handleChangeCapitalSocio}
             className="input"
           />
+          {Errores.capitalSocio && (
+            <span className="error">{Errores.apellidoSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -206,6 +262,9 @@ const SocioForm = () => {
             onChange={handleChangeFechaIngreso}
             className="input"
           />
+          {Errores.apellidoSocio && (
+            <span className="error">{Errores.apellidoSocio}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -223,6 +282,9 @@ const SocioForm = () => {
               </option>
             ))}
           </select>
+          {Errores.seleccionVivienda && (
+            <span className="error">{Errores.seleccionVivienda}</span>
+          )}
         </label>
         <br />
         <label className="label">
@@ -247,6 +309,9 @@ const SocioForm = () => {
                 onChange={handleChangeNombreSuplente}
                 className="input"
               />
+              {Errores.nombreSuplente && (
+                <span className="error">{Errores.nombreSuplente}</span>
+              )}
             </label>
             <br />
             <label className="label">
@@ -258,6 +323,9 @@ const SocioForm = () => {
                 onChange={handleChangeApellidoSuplente}
                 className="input"
               />
+              {Errores.apellidoSuplente && (
+                <span className="error">{Errores.apellidoSuplente}</span>
+              )}
             </label>
             <br />
             <label className="label">
@@ -269,6 +337,9 @@ const SocioForm = () => {
                 onChange={handleChangeCedulaSuplente}
                 className="input"
               />
+              {Errores.cedulaSuplente && (
+                <span className="error">{Errores.cedulaSuplente}</span>
+              )}
             </label>
             <br />
             <label className="label">
@@ -280,6 +351,9 @@ const SocioForm = () => {
                 onChange={handleChangeTelefonoSuplente}
                 className="input"
               />
+              {Errores.telefonoSuplente && (
+                <span className="error">{Errores.telefonoSuplente}</span>
+              )}
             </label>
             <br />
           </>

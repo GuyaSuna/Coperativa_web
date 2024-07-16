@@ -202,12 +202,13 @@ const getAllViviendas = async () => {
         "Content-Type": "application/json",
       },
     });
-
+   
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
 
     const data = await response.json();
+    console.log(data, "No llegan las viviendas");
 
     return data;
   } catch (error) {
