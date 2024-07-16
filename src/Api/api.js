@@ -77,7 +77,27 @@ const getSocio = async (UserNumber) => {
     throw new Error("Error al obtener los datos del socio");
   }
 };
+const getAllSocios = async () => {
+  try {
+    const response = await fetch(`${URL}/socio/allSocios`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSocios:", error);
+    throw new Error("Error al obtener los datos de los Socios.");
+  }
+};
 const postSocio = async (socioEntity, suplente) => {
   try {
     console.log(socioEntity);
@@ -231,4 +251,5 @@ export {
   postVivienda,
   getVivienda,
   getAllViviendas,
+  getAllSocios,
 };
