@@ -1,10 +1,10 @@
 const URL = "http://localhost:5000";
 
 //logins
-const loginAdministrador = async (nombreDeUsuario, contraseña) => {
+const loginAdministrador = async (email, contraseña) => {
   try {
     const body = {
-      nombreDeUsuario: nombreDeUsuario,
+      email: email,
       contraseña: contraseña,
     };
     const response = await fetch(`${URL}/administrador/login`, {
@@ -28,10 +28,10 @@ const loginAdministrador = async (nombreDeUsuario, contraseña) => {
   }
 };
 
-const loginUsuario = async (nombreDeUsuario, contraseña) => {
+const loginUsuario = async (email, contraseña) => {
   try {
     const body = {
-      nombreDeUsuario: nombreDeUsuario,
+      email: email,
       contraseña: contraseña,
     };
     const response = await fetch(`${URL}/usuario/login`, {
@@ -182,7 +182,7 @@ const getAllViviendas = async () => {
         "Content-Type": "application/json",
       },
     });
-
+   
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }

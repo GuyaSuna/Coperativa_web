@@ -29,8 +29,8 @@ const SocioForm = () => {
   const fetchViviendasDisponibles = async () => {
     try {
       const response = await getAllViviendas();
-      setViviendasDisponibles(response.data);
-      console.log(response.data, "no anda response");
+      setViviendasDisponibles(response);
+      console.log(response, "no anda response");
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -221,7 +221,7 @@ const SocioForm = () => {
               <option key={vivienda.nroVivienda} value={vivienda.nroVivienda}>
                 {`Vivienda Nro.: ${vivienda.nroVivienda} - ${vivienda.cantidadDormitorios} dormitorios`}
               </option>
-            ))}
+            ))} 
           </select>
         </label>
         <br />
