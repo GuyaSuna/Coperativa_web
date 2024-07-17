@@ -8,24 +8,24 @@ import { postVivienda } from "../../Api/api.js";
 const ViviendaForm = () => {
   const router = useRouter();
 
-  const [HouseNumber, setHouseNumber] = useState();
-  const [NumberOfBedrooms, setNumbersOfBedrooms] = useState();
+  const [NroVivienda, setNroVivienda] = useState();
+  const [CantidadDormitorios, setCantidadDormitorios] = useState();
 
-  const handleChangeNumberBedrooms = (e) => {
-    setNumbersOfBedrooms(e.target.value);
+  const handleChangeCantidadDormitorios = (e) => {
+    setCantidadDormitorios(e.target.value);
     console.log(e.target.value);
   };
 
-  const handleChangeHouseNumber = (e) => {
-    setHouseNumber(e.target.value);
+  const handleChangeNroVivienda = (e) => {
+    setNroVivienda(e.target.value);
     console.log(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-      nroVivienda: HouseNumber,
-      cantDormitorios: NumberOfBedrooms,
+      nroVivienda: NroVivienda,
+      cantidadDormitorios: CantidadDormitorios,
     };
     console.log(data);
 
@@ -42,8 +42,8 @@ const ViviendaForm = () => {
           <input
             type="text"
             name="houseNumber"
-            value={HouseNumber}
-            onChange={handleChangeHouseNumber}
+            value={NroVivienda}
+            onChange={handleChangeNroVivienda}
             className="input"
           />
         </label>
@@ -53,8 +53,8 @@ const ViviendaForm = () => {
           <input
             type="text"
             name="numberOfBedrooms"
-            value={NumberOfBedrooms}
-            onChange={handleChangeNumberBedrooms}
+            value={CantidadDormitorios}
+            onChange={handleChangeCantidadDormitorios}
             className="input"
           />
         </label>
