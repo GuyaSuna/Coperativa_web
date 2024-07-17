@@ -20,7 +20,7 @@ const loginAdministrador = async (email, contraseña) => {
     }
 
     const data = await response.json();
-
+    console.log(data.Socio)
     return data;
   } catch (error) {
     console.error("Error en getSocio:", error);
@@ -217,6 +217,32 @@ const getAllViviendas = async () => {
   }
 };
 
+
+
+// cooperativas
+
+const getCooperativaPorAdmin = async (idMiembro) => {
+  try {
+    const response = await fetch(`${URL}/cooperativa/Admin/${idMiembro}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data)
+    return data;
+  } catch (error) {
+    console.error("Error en getCooperativasPorAdmin:", error);
+    throw new Error("Error al obtener los datos de la Cooperativa");
+  }
+};
+
 // usuario
 
 // const postUsuario = async (socioEntity, suplente, vivienda) => {
@@ -253,4 +279,5 @@ export {
   getVivienda,
   getAllViviendas,
   getAllSocios,
+  getCooperativaPorAdmin,
 };

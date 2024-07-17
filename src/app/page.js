@@ -1,7 +1,7 @@
 "use client";
 import "./globals.css";
 import React, { useState, useContext } from "react";
-import { loginAdministrador, loginUsuario } from "../Api/api.js";
+import { loginAdministrador, loginUsuario , getCooperativaPorAdmin } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
 
@@ -13,12 +13,14 @@ const Home = () => {
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
-    const data = await loginAdministrador(email, password);
-    console.log(data);
-    if (data == null) {
+    const dataAdmin = await loginAdministrador(email, password);
+    console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
+    const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro)
+    console.log(`Cooperativa admin: ${cooperativaData}`)
+    if (dataAdmin == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      loginMiembro(data);
+      loginMiembro(dataAdmin, cooperativaData);
       router.push("./AdministradorHome");
     }
   };
