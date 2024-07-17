@@ -133,8 +133,7 @@ const ListadoSocio = () => {
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center">
                   <div className="sm:flex hidden flex-col">
-                    24.12.2020
-                    <div className="text-gray-400 text-xs">11:16 AM</div>
+                    {socios.fechaIngreso}
                   </div>
                   <button className="w-8 h-8 inline-flex items-center justify-center text-gray-400 ml-auto">
                     <svg
