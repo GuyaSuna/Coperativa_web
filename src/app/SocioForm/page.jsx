@@ -38,7 +38,6 @@ const SocioForm = () => {
         }
       });
       setViviendasDisponibles(viviendasDisponibles);
-      console.log(response, "no anda response");
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -158,13 +157,13 @@ const SocioForm = () => {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
         console.log(responseSuplente);
       }
-      alert("Dado de alta correctamente")
+      alert("Dado de alta correctamente");
     } catch (error) {
       console.error("Error al enviar los datos del socio:", error);
     }
   };
-//      ruta dinamica 
-//      router.push(`/UserInfo/${NroSocio}`);
+  //      ruta dinamica
+  //      router.push(`/UserInfo/${NroSocio}`);
   return (
     <div className="general-container">
       <form onSubmit={handleSubmit} className="form">

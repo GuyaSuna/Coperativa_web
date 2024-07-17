@@ -182,7 +182,7 @@ const getAllViviendas = async () => {
         "Content-Type": "application/json",
       },
     });
-   
+
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
