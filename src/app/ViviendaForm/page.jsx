@@ -1,6 +1,5 @@
 "use client";
 
-import React, { useEffect } from "react";
 import { useState } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
@@ -36,7 +35,7 @@ const ViviendaForm = () => {
   };
 
   return (
-    <div>
+    <div className="general-container">
       <form onSubmit={handleSubmit} className="form">
         <label className="label">
           Número de vivienda:
