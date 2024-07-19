@@ -18,8 +18,6 @@ const UpdateSocio = () => {
   const [telefonoSocio, setTelefonoSocio] = useState();
   const [fechaIngreso, setFechaIngreso] = useState();
   const [errores, setErrores] = useState({});
-  const [viviendasDisponibles, setViviendasDisponibles] = useState([]);
-  const [seleccionVivienda, setSeleccionVivienda] = useState("");
 
   useEffect(() => {
     const fetchSocio = async () => {
@@ -42,29 +40,6 @@ const UpdateSocio = () => {
     }
   }, [cedulaSocio]);
 
-  useEffect(() => {
-    fetchViviendasDisponibles();
-  }, []);
-
-  const fetchViviendasDisponibles = async () => {
-    try {
-      const response = await getAllViviendas();
-      console.log(response);
-      let viviendasDisponibles = [];
-      response.forEach((vivienda) => {
-        if (
-          vivienda.socioTitular === null ||
-          vivienda.socioTitular.CedulaSocio === cedulaSocio
-        ) {
-          viviendasDisponibles.push(vivienda);
-        }
-      });
-      setViviendasDisponibles(viviendasDisponibles);
-    } catch (error) {
-      console.error("Error al obtener las viviendas:", error);
-    }
-  };
-
   const validarFormulario = () => {
     const errores = {};
 
@@ -76,9 +51,6 @@ const UpdateSocio = () => {
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
     if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-
-    if (!seleccionVivienda)
-      errores.seleccionVivienda = "La selección de vivienda es obligatoria";
 
     setErrores(errores);
 
@@ -96,9 +68,7 @@ const UpdateSocio = () => {
         apellidoSocio,
         capitalSocio,
         telefonoSocio,
-        fechaIngreso,
-        viviendasDisponibles,
-        seleccionVivienda
+        fechaIngreso
       );
       alert("Socio actualizado con éxito.");
     } catch (error) {
@@ -220,26 +190,7 @@ const UpdateSocio = () => {
             <span className="error">{errores.fechaIngreso}</span>
           )}
         </label>
-        <br />
-        <label className="label">
-          Seleccione una vivienda:
-          <select
-            name="seleccionVivienda"
-            value={seleccionVivienda}
-            onChange={(e) => setSeleccionVivienda(e.target.value)}
-            className="select"
-          >
-            <option value="">Seleccione una vivienda</option>
-            {viviendasDisponibles.map((vivienda) => (
-              <option key={vivienda.nroVivienda} value={vivienda.nroVivienda}>
-                {`Vivienda Nro.: ${vivienda.nroVivienda} - ${vivienda.cantidadDormitorios} dormitorios`}
-              </option>
-            ))}
-          </select>
-          {errores.seleccionVivienda && (
-            <span className="error">{errores.seleccionVivienda}</span>
-          )}
-        </label>
+
         <button type="submit" className="button">
           Modificar
         </button>

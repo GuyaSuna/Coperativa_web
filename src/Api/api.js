@@ -131,8 +131,7 @@ const updateSocio = async (
   apellidoSocio,
   capitalSocio,
   Telefono,
-  FechaIngreso,
-  suplente
+  FechaIngreso
 ) => {
   try {
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
@@ -148,7 +147,6 @@ const updateSocio = async (
         capitalSocio,
         Telefono,
         FechaIngreso,
-        suplente,
       }),
     });
 
