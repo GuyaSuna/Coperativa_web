@@ -2,10 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
-import { getSocio, updateSocio, getAllViviendas } from "../../Api/api";
+import {
+  getSocio,
+  updateSocio,
+  getAllViviendas,
+  deleteSocio,
+} from "../../Api/api";
 
 const UpdateSocio = () => {
-  const [cedulaSocio, setCedulaSocio] = useState(8765431); //ver
+  const [cedulaSocio, setCedulaSocio] = useState(43653365); //ver
   const [nroSocio, setNroSocio] = useState();
   const [nombreSocio, setNombreSocio] = useState();
   const [apellidoSocio, setApellidoSocio] = useState();
@@ -24,7 +29,7 @@ const UpdateSocio = () => {
         setNombreSocio(data.nombreSocio);
         setApellidoSocio(data.apellidoSocio);
         setCapitalSocio(data.capitalSocio);
-        setTelefono(data.telefono);
+        setTelefonoSocio(data.telefono);
         setFechaIngreso(data.fechaIngreso);
         setSeleccionVivienda(data.vivienda ? data.vivienda.nroVivienda : "");
       } catch (error) {
@@ -95,9 +100,23 @@ const UpdateSocio = () => {
         viviendasDisponibles,
         seleccionVivienda
       );
-      alert("Anda el update");
+      alert("Socio actualizado con éxito.");
     } catch (error) {
       console.error(`An error has occurred updateSocio: ${error.message}`);
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = confirm(
+      "¿Estás seguro de que quieres eliminar este socio?"
+    );
+    if (confirmDelete) {
+      try {
+        await deleteSocio(cedulaSocio);
+        alert("Socio eliminado con éxito");
+      } catch (error) {
+        console.error(`An error has occurred in deleteSocio: ${error.message}`);
+      }
     }
   };
 
@@ -223,6 +242,9 @@ const UpdateSocio = () => {
         </label>
         <button type="submit" className="button">
           Modificar
+        </button>
+        <button type="button" onClick={handleDelete} className="button">
+          Borrar
         </button>
       </form>
     </div>
