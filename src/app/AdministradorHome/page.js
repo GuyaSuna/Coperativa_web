@@ -9,7 +9,8 @@ import ListadoSocio from "@/Components/Listados/ListadoSocios/ListadoSocio";
 const AdminHome = () => {
   const { miembro , cooperativa } = useContext(MiembroContext);
   console.log(miembro);
-  console.log(`Cooperativa: ${cooperativa.idCooperativa}`)
+  console.log('Cooperativa:', cooperativa);
+
   return (
     <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
       <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
