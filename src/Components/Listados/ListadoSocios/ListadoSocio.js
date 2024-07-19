@@ -19,7 +19,7 @@ const ListadoSocio = () => {
       console.error("Error al obtener los socios:", error);
     }
   };
-  console.log("ESTOS SON LOS SOCIOS" + allSocios);
+
   return (
     <div className="sm:p-7 p-4">
       <div className="flex w-full items-center mb-7">
