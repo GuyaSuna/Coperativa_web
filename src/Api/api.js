@@ -56,9 +56,9 @@ const loginUsuario = async (email, contraseña) => {
 };
 
 //socio
-const getSocio = async (UserNumber) => {
+const getSocio = async (cedulaSocio) => {
   try {
-    const response = await fetch(`${URL}/socio/${UserNumber}`, {
+    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

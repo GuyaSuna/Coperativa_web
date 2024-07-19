@@ -1,14 +1,11 @@
 "use client";
 
-import React from "react";
-import { getSocio, updateSocio } from "@/Api/api"; // ver
-import Link from "next/link";
-import { useRouter } from "next/router"; //ver
+import React, { useState, useEffect } from "react";
+import "./FormStyle.css";
+import { getSocio, updateSocio, getAllViviendas } from "../../Api/api";
 
 const UpdateSocio = () => {
-  const router = useRouter();
-
-  const [cedulaSocio, setCedulaSocio] = useState(); //ver
+  const [cedulaSocio, setCedulaSocio] = useState(8765431); //ver
   const [nroSocio, setNroSocio] = useState();
   const [nombreSocio, setNombreSocio] = useState();
   const [apellidoSocio, setApellidoSocio] = useState();
@@ -18,28 +15,18 @@ const UpdateSocio = () => {
   const [errores, setErrores] = useState({});
   const [viviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [seleccionVivienda, setSeleccionVivienda] = useState("");
-  const [tieneSuplente, setTieneSuplente] = useState(false);
-  const [nombreSuplente, setNombreSuplente] = useState("");
-  const [apellidoSuplente, setApellidoSuplente] = useState("");
-  const [cedulaSuplente, setCedulaSuplente] = useState("");
-  const [telefonoSuplente, setTelefonoSuplente] = useState("");
 
   useEffect(() => {
-    // Lógica para obtener los datos del socio por cedulaSocio y rellenar el formulario, ver.
     const fetchSocio = async () => {
       try {
-        const response = await fetch(`${URL}/socio/${cedulaSocio}`);
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-        const data = await response.json();
+        const data = await getSocio(cedulaSocio);
         setNroSocio(data.nroSocio);
         setNombreSocio(data.nombreSocio);
         setApellidoSocio(data.apellidoSocio);
         setCapitalSocio(data.capitalSocio);
         setTelefono(data.telefono);
         setFechaIngreso(data.fechaIngreso);
-        setSuplente(data.suplente); //ver
+        setSeleccionVivienda(data.vivienda ? data.vivienda.nroVivienda : "");
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
@@ -50,30 +37,44 @@ const UpdateSocio = () => {
     }
   }, [cedulaSocio]);
 
+  useEffect(() => {
+    fetchViviendasDisponibles();
+  }, []);
+
+  const fetchViviendasDisponibles = async () => {
+    try {
+      const response = await getAllViviendas();
+      console.log(response);
+      let viviendasDisponibles = [];
+      response.forEach((vivienda) => {
+        if (
+          vivienda.socioTitular === null ||
+          vivienda.socioTitular.CedulaSocio === cedulaSocio
+        ) {
+          viviendasDisponibles.push(vivienda);
+        }
+      });
+      setViviendasDisponibles(viviendasDisponibles);
+    } catch (error) {
+      console.error("Error al obtener las viviendas:", error);
+    }
+  };
+
   const validarFormulario = () => {
     const errores = {};
 
-    if (!CedulaSocio) errores.cedulaSocio = "La cédula es obligatoria";
-    if (!NroSocio) errores.nroSocio = "El número de socio es obligatorio";
-    if (!NombreSocio) errores.nombreSocio = "El nombre es obligatorio";
-    if (!ApellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
-    if (!TelefonoSocio) errores.telefonoSocio = "El teléfono es obligatorio";
-    if (!CapitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!FechaIngreso)
+    if (!cedulaSocio) errores.cedulaSocio = "La cédula es obligatoria";
+    if (!nroSocio) errores.nroSocio = "El número de socio es obligatorio";
+    if (!nombreSocio) errores.nombreSocio = "El nombre es obligatorio";
+    if (!apellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
+    if (!telefonoSocio) errores.telefonoSocio = "El teléfono es obligatorio";
+    if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
+    if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-    if (!SeleccionVivienda)
+
+    if (!seleccionVivienda)
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
 
-    if (TieneSuplente) {
-      if (!CedulaSuplente)
-        errores.cedulaSuplente = "La cédula del suplente es obligatoria";
-      if (!NombreSuplente)
-        errores.nombreSuplente = "El nombre del suplente es obligatorio";
-      if (!ApellidoSuplente)
-        errores.apellidoSuplente = "El apellido del suplente es obligatorio";
-      if (!TelefonoSuplente)
-        errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
-    }
     setErrores(errores);
 
     return Object.keys(errores).length === 0;
@@ -92,14 +93,9 @@ const UpdateSocio = () => {
         telefonoSocio,
         fechaIngreso,
         viviendasDisponibles,
-        seleccionVivienda,
-        tieneSuplente,
-        nombreSuplente,
-        apellidoSuplente,
-        cedulaSuplente,
-        telefonoSuplente
+        seleccionVivienda
       );
-      router.push("/AdministradorHome"); // ver
+      alert("Anda el update");
     } catch (error) {
       console.error(`An error has occurred updateSocio: ${error.message}`);
     }
@@ -197,7 +193,7 @@ const UpdateSocio = () => {
           <input
             type="date"
             name="fechaIngreso"
-            value={FechaIngreso}
+            value={fechaIngreso}
             onChange={(e) => setFechaIngreso(e.target.value)}
             className="input"
           />
@@ -225,78 +221,6 @@ const UpdateSocio = () => {
             <span className="error">{errores.seleccionVivienda}</span>
           )}
         </label>
-        <br />
-        <label className="label">
-          Suplente:
-          <input
-            type="checkbox"
-            name="tieneSuplente"
-            checked={tieneSuplente}
-            onChange={(e) => setTieneSuplente(e.target.checked)}
-            className="checkbox"
-          />
-        </label>
-        <br />
-        {tieneSuplente && (
-          <>
-            <label className="label">
-              Nombre del Suplente:
-              <input
-                type="text"
-                name="nombreSuplente"
-                value={nombreSuplente}
-                onChange={(e) => setNombreSuplente(e.target.value)}
-                className="input"
-              />
-              {errores.nombreSuplente && (
-                <span className="error">{errores.nombreSuplente}</span>
-              )}
-            </label>
-            <br />
-            <label className="label">
-              Apellido del Suplente:
-              <input
-                type="text"
-                name="apellidoSuplente"
-                value={apellidoSuplente}
-                onChange={(e) => setApellidoSuplente(e.target.value)}
-                className="input"
-              />
-              {errores.apellidoSuplente && (
-                <span className="error">{errores.apellidoSuplente}</span>
-              )}
-            </label>
-            <br />
-            <label className="label">
-              Número de CI del Suplente:
-              <input
-                type="text"
-                name="cedulaSuplente"
-                value={cedulaSuplente}
-                onChange={(e) => setCedulaSuplente(e.target.value)}
-                className="input"
-              />
-              {errores.cedulaSuplente && (
-                <span className="error">{errores.cedulaSuplente}</span>
-              )}
-            </label>
-            <br />
-            <label className="label">
-              Teléfono del Suplente:
-              <input
-                type="text"
-                name="telefonoSuplente"
-                value={telefonoSuplente}
-                onChange={(e) => setTelefonoSuplente(e.target.value)}
-                className="input"
-              />
-              {errores.telefonoSuplente && (
-                <span className="error">{errores.telefonoSuplente}</span>
-              )}
-            </label>
-            <br />
-          </>
-        )}
         <button type="submit" className="button">
           Modificar
         </button>
