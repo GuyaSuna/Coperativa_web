@@ -6,12 +6,14 @@ import { MiembroContext } from "@/Provider/provider";
 import logo from "../../../public/LogoApp.jpg";
 import Image from "next/image";
 import ListadoSocio from "@/Components/Listados/ListadoSocios/ListadoSocio";
+import ListadoViviendas from "@/Components/Listados/ListadoViviendas/ListadoViviendas";
 
 const AdminHome = () => {
   const { miembro , cooperativa } = useContext(MiembroContext);
   console.log(miembro);
   console.log('Cooperativa:', cooperativa);
   const [socios, setSocios] = useState([]);
+  const [identificadorComponente , setIdentificadorComponente] = useState(0);
 
   
 
@@ -105,12 +107,12 @@ const AdminHome = () => {
       <div className="flex-grow overflow-hidden h-full flex flex-col">
         <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden px-10">
           <div className="flex h-full text-gray-600 dark:text-gray-400">
-            <Link
-              href="../ViviendaForm"
+            <button
+              onClick={ () => setIdentificadorComponente(1)}
               className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Agregar Viviendas
-            </Link>
+            </button>
             <Link
               href="../SocioForm"
               className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex mr-8 items-center"
@@ -274,7 +276,12 @@ const AdminHome = () => {
                 </a>
               </div>
             </div>
-            <ListadoSocio/>
+            { identificadorComponente == 0 && 
+              <ListadoSocio/>
+            }  { identificadorComponente == 1 && 
+              <ListadoViviendas/>
+            }
+           
           </div>
         </div>
       </div>
