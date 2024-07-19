@@ -20,7 +20,7 @@ const loginAdministrador = async (email, contraseña) => {
     }
 
     const data = await response.json();
-    console.log(data.Socio)
+    console.log(data.Socio);
     return data;
   } catch (error) {
     console.error("Error en getSocio:", error);
@@ -77,6 +77,7 @@ const getSocio = async (UserNumber) => {
     throw new Error("Error al obtener los datos del socio");
   }
 };
+
 const getAllSocios = async () => {
   try {
     const response = await fetch(`${URL}/socio/allSocios`, {
@@ -98,6 +99,7 @@ const getAllSocios = async () => {
     throw new Error("Error al obtener los datos de los Socios.");
   }
 };
+
 const postSocio = async (socioEntity, suplente) => {
   try {
     console.log(socioEntity);
@@ -119,6 +121,73 @@ const postSocio = async (socioEntity, suplente) => {
   } catch (error) {
     console.error("Error en postSocio:", error);
     throw new Error("Error al enviar los datos del socio");
+  }
+};
+
+const updateSocio = async (
+  cedulaSocio,
+  nroSocio,
+  nombreSocio,
+  apellidoSocio,
+  capitalSocio,
+  Telefono,
+  FechaIngreso,
+  suplente
+) => {
+  try {
+    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cedulaSocio,
+        nroSocio,
+        nombreSocio,
+        apellidoSocio,
+        capitalSocio,
+        Telefono,
+        FechaIngreso,
+        suplente,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.status}`);
+    }
+    return true;
+  } catch (error) {
+    console.error(`An error has occurred in updateSocio: ${error.message}`);
+    throw error;
+  }
+};
+
+const deleteSocio = async (cedulaSocio) => {
+  try {
+    const socioResponse = await fetch(`${URL}/socio/${cedulaSocio}`);
+    if (!socioResponse.ok) {
+      throw new Error(`Error en la solicitud: ${socioResponse.status}`);
+    }
+    const socioData = await socioResponse.json();
+    if (socioData.suplente) {
+      throw new Error(
+        "No se puede eliminar el socio porque tiene un suplente asociado."
+      );
+    }
+
+    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Error en la solicitud: ${response.status}`);
+    }
+    return true;
+  } catch (error) {
+    console.error(`An error has occurred in DeleteProduct: ${error.message}`);
+    return false;
   }
 };
 
@@ -217,8 +286,6 @@ const getAllViviendas = async () => {
   }
 };
 
-
-
 // cooperativas
 
 const getCooperativaPorAdmin = async (idMiembro) => {
@@ -235,7 +302,7 @@ const getCooperativaPorAdmin = async (idMiembro) => {
     }
 
     const data = await response.json();
-    console.log(data)
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error en getCooperativasPorAdmin:", error);
@@ -270,14 +337,16 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 // };
 
 export {
-  getSocio,
   loginAdministrador,
   loginUsuario,
+  getSocio,
   postSocio,
+  getAllSocios,
+  updateSocio,
+  deleteSocio,
   postSuplente,
   postVivienda,
   getVivienda,
   getAllViviendas,
-  getAllSocios,
   getCooperativaPorAdmin,
 };

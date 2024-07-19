@@ -247,7 +247,7 @@ const SocioForm = () => {
             className="input"
           />
           {Errores.capitalSocio && (
-            <span className="error">{Errores.apellidoSocio}</span>
+            <span className="error">{Errores.ApellidoSocio}</span>
           )}
         </label>
         <br />
@@ -260,8 +260,8 @@ const SocioForm = () => {
             onChange={handleChangeFechaIngreso}
             className="input"
           />
-          {Errores.apellidoSocio && (
-            <span className="error">{Errores.apellidoSocio}</span>
+          {Errores.fechaIngreso && (
+            <span className="error">{Errores.fechaIngreso}</span>
           )}
         </label>
         <br />
