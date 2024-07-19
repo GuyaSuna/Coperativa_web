@@ -1,28 +1,29 @@
-'use client'
-import React , {createContext , useState} from "react";
+"use client";
+import React, { createContext, useState } from "react";
 
 const MiembroContext = createContext();
 
-const MiembroProvider =  ({children}) => {
+const MiembroProvider = ({ children }) => {
+  const [miembro, setMiembro] = useState(null);
+  const [cooperativa, setCooperativa] = useState(null);
 
-    const[miembro , setMiembro] = useState(null);
-    const[cooperativa, setCooperativa] = useState(null);
+  const loginMiembro = (DatosMiembro, DatosCooperativa) => {
+    setMiembro(DatosMiembro);
+    setCooperativa(DatosCooperativa);
+  };
 
-    const loginMiembro = (DatosMiembro , DatosCooperativa) => {
-        setMiembro(DatosMiembro)
-        setCooperativa(DatosCooperativa)
-    }
+  const logoutMiembro = () => {
+    setMiembro(null);
+    setCooperativa(null);
+  };
 
-    const logoutMiembro = () =>{
-        setMiembro(null)
-        setCooperativa(null)
-    }
-
-    return (
-        <MiembroContext.Provider    value={{miembro, cooperativa, loginMiembro, logoutMiembro}}>
-            {children}
-        </MiembroContext.Provider>
-    );
+  return (
+    <MiembroContext.Provider
+      value={{ miembro, cooperativa, loginMiembro, logoutMiembro }}
+    >
+      {children}
+    </MiembroContext.Provider>
+  );
 };
 
-export {MiembroContext,MiembroProvider}
+export { MiembroContext, MiembroProvider };
