@@ -7,6 +7,7 @@ import logo from "../../../public/LogoApp.jpg";
 import Image from "next/image";
 import ListadoSocio from "@/Components/Listados/ListadoSocios/ListadoSocio";
 import ListadoViviendas from "@/Components/Listados/ListadoViviendas/ListadoViviendas";
+import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 
 const AdminHome = () => {
   const { miembro , cooperativa } = useContext(MiembroContext);
@@ -244,18 +245,18 @@ const AdminHome = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 sm:mt-7 mt-4">
-                <a
-                  href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5"
+              <button
+                  onClick={ () => setIdentificadorComponente(0)}
+                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Socios
-                </a>
-                <a
-                  href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5"
+                  </button>
+                <button
+                  onClick={ () => setIdentificadorComponente(1)}
+                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Viviendas
-                </a>
+                  </button>
                 <a
                   href="#"
                   className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5 sm:block hidden"
@@ -276,12 +277,7 @@ const AdminHome = () => {
                 </a>
               </div>
             </div>
-            { identificadorComponente == 0 && 
-              <ListadoSocio/>
-            }  { identificadorComponente == 1 && 
-              <ListadoViviendas/>
-            }
-           
+              <ComponentesOrganizados identificador={identificadorComponente} />   
           </div>
         </div>
       </div>

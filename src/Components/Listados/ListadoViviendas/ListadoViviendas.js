@@ -122,7 +122,7 @@ const ListadoViviendas = () => {
                 <div className="flex items-center ml-4">{vivienda.nroVivienda}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{vivienda.socioTitular.nombreSocio}</div>
+                <div className="flex items-center"></div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                 {vivienda.cantidadDormitorios}
