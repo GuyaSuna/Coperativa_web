@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { postSocio, postSuplente, getAllViviendas } from "../../../Api/api.js";
+import { postSocio, postSuplente, getAllViviendas } from "../../../../Api/api.js";
 
 const AltaSocio = () => {
   const router = useRouter();

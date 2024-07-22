@@ -3,7 +3,7 @@
 import { useState } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
-import { postVivienda } from "../../../Api/api.js";
+import { postVivienda } from "../../../../Api/api.js";
 
 const AltaVivienda = () => {
   const router = useRouter();
