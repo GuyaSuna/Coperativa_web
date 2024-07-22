@@ -292,6 +292,60 @@ const getAllViviendas = async () => {
   }
 };
 
+const updateVivienda = async (
+  nroVivienda,
+  cantidadDormitorios,
+  socioTitular
+) => {
+  console.log("El nro de vivienda es: " + nroVivienda);
+  console.log("La cant de dormis es: " + cantidadDormitorios);
+  console.log("El es socio: " + socioTitular);
+  console.log("Vivienda de la cooperativa: " + idCooperativa);
+  try {
+    const response = await fetch(`${URL}/viviendas`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nroVivienda,
+        cantidadDormitorios,
+        socioTitular: { cedulaSocio },
+        cooperativaEntity: { idCooperativa },
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al actualizar la vivienda");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en updateVivienda:", error);
+    throw error;
+  }
+};
+
+const deleteVivienda = async (nroVivienda) => {
+  try {
+    const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteVivienda:", error);
+    throw new Error("Error al eliminar la vivienda.");
+  }
+};
+
 // cooperativas
 
 const getCooperativaPorAdmin = async (idMiembro) => {
@@ -354,5 +408,7 @@ export {
   postVivienda,
   getVivienda,
   getAllViviendas,
+  updateVivienda,
+  deleteVivienda,
   getCooperativaPorAdmin,
 };
