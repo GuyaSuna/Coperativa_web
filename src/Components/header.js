@@ -4,6 +4,7 @@ import Link from "next/link";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [IdentificadorComponente, setIdentificadorComponente] = useState(0);
 
   return (
     <header className="h-16 flex w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10">

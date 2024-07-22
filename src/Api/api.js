@@ -123,13 +123,6 @@ const postSocio = async (socioEntity) => {
     throw new Error("Error al enviar los datos del socio");
   }
 };
-const formatDateToSQL = (date) => {
-  const d = new Date(date);
-  const month = `${d.getMonth() + 1}`.padStart(2, "0");
-  const day = `${d.getDate()}`.padStart(2, "0");
-  const year = d.getFullYear();
-  return [year, month, day].join("-");
-};
 
 const updateSocio = async (
   cedulaSocio,
@@ -143,7 +136,6 @@ const updateSocio = async (
   console.log("La cedula del socio es: " + cedulaSocio);
   console.log("Telefono que se envía: " + telefono);
   try {
-    const fechaFormateada = formatDateToSQL(FechaIngreso);
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "PUT",
       headers: {
@@ -156,7 +148,7 @@ const updateSocio = async (
         apellidoSocio,
         capitalSocio,
         telefono,
-        FechaIngreso: fechaFormateada,
+        FechaIngreso,
       }),
     });
 
