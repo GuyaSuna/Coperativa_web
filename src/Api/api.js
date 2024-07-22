@@ -56,9 +56,9 @@ const loginUsuario = async (email, contraseña) => {
 };
 
 //socio
-const getSocio = async (UserNumber) => {
+const getSocio = async (cedulaSocio) => {
   try {
-    const response = await fetch(`${URL}/socio/${UserNumber}`, {
+    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +100,7 @@ const getAllSocios = async () => {
   }
 };
 
-const postSocio = async (socioEntity, suplente) => {
+const postSocio = async (socioEntity) => {
   try {
     console.log(socioEntity);
     const response = await fetch(`${URL}/socio/${nroVivienda}`, {
@@ -123,6 +123,13 @@ const postSocio = async (socioEntity, suplente) => {
     throw new Error("Error al enviar los datos del socio");
   }
 };
+const formatDateToSQL = (date) => {
+  const d = new Date(date);
+  const month = `${d.getMonth() + 1}`.padStart(2, "0");
+  const day = `${d.getDate()}`.padStart(2, "0");
+  const year = d.getFullYear();
+  return [year, month, day].join("-");
+};
 
 const updateSocio = async (
   cedulaSocio,
@@ -131,10 +138,14 @@ const updateSocio = async (
   apellidoSocio,
   capitalSocio,
   Telefono,
-  FechaIngreso,
-  suplente
+  FechaIngreso
 ) => {
+  console.log("La cedula del socio es: " + cedulaSocio);
+  console.log("La fecha es: " + FechaIngreso);
+  console.log("Telefono que se envía: " + Telefono);
   try {
+    const fechaFormateada = formatDateToSQL(FechaIngreso);
+    console.log("Fecha formateada:", fechaFormateada);
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "PUT",
       headers: {
@@ -147,17 +158,21 @@ const updateSocio = async (
         apellidoSocio,
         capitalSocio,
         Telefono,
-        FechaIngreso,
-        suplente,
+        FechaIngreso: fechaFormateada,
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Error en la solicitud: ${response.status}`);
+      const errorText = await response.text();
+      throw new Error(
+        `Error en la solicitud: ${response.status} - ${errorText}`
+      );
     }
-    return true;
+
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error(`An error has occurred in updateSocio: ${error.message}`);
+    console.error(`El error ocurrio en updateSocio: ${error.message}`);
     throw error;
   }
 };
