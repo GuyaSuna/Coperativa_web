@@ -10,26 +10,29 @@ import {
 } from "../../Api/api";
 
 const UpdateSocio = () => {
-  const [cedulaSocio, setCedulaSocio] = useState(43653365); //ver
-  const [nroSocio, setNroSocio] = useState();
-  const [nombreSocio, setNombreSocio] = useState();
-  const [apellidoSocio, setApellidoSocio] = useState();
-  const [capitalSocio, setCapitalSocio] = useState();
-  const [telefonoSocio, setTelefonoSocio] = useState();
-  const [fechaIngreso, setFechaIngreso] = useState();
+  const [cedulaSocio, setCedulaSocio] = useState("");
+  const [nroSocio, setNroSocio] = useState("");
+  const [nombreSocio, setNombreSocio] = useState("");
+  const [apellidoSocio, setApellidoSocio] = useState("");
+  const [capitalSocio, setCapitalSocio] = useState("");
+  const [Telefono, setTelefono] = useState("");
+  const [FechaIngreso, setFechaIngreso] = useState("");
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
     const fetchSocio = async () => {
       try {
         const data = await getSocio(cedulaSocio);
-        setNroSocio(data.nroSocio);
-        setNombreSocio(data.nombreSocio);
-        setApellidoSocio(data.apellidoSocio);
-        setCapitalSocio(data.capitalSocio);
-        setTelefonoSocio(data.telefono);
-        setFechaIngreso(data.fechaIngreso);
-        setSeleccionVivienda(data.vivienda ? data.vivienda.nroVivienda : "");
+        if (data) {
+          setNroSocio(data.nroSocio || "");
+          setNombreSocio(data.nombreSocio || "");
+          setApellidoSocio(data.apellidoSocio || "");
+          setCapitalSocio(data.capitalSocio || "");
+          setTelefono(data.Telefono || "");
+          setFechaIngreso(
+            data.FechaIngreso ? data.FechaIngreso.substring(0, 10) : ""
+          ); // Guriceeeee esto valida que el date se el año/mes/dia
+        }
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
@@ -47,32 +50,32 @@ const UpdateSocio = () => {
     if (!nroSocio) errores.nroSocio = "El número de socio es obligatorio";
     if (!nombreSocio) errores.nombreSocio = "El nombre es obligatorio";
     if (!apellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
-    if (!telefonoSocio) errores.telefonoSocio = "El teléfono es obligatorio";
+    if (!Telefono) errores.Telefono = "El teléfono es obligatorio";
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!fechaIngreso)
+    if (!FechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-
     setErrores(errores);
 
     return Object.keys(errores).length === 0;
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!validarFormulario()) return;
+    console.log("Telefono que se envia: " + Telefono);
     try {
-      await updateSocio(
+      const result = await updateSocio(
         cedulaSocio,
         nroSocio,
         nombreSocio,
         apellidoSocio,
         capitalSocio,
-        telefonoSocio,
-        fechaIngreso
+        Telefono,
+        FechaIngreso
       );
-      alert("Socio actualizado con éxito.");
+      console.log("Socio actualizado:", result);
     } catch (error) {
-      console.error(`An error has occurred updateSocio: ${error.message}`);
+      console.error("Error al actualizar socio:", error);
     }
   };
 
@@ -98,7 +101,7 @@ const UpdateSocio = () => {
           <input
             type="text"
             name="nroSocio"
-            value={nroSocio}
+            value={nroSocio || ""}
             onChange={(e) => setNroSocio(e.target.value)}
             className="input"
           />
@@ -112,7 +115,7 @@ const UpdateSocio = () => {
           <input
             type="text"
             name="nombreSocio"
-            value={nombreSocio}
+            value={nombreSocio || ""}
             onChange={(e) => setNombreSocio(e.target.value)}
             className="input"
           />
@@ -126,7 +129,7 @@ const UpdateSocio = () => {
           <input
             type="text"
             name="apellidoSocio"
-            value={apellidoSocio}
+            value={apellidoSocio || ""}
             onChange={(e) => setApellidoSocio(e.target.value)}
             className="input"
           />
@@ -140,7 +143,7 @@ const UpdateSocio = () => {
           <input
             type="text"
             name="cedulaSocio"
-            value={cedulaSocio}
+            value={cedulaSocio || ""}
             onChange={(e) => setCedulaSocio(e.target.value)}
             className="input"
           />
@@ -154,8 +157,8 @@ const UpdateSocio = () => {
           <input
             type="text"
             name="telefonoSocio"
-            value={telefonoSocio}
-            onChange={(e) => setTelefonoSocio(e.target.value)}
+            value={Telefono || ""}
+            onChange={(e) => setTelefono(e.target.value)}
             className="input"
           />
           {errores.telefonoSocio && (
@@ -168,7 +171,7 @@ const UpdateSocio = () => {
           <input
             type="text"
             name="capitalSocio"
-            value={capitalSocio}
+            value={capitalSocio || ""}
             onChange={(e) => setCapitalSocio(e.target.value)}
             className="input"
           />
@@ -182,7 +185,7 @@ const UpdateSocio = () => {
           <input
             type="date"
             name="fechaIngreso"
-            value={fechaIngreso}
+            value={FechaIngreso || ""}
             onChange={(e) => setFechaIngreso(e.target.value)}
             className="input"
           />
@@ -190,7 +193,7 @@ const UpdateSocio = () => {
             <span className="error">{errores.fechaIngreso}</span>
           )}
         </label>
-
+        <br />
         <button type="submit" className="button">
           Modificar
         </button>

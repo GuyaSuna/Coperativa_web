@@ -38,6 +38,7 @@ const SocioForm = () => {
         }
       });
       setViviendasDisponibles(viviendasDisponibles);
+      console.log("viviendas disponibles" + viviendasDisponibles);
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }

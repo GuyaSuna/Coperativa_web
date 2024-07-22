@@ -1,22 +1,22 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getAllSocios } from "../../../Api/api.js";
+import { getAllViviendas } from "../../../Api/api.js";
 
-const ListadoSocio = () => {
-  const [allSocios, setAllSocios] = useState([]);
+const ListadoViviendas = () => {
+  const [viviendas, setAllViviendas] = useState([]);
 
   useEffect(() => {
-    fetchAllSocios();
+    fetchAllViviendas();
   }, []);
 
-  const fetchAllSocios = async () => {
+  const fetchAllViviendas = async () => {
     try {
-      const response = await getAllSocios();
-      setAllSocios(response);
-      console.log(response, "no anda response");
+      const response = await getAllViviendas();
+      setAllViviendas(response);
+      console.log(response, "Viviendas");
     } catch (error) {
-      console.error("Error al obtener los socios:", error);
+      console.error("Error al obtener las viviendas:", error);
     }
   };
 
@@ -99,13 +99,13 @@ const ListadoSocio = () => {
         <thead>
           <tr className="text-gray-400">
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              NroSocio
+              NroVivienda
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Nombre
+              Socio Titular
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Apellido
+              Dormitorios
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">
               Estado Cuota
@@ -116,16 +116,16 @@ const ListadoSocio = () => {
           </tr>
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
-          {allSocios?.map((socios) => (
+          {viviendas?.map((vivienda) => (
             <tr>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">{socios.nroSocio}</div>
+                <div className="flex items-center ml-4">{vivienda.nroVivienda}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{socios.nombreSocio}</div>
+                <div className="flex items-center">{vivienda.socioTitular.nombreSocio}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                {socios.apellidoSocio}
+                {vivienda.cantidadDormitorios}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-red-500">
                 - $120.00
@@ -133,7 +133,7 @@ const ListadoSocio = () => {
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center">
                   <div className="sm:flex hidden flex-col">
-                    {socios.fechaIngreso}
+                    {vivienda.fechaIngreso}
                   </div>
                   <button className="w-8 h-8 inline-flex items-center justify-center text-gray-400 ml-auto">
                     <svg
@@ -200,4 +200,4 @@ const ListadoSocio = () => {
   );
 };
 
-export default ListadoSocio;
+export default ListadoViviendas;
