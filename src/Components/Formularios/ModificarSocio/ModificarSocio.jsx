@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
-import { getSocio, updateSocio, getAllViviendas } from "../../Api/api";
+import { getSocio, updateSocio, getAllViviendas } from "../../../Api/api";
 
-const UpdateSocio = () => {
+const ModificarSocio = () => {
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nroSocio, setNroSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
@@ -183,4 +183,4 @@ const UpdateSocio = () => {
   );
 };
 
-export default UpdateSocio;
+export default ModificarSocio;
