@@ -3,9 +3,9 @@
 import { useState } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
-import { postVivienda } from "../../Api/api.js";
+import { postVivienda } from "../../../Api/api.js";
 
-const ViviendaForm = () => {
+const AltaVivienda = () => {
   const router = useRouter();
 
   const [NroVivienda, setNroVivienda] = useState();
@@ -67,4 +67,4 @@ const ViviendaForm = () => {
   );
 };
 
-export default ViviendaForm;
+export default AltaVivienda;

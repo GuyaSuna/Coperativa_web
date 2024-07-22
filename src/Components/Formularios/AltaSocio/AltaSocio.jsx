@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { postSocio, postSuplente, getAllViviendas } from "../../Api/api.js";
+import { postSocio, postSuplente, getAllViviendas } from "../../../Api/api.js";
 
-const SocioForm = () => {
+const AltaSocio = () => {
   const router = useRouter();
   const [CedulaSocio, setCedulaSocio] = useState("");
   const [NroSocio, setNroSocio] = useState("");
@@ -365,4 +365,4 @@ const SocioForm = () => {
   );
 };
 
-export default SocioForm;
+export default AltaSocio;

@@ -5,8 +5,8 @@ import { getAllSocios } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import logo from "../../../public/LogoApp.jpg";
 import Image from "next/image";
-import ListadoSocio from "@/Components/Listados/ListadoSocios/ListadoSocio";
-import ListadoViviendas from "@/Components/Listados/ListadoViviendas/ListadoViviendas";
+import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
+
 
 const AdminHome = () => {
   const { miembro , cooperativa } = useContext(MiembroContext);
@@ -108,17 +108,17 @@ const AdminHome = () => {
         <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden px-10">
           <div className="flex h-full text-gray-600 dark:text-gray-400">
             <button
-              onClick={ () => setIdentificadorComponente(1)}
+              onClick={ () => setIdentificadorComponente(2)}
               className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Agregar Viviendas
             </button>
-            <Link
-              href="../SocioForm"
-              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex mr-8 items-center"
+            <button
+              onClick={ () => setIdentificadorComponente(3)}
+              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Agregar Socios
-            </Link>
+            </button>
             <a
               href="#"
               className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
@@ -244,18 +244,18 @@ const AdminHome = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 sm:mt-7 mt-4">
-                <a
-                  href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5"
+              <button
+                  onClick={ () => setIdentificadorComponente(0)}
+                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Socios
-                </a>
-                <a
-                  href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5"
+                  </button>
+                <button
+                  onClick={ () => setIdentificadorComponente(1)}
+                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Viviendas
-                </a>
+                  </button>
                 <a
                   href="#"
                   className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5 sm:block hidden"
@@ -276,12 +276,7 @@ const AdminHome = () => {
                 </a>
               </div>
             </div>
-            { identificadorComponente == 0 && 
-              <ListadoSocio/>
-            }  { identificadorComponente == 1 && 
-              <ListadoViviendas/>
-            }
-           
+              <ComponentesOrganizados identificador={identificadorComponente} />   
           </div>
         </div>
       </div>
