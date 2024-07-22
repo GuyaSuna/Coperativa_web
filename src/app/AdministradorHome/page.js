@@ -14,6 +14,7 @@ const AdminHome = () => {
   console.log('Cooperativa:', cooperativa);
   const [socios, setSocios] = useState([]);
   const [identificadorComponente , setIdentificadorComponente] = useState(0);
+  const [cedulaSocio , setCedulaSocio] = useState(0);
 
   
 
@@ -251,7 +252,7 @@ const AdminHome = () => {
                   Socios
                   </button>
                 <button
-                  onClick={ () => setIdentificadorComponente(1)}
+                  onClick={ () => setIdentificadorComponente(1,setCedulaSocio)}
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Viviendas
@@ -276,7 +277,7 @@ const AdminHome = () => {
                 </a>
               </div>
             </div>
-              <ComponentesOrganizados identificador={identificadorComponente} />   
+              <ComponentesOrganizados identificador={identificadorComponente} setCedulaSocio={setCedulaSocio} cedulaSocio={cedulaSocio} setIdentificadorComponente={setIdentificadorComponente} />   
           </div>
         </div>
       </div>
