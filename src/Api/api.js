@@ -137,15 +137,13 @@ const updateSocio = async (
   nombreSocio,
   apellidoSocio,
   capitalSocio,
-  Telefono,
+  telefono,
   FechaIngreso
 ) => {
   console.log("La cedula del socio es: " + cedulaSocio);
-  console.log("La fecha es: " + FechaIngreso);
-  console.log("Telefono que se envía: " + Telefono);
+  console.log("Telefono que se envía: " + telefono);
   try {
     const fechaFormateada = formatDateToSQL(FechaIngreso);
-    console.log("Fecha formateada:", fechaFormateada);
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "PUT",
       headers: {
@@ -157,7 +155,7 @@ const updateSocio = async (
         nombreSocio,
         apellidoSocio,
         capitalSocio,
-        Telefono,
+        telefono,
         FechaIngreso: fechaFormateada,
       }),
     });

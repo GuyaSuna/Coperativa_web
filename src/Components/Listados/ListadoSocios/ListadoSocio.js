@@ -5,7 +5,7 @@ import { getAllSocios } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-const ListadoSocio = () => {
+const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
   const [allSocios, setAllSocios] = useState([]);
 
   useEffect(() => {
@@ -21,6 +21,11 @@ const ListadoSocio = () => {
       console.error("Error al obtener los socios:", error);
     }
   };
+
+  const handleModificar = (cedula) => {
+    setCedulaSocio(cedula);
+    setIdentificadorComponente(4)
+  }
 
   return (
     <div className="sm:p-7 p-4">
@@ -174,7 +179,7 @@ const ListadoSocio = () => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            href="#"
+                            onClick={ () => handleModificar(socios.cedulaSocio)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Modificar
