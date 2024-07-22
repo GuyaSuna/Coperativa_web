@@ -5,15 +5,13 @@ import "./FormStyle.css";
 import { getSocio, updateSocio, getAllViviendas } from "../../../../Api/api";
 
 const ModificarSocio = ({cedulaSocioParam}) => {
-  console.log(" Es Esto: ")
-  console.log(cedulaSocioParam)
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nroSocio, setNroSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
   const [apellidoSocio, setApellidoSocio] = useState("");
   const [capitalSocio, setCapitalSocio] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [FechaIngreso, setFechaIngreso] = useState("");
+  const [fechaIngreso, setFechaIngreso] = useState("");
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -54,7 +52,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
     if (!apellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
     if (!telefono) errores.Telefono = "El teléfono es obligatorio";
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!FechaIngreso)
+    if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
     setErrores(errores);
 
@@ -63,6 +61,8 @@ const ModificarSocio = ({cedulaSocioParam}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(fechaIngreso)
     if (!validarFormulario()) return;
 
     try {
@@ -73,7 +73,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
         apellidoSocio,
         capitalSocio,
         telefono,
-        FechaIngreso
+        fechaIngreso
       );
       console.log("Socio actualizado:", result);
     } catch (error) {
@@ -173,7 +173,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
           <input
             type="date"
             name="fechaIngreso"
-            value={FechaIngreso || ""}
+            value={fechaIngreso || ""}
             onChange={(e) => setFechaIngreso(e.target.value)}
             className="input"
           />
