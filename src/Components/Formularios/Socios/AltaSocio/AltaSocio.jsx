@@ -127,6 +127,7 @@ const AltaSocio = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(FechaIngreso)
     if (!validarFormulario()) return;
     const SocioData = {
       cedulaSocio: CedulaSocio,

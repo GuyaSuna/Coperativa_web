@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
-import { getSocio, updateSocio, getAllViviendas } from "../../../../Api/api";
+import { getSocio, updateSocio } from "../../../../Api/api";
 
 const ModificarSocio = ({ cedulaSocioParam }) => {
   console.log(" Es Esto: ");
@@ -13,7 +13,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
   const [apellidoSocio, setApellidoSocio] = useState("");
   const [capitalSocio, setCapitalSocio] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [FechaIngreso, setFechaIngreso] = useState("");
+  const [fechaIngreso, setFechaIngreso] = useState("");
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -52,7 +52,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
     if (!apellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
     if (!telefono) errores.Telefono = "El teléfono es obligatorio";
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!FechaIngreso)
+    if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
     setErrores(errores);
 
@@ -61,6 +61,8 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log(fechaIngreso);
     if (!validarFormulario()) return;
 
     try {
@@ -71,11 +73,25 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
         apellidoSocio,
         capitalSocio,
         telefono,
-        FechaIngreso
+        fechaIngreso
       );
       console.log("Socio actualizado:", result);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = confirm(
+      "¿Estás seguro de que quieres eliminar este socio?"
+    );
+    if (confirmDelete) {
+      try {
+        await deleteSocio(cedulaSocio);
+        alert("Socio eliminado con éxito");
+      } catch (error) {
+        console.error(`An error has occurred in deleteSocio: ${error.message}`);
+      }
     }
   };
 
@@ -171,7 +187,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
           <input
             type="date"
             name="fechaIngreso"
-            value={FechaIngreso || ""}
+            value={fechaIngreso || ""}
             onChange={(e) => setFechaIngreso(e.target.value)}
             className="input"
           />
@@ -182,6 +198,9 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
         <br />
         <button type="submit" className="button">
           Modificar
+        </button>
+        <button type="button" onClick={handleDelete} className="button">
+          Borrar
         </button>
       </form>
     </div>
