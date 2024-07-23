@@ -3,6 +3,8 @@ import Link from "next/link";
 import logo from "../../public/LogoApp.jpg"; // Importa la imagen del logo
 
 const Header = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <header className="header">
       <div className="logo">
