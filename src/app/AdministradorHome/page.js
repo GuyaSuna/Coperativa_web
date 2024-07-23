@@ -79,31 +79,31 @@ const AdminHome = () => {
               <div className="flex items-center space-x-3 sm:mt-7 mt-4">
                 <button
                   onClick={() => setIdentificadorComponente(0)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
+                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
                 >
                   Socios
                 </button>
                 <button
                   onClick={() => setIdentificadorComponente(1, setCedulaSocio)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
+                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
                 >
                   Viviendas
                 </button>
                 <a
                   href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5 sm:block hidden"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white pb-1.5 sm:block hidden"
                 >
                   Recibos
                 </a>
                 <a
                   href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white  pb-1.5 sm:block hidden"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white  pb-1.5 sm:block hidden"
                 >
                   Suplentes
                 </a>
                 <a
                   href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white  pb-1.5 sm:block hidden"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white  pb-1.5 sm:block hidden"
                 >
                   Informes
                 </a>
