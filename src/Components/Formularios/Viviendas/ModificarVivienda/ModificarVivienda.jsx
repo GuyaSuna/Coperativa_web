@@ -13,8 +13,9 @@ import { MiembroContext } from "@/Provider/provider";
 
 const ModificarVivienda = ({ nroViviendaParam }) => {
   const [nroVivienda, setNroVivienda] = useState(nroViviendaParam);
+  const [vivienda , setVivienda] = useState({})
   const [cantidadDormitorios, setCantidadDormitorios] = useState("");
-  const [socioTitular, setSocioTitular] = useState("");
+  const [socioTitular, setSocioTitular] = useState({});
   const [socios, setSocios] = useState([]);
   const [errores, setErrores] = useState({});
 
@@ -26,7 +27,11 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
         const data = await getVivienda(nroVivienda);
         if (data) {
           setCantidadDormitorios(data.cantidadDormitorios);
-          setSocioTitular(data.socioTitular?.cedulaSocio);
+        }
+        if(data.socioTitular){
+          console.log(data.socioTitular)
+          const dataSocio = await getSocio(data.socioTitular.cedulaSocio);
+          setSocioTitular(dataSocio)
         }
       } catch (error) {
         console.error("An error has occurred in fetchVivienda:", error);
@@ -84,15 +89,13 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
 
   const handleSocioChange = async (e) => {
     const cedulaSocio = e.target.value;
-    setSocioTitular(cedulaSocio);
+    console.log("CEDULAA : " + cedulaSocio)
     try {
       const socioData = await getSocio(cedulaSocio);
-      if (vivienda.cedulaSocio === socioData.cedulaSocio) {
-        setNroVivienda(vivienda.nroVivienda);
-        setCantidadDormitorios(vivienda.cantidadDormitorios);
-      }
+      console.log(socioData)
+      setSocioTitular(socioData);
     } catch (error) {
-      console.error("Error al obtener la vivienda del socio:", error);
+      console.error("Error al obtener al socio titular:", error);
     }
   };
 
@@ -135,7 +138,7 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
             onChange={handleSocioChange}
             className="input"
           >
-            <option value="">Seleccione un socio</option>
+            <option value={socioTitular.nombreSocio }>{socioTitular.nombreSocio || ""} {socioTitular.apellidoSocio || ""}</option>
             {socios.map((socio) => (
               <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
                 {socio.nombreSocio} {socio.apellidoSocio}
