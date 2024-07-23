@@ -12,10 +12,10 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-   <MiembroProvider> 
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <MiembroProvider>
+      <html lang="en">
+        <body className={inter.className}>{children}</body>
+      </html>
     </MiembroProvider>
   );
 }

@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
-import { getVivienda, updateVivienda, getAllSocios } from "../../../../Api/api";
+import {
+  getVivienda,
+  updateVivienda,
+  getAllSocios,
+  getSocio,
+} from "../../../../Api/api";
 import { MiembroContext } from "@/Provider/provider";
 
 const ModificarVivienda = ({ nroViviendaParam }) => {
