@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
 import {
   getVivienda,
   updateVivienda,
   getAllSocios,
   getSocio,
-  deleteVivienda,
+  getCooperativaPorAdmin,
 } from "../../../../Api/api";
+import { MiembroContext } from "@/Provider/provider";
 
 const ModificarVivienda = ({ nroViviendaParam }) => {
   const [nroVivienda, setNroVivienda] = useState(nroViviendaParam);
@@ -16,6 +17,8 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
   const [socioTitular, setSocioTitular] = useState("");
   const [socios, setSocios] = useState([]);
   const [errores, setErrores] = useState({});
+
+  const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
     const fetchVivienda = async () => {
@@ -39,6 +42,7 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
     const fetchSocios = async () => {
       try {
         const data = await getAllSocios();
+        console.log(data, "data de los socios");
         setSocios(data);
       } catch (error) {
         console.error(`An error has occurred in fetchSocios: ${error.message}`);
@@ -69,27 +73,12 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
       const result = await updateVivienda(
         nroVivienda,
         cantidadDormitorios,
+        cooperativa,
         socioTitular
       );
       console.log("Vivienda actualizada:", result);
     } catch (error) {
       console.error("Error al actualizar vivienda:", error);
-    }
-  };
-
-  const handleDelete = async () => {
-    const confirmDelete = confirm(
-      "¿Estás seguro de que quieres eliminar esta vivienda?"
-    );
-    if (confirmDelete) {
-      try {
-        await deleteVivienda(nroVivienda);
-        alert("Vivienda eliminada con éxito");
-      } catch (error) {
-        console.error(
-          `An error has occurred in deleteVivienda: ${error.message}`
-        );
-      }
     }
   };
 
@@ -157,9 +146,6 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
         <br />
         <button type="submit" className="button">
           Modificar
-        </button>
-        <button type="button" onClick={handleDelete} className="button">
-          Borrar
         </button>
       </form>
     </div>

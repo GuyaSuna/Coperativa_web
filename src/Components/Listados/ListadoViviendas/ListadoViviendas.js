@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import { getAllViviendas } from "../../../Api/api.js";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-const ListadoViviendas = () => {
+const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
   const [viviendas, setAllViviendas] = useState([]);
 
   useEffect(() => {
@@ -18,6 +19,11 @@ const ListadoViviendas = () => {
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
+  };
+
+  const handleModificar = (nroVivienda) => {
+    setNroVivienda(nroVivienda);
+    setIdentificadorComponente(5);
   };
 
   return (
@@ -117,7 +123,7 @@ const ListadoViviendas = () => {
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
           {viviendas?.map((vivienda) => (
-            <tr>
+            <tr key={vivienda.nroVivienda}>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center ml-4">
                   {vivienda.nroVivienda}
@@ -137,21 +143,54 @@ const ListadoViviendas = () => {
                   <div className="sm:flex hidden flex-col">
                     {vivienda.fechaIngreso}
                   </div>
-                  <button className="w-8 h-8 inline-flex items-center justify-center text-gray-400 ml-auto">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="w-5"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  <Menu
+                    as="div"
+                    className="relative inline-block text-left justify-end"
+                  >
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+                    </div>
+
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                     >
-                      <circle cx={12} cy={12} r={1} />
-                      <circle cx={19} cy={12} r={1} />
-                      <circle cx={5} cy={12} r={1} />
-                    </svg>
-                  </button>
+                      <div className="py-1">
+                        <MenuItem>
+                          <a
+                            href="#"
+                            className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Eliminar
+                          </a>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
+                            onClick={() =>
+                              handleModificar(vivienda.nroVivienda)
+                            }
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Modificar
+                          </button>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Menu>
                 </div>
               </td>
             </tr>

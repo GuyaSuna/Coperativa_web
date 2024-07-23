@@ -247,7 +247,7 @@ const postVivienda = async (viviendaEntity) => {
 
 const getVivienda = async (nroVivienda) => {
   try {
-    const response = await fetch(`${URL}/viviendas/${nroVivienda}`, {
+    const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -262,8 +262,8 @@ const getVivienda = async (nroVivienda) => {
 
     return data;
   } catch (error) {
-    console.error("Error en getSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
+    console.error("Error en getVivienda:", error);
+    throw new Error("Error al obtener los datos de la vivienda");
   }
 };
 
@@ -293,14 +293,11 @@ const getAllViviendas = async () => {
 const updateVivienda = async (
   nroVivienda,
   cantidadDormitorios,
+  cooperativa,
   socioTitular
 ) => {
-  console.log("El nro de vivienda es: " + nroVivienda);
-  console.log("La cant de dormis es: " + cantidadDormitorios);
-  console.log("El es socio: " + socioTitular);
-  console.log("Vivienda de la cooperativa: " + idCooperativa);
   try {
-    const response = await fetch(`${URL}/viviendas`, {
+    const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -308,11 +305,12 @@ const updateVivienda = async (
       body: JSON.stringify({
         nroVivienda,
         cantidadDormitorios,
-        socioTitular: { cedulaSocio },
-        cooperativaEntity: { idCooperativa },
+        socioTitular: { socioTitular },
+        cooperativaEntity: { cooperativa },
       }),
     });
-
+    const data = response.json();
+    console.log(data);
     if (!response.ok) {
       throw new Error("Error al actualizar la vivienda");
     }

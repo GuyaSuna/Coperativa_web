@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
-import { getSocio, updateSocio, getAllViviendas } from "../../../../Api/api";
+import { getSocio, updateSocio } from "../../../../Api/api";
 
-const ModificarSocio = ({cedulaSocioParam}) => {
+const ModificarSocio = ({ cedulaSocioParam }) => {
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nroSocio, setNroSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
@@ -16,7 +16,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
 
   useEffect(() => {
     setCedulaSocio(cedulaSocioParam);
-  },[])
+  }, []);
 
   useEffect(() => {
     const fetchSocio = async () => {
@@ -32,7 +32,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
             data.FechaIngreso ? data.FechaIngreso.substring(0, 10) : ""
           ); // Guriceeeee esto valida que el date se el año/mes/dia
         }
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
@@ -62,7 +62,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(fechaIngreso)
+    console.log(fechaIngreso);
     if (!validarFormulario()) return;
 
     try {
