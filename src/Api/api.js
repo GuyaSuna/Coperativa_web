@@ -293,7 +293,7 @@ const getAllViviendas = async () => {
 const updateVivienda = async (
   nroVivienda,
   cantidadDormitorios,
-  cooperativa,
+  idCooperativa,
   socioTitular
 ) => {
   try {
@@ -305,8 +305,8 @@ const updateVivienda = async (
       body: JSON.stringify({
         nroVivienda,
         cantidadDormitorios,
-        socioTitular: { socioTitular },
-        cooperativaEntity: { cooperativa },
+        cooperativaEntity: { idCooperativa },
+        socioTitular,
       }),
     });
     const data = response.json();

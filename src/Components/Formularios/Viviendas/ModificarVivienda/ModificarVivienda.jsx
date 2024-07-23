@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
-import {
-  getVivienda,
-  updateVivienda,
-  getAllSocios,
-  getSocio,
-  getCooperativaPorAdmin,
-} from "../../../../Api/api";
+import { getVivienda, updateVivienda, getAllSocios } from "../../../../Api/api";
 import { MiembroContext } from "@/Provider/provider";
 
 const ModificarVivienda = ({ nroViviendaParam }) => {
@@ -73,7 +67,7 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
       const result = await updateVivienda(
         nroVivienda,
         cantidadDormitorios,
-        cooperativa,
+        cooperativa.idCooperativa,
         socioTitular
       );
       console.log("Vivienda actualizada:", result);
@@ -85,15 +79,6 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
   const handleSocioChange = async (e) => {
     const cedulaSocio = e.target.value;
     setSocioTitular(cedulaSocio);
-    try {
-      const socioData = await getSocio(cedulaSocio);
-      if (vivienda.cedulaSocio === socioData.cedulaSocio) {
-        setNroVivienda(vivienda.nroVivienda);
-        setCantidadDormitorios(vivienda.cantidadDormitorios);
-      }
-    } catch (error) {
-      console.error("Error al obtener la vivienda del socio:", error);
-    }
   };
 
   return (
