@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { getAllSocios } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { deleteSocio } from "../../../Api/api.js";
 
 const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
   const [allSocios, setAllSocios] = useState([]);
@@ -25,6 +26,17 @@ const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
   const handleModificar = (cedula) => {
     setCedulaSocio(cedula);
     setIdentificadorComponente(4)
+  }
+
+  const handleEliminar = async (cedula) => {
+    
+    try{
+        const data = await deleteSocio(cedula);
+        console.log(data)
+    }catch(e){
+      throw("Fallo al eliminar el socio " , e.error)
+    }
+
   }
 
   return (
@@ -170,12 +182,12 @@ const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
                     >
                       <div className="py-1">
                         <MenuItem>
-                          <a
-                            href="#"
+                          <button
+                            onClick={ () => handleEliminar(socios.cedulaSocio)}
                             className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Eliminar
-                          </a>
+                          </button>
                         </MenuItem>
                         <MenuItem>
                           <button

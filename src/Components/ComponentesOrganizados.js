@@ -4,7 +4,10 @@ import ListadoViviendas from "./Listados/ListadoViviendas/ListadoViviendas";
 import AltaSocio from "./Formularios/Socios/AltaSocio/AltaSocio";
 import AltaVivienda from "./Formularios/Viviendas/AltaVivienda/AltaVivienda";
 import ModificarSocio from "./Formularios/Socios/ModificarSocio/ModificarSocio";
-const ComponentesOrganizados = ({identificador , setCedulaSocio, cedulaSocio , setIdentificadorComponente}) => {
+
+const ComponentesOrganizados = ({identificador, setIdentificadorComponente}) => {
+
+    const [cedulaSocio , setCedulaSocio] = useState(0);
 
     switch (identificador){
         case 0:{

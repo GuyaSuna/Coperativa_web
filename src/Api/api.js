@@ -177,17 +177,6 @@ const updateSocio = async (
 
 const deleteSocio = async (cedulaSocio) => {
   try {
-    const socioResponse = await fetch(`${URL}/socio/${cedulaSocio}`);
-    if (!socioResponse.ok) {
-      throw new Error(`Error en la solicitud: ${socioResponse.status}`);
-    }
-    const socioData = await socioResponse.json();
-    if (socioData.suplente) {
-      throw new Error(
-        "No se puede eliminar el socio porque tiene un suplente asociado."
-      );
-    }
-
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "DELETE",
       headers: {
@@ -256,7 +245,7 @@ const postVivienda = async (viviendaEntity) => {
 
 const getVivienda = async (nroVivienda) => {
   try {
-    const response = await fetch(`${URL}/viviendas/${nroVivienda}`, {
+    const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
