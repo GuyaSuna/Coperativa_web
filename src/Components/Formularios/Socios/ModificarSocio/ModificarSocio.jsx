@@ -30,7 +30,9 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
           setApellidoSocio(data.apellidoSocio || "");
           setCapitalSocio(data.capitalSocio || "");
           setTelefono(data.telefono || "");
-          setFechaIngreso(data.FechaIngreso || "");
+          setFechaIngreso(
+            data.FechaIngreso ? data.FechaIngreso.substring(0, 10) : ""
+          ); // Guriceeeee esto valida que el date se el año/mes/dia
         }
         console.log(data);
       } catch (error) {

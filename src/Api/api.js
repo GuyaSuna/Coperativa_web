@@ -123,6 +123,13 @@ const postSocio = async (socioEntity, nroVivienda) => {
     throw new Error("Error al enviar los datos del socio");
   }
 };
+// const formatDateToSQL = (date) => {
+//   const d = new Date(date);
+//   const month = `${d.getMonth() + 1}`.padStart(2, "0");
+//   const day = `${d.getDate()}`.padStart(2, "0");
+//   const year = d.getFullYear();
+//   return [year, month, day].join("-");
+// };
 
 const updateSocio = async (
   cedulaSocio,
@@ -136,6 +143,7 @@ const updateSocio = async (
   console.log("La cedula del socio es: " + cedulaSocio);
   console.log("Telefono que se envía: " + telefono);
   try {
+    // const fechaFormateada = formatDateToSQL(FechaIngreso);
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "PUT",
       headers: {
@@ -285,10 +293,13 @@ const getAllViviendas = async () => {
 const updateVivienda = async (
   nroVivienda,
   cantidadDormitorios,
-  idCooperativa,
+  cooperativaEntity,
   socioTitular
 ) => {
   try {
+    console.log(cooperativaEntity);
+    console.log(socioTitular);
+
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
       headers: {
@@ -296,18 +307,18 @@ const updateVivienda = async (
       },
       body: JSON.stringify({
         nroVivienda,
-        cantidadDormitorios,
-        cooperativaEntity: { idCooperativa },
         socioTitular,
+        cantidadDormitorios,
+        cooperativaEntity,
       }),
     });
-    const data = response.json();
+    const data = await response.json();
     console.log(data);
     if (!response.ok) {
       throw new Error("Error al actualizar la vivienda");
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error("Error en updateVivienda:", error);
     throw error;
