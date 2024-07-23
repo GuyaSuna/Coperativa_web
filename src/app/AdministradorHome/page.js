@@ -1,17 +1,16 @@
 "use client";
 import Link from "next/link";
-import React, { useContext , useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import logo from "../../../public/LogoApp.jpg";
 import Image from "next/image";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 
-
 const AdminHome = () => {
-  const { miembro , cooperativa } = useContext(MiembroContext);
+  const { miembro, cooperativa } = useContext(MiembroContext);
   console.log(miembro);
-  console.log('Cooperativa:', cooperativa);
+  console.log("Cooperativa:", cooperativa);
   const [socios, setSocios] = useState([]);
   const [identificadorComponente , setIdentificadorComponente] = useState(0);
 
@@ -26,7 +25,7 @@ const AdminHome = () => {
     try {
       const response = await getAllSocios();
       setSocios(response);
-      console.log('SOCIOS',response);
+      console.log("SOCIOS", response);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -109,13 +108,19 @@ const AdminHome = () => {
         <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden px-10">
           <div className="flex h-full text-gray-600 dark:text-gray-400">
             <button
-              onClick={ () => setIdentificadorComponente(2)}
+              onClick={() => setIdentificadorComponente(2)}
               className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Agregar Viviendas
             </button>
             <button
-              onClick={ () => setIdentificadorComponente(3)}
+              onClick={() => setIdentificadorComponente(5)}
+              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
+            >
+              ModificarVivienda
+            </button>
+            <button
+              onClick={() => setIdentificadorComponente(3)}
               className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
             >
               Agregar Socios
@@ -187,23 +192,25 @@ const AdminHome = () => {
               </svg>
             </div>
             <div className="space-y-4 mt-3">
-              {socios.map(socio => (
+              {socios.map((socio) => (
                 <button className="bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:ring-2 hover:ring-blue-500 focus:outline-none">
-                <div className="flex xl:flex-row flex-col items-center font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
-                  <img
-                    src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=046c29138c1335ef8edee7daf521ba50"
-                    className="w-7 h-7 mr-2 rounded-full"
-                    alt="profile"
-                  />
-                  {socio.nombreSocio}
-                </div>
-                <div className="flex items-center w-full">
-                  <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-blue-100 text-blue-500 rounded-md">
-                    Capital
+                  <div className="flex xl:flex-row flex-col items-center font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
+                    <img
+                      src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=046c29138c1335ef8edee7daf521ba50"
+                      className="w-7 h-7 mr-2 rounded-full"
+                      alt="profile"
+                    />
+                    {socio.nombreSocio}
                   </div>
-                  <div className="ml-auto text-xs text-gray-500">${socio.capitalSocio}</div>
-                </div>
-              </button>
+                  <div className="flex items-center w-full">
+                    <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-blue-100 text-blue-500 rounded-md">
+                      Capital
+                    </div>
+                    <div className="ml-auto text-xs text-gray-500">
+                      ${socio.capitalSocio}
+                    </div>
+                  </div>
+                </button>
               ))}
             </div>
           </div>
@@ -245,18 +252,18 @@ const AdminHome = () => {
                 </div>
               </div>
               <div className="flex items-center space-x-3 sm:mt-7 mt-4">
-              <button
-                  onClick={ () => setIdentificadorComponente(0)}
+                <button
+                  onClick={() => setIdentificadorComponente(0)}
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Socios
-                  </button>
+                </button>
                 <button
-                  onClick={ () => setIdentificadorComponente(1)}
+                  onClick={() => setIdentificadorComponente(1)}
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Viviendas
-                  </button>
+                </button>
                 <a
                   href="#"
                   className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 text-white border-white pb-1.5 sm:block hidden"
@@ -277,7 +284,10 @@ const AdminHome = () => {
                 </a>
               </div>
             </div>
-              <ComponentesOrganizados identificador={identificadorComponente}  setIdentificadorComponente={setIdentificadorComponente} />   
+            <ComponentesOrganizados
+              identificador={identificadorComponente}
+              setIdentificadorComponente={setIdentificadorComponente}
+            />
           </div>
         </div>
       </div>

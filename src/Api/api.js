@@ -183,13 +183,15 @@ const deleteSocio = async (cedulaSocio) => {
         "Content-Type": "application/json",
       },
     });
+
     if (!response.ok) {
-      throw new Error(`Error en la solicitud: ${response.status}`);
+      throw new Error("Error en la solicitud de borrado");
     }
+
     return true;
   } catch (error) {
-    console.error(`An error has occurred in DeleteProduct: ${error.message}`);
-    return false;
+    console.error("Error en deleteSocio:", error);
+    throw new Error("Error al eliminar el socio");
   }
 };
 
@@ -260,8 +262,8 @@ const getVivienda = async (nroVivienda) => {
 
     return data;
   } catch (error) {
-    console.error("Error en getSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
+    console.error("Error en getVivienda:", error);
+    throw new Error("Error al obtener los datos de la vivienda");
   }
 };
 
@@ -285,6 +287,58 @@ const getAllViviendas = async () => {
   } catch (error) {
     console.error("Error en getAllViviendas:", error);
     throw new Error("Error al obtener los datos de las viviendas.");
+  }
+};
+
+const updateVivienda = async (
+  nroVivienda,
+  cantidadDormitorios,
+  cooperativa,
+  socioTitular
+) => {
+  try {
+    const response = await fetch(`${URL}/vivienda`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nroVivienda,
+        cantidadDormitorios,
+        socioTitular: { socioTitular },
+        cooperativaEntity: { cooperativa },
+      }),
+    });
+    const data = response.json();
+    console.log(data);
+    if (!response.ok) {
+      throw new Error("Error al actualizar la vivienda");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error en updateVivienda:", error);
+    throw error;
+  }
+};
+
+const deleteVivienda = async (nroVivienda) => {
+  try {
+    const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteVivienda:", error);
+    throw new Error("Error al eliminar la vivienda.");
   }
 };
 
@@ -350,5 +404,7 @@ export {
   postVivienda,
   getVivienda,
   getAllViviendas,
+  updateVivienda,
+  deleteVivienda,
   getCooperativaPorAdmin,
 };

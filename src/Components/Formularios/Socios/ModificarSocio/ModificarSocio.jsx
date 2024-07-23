@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
 import { getSocio, updateSocio } from "../../../../Api/api";
 
-const ModificarSocio = ({cedulaSocioParam}) => {
+const ModificarSocio = ({ cedulaSocioParam }) => {
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nroSocio, setNroSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
@@ -16,7 +16,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
 
   useEffect(() => {
     setCedulaSocio(cedulaSocioParam);
-  },[])
+  }, []);
 
   useEffect(() => {
     const fetchSocio = async () => {
@@ -32,7 +32,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
             data.FechaIngreso ? data.FechaIngreso.substring(0, 10) : ""
           ); // Guriceeeee esto valida que el date se el año/mes/dia
         }
-        console.log(data)
+        console.log(data);
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
@@ -62,7 +62,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(fechaIngreso)
+    console.log(fechaIngreso);
     if (!validarFormulario()) return;
 
     try {
@@ -78,6 +78,20 @@ const ModificarSocio = ({cedulaSocioParam}) => {
       console.log("Socio actualizado:", result);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
+    }
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = confirm(
+      "¿Estás seguro de que quieres eliminar este socio?"
+    );
+    if (confirmDelete) {
+      try {
+        await deleteSocio(cedulaSocio);
+        alert("Socio eliminado con éxito");
+      } catch (error) {
+        console.error(`An error has occurred in deleteSocio: ${error.message}`);
+      }
     }
   };
 
@@ -184,6 +198,9 @@ const ModificarSocio = ({cedulaSocioParam}) => {
         <br />
         <button type="submit" className="button">
           Modificar
+        </button>
+        <button type="button" onClick={handleDelete} className="button">
+          Borrar
         </button>
       </form>
     </div>

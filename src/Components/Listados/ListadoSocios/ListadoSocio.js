@@ -6,7 +6,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { deleteSocio } from "../../../Api/api.js";
 
-const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
+const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allSocios, setAllSocios] = useState([]);
 
   useEffect(() => {
@@ -25,8 +25,8 @@ const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
 
   const handleModificar = (cedula) => {
     setCedulaSocio(cedula);
-    setIdentificadorComponente(4)
-  }
+    setIdentificadorComponente(4);
+  };
 
   const handleEliminar = async (cedula) => {
     
@@ -191,7 +191,7 @@ const ListadoSocio = ({setCedulaSocio, setIdentificadorComponente}) => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            onClick={ () => handleModificar(socios.cedulaSocio)}
+                            onClick={() => handleModificar(socios.cedulaSocio)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Modificar
