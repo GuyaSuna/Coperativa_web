@@ -130,7 +130,8 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                 </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center"></div>
+              <div className="flex items-center">{vivienda?.socioTitular?.nombreSocio || "Sin socio"}</div>
+
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                 {vivienda.cantidadDormitorios}

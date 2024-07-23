@@ -293,10 +293,13 @@ const getAllViviendas = async () => {
 const updateVivienda = async (
   nroVivienda,
   cantidadDormitorios,
-  idCooperativa,
+  cooperativaEntity,
   socioTitular
 ) => {
   try {
+    console.log(cooperativaEntity);
+    console.log(socioTitular);
+
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
       headers: {
@@ -304,18 +307,18 @@ const updateVivienda = async (
       },
       body: JSON.stringify({
         nroVivienda,
-        cantidadDormitorios,
-        cooperativaEntity: { idCooperativa },
         socioTitular,
+        cantidadDormitorios,
+        cooperativaEntity,
       }),
     });
-    const data = response.json();
+    const data = await response.json();
     console.log(data);
     if (!response.ok) {
       throw new Error("Error al actualizar la vivienda");
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
     console.error("Error en updateVivienda:", error);
     throw error;
