@@ -6,6 +6,7 @@ import { MiembroContext } from "@/Provider/provider";
 import logo from "../../../public/LogoApp.jpg";
 import Image from "next/image";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
+import Header from "@/Components/header";
 
 const AdminHome = () => {
   const { miembro, cooperativa } = useContext(MiembroContext);
