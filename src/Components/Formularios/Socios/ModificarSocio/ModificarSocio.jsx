@@ -16,7 +16,7 @@ const ModificarSocio = ({cedulaSocioParam}) => {
 
   useEffect(() => {
     setCedulaSocio(cedulaSocioParam);
-  }, []);
+  },[])
 
   useEffect(() => {
     const fetchSocio = async () => {
@@ -28,9 +28,11 @@ const ModificarSocio = ({cedulaSocioParam}) => {
           setApellidoSocio(data.apellidoSocio || "");
           setCapitalSocio(data.capitalSocio || "");
           setTelefono(data.telefono || "");
-          setFechaIngreso(data.FechaIngreso || "");
+          setFechaIngreso(
+            data.FechaIngreso ? data.FechaIngreso.substring(0, 10) : ""
+          ); // Guriceeeee esto valida que el date se el año/mes/dia
         }
-        console.log(data);
+        console.log(data)
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
