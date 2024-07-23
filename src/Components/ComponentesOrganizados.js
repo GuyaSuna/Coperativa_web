@@ -4,11 +4,20 @@ import ListadoViviendas from "./Listados/ListadoViviendas/ListadoViviendas";
 import AltaSocio from "./Formularios/Socios/AltaSocio/AltaSocio";
 import AltaVivienda from "./Formularios/Viviendas/AltaVivienda/AltaVivienda";
 import ModificarSocio from "./Formularios/Socios/ModificarSocio/ModificarSocio";
-import ModificarVivienda from "./Formularios/Viviendas/ModificarVivienda/ModificarVivienda";
-const ComponentesOrganizados = ({ identificador }) => {
+const ComponentesOrganizados = ({
+  identificador,
+  setCedulaSocio,
+  cedulaSocio,
+  setIdentificadorComponente,
+}) => {
   switch (identificador) {
     case 0: {
-      return <ListadoSocio />;
+      return (
+        <ListadoSocio
+          setCedulaSocio={setCedulaSocio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
     case 1: {
       return <ListadoViviendas />;
@@ -20,10 +29,7 @@ const ComponentesOrganizados = ({ identificador }) => {
       return <AltaSocio />;
     }
     case 4: {
-      return <ModificarSocio />;
-    }
-    case 5: {
-      return <ModificarVivienda />;
+      return <ModificarSocio cedulaSocioParam={cedulaSocio} />;
     }
   }
 };

@@ -100,7 +100,7 @@ const getAllSocios = async () => {
   }
 };
 
-const postSocio = async (socioEntity) => {
+const postSocio = async (socioEntity, nroVivienda) => {
   try {
     console.log(socioEntity);
     const response = await fetch(`${URL}/socio/${nroVivienda}`, {
@@ -123,13 +123,13 @@ const postSocio = async (socioEntity) => {
     throw new Error("Error al enviar los datos del socio");
   }
 };
-const formatDateToSQL = (date) => {
-  const d = new Date(date);
-  const month = `${d.getMonth() + 1}`.padStart(2, "0");
-  const day = `${d.getDate()}`.padStart(2, "0");
-  const year = d.getFullYear();
-  return [year, month, day].join("-");
-};
+// const formatDateToSQL = (date) => {
+//   const d = new Date(date);
+//   const month = `${d.getMonth() + 1}`.padStart(2, "0");
+//   const day = `${d.getDate()}`.padStart(2, "0");
+//   const year = d.getFullYear();
+//   return [year, month, day].join("-");
+// };
 
 const updateSocio = async (
   cedulaSocio,
@@ -137,15 +137,13 @@ const updateSocio = async (
   nombreSocio,
   apellidoSocio,
   capitalSocio,
-  Telefono,
-  FechaIngreso
+  telefono,
+  fechaIngreso
 ) => {
   console.log("La cedula del socio es: " + cedulaSocio);
-  console.log("La fecha es: " + FechaIngreso);
-  console.log("Telefono que se envía: " + Telefono);
+  console.log("Telefono que se envía: " + telefono);
   try {
-    const fechaFormateada = formatDateToSQL(FechaIngreso);
-    console.log("Fecha formateada:", fechaFormateada);
+    // const fechaFormateada = formatDateToSQL(FechaIngreso);
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "PUT",
       headers: {
@@ -157,8 +155,8 @@ const updateSocio = async (
         nombreSocio,
         apellidoSocio,
         capitalSocio,
-        Telefono,
-        FechaIngreso: fechaFormateada,
+        telefono,
+        fechaIngreso,
       }),
     });
 
@@ -226,7 +224,7 @@ const postSuplente = async (suplenteEntity, CedulaSocio) => {
 const postVivienda = async (viviendaEntity) => {
   try {
     console.log(viviendaEntity);
-    const response = await fetch(`${URL}/vivienda`, {
+    const response = await fetch(`${URL}/vivienda/1`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
