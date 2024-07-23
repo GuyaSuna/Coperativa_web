@@ -12,7 +12,10 @@ const AdminHome = () => {
   console.log(miembro);
   console.log("Cooperativa:", cooperativa);
   const [socios, setSocios] = useState([]);
-  const [identificadorComponente, setIdentificadorComponente] = useState(0);
+  const [identificadorComponente , setIdentificadorComponente] = useState(0);
+
+
+  
 
   useEffect(() => {
     fetchSocios();
