@@ -4,13 +4,20 @@ import React, { useState, useContext, useEffect } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider";
 import ThemeToggle from "./ThemeToggle";
+import logo from "../../public/logovisoft.png";
+import Image from "next/image";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [administrador, setAdministrador] = useState("");
   const { miembro } = useContext(MiembroContext);
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  const handleSelection = (option) => {
+    setIdentificadorComponente(option);
+    setSelectedOption(option);
+  };
   console.log(miembro);
 
   useEffect(() => {
@@ -20,8 +27,17 @@ const Header = () => {
   }, [miembro]);
   console.log("Este es el administrador: " + administrador);
   return (
-    <header className="h-16 flex w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 ">
-      <div className="flex h-full text-gray-600 dark:text-gray-400 w-full lg:w-auto">
+    <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 ">
+      <div className=" h-full flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
+        <Image
+          className="logo-Img "
+          src={logo}
+          alt="Coviamuro Logo"
+          width={65}
+          height={65}
+        />
+      </div>
+      <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
         <button
           className="lg:hidden text-white focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -43,42 +59,53 @@ const Header = () => {
         </button>
         <div
           className={`lg:flex h-full flex-col lg:flex-row lg:items-center  ${
-            menuOpen ? "grid z-50 translate-y-0 " : "hidden -translate-y-full  "
+            menuOpen ? "grid z-50 translate-y-0 " : "hidden -translate-y-full"
           } w-full lg:w-auto lg:translate-y-0 lg:bg-transparent z-50`}
         >
           <button
-            onClick={() => setIdentificadorComponente(2)}
-            className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0"
+            onClick={() => handleSelection(2)}
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === 2
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
+            }`}
           >
             Agregar Viviendas
           </button>
           <button
-            onClick={() => setIdentificadorComponente(3)}
-            className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black  border-white inline-flex items-center mr-8 mt-4 lg:mt-0"
+            onClick={() => handleSelection(3)}
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === 3
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
+            }`}
           >
             Agregar Socios
           </button>
           <a
             href="#"
-            className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0"
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === "Crear Usuario"
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
+            }`}
+            onClick={() => setSelectedOption("Crear Usuario")}
           >
             Crear Usuario
           </a>
           <a
             href="#"
-            className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0"
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === "Generar Recibo"
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
+            }`}
+            onClick={() => setSelectedOption("Generar Recibo")}
           >
             Generar Recibo
           </a>
         </div>
-      </div>
-      <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
-        <Link
-          href={"/"}
-          className="h-auto w-auto px-3 self-center rounded-md shadow text-white bg-blue-500 hover:bg-black"
-        >
-          Cerrar Sesion
-        </Link>
+
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>
             <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
@@ -127,12 +154,12 @@ const Header = () => {
                 </button>
               </MenuItem>
               <MenuItem>
-                <a
-                  href="#"
+                <Link
+                  href={"/"}
                   className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                 >
-                  Crear Recibo
-                </a>
+                  Cerrar Sesion
+                </Link>
               </MenuItem>
             </div>
           </MenuItems>
