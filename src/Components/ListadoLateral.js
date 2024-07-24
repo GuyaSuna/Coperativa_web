@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getAllSocios } from "@/Api/api";
 import Buscador from "./Buscador";
 
-const ListadoLateral = () => {
+const ListadoLateral = ({idCooperativa}) => {
   const [socios, setSocios] = useState([]);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(socios);
@@ -14,7 +14,7 @@ const ListadoLateral = () => {
 
   const fetchSocios = async () => {
     try {
-      const response = await getAllSocios();
+      const response = await getAllSocios(idCooperativa);
       setSocios(response);
       console.log("SOCIOS", response);
     } catch (error) {

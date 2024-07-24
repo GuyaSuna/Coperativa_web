@@ -78,9 +78,11 @@ const getSocio = async (cedulaSocio) => {
   }
 };
 
-const getAllSocios = async () => {
+const getAllSocios = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/socio/allSocios`, {
+    console.log("API" ,idCooperativa)
+    console.log("Cooperativa IDENTIFICADOR" , idCooperativa)
+    const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -395,6 +397,40 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 //   }
 // };
 
+
+const getUr = async () => {
+  try {
+    const response = await fetch('https://api.cambio-uruguay.com/', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    // Buscar el objeto con el código 'UR' en el array de datos
+    const urData = data.find(item => item.code === 'UR');
+    
+    if (!urData) {
+      throw new Error("No se encontró el valor de las UR en los datos obtenidos");
+    }
+
+    const urValue = urData.buy; // Extraer el valor de 'buy' del objeto con código 'UR'
+
+    return urValue;
+  } catch (error) {
+    console.error("Error en getUr:", error);
+    throw new Error("Error al obtener los datos de las UR");
+  }
+};
+
+
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -410,4 +446,5 @@ export {
   updateVivienda,
   deleteVivienda,
   getCooperativaPorAdmin,
+  getUr,
 };
