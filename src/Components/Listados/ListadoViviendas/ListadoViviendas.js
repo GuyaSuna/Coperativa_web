@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getAllViviendas } from "../../../Api/api.js";
+import { getAllViviendas, deleteVivienda } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
@@ -24,6 +24,14 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
   const handleModificar = (nroVivienda) => {
     setNroVivienda(nroVivienda);
     setIdentificadorComponente(5);
+  };
+  const handleEliminar = async (nroVivienda) => {
+    try {
+      const data = await deleteVivienda(nroVivienda);
+      console.log(data);
+    } catch (e) {
+      throw ("Fallo al eliminar la vivienda ", e.error);
+    }
   };
 
   return (
@@ -130,14 +138,15 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                 </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-              <div className="flex items-center">{vivienda?.socioTitular?.nombreSocio || "Sin socio"}</div>
-
+                <div className="flex items-center">
+                  {vivienda?.socioTitular?.nombreSocio || "Sin socio"}
+                </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                 {vivienda.cantidadDormitorios}
               </td>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-red-500">
-                - $120.00
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-green-500">
+                $120.00
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center">
@@ -172,12 +181,12 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                     >
                       <div className="py-1">
                         <MenuItem>
-                          <a
-                            href="#"
+                          <button
+                            onClick={() => handleEliminar(vivienda.nroVivienda)}
                             className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Eliminar
-                          </a>
+                          </button>
                         </MenuItem>
                         <MenuItem>
                           <button
