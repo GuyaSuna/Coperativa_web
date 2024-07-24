@@ -5,6 +5,8 @@ import "./FormStyle.css";
 import { getSocio, updateSocio } from "../../../../Api/api";
 
 const ModificarSocio = ({ cedulaSocioParam }) => {
+  console.log(" Es Esto: ");
+  console.log(cedulaSocioParam);
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nroSocio, setNroSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");

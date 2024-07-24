@@ -3,8 +3,6 @@ import Link from "next/link";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
-import logo from "../../../public/LogoApp.jpg";
-import Image from "next/image";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 
 const AdminHome = () => {
@@ -12,10 +10,8 @@ const AdminHome = () => {
   console.log(miembro);
   console.log("Cooperativa:", cooperativa);
   const [socios, setSocios] = useState([]);
-  const [identificadorComponente , setIdentificadorComponente] = useState(0);
-
-
-  
+  const [identificadorComponente, setIdentificadorComponente] = useState(0);
+  const [cedulaSocio, setCedulaSocio] = useState(0);
 
   useEffect(() => {
     fetchSocios();
@@ -105,70 +101,7 @@ const AdminHome = () => {
         </div>
       </div>
       <div className="flex-grow overflow-hidden h-full flex flex-col">
-        <div className="h-16 lg:flex w-full border-b border-gray-200 dark:border-gray-800 hidden px-10">
-          <div className="flex h-full text-gray-600 dark:text-gray-400">
-            <button
-              onClick={() => setIdentificadorComponente(2)}
-              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
-            >
-              Agregar Viviendas
-            </button>
-            <button
-              onClick={() => setIdentificadorComponente(5)}
-              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
-            >
-              ModificarVivienda
-            </button>
-            <button
-              onClick={() => setIdentificadorComponente(3)}
-              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
-            >
-              Agregar Socios
-            </button>
-            <a
-              href="#"
-              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
-            >
-              Crear Usuario
-            </a>
-            <a
-              href="#"
-              className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center"
-            >
-              Generar Recibo
-            </a>
-          </div>
-          <div className="ml-auto flex items-center space-x-7">
-            <Link
-              href={"/page"}
-              className="h-6 px-3 items-center rounded-md shadow text-white bg-blue-500 hover:bg-black"
-            >
-              Cerrar Sesion
-            </Link>
-            <button className="flex items-center">
-              <span className="relative flex-shrink-0">
-                <img
-                  className="w-7 h-7 rounded-full"
-                  src="https://images.unsplash.com/photo-1521587765099-8835e7201186?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                  alt="profile"
-                />
-                <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
-              </span>
-              <span className="ml-2">Carlitos Silvestri</span>
-              <svg
-                viewBox="0 0 24 24"
-                className="w-4 ml-1 flex-shrink-0"
-                stroke="currentColor"
-                strokeWidth={2}
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        <Header />
         <div className="flex-grow flex overflow-x-hidden">
           <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5">
             <div className="text-xs text-gray-400 tracking-wider">SOCIOS</div>
@@ -259,7 +192,7 @@ const AdminHome = () => {
                   Socios
                 </button>
                 <button
-                  onClick={() => setIdentificadorComponente(1)}
+                  onClick={() => setIdentificadorComponente(1, setCedulaSocio)}
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 text-white border-white inline-flex items-center mr-8"
                 >
                   Viviendas
@@ -286,6 +219,8 @@ const AdminHome = () => {
             </div>
             <ComponentesOrganizados
               identificador={identificadorComponente}
+              setCedulaSocio={setCedulaSocio}
+              cedulaSocio={cedulaSocio}
               setIdentificadorComponente={setIdentificadorComponente}
             />
           </div>
