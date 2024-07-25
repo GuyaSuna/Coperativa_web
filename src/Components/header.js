@@ -7,7 +7,7 @@ import ThemeToggle from "./ThemeToggle";
 import logo from "../../public/logovisoft.png";
 import Image from "next/image";
 
-const Header = ({setIdentificadorComponente}) => {
+const Header = ({ setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [administrador, setAdministrador] = useState("");
   const { miembro } = useContext(MiembroContext);
@@ -25,13 +25,13 @@ const Header = ({setIdentificadorComponente}) => {
     }
   }, [miembro]);
 
-
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 ">
       <div className=" h-full flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <Image
-          className="logo-Img "
+          className="logo-Img hover:scale-90 transform duration-700"
           src={logo}
+          href="/AdministradorHome"
           alt="Coviamuro Logo"
           width={65}
           height={65}
