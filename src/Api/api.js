@@ -78,9 +78,9 @@ const getSocio = async (cedulaSocio) => {
   }
 };
 
-const getAllSocios = async () => {
+const getAllSocios = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/socio/allSocios`, {
+    const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -395,6 +395,77 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 //   }
 // };
 
+
+const getUr = async () => {
+  try {
+    const response = await fetch('https://api.cambio-uruguay.com/exchange/BCU/UR', {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+
+    return data;
+  } catch (error) {
+    console.error("Error en getUr:", error);
+    throw new Error("Error al obtener los datos de las UR");
+  }
+};
+
+const getAllRecibos = async (idCooperativa) => {
+  try {
+    const response = await fetch(`${URL}/recibo/allRecibos/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSocios:", error);
+    throw new Error("Error al obtener los datos de los Recibos.");
+  }
+};
+
+const postRecibo = async (recibo ,socio , tesorero) => {
+  try {
+
+    const response = await fetch(`${URL}/recibo/${socio}/${tesorero}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recibo),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postVivienda:", error);
+    throw new Error("Error al enviar los datos de el recibo");
+  }
+};
+
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -410,4 +481,7 @@ export {
   updateVivienda,
   deleteVivienda,
   getCooperativaPorAdmin,
+  getUr,
+  getAllRecibos,
+  postRecibo,
 };

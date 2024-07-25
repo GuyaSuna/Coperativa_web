@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
-import { getAllSocios } from "@/Api/api";
+import { getAllSocios, getUr } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
@@ -11,35 +12,44 @@ import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const AdminHome = () => {
+  const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
-  console.log("Miembro del provider:", miembro);
-  console.log("Cooperativa del provider:", cooperativa);
-  const [socios, setSocios] = useState([]);
+  const [ur, setUr] = useState([]);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  const handleSelection = (option) => {
+    setIdentificadorComponente(option);
+    setSelectedOption(option);
+  };
   useEffect(() => {
-    fetchSocios();
+    if (!miembro || !cooperativa) router.push("/");
   }, []);
 
-  const fetchSocios = async () => {
+  useEffect(() => {
+    fetchUr();
+  }, []);
+
+  const fetchUr = async () => {
     try {
-      const response = await getAllSocios();
-      setSocios(response);
-      console.log("SOCIOS", response);
+      const response = await getUr();
+      setUr(response);
+      console.log("Unidades Reajustables", response);
     } catch (error) {
-      console.error("Error al obtener los socios:", error);
+      console.error("Error al obtener las unidades reajustables:", error);
     }
   };
+
   return (
     <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
       {/* <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
         <Sidebar />
       </div> */}
       <div className="flex-grow overflow-hidden h-full flex flex-col">
-        <Header />
+        <Header setIdentificadorComponente={setIdentificadorComponente} />
         <div className="flex-grow flex overflow-x-hidden">
-          <ListadoLateral />
+          <ListadoLateral idCooperativa={cooperativa?.idCooperativa || 0} />
           <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
             <div className="sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
               <div className="flex w-full items-center">
@@ -114,37 +124,69 @@ const AdminHome = () => {
                   </Menu>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 sm:mt-7 mt-4">
+              <div className="flex items-center space-x-6 sm:mt-7 my-6">
                 <button
-                  onClick={() => setIdentificadorComponente(0)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center "
+                  onClick={() => {
+                    setIdentificadorComponente(0);
+                    handleSelection(0);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                    selectedOption === 0
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Socios
                 </button>
                 <button
-                  onClick={() => setIdentificadorComponente(1, setCedulaSocio)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                  onClick={() => {
+                    setIdentificadorComponente(1, setCedulaSocio);
+                    handleSelection(1);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 1
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Viviendas
                 </button>
-                <a
-                  href="#"
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                <button
+                  onClick={() => {
+                    handleSelection(2);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 2
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Recibos
-                </a>
-                <a
-                  href="#"
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                </button>
+                <button
+                  onClick={() => {
+                    handleSelection(3);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 3
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Suplentes
-                </a>
-                <a
-                  href="#"
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                </button>
+                <button
+                  onClick={() => {
+                    handleSelection(4);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 4
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Informes
-                </a>
+                </button>
               </div>
             </div>
             <ComponentesOrganizados

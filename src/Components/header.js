@@ -7,9 +7,8 @@ import ThemeToggle from "./ThemeToggle";
 import logo from "../../public/logovisoft.png";
 import Image from "next/image";
 
-const Header = () => {
+const Header = ({setIdentificadorComponente}) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [administrador, setAdministrador] = useState("");
   const { miembro } = useContext(MiembroContext);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -25,7 +24,8 @@ const Header = () => {
       setAdministrador(miembro.email);
     }
   }, [miembro]);
-  console.log("Este es el administrador: " + administrador);
+
+
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 ">
       <div className=" h-full flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">

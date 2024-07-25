@@ -6,17 +6,17 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
 
-const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
-  const [allSocios, setAllSocios] = useState([]);
+const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
+  const [allRecibos, setAllRecibos] = useState([]);
   const {cooperativa} = useContext(MiembroContext);
   useEffect(() => {
-    fetchAllSocios();
+    fetchAllRecibos();
   }, []);
 
-  const fetchAllSocios = async () => {
+  const fetchAllRecibos = async () => {
     try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      setAllSocios(response);
+      const response = await getAllRecibos(cooperativa.idCooperativa);
+      setAllRecibos(response);
       console.log(response, "no anda response");
     } catch (error) {
       console.error("Error al obtener los socios:", error);
@@ -33,13 +33,41 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
       const data = await deleteSocio(cedula);
       console.log(data);
     } catch (e) {
-      throw ("Fallo al eliminar el socio ", e.error);
+      throw ("Fallo al eliminar el recibo ", e.error);
     }
   };
 
   return (
     <div className="sm:p-7 p-4">
       <div className="flex w-full items-center mb-7">
+        <button className="inline-flex mr-3 items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
+          <svg
+            viewBox="0 0 24 24"
+            className="w-4 mr-2 text-gray-400 dark:text-gray-600"
+            stroke="currentColor"
+            strokeWidth={2}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x={3} y={4} width={18} height={18} rx={2} ry={2} />
+            <line x1={16} y1={2} x2={16} y2={6} />
+            <line x1={8} y1={2} x2={8} y2={6} />
+            <line x1={3} y1={10} x2={21} y2={10} />
+          </svg>
+          Last 30 days
+          <svg
+            viewBox="0 0 24 24"
+            className="w-4 ml-1.5 text-gray-400 dark:text-gray-600"
+            stroke="currentColor"
+            strokeWidth={2}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
         <button className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
           Filter by
           <svg
@@ -54,6 +82,35 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </button>
+        <div className="ml-auto text-gray-500 text-xs sm:inline-flex hidden items-center">
+          <span className="mr-3">Page 2 of 4</span>
+          <button className="inline-flex mr-2 items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none py-0">
+            <svg
+              className="w-4"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <button className="inline-flex items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 leading-none py-0">
+            <svg
+              className="w-4"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+        </div>
       </div>
       <table className="w-full text-left">
         <thead>
@@ -76,24 +133,24 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
           </tr>
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
-          {allSocios?.map((socios) => (
+          {allRecibos?.map((recibo) => (
             <tr>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">{socios.nroSocio}</div>
+                <div className="flex items-center ml-4">{recibo?.idRecibo}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{socios.nombreSocio}</div>
+                <div className="flex items-center">{recibo?.nombreSocio}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                {socios.apellidoSocio}
+                {recibo?.apellidoSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-green-500">
-                ${socios.capitalSocio}
+                ${recibo?.capitalSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between">
                   <div className="sm:flex hidden flex-col">
-                    {socios.fechaIngreso}
+                    {recibo?.fechaIngreso}
                   </div>
                   <Menu
                     as="div"
@@ -124,7 +181,7 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
                       <div className="py-1">
                         <MenuItem>
                           <button
-                            onClick={() => handleEliminar(socios.cedulaSocio)}
+                            onClick={() => handleEliminar(recibo?.idRecibo)}
                             className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Eliminar
@@ -132,19 +189,11 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            onClick={() => handleModificar(socios.cedulaSocio)}
+                            onClick={() => handleModificar(recibo?.idRecibo)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Modificar
                           </button>
-                        </MenuItem>
-                        <MenuItem>
-                          <a
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                          >
-                            Crear Recibo
-                          </a>
                         </MenuItem>
                       </div>
                     </MenuItems>
@@ -199,4 +248,4 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
   );
 };
 
-export default ListadoSocio;
+export default ListadoRecibos;
