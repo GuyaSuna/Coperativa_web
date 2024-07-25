@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useContext, useState, useEffect } from "react";
-import { getAllSocios } from "@/Api/api";
+import { getAllSocios, getUr } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
@@ -12,25 +12,24 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const AdminHome = () => {
   const { miembro, cooperativa } = useContext(MiembroContext);
-  console.log("Miembro del provider:", miembro);
-  console.log("Cooperativa del provider:", cooperativa);
-  const [socios, setSocios] = useState([]);
+  const [ur, setUr] = useState([]);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
 
   useEffect(() => {
-    fetchSocios();
+    fetchUr();
   }, []);
 
-  const fetchSocios = async () => {
+  const fetchUr = async () => {
     try {
-      const response = await getAllSocios();
-      setSocios(response);
-      console.log("SOCIOS", response);
+      const response = await getUr();
+      setUr(response);
+      console.log("Unidades Reajustables", response);
     } catch (error) {
-      console.error("Error al obtener los socios:", error);
+      console.error("Error al obtener las unidades reajustables:", error);
     }
   };
+
   return (
     <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
       {/* <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
@@ -39,7 +38,7 @@ const AdminHome = () => {
       <div className="flex-grow overflow-hidden h-full flex flex-col">
         <Header />
         <div className="flex-grow flex overflow-x-hidden">
-          <ListadoLateral />
+          <ListadoLateral idCooperativa={cooperativa.idCooperativa} />
           <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
             <div className="sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
               <div className="flex w-full items-center">

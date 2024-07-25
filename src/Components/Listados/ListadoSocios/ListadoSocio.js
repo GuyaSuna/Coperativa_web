@@ -1,20 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext } from "react";
 import { getAllSocios } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
+import { MiembroContext } from "@/Provider/provider.js";
 
 const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allSocios, setAllSocios] = useState([]);
-
+  const {cooperativa} = useContext(MiembroContext);
   useEffect(() => {
     fetchAllSocios();
   }, []);
 
   const fetchAllSocios = async () => {
     try {
-      const response = await getAllSocios();
+      const response = await getAllSocios(cooperativa.idCooperativa);
       setAllSocios(response);
       console.log(response, "no anda response");
     } catch (error) {
