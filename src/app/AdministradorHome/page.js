@@ -48,7 +48,7 @@ const AdminHome = () => {
                     className="w-12 mr-4 rounded-full"
                     alt="profile"
                   />
-                  Carlitos Silvestri - Tesorero
+                  {cooperativa.nombre} - {miembro.email}
                 </div>
                 <div className="ml-auto sm:flex hidden items-center justify-end">
                   <div className="text-right">
