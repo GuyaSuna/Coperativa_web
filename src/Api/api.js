@@ -80,8 +80,6 @@ const getSocio = async (cedulaSocio) => {
 
 const getAllSocios = async (idCooperativa) => {
   try {
-    console.log("API", idCooperativa);
-    console.log("Cooperativa IDENTIFICADOR", idCooperativa);
     const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
       method: "GET",
       headers: {
@@ -399,7 +397,32 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 
 const getUr = async () => {
   try {
-    const response = await fetch("https://api.cambio-uruguay.com/", {
+    const response = await fetch(
+      "https://api.cambio-uruguay.com/exchange/BCU/UR",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getUr:", error);
+    throw new Error("Error al obtener los datos de las UR");
+  }
+};
+
+const getAllRecibos = async (idCooperativa) => {
+  try {
+    const response = await fetch(`${URL}/recibo/allRecibos/${idCooperativa}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -412,21 +435,33 @@ const getUr = async () => {
 
     const data = await response.json();
 
-    // Buscar el objeto con el código 'UR' en el array de datos
-    const urData = data.find((item) => item.code === "UR");
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSocios:", error);
+    throw new Error("Error al obtener los datos de los Recibos.");
+  }
+};
 
-    if (!urData) {
-      throw new Error(
-        "No se encontró el valor de las UR en los datos obtenidos"
-      );
+const postRecibo = async (recibo, socio, tesorero) => {
+  try {
+    const response = await fetch(`${URL}/recibo/${socio}/${tesorero}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recibo),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
     }
 
-    const urValue = urData.buy; // Extraer el valor de 'buy' del objeto con código 'UR'
+    const data = await response.json();
 
-    return urValue;
+    return data;
   } catch (error) {
-    console.error("Error en getUr:", error);
-    throw new Error("Error al obtener los datos de las UR");
+    console.error("Error en postVivienda:", error);
+    throw new Error("Error al enviar los datos de el recibo");
   }
 };
 
@@ -446,4 +481,6 @@ export {
   deleteVivienda,
   getCooperativaPorAdmin,
   getUr,
+  getAllRecibos,
+  postRecibo,
 };

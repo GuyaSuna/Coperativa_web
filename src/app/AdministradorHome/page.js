@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios, getUr } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
@@ -11,10 +12,15 @@ import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const AdminHome = () => {
+  const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [ur, setUr] = useState([]);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
+
+  useEffect(() => {
+    if (!miembro || !cooperativa) router.push("/");
+  }, []);
 
   useEffect(() => {
     fetchUr();
@@ -36,9 +42,9 @@ const AdminHome = () => {
         <Sidebar />
       </div> */}
       <div className="flex-grow overflow-hidden h-full flex flex-col">
-        <Header />
+        <Header setIdentificadorComponente={setIdentificadorComponente} />
         <div className="flex-grow flex overflow-x-hidden">
-          <ListadoLateral idCooperativa={cooperativa.idCooperativa} />
+          <ListadoLateral idCooperativa={cooperativa?.idCooperativa || 0} />
           <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
             <div className="sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
               <div className="flex w-full items-center">
@@ -126,24 +132,24 @@ const AdminHome = () => {
                 >
                   Viviendas
                 </button>
-                <a
+                <button
                   href="#"
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
                 >
                   Recibos
-                </a>
-                <a
-                  // onClick={() => setIdentificadorComponente(7)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                </button>
+                <button
+                  href="#"
+                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white  pb-1.5 sm:block hidden"
                 >
                   Suplentes
-                </a>
-                <a
+                </button>
+                <button
                   href="#"
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
                 >
                   Informes
-                </a>
+                </button>
               </div>
             </div>
             <ComponentesOrganizados

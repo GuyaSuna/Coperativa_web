@@ -35,36 +35,42 @@ const AltaVivienda = () => {
   };
 
   return (
-    <div className="general-container">
-      <form onSubmit={handleSubmit} className="form">
-        <label className="label">
-          Número de vivienda:
+    <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form onSubmit={handleSubmit} className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md">
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="houseNumber">
+            Número de vivienda:
+          </label>
           <input
             type="text"
+            id="houseNumber"
             name="houseNumber"
             value={NroVivienda}
             onChange={handleChangeNroVivienda}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-        </label>
-        <br />
-        <label className="label">
-          Cantidad de Dormitorios:
+        </div>
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="numberOfBedrooms">
+            Cantidad de Dormitorios:
+          </label>
           <input
             type="text"
+            id="numberOfBedrooms"
             name="numberOfBedrooms"
             value={CantidadDormitorios}
             onChange={handleChangeCantidadDormitorios}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-        </label>
-        <br />
-        <button type="submit" className="button">
+        </div>
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+        >
           Submit
         </button>
       </form>
     </div>
   );
 };
-
 export default AltaVivienda;
