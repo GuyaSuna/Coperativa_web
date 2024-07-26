@@ -47,9 +47,6 @@ const ComponentesOrganizados = ({
     case 6: {
       return <AltaSuplente />;
     }
-    // case 7: {
-    //   return <ListadoSuplentes />;
-    // }
   }
 };
 

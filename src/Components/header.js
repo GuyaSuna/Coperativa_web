@@ -7,7 +7,7 @@ import ThemeToggle from "./ThemeToggle";
 import logo from "../../public/logovisoft.png";
 import Image from "next/image";
 
-const Header = ({setIdentificadorComponente}) => {
+const Header = ({ setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [administrador, setAdministrador] = useState("");
   const { miembro } = useContext(MiembroContext);
@@ -24,7 +24,6 @@ const Header = ({setIdentificadorComponente}) => {
       setAdministrador(miembro.email);
     }
   }, [miembro]);
-
 
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 ">
@@ -70,10 +69,10 @@ const Header = ({setIdentificadorComponente}) => {
                 : ""
             }`}
           >
-            Agregar Suplentes
+            Agregar Viviendas
           </button>
           <button
-            onClick={() => handleSelection(6)}
+            onClick={() => handleSelection(4)}
             className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
               selectedOption === 6
                 ? "border-b-2 border-blue-500 text-blue-500"
@@ -83,14 +82,14 @@ const Header = ({setIdentificadorComponente}) => {
             Agregar Socios
           </button>
           <button
-            onClick={() => handleSelection(2)}
+            onClick={() => handleSelection(6)}
             className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
-              selectedOption === 2
+              selectedOption === 6
                 ? "border-b-2 border-blue-500 text-blue-500"
                 : ""
             }`}
           >
-            Agregar Viviendas
+            Agregar Suplente
           </button>
           <a
             href="#"

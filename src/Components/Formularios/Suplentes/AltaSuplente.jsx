@@ -1,19 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
 import { postSuplente, getAllSocios } from "@/Api/api";
+import { MiembroContext } from "@/Provider/provider.js";
 
 const AltaSuplente = () => {
   const router = useRouter();
+  const { cooperativa } = useContext(MiembroContext);
+
   const [cedulaSuplente, setCedulaSuplente] = useState("");
   const [nombreSuplente, setNombreSuplente] = useState("");
   const [apellidoSuplente, setApellidoSuplente] = useState("");
   const [telefonoSuplente, setTelefonoSuplente] = useState("");
 
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
-  const [socioDelSuplente, setSocioDelSuplente] = useState({});
+  const [socioDelSuplente, setSocioDelSuplente] = useState([]);
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -22,15 +25,16 @@ const AltaSuplente = () => {
 
   const fetchSociosDisponibles = async () => {
     try {
-      const response = await getAllSocios(idCooperativa);
+      const response = await getAllSocios(cooperativa.idCooperativa);
       console.log(response);
-      let sociosDisponibles = [];
-      response.forEach((socio) => {
-        if (socio.suplente === null) {
-          sociosDisponibles.push(socio);
+      let sociosSinSuplente = [];
+      response.forEach((socioTitular) => {
+        if (socioTitular.suplente === null) {
+          sociosSinSuplente.push(socioTitular);
         }
       });
-      setSociosDisponibles(sociosDisponibles);
+
+      setSociosDisponibles(sociosSinSuplente);
       console.log("socios disponibles llegan" + sociosDisponibles);
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
@@ -148,9 +152,9 @@ const AltaSuplente = () => {
           Teléfono:
           <input
             type="text"
-            name="telefonoSocio"
-            value={TelefonoSocio}
-            onChange={handleChangeTelefonoSocio}
+            name="telefonoSuplente"
+            value={telefonoSuplente}
+            onChange={handleChangeTelefonoSuplente}
             className="input"
           />
           {Errores.telefonoSocio && (
@@ -166,7 +170,7 @@ const AltaSuplente = () => {
             onChange={handleChangeSocioDelSuplente}
             className="select"
           >
-            <option value="">Seleccione un socio</option>
+            <option value=""></option>
             {sociosDisponibles.map((socio) => (
               <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
                 {`Socio: ${socio.nombreSocio} " " ${socio.apellidoSocio}`}
