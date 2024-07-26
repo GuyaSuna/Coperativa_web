@@ -17,7 +17,12 @@ const AdminHome = () => {
   const [ur, setUr] = useState([]);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  const handleSelection = (option) => {
+    setIdentificadorComponente(option);
+    setSelectedOption(option);
+  };
   useEffect(() => {
     if (!miembro || !cooperativa) router.push("/");
   }, []);
@@ -119,34 +124,66 @@ const AdminHome = () => {
                   </Menu>
                 </div>
               </div>
-              <div className="flex items-center space-x-3 sm:mt-7 mt-4">
+              <div className="flex items-center space-x-6 sm:mt-7 my-6">
                 <button
-                  onClick={() => setIdentificadorComponente(0)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center "
+                  onClick={() => {
+                    setIdentificadorComponente(0);
+                    handleSelection(0);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                    selectedOption === 0
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Socios
                 </button>
                 <button
-                  onClick={() => setIdentificadorComponente(1, setCedulaSocio)}
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                  onClick={() => {
+                    setIdentificadorComponente(1, setCedulaSocio);
+                    handleSelection(1);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 1
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Viviendas
                 </button>
                 <button
-                  href="#"
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                  onClick={() => {
+                    handleSelection(2);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 2
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Recibos
                 </button>
                 <button
-                  href="#"
-                  className="px-3 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white  pb-1.5 sm:block hidden"
+                  onClick={() => {
+                    handleSelection(3);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 3
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Suplentes
                 </button>
                 <button
-                  href="#"
-                  className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
+                  onClick={() => {
+                    handleSelection(4);
+                  }}
+                  className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                    selectedOption === 4
+                      ? "border-b-2 border-blue-500 text-blue-500"
+                      : ""
+                  }`}
                 >
                   Informes
                 </button>
