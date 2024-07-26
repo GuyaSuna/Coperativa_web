@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
@@ -16,7 +15,7 @@ const AltaSuplente = () => {
   const [telefonoSuplente, setTelefonoSuplente] = useState("");
 
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
-  const [socioDelSuplente, setSocioDelSuplente] = useState([]);
+  const [socioDelSuplente, setSocioDelSuplente] = useState("");
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -26,38 +25,36 @@ const AltaSuplente = () => {
   const fetchSociosDisponibles = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
-      console.log(response);
       let sociosSinSuplente = [];
       response.forEach((socioTitular) => {
-        if (socioTitular.suplente === null) {
+        if (socioTitular.suplenteEntity === null) {
           sociosSinSuplente.push(socioTitular);
         }
       });
-
       setSociosDisponibles(sociosSinSuplente);
-      console.log("socios disponibles llegan" + sociosDisponibles);
+      console.log("Socios disponibles: ", sociosSinSuplente);
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
   };
 
-  const handleChangeSocioDelSuplente = async (e) => {
+  const handleChangeSocioDelSuplente = (e) => {
     setSocioDelSuplente(e.target.value);
   };
 
-  const handleChangeCedulaSuplente = async (e) => {
+  const handleChangeCedulaSuplente = (e) => {
     setCedulaSuplente(e.target.value);
   };
 
-  const handleChangeNombreSuplente = async (e) => {
+  const handleChangeNombreSuplente = (e) => {
     setNombreSuplente(e.target.value);
   };
 
-  const handleChangeApellidoSuplente = async (e) => {
+  const handleChangeApellidoSuplente = (e) => {
     setApellidoSuplente(e.target.value);
   };
 
-  const handleChangeTelefonoSuplente = async (e) => {
+  const handleChangeTelefonoSuplente = (e) => {
     setTelefonoSuplente(e.target.value);
   };
 
@@ -65,11 +62,11 @@ const AltaSuplente = () => {
     const errores = {};
 
     if (!cedulaSuplente) errores.cedulaSuplente = "La cédula es obligatoria";
-    if (!nombreSuplente) errores.nombreSuplente = "La cédula es obligatoria";
+    if (!nombreSuplente) errores.nombreSuplente = "El nombre es obligatorio";
     if (!apellidoSuplente)
-      errores.apellidoSuplente = "La cédula es obligatoria";
+      errores.apellidoSuplente = "El apellido es obligatorio";
     if (!telefonoSuplente)
-      errores.telefonoSuplente = "La cédula es obligatoria";
+      errores.telefonoSuplente = "El teléfono es obligatorio";
     if (!socioDelSuplente)
       errores.socioDelSuplente = "El suplente debe pertenecer a un socio.";
     setErrores(errores);
@@ -89,14 +86,11 @@ const AltaSuplente = () => {
     };
 
     try {
-      const response = await postSuplente(
-        SuplenteData,
-        socioDelSuplente.cedulaSocio
-      );
+      const response = await postSuplente(SuplenteData, socioDelSuplente);
       if (response.status === 201) {
-        alert("Suplente agregado exitosamente");
-      } else {
         alert("Error al agregar suplente");
+      } else {
+        alert("Suplente agregado exitosamente");
       }
     } catch (error) {
       console.error("Error al enviar los datos del suplente:", error);
@@ -157,8 +151,8 @@ const AltaSuplente = () => {
             onChange={handleChangeTelefonoSuplente}
             className="input"
           />
-          {Errores.telefonoSocio && (
-            <span className="error">{Errores.telefonoSocio}</span>
+          {Errores.telefonoSuplente && (
+            <span className="error">{Errores.telefonoSuplente}</span>
           )}
         </label>
 
@@ -170,10 +164,10 @@ const AltaSuplente = () => {
             onChange={handleChangeSocioDelSuplente}
             className="select"
           >
-            <option value=""></option>
+            <option value="">Seleccione un socio </option>
             {sociosDisponibles.map((socio) => (
               <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {`Socio: ${socio.nombreSocio} " " ${socio.apellidoSocio}`}
+                {`Socio: ${socio.nombreSocio} ${socio.apellidoSocio}`}
               </option>
             ))}
           </select>

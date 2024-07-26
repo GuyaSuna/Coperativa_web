@@ -199,6 +199,7 @@ const deleteSocio = async (cedulaSocio) => {
 const postSuplente = async (suplenteEntity, CedulaSocio) => {
   try {
     console.log(suplenteEntity);
+    console.log("Cedula del socio:", CedulaSocio);
     const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
       method: "POST",
       headers: {
