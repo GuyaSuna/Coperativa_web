@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { postSocio, postSuplente, getAllViviendas } from "../../../../Api/api.js";
+import {
+  postSocio,
+  postSuplente,
+  getAllViviendas,
+} from "../../../../Api/api.js";
 
 const AltaSocio = () => {
   const router = useRouter();
@@ -127,7 +131,7 @@ const AltaSocio = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(FechaIngreso)
+    console.log(FechaIngreso);
     if (!validarFormulario()) return;
     const SocioData = {
       cedulaSocio: CedulaSocio,

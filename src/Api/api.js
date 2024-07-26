@@ -80,8 +80,8 @@ const getSocio = async (cedulaSocio) => {
 
 const getAllSocios = async (idCooperativa) => {
   try {
-    console.log("API" ,idCooperativa)
-    console.log("Cooperativa IDENTIFICADOR" , idCooperativa)
+    console.log("API", idCooperativa);
+    console.log("Cooperativa IDENTIFICADOR", idCooperativa);
     const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
       method: "GET",
       headers: {
@@ -397,10 +397,9 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 //   }
 // };
 
-
 const getUr = async () => {
   try {
-    const response = await fetch('https://api.cambio-uruguay.com/', {
+    const response = await fetch("https://api.cambio-uruguay.com/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -414,10 +413,12 @@ const getUr = async () => {
     const data = await response.json();
 
     // Buscar el objeto con el código 'UR' en el array de datos
-    const urData = data.find(item => item.code === 'UR');
-    
+    const urData = data.find((item) => item.code === "UR");
+
     if (!urData) {
-      throw new Error("No se encontró el valor de las UR en los datos obtenidos");
+      throw new Error(
+        "No se encontró el valor de las UR en los datos obtenidos"
+      );
     }
 
     const urValue = urData.buy; // Extraer el valor de 'buy' del objeto con código 'UR'
@@ -428,8 +429,6 @@ const getUr = async () => {
     throw new Error("Error al obtener los datos de las UR");
   }
 };
-
-
 
 export {
   loginAdministrador,

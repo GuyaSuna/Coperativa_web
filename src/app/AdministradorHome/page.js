@@ -48,7 +48,7 @@ const AdminHome = () => {
                     className="w-16 mr-4 rounded-full"
                     alt="profile"
                   />
-                  {cooperativa.nombre} - {miembro.email}
+                  {/* {cooperativa.nombre} - {miembro.email} */}
                 </div>
                 <div className="ml-auto sm:flex hidden items-center justify-end">
                   <div className="text-right">
@@ -133,7 +133,7 @@ const AdminHome = () => {
                   Recibos
                 </a>
                 <a
-                  href="#"
+                  // onClick={() => setIdentificadorComponente(7)}
                   className="cursor-pointer h-full hover:border-b-2  hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8"
                 >
                   Suplentes

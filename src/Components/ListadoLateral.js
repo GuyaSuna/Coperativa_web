@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { getAllSocios } from "@/Api/api";
 import Buscador from "./Buscador";
 
-const ListadoLateral = ({idCooperativa}) => {
+const ListadoLateral = ({ idCooperativa }) => {
   const [socios, setSocios] = useState([]);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(socios);
