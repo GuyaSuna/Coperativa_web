@@ -100,22 +100,7 @@ const AltaRecibo= ({Socio}) => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form onSubmit={handleSubmit} className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md">
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nroSocio">
-            Nro. Recibo:
-          </label>
-          <input
-            type="text"
-            id="nroSocio"
-            name="nroSocio"
-            value={NroRecibo}
-            onChange={handleChangeNroRecibo}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.nroSocio && (
-            <span className="text-red-500 text-sm">{Errores.nroSocio}</span>
-          )}
-        </div>
+      
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="nombreSocio">
             Nombres:
@@ -125,7 +110,7 @@ const AltaRecibo= ({Socio}) => {
             id="nombreSocio"
             name="nombreSocio"
             value={NombreSocio}
-            onChange={handleChangeNombreSocio}
+            onChange={handle}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.nombreSocio && (

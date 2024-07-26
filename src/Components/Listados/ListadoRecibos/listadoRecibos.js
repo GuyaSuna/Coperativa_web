@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect , useContext } from "react";
-import { getAllSocios } from "../../../Api/api.js";
+import { getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
@@ -28,9 +28,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     setIdentificadorComponente(4);
   };
 
-  const handleEliminar = async (cedula) => {
+  const handleEliminar = async (idRecibo) => {
     try {
-      const data = await deleteSocio(cedula);
+      const data = await deleteSocio(idRecibo);
       console.log(data);
     } catch (e) {
       throw ("Fallo al eliminar el recibo ", e.error);
@@ -116,7 +116,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         <thead>
           <tr className="text-gray-400">
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              NroSocio
+              NroRecibo
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Nombre
