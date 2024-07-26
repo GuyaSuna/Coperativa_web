@@ -8,22 +8,23 @@ import { MiembroContext } from "@/Provider/provider";
 const AltaRecibo= ({Socio}) => {
   const router = useRouter();
   const {miembro} = useContext(MiembroContext) 
-  const [fechaIngreso, setFechaIngreso] = useState("");
-  const [recargo, setRecargo] = useState(0);
-  const [interes, setInteres] = useState(0);
-  const [capital, setCapital] = useState(0);
-  const [cuotaSocial, setCuotaSocial] = useState(0);
-  const [convenio, setConvenio] = useState(0);
-  const [cuotaMensual, setCuotaMensual] = useState(0);
-  const [sumaPesos, setSumaPesos] = useState("");
+  const [fechaEmision, setFechaEmision] = useState(Date.now());
+  const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
+  const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
+  const [capital, setCapital] = useState(0); // sale del socio y se le resta el interes
+  const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
+  const [convenio, setConvenio] = useState(0); // dudoso creo que es plata que se suma por no cumplir horas de trabajo
+  const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur
+  const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
     console.log(Socio)
+    console.log(fechaEmision)
   }, [Socio]);
  
   const handleChangefechaRecibo = (e) => {
-    setFechaIngreso(e.target.value);
+    setFechaEmision(e.target.value);
   };
 
   const handleChangeRecargo = (e) => {
@@ -103,35 +104,29 @@ const AltaRecibo= ({Socio}) => {
       
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="nombreSocio">
-            Nombres:
+            Nombre Socio:
           </label>
           <input
             type="text"
+            readOnly
             id="nombreSocio"
             name="nombreSocio"
-            value={NombreSocio}
-            onChange={handle}
+            value={Socio.nombreSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {Errores.nombreSocio && (
-            <span className="text-red-500 text-sm">{Errores.nombreSocio}</span>
-          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="apellidoSocio">
-            Apellidos:
+            Apellido Socio:
           </label>
           <input
             type="text"
             id="apellidoSocio"
             name="apellidoSocio"
-            value={ApellidoSocio}
-            onChange={handleChangeApellidoSocio}
+            readOnly
+            value={Socio.apellidoSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {Errores.apellidoSocio && (
-            <span className="text-red-500 text-sm">{Errores.apellidoSocio}</span>
-          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="cedulaSocio">
@@ -141,62 +136,155 @@ const AltaRecibo= ({Socio}) => {
             type="text"
             id="cedulaSocio"
             name="cedulaSocio"
-            value={CedulaSocio}
-            onChange={handleChangeCedulaSocio}
+            value={Socio.cedulaSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {Errores.cedulaSocio && (
-            <span className="text-red-500 text-sm">{Errores.cedulaSocio}</span>
-          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="telefonoSocio">
-            Teléfono:
+            Nombre Administrador:
           </label>
           <input
             type="text"
             id="telefonoSocio"
             name="telefonoSocio"
-            value={TelefonoSocio}
-            onChange={handleChangeTelefonoSocio}
+            readOnly
+            value={miembro.nombreMiembro}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {Errores.telefonoSocio && (
-            <span className="text-red-500 text-sm">{Errores.telefonoSocio}</span>
-          )}
         </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="capitalSocio">
-            Capital:
+            Apellido Administrador:
           </label>
           <input
             type="text"
             id="capitalSocio"
             name="capitalSocio"
-            value={CapitalSocio}
-            onChange={handleChangeCapitalSocio}
+            readOnly
+            value={miembro.apellidoMiembro}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {Errores.capitalSocio && (
-            <span className="text-red-500 text-sm">{Errores.capitalSocio}</span>
-          )}
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="fechaIngreso">
-            Fecha de Ingreso:
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaEmision">
+            Fecha de Emision:
           </label>
           <input
             type="date"
             id="fechaIngreso"
             name="fechaIngreso"
-            value={FechaIngreso}
-            onChange={handleChangeFechaIngreso}
+            value={fechaEmision}
+            onChange={handleChangefechaRecibo}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.fechaIngreso && (
             <span className="text-red-500 text-sm">{Errores.fechaIngreso}</span>
+          )}
+        </div>
+
+        {/* posible optional */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="recargo">
+            Recargo:
+          </label>
+          <input
+            type="text"
+            id="recargo"
+            name="recargo"
+            value={recargo}
+            onChange={handleChangeRecargo}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.Recargo && (
+            <span className="text-red-500 text-sm">{Errores.Recargo}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="interes">
+            Interes:
+          </label>
+          <input
+            type="text"
+            id="interes"
+            name="interes"
+            value={interes}
+            onChange={handleChangeInteres}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.Interes && (
+            <span className="text-red-500 text-sm">{Errores.Interes}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="capital">
+            Capital:
+          </label>
+          <input
+            type="text"
+            id="capital"
+            name="capital"
+            value={capital}
+            onChange={handleChangeCapital}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.Capital && (
+            <span className="text-red-500 text-sm">{Errores.Capital}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="convenio">
+            Convenio:
+          </label>
+          <input
+            type="text"
+            id="convenio"
+            name="convenio"
+            value={convenio}
+            onChange={handleChangeConvenio}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.Convenio && (
+            <span className="text-red-500 text-sm">{Errores.Convenio}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="cuotaSocial">
+            cuotaSocial:
+          </label>
+          <input
+            type="text"
+            id="cuotaSocial"
+            name="cuotaSocial"
+            value={cuotaSocial}
+            onChange={handleChangeCuotaSocial}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.CuotaSocial && (
+            <span className="text-red-500 text-sm">{Errores.CuotaSocial}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="cuotaMensual">
+            cuotaMensual:
+          </label>
+          <input
+            type="text"
+            id="cuotaMensual"
+            name="cuotaMensual"
+            value={cuotaMensual}
+            onChange={handleChangeCuotaMensual}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.CuotaMensual && (
+            <span className="text-red-500 text-sm">{Errores.CuotaMensual}</span>
           )}
         </div>
         
