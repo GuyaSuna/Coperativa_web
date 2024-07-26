@@ -6,7 +6,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
 
-const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
+const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente , setSocioRecibo}) => {
   const [allSocios, setAllSocios] = useState([]);
   const {cooperativa} = useContext(MiembroContext);
   useEffect(() => {
@@ -36,6 +36,11 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
       throw ("Fallo al eliminar el socio ", e.error);
     }
   };
+
+  const handleRecibo = (socio) => {
+   setSocioRecibo(socio)
+   setIdentificadorComponente(6)
+  }
 
   return (
     <div className="sm:p-7 p-4">
@@ -133,24 +138,24 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
           </tr>
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
-          {allSocios?.map((socios) => (
+          {allSocios?.map((socio) => (
             <tr>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">{socios.nroSocio}</div>
+                <div className="flex items-center ml-4">{socio.nroSocio}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{socios.nombreSocio}</div>
+                <div className="flex items-center">{socio.nombreSocio}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                {socios.apellidoSocio}
+                {socio.apellidoSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-green-500">
-                ${socios.capitalSocio}
+                ${socio.capitalSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between">
                   <div className="sm:flex hidden flex-col">
-                    {socios.fechaIngreso}
+                    {socio.fechaIngreso}
                   </div>
                   <Menu
                     as="div"
@@ -181,7 +186,7 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
                       <div className="py-1">
                         <MenuItem>
                           <button
-                            onClick={() => handleEliminar(socios.cedulaSocio)}
+                            onClick={() => handleEliminar(socio.cedulaSocio)}
                             className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Eliminar
@@ -189,19 +194,19 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            onClick={() => handleModificar(socios.cedulaSocio)}
+                            onClick={() => handleModificar(socio.cedulaSocio)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Modificar
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <a
-                            href="#"
+                          <button
+                            onClick={() => handleRecibo(socio) }
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Crear Recibo
-                          </a>
+                          </button>
                         </MenuItem>
                       </div>
                     </MenuItems>

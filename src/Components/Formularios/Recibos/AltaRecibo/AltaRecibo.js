@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import "./FormStyle.css";
+
 import { useRouter } from "next/navigation";
 import { postRecibo } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
@@ -19,10 +19,20 @@ const AltaRecibo= ({Socio}) => {
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
-    console.log(Socio)
-    console.log(fechaEmision)
+    fetchCalculos()
   }, [Socio]);
  
+  const fetchCalculos = () => {
+    setRecargo(300)
+    setInteres(300)
+    setCapital(300)
+    setCuotaSocial(300)
+    setConvenio(300)
+    setCuotaMensual(300)
+    setSumaPesos(300)
+
+  }
+
   const handleChangefechaRecibo = (e) => {
     setFechaEmision(e.target.value);
   };
@@ -136,6 +146,7 @@ const AltaRecibo= ({Socio}) => {
             type="text"
             id="cedulaSocio"
             name="cedulaSocio"
+            readOnly
             value={Socio.cedulaSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
