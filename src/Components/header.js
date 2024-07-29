@@ -138,7 +138,7 @@ const Header = ({ setIdentificadorComponente }) => {
             Agregar Viviendas
           </button>
           <button
-            onClick={() => handleSelection(4)}
+            onClick={() => handleSelection(3)}
             className={`cursor-pointer py-2 px-4 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
               selectedOption === 4 ? "border-b-2 border-blue-500 text-blue-500" : ""
             }`}
