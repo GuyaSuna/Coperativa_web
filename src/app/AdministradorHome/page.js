@@ -24,7 +24,10 @@ const AdminHome = () => {
     setSelectedOption(option);
   };
   useEffect(() => {
-    if (!miembro || !cooperativa) router.push("/");
+    if (!miembro || !cooperativa){
+      console.log("es esto")
+      router.push("/");
+    } 
   }, []);
 
   useEffect(() => {
@@ -41,7 +44,8 @@ const AdminHome = () => {
     }
   };
 
-  return (
+  return (<>
+    {cooperativa &&
     <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
       {/* <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
         <Sidebar />
@@ -59,7 +63,7 @@ const AdminHome = () => {
                     className="w-16 mr-4 rounded-full"
                     alt="profile"
                   />
-                  {cooperativa.nombre} - {miembro.email}
+                  {cooperativa?.nombre} - {miembro?.email}
                 </div>
                 <div className="ml-auto sm:flex hidden items-center justify-end">
                   <div className="text-right">
@@ -201,7 +205,13 @@ const AdminHome = () => {
       <div className="fixed bottom-0 w-full">
         <Footer />
       </div>
-    </div>
+    </div>}
+    {!cooperativa && 
+      <div>
+        cargando...
+      </div>
+    }
+    </>
   );
 };
 

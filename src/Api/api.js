@@ -466,6 +466,30 @@ const postRecibo = async (recibo, socio, tesorero) => {
   }
 };
 
+const postAviso = async (aviso ,idAdmin, idUsuario) => {
+  try {
+    console.log(aviso);
+    const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(aviso),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postSocio:", error);
+    throw new Error("Error al enviar los datos del aviso");
+  }
+};
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -484,4 +508,5 @@ export {
   getUr,
   getAllRecibos,
   postRecibo,
+  postAviso
 };
