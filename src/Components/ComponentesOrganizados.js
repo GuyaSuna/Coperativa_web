@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import ListadoSocio from "./Listados/ListadoSocios/ListadoSocio";
 import ListadoViviendas from "./Listados/ListadoViviendas/ListadoViviendas";
+// import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
 import AltaSocio from "./Formularios/Socios/AltaSocio/AltaSocio";
 import AltaVivienda from "./Formularios/Viviendas/AltaVivienda/AltaVivienda";
 import ModificarSocio from "./Formularios/Socios/ModificarSocio/ModificarSocio";
 import ModificarVivienda from "./Formularios/Viviendas/ModificarVivienda/ModificarVivienda";
 import AltaRecibo from "./Formularios/Recibos/AltaRecibo/AltaRecibo";
+import AltaSuplente from "./Formularios/Suplentes/AltaSuplente";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -47,6 +49,9 @@ const ComponentesOrganizados = ({
     }
     case 6: {
       return <AltaRecibo Socio={socioRecibo} />;
+    }
+    case 7: {
+      return <AltaSuplente />;
     }
   }
 };

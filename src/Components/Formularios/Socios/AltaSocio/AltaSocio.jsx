@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { postSocio, postSuplente, getAllViviendas } from "../../../../Api/api.js";
+import {
+  postSocio,
+  postSuplente,
+  getAllViviendas,
+} from "../../../../Api/api.js";
 
 const AltaSocio = () => {
   const router = useRouter();
@@ -127,7 +131,7 @@ const AltaSocio = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(FechaIngreso)
+    console.log(FechaIngreso);
     if (!validarFormulario()) return;
     const SocioData = {
       cedulaSocio: CedulaSocio,
@@ -168,7 +172,10 @@ const AltaSocio = () => {
   //      router.push(`/UserInfo/${NroSocio}`);
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form onSubmit={handleSubmit} className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="nroSocio">
             Nro. Socio:
@@ -186,7 +193,10 @@ const AltaSocio = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nombreSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="nombreSocio"
+          >
             Nombres:
           </label>
           <input
@@ -202,7 +212,10 @@ const AltaSocio = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="apellidoSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="apellidoSocio"
+          >
             Apellidos:
           </label>
           <input
@@ -214,11 +227,16 @@ const AltaSocio = () => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.apellidoSocio && (
-            <span className="text-red-500 text-sm">{Errores.apellidoSocio}</span>
+            <span className="text-red-500 text-sm">
+              {Errores.apellidoSocio}
+            </span>
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="cedulaSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="cedulaSocio"
+          >
             Número de CI.:
           </label>
           <input
@@ -234,7 +252,10 @@ const AltaSocio = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="telefonoSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="telefonoSocio"
+          >
             Teléfono:
           </label>
           <input
@@ -246,11 +267,16 @@ const AltaSocio = () => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.telefonoSocio && (
-            <span className="text-red-500 text-sm">{Errores.telefonoSocio}</span>
+            <span className="text-red-500 text-sm">
+              {Errores.telefonoSocio}
+            </span>
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="capitalSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="capitalSocio"
+          >
             Capital:
           </label>
           <input
@@ -266,7 +292,10 @@ const AltaSocio = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="fechaIngreso">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="fechaIngreso"
+          >
             Fecha de Ingreso:
           </label>
           <input
@@ -282,7 +311,10 @@ const AltaSocio = () => {
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="seleccionVivienda">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="seleccionVivienda"
+          >
             Seleccione una vivienda:
           </label>
           <select
@@ -300,11 +332,16 @@ const AltaSocio = () => {
             ))}
           </select>
           {Errores.seleccionVivienda && (
-            <span className="text-red-500 text-sm">{Errores.seleccionVivienda}</span>
+            <span className="text-red-500 text-sm">
+              {Errores.seleccionVivienda}
+            </span>
           )}
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="tieneSuplente">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="tieneSuplente"
+          >
             Suplente:
           </label>
           <input
@@ -319,7 +356,10 @@ const AltaSocio = () => {
         {TieneSuplente && (
           <>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2" htmlFor="nombreSuplente">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="nombreSuplente"
+              >
                 Nombre del Suplente:
               </label>
               <input
@@ -331,11 +371,16 @@ const AltaSocio = () => {
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
               {Errores.nombreSuplente && (
-                <span className="text-red-500 text-sm">{Errores.nombreSuplente}</span>
+                <span className="text-red-500 text-sm">
+                  {Errores.nombreSuplente}
+                </span>
               )}
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2" htmlFor="apellidoSuplente">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="apellidoSuplente"
+              >
                 Apellido del Suplente:
               </label>
               <input
@@ -347,11 +392,16 @@ const AltaSocio = () => {
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
               {Errores.apellidoSuplente && (
-                <span className="text-red-500 text-sm">{Errores.apellidoSuplente}</span>
+                <span className="text-red-500 text-sm">
+                  {Errores.apellidoSuplente}
+                </span>
               )}
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2" htmlFor="cedulaSuplente">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="cedulaSuplente"
+              >
                 Número de CI del Suplente:
               </label>
               <input
@@ -363,11 +413,16 @@ const AltaSocio = () => {
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
               {Errores.cedulaSuplente && (
-                <span className="text-red-500 text-sm">{Errores.cedulaSuplente}</span>
+                <span className="text-red-500 text-sm">
+                  {Errores.cedulaSuplente}
+                </span>
               )}
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2" htmlFor="telefonoSuplente">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="telefonoSuplente"
+              >
                 Teléfono del Suplente:
               </label>
               <input
@@ -379,7 +434,9 @@ const AltaSocio = () => {
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
               {Errores.telefonoSuplente && (
-                <span className="text-red-500 text-sm">{Errores.telefonoSuplente}</span>
+                <span className="text-red-500 text-sm">
+                  {Errores.telefonoSuplente}
+                </span>
               )}
             </div>
           </>

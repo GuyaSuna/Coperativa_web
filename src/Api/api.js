@@ -199,6 +199,7 @@ const deleteSocio = async (cedulaSocio) => {
 const postSuplente = async (suplenteEntity, CedulaSocio) => {
   try {
     console.log(suplenteEntity);
+    console.log("Cedula del socio:", CedulaSocio);
     const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
       method: "POST",
       headers: {
@@ -395,22 +396,23 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 //   }
 // };
 
-
 const getUr = async () => {
   try {
-    const response = await fetch('https://api.cambio-uruguay.com/exchange/BCU/UR', {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      "https://api.cambio-uruguay.com/exchange/BCU/UR",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
 
     const data = await response.json();
-
 
     return data;
   } catch (error) {
@@ -441,9 +443,8 @@ const getAllRecibos = async (idCooperativa) => {
   }
 };
 
-const postRecibo = async (recibo ,socio , tesorero) => {
+const postRecibo = async (recibo, socio, tesorero) => {
   try {
-
     const response = await fetch(`${URL}/recibo/${socio}/${tesorero}`, {
       method: "POST",
       headers: {
@@ -464,7 +465,6 @@ const postRecibo = async (recibo ,socio , tesorero) => {
     throw new Error("Error al enviar los datos de el recibo");
   }
 };
-
 
 export {
   loginAdministrador,
