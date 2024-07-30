@@ -1,4 +1,5 @@
 const URL = "http://localhost:5000";
+import { parseISO, format } from "date-fns";
 
 //logins
 const loginAdministrador = async (email, contraseña) => {
@@ -93,7 +94,21 @@ const getAllSocios = async (idCooperativa) => {
 
     const data = await response.json();
 
-    return data;
+    // Formatear la fecha de cada socio
+    const sociosConFechaFormateada = data.map((socio) => {
+      if (socio.FechaIngreso) {
+        const fechaISO = parseISO(socio.FechaIngreso);
+        const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
+        return {
+          ...socio,
+          FechaIngreso: fechaFormateada,
+        };
+      } else {
+        return socio;
+      }
+    });
+
+    return sociosConFechaFormateada;
   } catch (error) {
     console.error("Error en getAllSocios:", error);
     throw new Error("Error al obtener los datos de los Socios.");
