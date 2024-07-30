@@ -7,7 +7,8 @@ import AltaVivienda from "./Formularios/Viviendas/AltaVivienda/AltaVivienda";
 import ModificarSocio from "./Formularios/Socios/ModificarSocio/ModificarSocio";
 import ModificarVivienda from "./Formularios/Viviendas/ModificarVivienda/ModificarVivienda";
 import AltaRecibo from "./Formularios/Recibos/AltaRecibo/AltaRecibo";
-import AltaSuplente from "./Formularios/Suplentes/AltaSuplente";
+import AltaSuplente from "./Formularios/Suplentes/AltaSuplente/AltaSuplente";
+import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -15,7 +16,7 @@ const ComponentesOrganizados = ({
 }) => {
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [nroVivienda, setNroVivienda] = useState(0);
-  const [socioRecibo , setSocioRecibo] = useState({});
+  const [socioRecibo, setSocioRecibo] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -52,6 +53,9 @@ const ComponentesOrganizados = ({
     }
     case 7: {
       return <AltaSuplente />;
+    }
+    case 8: {
+      return <ListadoSuplentes />;
     }
   }
 };

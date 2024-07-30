@@ -1,5 +1,4 @@
 const URL = "http://localhost:5000";
-import { parseISO, format } from "date-fns";
 
 //logins
 const loginAdministrador = async (email, contraseña) => {
@@ -233,6 +232,29 @@ const postSuplente = async (suplenteEntity, CedulaSocio) => {
   } catch (error) {
     console.error("Error en postSuplente:", error);
     throw new Error("Error al enviar los datos del socio");
+  }
+};
+
+const getAllSuplentes = async () => {
+  try {
+    const response = await fetch(`${URL}/suplente/allSuplentes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSuplentes:", error);
+    throw new Error("Error al obtener los datos de los suplentes.");
   }
 };
 
@@ -490,6 +512,7 @@ export {
   updateSocio,
   deleteSocio,
   postSuplente,
+  getAllSuplentes,
   postVivienda,
   getVivienda,
   getAllViviendas,

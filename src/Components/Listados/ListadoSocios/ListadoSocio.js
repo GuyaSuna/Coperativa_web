@@ -5,7 +5,6 @@ import { getAllSocios } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import { parseISO, format } from "date-fns";
 
 const ListadoSocio = ({
   setCedulaSocio,
@@ -21,24 +20,8 @@ const ListadoSocio = ({
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngreso);
-
-        if (socio.fechaIngreso) {
-          const fechaISO = parseISO(socio.fechaIngreso);
-          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          console.log("Fecha formateada: ", fechaFormateada);
-          return {
-            ...socio,
-            fechaIngreso: fechaFormateada,
-          };
-        } else {
-          return socio;
-        }
-      });
-
-      setAllSocios(sociosConFechaFormateada);
-      console.log(sociosConFechaFormateada, "response con fecha formateada");
+      setAllSocios(response);
+      console.log(response, "no anda response");
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -57,74 +40,29 @@ const ListadoSocio = ({
       throw ("Fallo al eliminar el socio ", e.error);
     }
   };
-  const handleOrderByFechaIngreso = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso)
-    );
-    setAllSocios(ordenarSocios);
+
+  const handleRecibo = (socio) => {
+    setSocioRecibo(socio);
+    setIdentificadorComponente(6);
   };
 
-  const handleOrderByNroSocio = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => a.nroSocio - b.nroSocio
-    );
-    setAllSocios(ordenarSocios);
-  };
   return (
     <div className="sm:p-7 p-4">
-      <div className="flex w-full items-center mb-7 z-50 relative">
-        <Menu
-          as="div"
-          className="relative inline-block text-left justify-end z-50"
-        >
-          <div>
-            <MenuButton className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
-              Ordenar por
-              <svg
-                viewBox="0 0 24 24"
-                className="w-4 ml-1.5 text-gray-400 dark:text-gray-600"
-                stroke="currentColor"
-                strokeWidth={2}
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </MenuButton>
-          </div>
-          <MenuItems
-            transition
-            className="absolute right-0 z-50 mt-2 w-auto origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+      <div className="flex w-full items-center mb-7">
+        <button className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
+          Filter by
+          <svg
+            viewBox="0 0 24 24"
+            className="w-4 ml-1.5 text-gray-400 dark:text-gray-600"
+            stroke="currentColor"
+            strokeWidth={2}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <div className="py-1">
-              <MenuItem>
-                {({ active }) => (
-                  <button
-                    onClick={handleOrderByFechaIngreso}
-                    className={`block px-4 py-2 text-sm ${
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                    }`}
-                  >
-                    Fecha de Ingreso
-                  </button>
-                )}
-              </MenuItem>
-              <MenuItem>
-                {({ active }) => (
-                  <button
-                    onClick={handleOrderByNroSocio}
-                    className={`block px-4 py-2 text-sm ${
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                    }`}
-                  >
-                    Número de Socio
-                  </button>
-                )}
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </Menu>
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
       </div>
       <table className="w-full text-left">
         <thead>

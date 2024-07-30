@@ -83,7 +83,7 @@ const Header = ({ setIdentificadorComponente }) => {
             Agregar Socios
           </button>
           <button
-            onClick={() => handleSelection(6)}
+            onClick={() => handleSelection(7)}
             className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
               selectedOption === 6
                 ? "border-b-2 border-blue-500 text-blue-500"

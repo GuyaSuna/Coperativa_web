@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { postSuplente, getAllSocios } from "@/Api/api";
-import { MiembroContext } from "@/Provider/provider.js";
+import { postSuplente, getAllSocios } from "../../../../Api/api";
+import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaSuplente = () => {
   const router = useRouter();
