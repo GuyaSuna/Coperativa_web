@@ -1,22 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import "./livingPlaceStyle.css";
+import { useState , useContext, useEffect} from "react";
 import { useRouter } from "next/navigation";
-import { postAviso } from "../../../../Api/api.js";
+import { postAviso , getAllUsuario } from "../../../Api/api.js";
+import { MiembroContext } from "@/Provider/provider";
 
 const AltaAviso = () => {
-  const router = useRouter();
+  const {miembro , cooperativa} = useContext(MiembroContext);
+  const [Mensaje, setMensaje] = useState("");
+  const [usuario, setUsuario] = useState({});
+  const [usuarios , setUsuarios] = useState([]);
 
-  const [NroVivienda, setNroVivienda] = useState();
-  const [CantidadDormitorios, setCantidadDormitorios] = useState();
+  useEffect(() => {
+    fetchUsuarios();
+  },[]);
 
-  const handleChangeCantidadDormitorios = (e) => {
+  const fetchUsuarios = async () => {
+    try{
+      const response = await getAllUsuario(cooperativa.idCooperativa);
+      setUsuarios(response);
+    }catch (error) {
+      console.error("Error al recibir los datos de los usuarios:", error);
+    }
+  }
+
+  const handleChangeMensaje = (e) => {
     setCantidadDormitorios(e.target.value);
     console.log(e.target.value);
   };
 
-  const handleChangeNroVivienda = (e) => {
+  const handleChangeUsuario = (e) => {
     setNroVivienda(e.target.value);
     console.log(e.target.value);
   };
@@ -24,12 +37,14 @@ const AltaAviso = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-      nroVivienda: NroVivienda,
-      cantidadDormitorios: CantidadDormitorios,
+      mensaje: Mensaje,
+      fecha: "" ,
+      administrador : miembro.idMiembro,
+      usuario : usuario.Cedula
     };
     console.log(data);
 
-    const response = await postVivienda(data);
+    const response = await postAviso(data);
 
     console.log(response);
   };
@@ -39,30 +54,31 @@ const AltaAviso = () => {
       <form onSubmit={handleSubmit} className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md">
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="houseNumber">
-            Número de vivienda:
+            Mensaje:
           </label>
           <input
             type="text"
             id="houseNumber"
             name="houseNumber"
-            value={NroVivienda}
-            onChange={handleChangeNroVivienda}
+            value={Mensaje}
+            onChange={handleChangeMensaje}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="numberOfBedrooms">
-            Cantidad de Dormitorios:
-          </label>
-          <input
-            type="text"
-            id="numberOfBedrooms"
-            name="numberOfBedrooms"
-            value={CantidadDormitorios}
-            onChange={handleChangeCantidadDormitorios}
+        <select
+            id="seleccionVivienda"
+            name="seleccionVivienda"
+            value={usuario}
+            onChange={handleChangeUsuario}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-        </div>
+          >
+            <option value="">Seleccione un socio</option>
+            {usuarios.map((usuario) => (
+              <option key={usuario.idMiembro} value={usuario.idMiembro}>
+                {`Usuario Nro.: ${usuario.idMiembro} - ${usuario.nombreMiembro} `}
+              </option>
+            ))}
+          </select>
         <button
           type="submit"
           className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"

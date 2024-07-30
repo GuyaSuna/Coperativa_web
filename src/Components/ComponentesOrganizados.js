@@ -8,7 +8,7 @@ import ModificarSocio from "./Formularios/Socios/ModificarSocio/ModificarSocio";
 import ModificarVivienda from "./Formularios/Viviendas/ModificarVivienda/ModificarVivienda";
 import AltaRecibo from "./Formularios/Recibos/AltaRecibo/AltaRecibo";
 import AltaSuplente from "./Formularios/Suplentes/AltaSuplente";
-
+import AltaAviso from "./Formularios/Avisos/AltaAviso";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -39,7 +39,7 @@ const ComponentesOrganizados = ({
       return <AltaVivienda />;
     }
     case 3: {
-      return <AltaSocio />;
+      return <AltaSocio setIdentificadorComponente={setIdentificadorComponente}/>;
     }
     case 4: {
       return <ModificarSocio cedulaSocioParam={cedulaSocio} />;
@@ -52,6 +52,9 @@ const ComponentesOrganizados = ({
     }
     case 7: {
       return <AltaSuplente />;
+    }
+    case 8 :{
+      return <AltaAviso/>
     }
   }
 };

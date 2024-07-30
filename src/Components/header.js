@@ -93,9 +93,9 @@ const Header = ({ setIdentificadorComponente }) => {
               Agregar Viviendas
             </button>
             <button
-              onClick={() => handleSelection(4)}
+              onClick={() => handleSelection(3)}
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === 4 ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === 3 ? "border-b-2 border-blue-500 text-blue-500" : ""
               }`}
             >
               Agregar Socios
@@ -126,6 +126,15 @@ const Header = ({ setIdentificadorComponente }) => {
             >
               Generar Recibo
             </a>
+            <button
+              href="#"
+              className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
+                selectedOption === "Generar Recibo" ? "border-b-2 border-blue-500 text-blue-500" : ""
+              }`}
+              onClick={() => handleSelection(8)}
+            >
+              Generar Aviso
+            </button>
           </div>
         </div>
         <div className="hidden lg:flex space-x-4">
@@ -140,7 +149,7 @@ const Header = ({ setIdentificadorComponente }) => {
           <button
             onClick={() => handleSelection(3)}
             className={`cursor-pointer py-2 px-4 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-              selectedOption === 4 ? "border-b-2 border-blue-500 text-blue-500" : ""
+              selectedOption === 3 ? "border-b-2 border-blue-500 text-blue-500" : ""
             }`}
           >
             Agregar Socios
@@ -171,6 +180,15 @@ const Header = ({ setIdentificadorComponente }) => {
           >
             Generar Recibo
           </a>
+          <button
+              href="#"
+              className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
+                selectedOption === "Generar Recibo" ? "border-b-2 border-blue-500 text-blue-500" : ""
+              }`}
+              onClick={() => handleSelection(8)}
+            >
+              Generar Aviso
+            </button>
         </div>
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>
