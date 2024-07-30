@@ -40,25 +40,39 @@ const ListadoSuplentes = ({}) => {
         <thead>
           <tr className="text-gray-400">
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Cedula Suplente
+            </th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Nombre Suplente
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Apellidos Suplente
             </th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Telefono Suplente
+            </th>
           </tr>
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
           {suplentes.map((suplente) => (
-            <tr key={suplente.id}>
+            <tr key={suplente.cedulaSuplente}>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">{suplente.nombre}</div>
+                <div className="flex items-center ml-4">
+                  {suplente.cedulaSuplente}
+                </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{suplente.apellidos}</div>
+                <div className="flex items-center ml-4">
+                  {suplente.nombreSuplente}
+                </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                {/* Opcionalmente, puedes agregar más información o acciones aquí */}
+                <div className="flex items-center">
+                  {suplente.apellidoSuplente}
+                </div>
+              </td>
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                {suplente.telefonoSuplente}
               </td>
             </tr>
           ))}
