@@ -23,7 +23,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
   const handleModificar = (suplente) => {
     setSuplente(suplente);
-    setIdentificadorComponente(9);
+    setIdentificadorComponente(10);
   };
   return (
     <div className="sm:p-7 p-4">

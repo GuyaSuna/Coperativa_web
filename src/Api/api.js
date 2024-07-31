@@ -287,7 +287,6 @@ const updateSuplente = async (
   telefonoSuplente
 ) => {
   try {
-    console.log(cedulaSuplente, "updateSuplenteAPI");
     const response = await fetch(`${URL}/suplente`, {
       method: "PUT",
       headers: {
