@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { getAllSuplentes, deleteSuplente } from "../../../Api/api";
+import { getAllSuplentes } from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 
 const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
@@ -68,6 +68,9 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Telefono Suplente
+            </th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Socio
             </th>
           </tr>
         </thead>

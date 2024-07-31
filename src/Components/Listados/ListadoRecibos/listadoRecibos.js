@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect , useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
@@ -8,7 +8,7 @@ import { MiembroContext } from "@/Provider/provider.js";
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
-  const {cooperativa} = useContext(MiembroContext);
+  const { cooperativa } = useContext(MiembroContext);
   useEffect(() => {
     fetchAllRecibos();
   }, []);
@@ -32,6 +32,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     try {
       const data = await deleteSocio(idRecibo);
       console.log(data);
+      fetchAllRecibos();
     } catch (e) {
       throw ("Fallo al eliminar el recibo ", e.error);
     }

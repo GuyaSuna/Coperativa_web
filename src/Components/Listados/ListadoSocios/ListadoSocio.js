@@ -49,6 +49,7 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
     try {
       const data = await deleteSocio(cedula);
       console.log(data);
+      fetchAllSocios();
     } catch (e) {
       throw ("Fallo al eliminar el socio ", e.error);
     }

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
-import { updateSuplente } from "../../../../Api/api";
+import { getSuplente, updateSuplente } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const ModificarSuplente = ({ suplenteParam }) => {

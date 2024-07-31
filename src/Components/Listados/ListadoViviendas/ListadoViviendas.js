@@ -29,6 +29,7 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
     try {
       const data = await deleteVivienda(nroVivienda);
       console.log(data);
+      fetchAllViviendas();
     } catch (e) {
       throw ("Fallo al eliminar la vivienda ", e.error);
     }

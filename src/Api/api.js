@@ -485,19 +485,22 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 
 const getAllUsuario = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/usuario/allUsuarios/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/usuario/allUsuarios/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
 
     const data = await response.json();
-    console.log(data)
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error en getAllUsuario:", error);
@@ -599,7 +602,7 @@ const postRecibo = async (recibo, socio, tesorero) => {
   }
 };
 
-const postAviso = async (aviso ,idAdmin, idUsuario) => {
+const postAviso = async (aviso, idAdmin, idUsuario) => {
   try {
     console.log(aviso);
     const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
@@ -646,5 +649,5 @@ export {
   getAllRecibos,
   postRecibo,
   postAviso,
-  getAllUsuario
+  getAllUsuario,
 };
