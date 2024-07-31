@@ -8,7 +8,7 @@ import { MiembroContext } from "@/Provider/provider";
 const AltaAviso = () => {
   const {miembro , cooperativa} = useContext(MiembroContext);
   const [Mensaje, setMensaje] = useState("");
-  const [usuario, setUsuario] = useState({});
+  const [usuario, setUsuario] = useState(0);
   const [usuarios , setUsuarios] = useState([]);
 
   useEffect(() => {
@@ -30,21 +30,20 @@ const AltaAviso = () => {
   };
 
   const handleChangeUsuario = (e) => {
-    setUsuario(e.target.value);
+    setUsuario(parseInt(e.target.value));
     console.log(e.target.value);
+    console.log(usuario.parteInt())
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(usuario)
     const data = {
       mensaje: Mensaje,
-      fecha: "" ,
-      administrador : miembro.idMiembro,
-      usuario : usuario.idMiembro
     };
     console.log(data);
 
-    const response = await postAviso(data, miembro.idMiembro , usuario.idMiembro);
+    const response = await postAviso(data, miembro.idMiembro , usuario);
 
     console.log(response);
   };
@@ -74,7 +73,7 @@ const AltaAviso = () => {
           >
             <option value="">Seleccione un usuario</option>
             {usuarios.map((usuario) => (
-              <option key={usuario.idMiembro} value={usuario}>
+              <option key={usuario.idMiembro} value={usuario.idMiembro}>
                 {`Usuario Nro.: ${usuario.idMiembro} - ${usuario.nombreMiembro}`}
               </option>
             ))}
