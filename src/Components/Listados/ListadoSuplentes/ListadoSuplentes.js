@@ -30,6 +30,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
     try {
       const data = await deleteSuplente(cedulaSuplente);
       console.log("Suplente eliminado:", data);
+      fetchAllSuplentes();
     } catch (e) {
       throw ("Fallo al eliminar la vivienda ", e.error);
     }
