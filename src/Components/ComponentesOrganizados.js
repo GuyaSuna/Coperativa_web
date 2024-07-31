@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ListadoSocio from "./Listados/ListadoSocios/ListadoSocio";
 import ListadoViviendas from "./Listados/ListadoViviendas/ListadoViviendas";
-// import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
 import AltaSocio from "./Formularios/Socios/AltaSocio/AltaSocio";
 import AltaVivienda from "./Formularios/Viviendas/AltaVivienda/AltaVivienda";
 import ModificarSocio from "./Formularios/Socios/ModificarSocio/ModificarSocio";
@@ -9,6 +8,7 @@ import ModificarVivienda from "./Formularios/Viviendas/ModificarVivienda/Modific
 import AltaRecibo from "./Formularios/Recibos/AltaRecibo/AltaRecibo";
 import AltaSuplente from "./Formularios/Suplentes/AltaSuplente/AltaSuplente";
 import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
+import ModificarSuplente from "./Formularios/Suplentes/ModificarSuplente/ModificarSuplente";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -17,6 +17,7 @@ const ComponentesOrganizados = ({
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [nroVivienda, setNroVivienda] = useState(0);
   const [socioRecibo, setSocioRecibo] = useState({});
+  const [suplente, setSuplente] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -55,7 +56,15 @@ const ComponentesOrganizados = ({
       return <AltaSuplente />;
     }
     case 8: {
-      return <ListadoSuplentes />;
+      return (
+        <ListadoSuplentes
+          setIdentificadorComponente={setIdentificadorComponente}
+          setSuplente={setSuplente}
+        />
+      );
+    }
+    case 9: {
+      return <ModificarSuplente suplenteParam={suplente} />;
     }
   }
 };

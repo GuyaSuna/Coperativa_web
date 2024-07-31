@@ -258,6 +258,61 @@ const getAllSuplentes = async () => {
   }
 };
 
+const getSuplente = async (cedulaSuplente) => {
+  try {
+    const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getSuplente:", error);
+    throw new Error("Error al obtener los datos del suplente");
+  }
+};
+
+const updateSuplente = async (
+  cedulaSuplente,
+  nombreSuplente,
+  apellidoSuplente,
+  telefonoSuplente
+) => {
+  try {
+    console.log(cedulaSuplente, "updateSuplenteAPI");
+    const response = await fetch(`${URL}/suplente`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cedulaSuplente,
+        nombreSuplente,
+        apellidoSuplente,
+        telefonoSuplente,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (!response.ok) {
+      throw new Error("Error al actualizar el suplente.");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateSuplente:", error);
+    throw error;
+  }
+};
+
 //vivienda
 const postVivienda = async (viviendaEntity) => {
   try {
@@ -513,6 +568,8 @@ export {
   deleteSocio,
   postSuplente,
   getAllSuplentes,
+  getSuplente,
+  updateSuplente,
   postVivienda,
   getVivienda,
   getAllViviendas,

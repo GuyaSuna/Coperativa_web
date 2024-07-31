@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { getAllSuplentes } from "../../../Api/api";
+import { MiembroContext } from "@/Provider/provider.js";
 
-const ListadoSuplentes = ({}) => {
-  const [suplentes, setSuplentes] = useState([]);
+const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
+  const [allSuplentes, setAllSuplentes] = useState([]);
+  const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
     fetchAllSuplentes();
@@ -13,10 +16,14 @@ const ListadoSuplentes = ({}) => {
   const fetchAllSuplentes = async () => {
     try {
       const response = await getAllSuplentes();
-      setSuplentes(response);
+      setAllSuplentes(response);
     } catch (error) {
       console.error("Error al obtener los suplentes:", error);
     }
+  };
+  const handleModificar = (suplente) => {
+    setSuplente(suplente);
+    setIdentificadorComponente(9);
   };
   return (
     <div className="sm:p-7 p-4">
@@ -54,7 +61,7 @@ const ListadoSuplentes = ({}) => {
           </tr>
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
-          {suplentes.map((suplente) => (
+          {allSuplentes.map((suplente) => (
             <tr key={suplente.cedulaSuplente}>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center ml-4">
@@ -72,7 +79,59 @@ const ListadoSuplentes = ({}) => {
                 </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                {suplente.telefonoSuplente}
+                <div className="flex items-center">
+                  {suplente.telefonoSuplente}
+                </div>
+                <div>
+                  <Menu
+                    as="div"
+                    className="relative inline-block text-left justify-end"
+                  >
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+                    </div>
+
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    >
+                      <div className="py-1">
+                        <MenuItem>
+                          <button
+                            onClick={() =>
+                              handleEliminar(suplente.cedulaSuplente)
+                            }
+                            className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Eliminar
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
+                            onClick={() => handleModificar(suplente)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Modificar
+                          </button>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Menu>
+                </div>
               </td>
             </tr>
           ))}
