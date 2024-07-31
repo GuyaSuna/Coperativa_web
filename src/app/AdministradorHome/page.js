@@ -169,10 +169,10 @@ const AdminHome = () => {
                 </button>
                 <button
                   onClick={() => {
-                    handleSelection(3);
+                    handleSelection(8);
                   }}
                   className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
-                    selectedOption === 3
+                    selectedOption === 8
                       ? "border-b-2 border-blue-500 text-blue-500"
                       : ""
                   }`}

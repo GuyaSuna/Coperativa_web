@@ -1,76 +1,144 @@
-// "use client";
+"use client";
 
-// import React, { useState, useEffect } from "react";
-// import { getAllSocios } from "../../../Api/api";
+import React, { useState, useEffect, useContext } from "react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { getAllSuplentes } from "../../../Api/api";
+import { MiembroContext } from "@/Provider/provider.js";
 
-// const ListadoSuplentes = ({}) => {
-//   const [suplentes, setSuplentes] = useState([]);
+const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
+  const [allSuplentes, setAllSuplentes] = useState([]);
+  const { cooperativa } = useContext(MiembroContext);
 
-//   useEffect(() => {
-//     fetchAllSocios();
-//   }, []);
+  useEffect(() => {
+    fetchAllSuplentes();
+  }, []);
 
-//   const fetchAllSocios = async () => {
-//     try {
-//       const response = await getAllSocios(cooperativa.idCooperativa);
-//       const suplentes = response.filter((socio) => socio.suplente !== null);
-//       setSuplentes(suplentes);
-//     } catch (error) {
-//       console.error("Error al obtener los socios:", error);
-//     }
-//   };
-//   return (
-//     <div className="sm:p-7 p-4">
-//       <div className="flex w-full items-center mb-7">
-//         <button className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
-//           Filter by
-//           <svg
-//             viewBox="0 0 24 24"
-//             className="w-4 ml-1.5 text-gray-400 dark:text-gray-600"
-//             stroke="currentColor"
-//             strokeWidth={2}
-//             fill="none"
-//             strokeLinecap="round"
-//             strokeLinejoin="round"
-//           >
-//             <polyline points="6 9 12 15 18 9" />
-//           </svg>
-//         </button>
-//       </div>
-//       <table className="w-full text-left">
-//         <thead>
-//           <tr className="text-gray-400">
-//             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-//               NroSocio
-//             </th>
-//             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-//               Nombre Suplente
-//             </th>
-//             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-//               Apellido Suplente
-//             </th>
-//           </tr>
-//         </thead>
-//         <tbody className="text-gray-600 dark:text-gray-100">
-//           {suplentes.map((socio) => (
-//             <tr key={socio.nroSocio}>
-//               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-//                 <div className="flex items-center ml-4">{socio.nroSocio}</div>
-//               </td>
-//               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-//                 <div className="flex items-center">{socio.suplente.nombre}</div>
-//               </td>
-//               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-//                 <div className="flex items-center">
-//                   {socio.suplente.apellido}
-//                 </div>
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-//     </div>
-//   );
-// };
+  const fetchAllSuplentes = async () => {
+    try {
+      const response = await getAllSuplentes();
+      setAllSuplentes(response);
+    } catch (error) {
+      console.error("Error al obtener los suplentes:", error);
+    }
+  };
+  const handleModificar = (suplente) => {
+    setSuplente(suplente);
+    setIdentificadorComponente(9);
+  };
+  return (
+    <div className="sm:p-7 p-4">
+      <div className="flex w-full items-center mb-7">
+        <button className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
+          Filter by
+          <svg
+            viewBox="0 0 24 24"
+            className="w-4 ml-1.5 text-gray-400 dark:text-gray-600"
+            stroke="currentColor"
+            strokeWidth={2}
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
+      </div>
+      <table className="w-full text-left">
+        <thead>
+          <tr className="text-gray-400">
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Cedula Suplente
+            </th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Nombre Suplente
+            </th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Apellidos Suplente
+            </th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              Telefono Suplente
+            </th>
+          </tr>
+        </thead>
+        <tbody className="text-gray-600 dark:text-gray-100">
+          {allSuplentes.map((suplente) => (
+            <tr key={suplente.cedulaSuplente}>
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex items-center ml-4">
+                  {suplente.cedulaSuplente}
+                </div>
+              </td>
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex items-center ml-4">
+                  {suplente.nombreSuplente}
+                </div>
+              </td>
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex items-center">
+                  {suplente.apellidoSuplente}
+                </div>
+              </td>
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex items-center">
+                  {suplente.telefonoSuplente}
+                </div>
+                <div>
+                  <Menu
+                    as="div"
+                    className="relative inline-block text-left justify-end"
+                  >
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+                    </div>
 
-// export default ListadoSuplentes;
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                    >
+                      <div className="py-1">
+                        <MenuItem>
+                          <button
+                            onClick={() =>
+                              handleEliminar(suplente.cedulaSuplente)
+                            }
+                            className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Eliminar
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
+                            onClick={() => handleModificar(suplente)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Modificar
+                          </button>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Menu>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default ListadoSuplentes;

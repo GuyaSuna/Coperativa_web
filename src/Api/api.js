@@ -93,7 +93,21 @@ const getAllSocios = async (idCooperativa) => {
 
     const data = await response.json();
 
-    return data;
+    // Formatear la fecha de cada socio
+    const sociosConFechaFormateada = data.map((socio) => {
+      if (socio.FechaIngreso) {
+        const fechaISO = parseISO(socio.FechaIngreso);
+        const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
+        return {
+          ...socio,
+          FechaIngreso: fechaFormateada,
+        };
+      } else {
+        return socio;
+      }
+    });
+
+    return sociosConFechaFormateada;
   } catch (error) {
     console.error("Error en getAllSocios:", error);
     throw new Error("Error al obtener los datos de los Socios.");
@@ -218,6 +232,84 @@ const postSuplente = async (suplenteEntity, CedulaSocio) => {
   } catch (error) {
     console.error("Error en postSuplente:", error);
     throw new Error("Error al enviar los datos del socio");
+  }
+};
+
+const getAllSuplentes = async () => {
+  try {
+    const response = await fetch(`${URL}/suplente/allSuplentes`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSuplentes:", error);
+    throw new Error("Error al obtener los datos de los suplentes.");
+  }
+};
+
+const getSuplente = async (cedulaSuplente) => {
+  try {
+    const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getSuplente:", error);
+    throw new Error("Error al obtener los datos del suplente");
+  }
+};
+
+const updateSuplente = async (
+  cedulaSuplente,
+  nombreSuplente,
+  apellidoSuplente,
+  telefonoSuplente
+) => {
+  try {
+    console.log(cedulaSuplente, "updateSuplenteAPI");
+    const response = await fetch(`${URL}/suplente`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cedulaSuplente,
+        nombreSuplente,
+        apellidoSuplente,
+        telefonoSuplente,
+      }),
+    });
+    const data = await response.json();
+    console.log(data);
+    if (!response.ok) {
+      throw new Error("Error al actualizar el suplente.");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateSuplente:", error);
+    throw error;
   }
 };
 
@@ -521,6 +613,9 @@ export {
   updateSocio,
   deleteSocio,
   postSuplente,
+  getAllSuplentes,
+  getSuplente,
+  updateSuplente,
   postVivienda,
   getVivienda,
   getAllViviendas,
