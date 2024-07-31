@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { getAllSuplentes } from "../../../Api/api";
+import { getAllSuplentes, deleteSuplente } from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 
 const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
@@ -25,6 +25,16 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
     setSuplente(suplente);
     setIdentificadorComponente(9);
   };
+
+  const handleEliminar = async (cedulaSuplente) => {
+    try {
+      const data = await deleteSuplente(cedulaSuplente);
+      console.log("Suplente eliminado:", data);
+    } catch (e) {
+      throw ("Fallo al eliminar la vivienda ", e.error);
+    }
+  };
+
   return (
     <div className="sm:p-7 p-4">
       <div className="flex w-full items-center mb-7">

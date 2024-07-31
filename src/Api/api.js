@@ -280,6 +280,26 @@ const getSuplente = async (cedulaSuplente) => {
   }
 };
 
+const deleteSuplente = async (cedulaSuplente) => {
+  try {
+    const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteSuplente:", error);
+    throw new Error("Error al eliminar la vivienda.");
+  }
+};
+
 const updateSuplente = async (
   cedulaSuplente,
   nombreSuplente,
@@ -570,6 +590,7 @@ export {
   getAllSuplentes,
   getSuplente,
   updateSuplente,
+  deleteSuplente,
   postVivienda,
   getVivienda,
   getAllViviendas,
