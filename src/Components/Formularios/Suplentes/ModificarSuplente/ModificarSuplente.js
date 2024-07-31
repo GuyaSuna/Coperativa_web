@@ -23,6 +23,10 @@ const ModificarSuplente = ({ suplenteParam }) => {
     }
   }, [suplenteParam]);
 
+  useEffect(() => {
+    console.log(cedulaSuplente, "ACAAAAAA");
+  }, [cedulaSuplente]);
+
   const validarFormulario = () => {
     const errores = {};
 
@@ -43,13 +47,12 @@ const ModificarSuplente = ({ suplenteParam }) => {
     e.preventDefault();
     if (!validarFormulario()) return;
     try {
-      const updatedSuplente = await updateSuplente(
+      await updateSuplente(
         cedulaSuplente,
         apellidoSuplente,
         nombreSuplente,
         telefonoSuplente
       );
-      console.log("Suplente actualizado:", updatedSuplente);
     } catch (error) {
       console.error("Error al actualizar suplente:", error);
     }

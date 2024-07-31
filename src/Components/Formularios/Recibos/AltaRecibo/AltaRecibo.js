@@ -8,12 +8,12 @@ import { MiembroContext } from "@/Provider/provider";
 const AltaRecibo= ({Socio}) => {
   const router = useRouter();
   const {miembro} = useContext(MiembroContext) 
-  const [fechaEmision, setFechaEmision] = useState(Date.now());
+  const [fechaEmision, setFechaEmision] = useState();
   const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
-  const [convenio, setConvenio] = useState(0); // dudoso creo que es plata que se suma por no cumplir horas de trabajo
+  const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
   const [Errores, setErrores] = useState({});
@@ -25,7 +25,7 @@ const AltaRecibo= ({Socio}) => {
   const fetchCalculos = () => {
     setRecargo(300)
     setInteres(300)
-    setCapital(300)
+
     setCuotaSocial(300)
     setConvenio(300)
     setCuotaMensual(300)
@@ -222,6 +222,7 @@ const AltaRecibo= ({Socio}) => {
             type="text"
             id="interes"
             name="interes"
+            readOnly
             value={interes}
             onChange={handleChangeInteres}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
@@ -239,8 +240,7 @@ const AltaRecibo= ({Socio}) => {
             type="text"
             id="capital"
             name="capital"
-            value={capital}
-            onChange={handleChangeCapital}
+            value={Socio.capitalSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.Capital && (

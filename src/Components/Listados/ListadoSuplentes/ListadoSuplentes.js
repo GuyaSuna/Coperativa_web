@@ -23,7 +23,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
   const handleModificar = (suplente) => {
     setSuplente(suplente);
-    setIdentificadorComponente(9);
+    setIdentificadorComponente(10);
   };
 
   const handleEliminar = async (cedulaSuplente) => {

@@ -2,26 +2,25 @@
 
 import React, { useState, useEffect } from "react";
 import "./FormStyle.css";
-import { useRouter } from "next/navigation";
 import {
   postSocio,
   postSuplente,
   getAllViviendas,
 } from "../../../../Api/api.js";
 
-const AltaSocio = () => {
-  const router = useRouter();
-  const [CedulaSocio, setCedulaSocio] = useState("");
-  const [NroSocio, setNroSocio] = useState("");
+const AltaSocio = ({setIdentificadorComponente}) => {
+
+  const [CedulaSocio, setCedulaSocio] = useState(0);
+  const [NroSocio, setNroSocio] = useState(0);
   const [NombreSocio, setNombreSocio] = useState("");
   const [ApellidoSocio, setApellidoSocio] = useState("");
-  const [TelefonoSocio, setTelefonoSocio] = useState("");
-  const [CapitalSocio, setCapitalSocio] = useState("");
+  const [TelefonoSocio, setTelefonoSocio] = useState(0);
+  const [CapitalSocio, setCapitalSocio] = useState(0);
   const [FechaIngreso, setFechaIngreso] = useState("");
-  const [CedulaSuplente, setCedulaSuplente] = useState("");
+  const [CedulaSuplente, setCedulaSuplente] = useState(0);
   const [NombreSuplente, setNombreSuplente] = useState("");
   const [ApellidoSuplente, setApellidoSuplente] = useState("");
-  const [TelefonoSuplente, setTelefonoSuplente] = useState("");
+  const [TelefonoSuplente, setTelefonoSuplente] = useState(0);
   const [TieneSuplente, setTieneSuplente] = useState(false);
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
@@ -163,13 +162,12 @@ const AltaSocio = () => {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
         console.log(responseSuplente);
       }
-      alert("Dado de alta correctamente");
+      setIdentificadorComponente(0);
     } catch (error) {
       console.error("Error al enviar los datos del socio:", error);
     }
   };
-  //      ruta dinamica
-  //      router.push(`/UserInfo/${NroSocio}`);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
