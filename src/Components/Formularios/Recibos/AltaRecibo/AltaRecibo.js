@@ -3,12 +3,16 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { useRouter } from "next/navigation";
-import { postRecibo } from "../../../../Api/api.js";
+import { postRecibo, getSocio } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
-const AltaRecibo= ({Socio}) => {
+const AltaRecibo = ({ Socio }) => {
   const router = useRouter();
-  const {miembro} = useContext(MiembroContext) 
+  const { miembro } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
+  const [cedulaSocio, setCedulaSocio] = useState("");
+  const [nombreSocio, setNombreSocio] = useState("");
+  const [apellidoSocio, setApellidoSocio] = useState("");
+  const [apellidoAdministrador, setApellidoAdministrador] = useState("");
   const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // sale del socio y se le resta el interes
@@ -19,19 +23,39 @@ const AltaRecibo= ({Socio}) => {
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
-    fetchCalculos()
+    fetchCalculos();
   }, [Socio]);
- 
+  useEffect(() => {
+    setCedulaSocio(Socio);
+  }, []);
+  console.log("El MIEMBRO EN RECIBO", miembro);
+  useEffect(() => {
+    const fetchSocio = async () => {
+      try {
+        const data = await getSocio(cedulaSocio);
+        if (data) {
+          setNombreSocio(data.nombreSocio || "");
+          setApellidoSocio(data.apellidoSocio || "");
+        }
+        console.log(data);
+      } catch (error) {
+        console.error(`An error has occurred in fetchSocio: ${error.message}`);
+      }
+    };
+
+    if (cedulaSocio) {
+      fetchSocio();
+    }
+  }, [cedulaSocio]);
   const fetchCalculos = () => {
-    setRecargo(300)
-    setInteres(300)
+    setRecargo(300);
+    setInteres(300);
 
-    setCuotaSocial(300)
-    setConvenio(300)
-    setCuotaMensual(300)
-    setSumaPesos(300)
-
-  }
+    setCuotaSocial(300);
+    setConvenio(300);
+    setCuotaMensual(300);
+    setSumaPesos(300);
+  };
 
   const handleChangefechaRecibo = (e) => {
     setFechaEmision(e.target.value);
@@ -68,14 +92,15 @@ const AltaRecibo= ({Socio}) => {
 
   const validarFormulario = () => {
     const errores = {};
-    if (!fechaIngreso) errores.FechaIngreso = "La fecha de ingreso es obligatoria";
+    if (!fechaIngreso)
+      errores.FechaIngreso = "La fecha de ingreso es obligatoria";
     if (!recargo) errores.Recargo = "El Recargo es obligatoria";
     if (!interes) errores.Interes = "El Interes es obligatorio";
     if (!capital) errores.Capital = "La Capital es obligatorio";
     if (!cuotaSocial) errores.CuotaSocial = "La Cuota Social es obligatorio";
     if (!convenio) errores.Convenio = "El Convenio es obligatorio";
     if (!cuotaMensual) errores.CuotaMensual = "La CuotaMensual es obligatorio";
-    if (!sumaPesos) errores.SumaPesos = "La Suma en Pesos es obligatorio";  
+    if (!sumaPesos) errores.SumaPesos = "La Suma en Pesos es obligatorio";
 
     setErrores(errores);
 
@@ -88,18 +113,22 @@ const AltaRecibo= ({Socio}) => {
     console.log(ViviendaData.nroVivienda);
 
     const ReciboData = {
-        capital : capital,
-        convenio : convenio,
-        cuota_mensual : cuotaMensual,
-        cuota_social: cuotaSocial,
-        fecha_recibo : fechaIngreso,
-        interes : interes,
-        recargo : recargo,
-        suma_en_pesos : sumaPesos,
-    }
+      capital: capital,
+      convenio: convenio,
+      cuota_mensual: cuotaMensual,
+      cuota_social: cuotaSocial,
+      fecha_recibo: fechaIngreso,
+      interes: interes,
+      recargo: recargo,
+      suma_en_pesos: sumaPesos,
+    };
 
     try {
-      const response = await postRecibo(ReciboData, Socio.cedulaSocio , miembro.idMiembro);
+      const response = await postRecibo(
+        ReciboData,
+        Socio.cedulaSocio,
+        miembro.idMiembro
+      );
       console.log(response);
       alert("Dado de alta correctamente");
     } catch (error) {
@@ -110,10 +139,15 @@ const AltaRecibo= ({Socio}) => {
   //      router.push(`/UserInfo/${NroSocio}`);
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form onSubmit={handleSubmit} className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md">
-      
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nombreSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="nombreSocio"
+          >
             Nombre Socio:
           </label>
           <input
@@ -121,12 +155,15 @@ const AltaRecibo= ({Socio}) => {
             readOnly
             id="nombreSocio"
             name="nombreSocio"
-            value={Socio.nombreSocio}
+            value={nombreSocio || ""}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="apellidoSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="apellidoSocio"
+          >
             Apellido Socio:
           </label>
           <input
@@ -134,12 +171,15 @@ const AltaRecibo= ({Socio}) => {
             id="apellidoSocio"
             name="apellidoSocio"
             readOnly
-            value={Socio.apellidoSocio}
+            value={apellidoSocio || ""}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="cedulaSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="cedulaSocio"
+          >
             Número de CI.:
           </label>
           <input
@@ -147,12 +187,15 @@ const AltaRecibo= ({Socio}) => {
             id="cedulaSocio"
             name="cedulaSocio"
             readOnly
-            value={Socio.cedulaSocio}
+            value={Socio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="telefonoSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="telefonoSocio"
+          >
             Nombre Administrador:
           </label>
           <input
@@ -166,7 +209,10 @@ const AltaRecibo= ({Socio}) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="capitalSocio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="capitalSocio"
+          >
             Apellido Administrador:
           </label>
           <input
@@ -180,7 +226,10 @@ const AltaRecibo= ({Socio}) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="fechaEmision">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="fechaEmision"
+          >
             Fecha de Emision:
           </label>
           <input
@@ -266,7 +315,10 @@ const AltaRecibo= ({Socio}) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="cuotaSocial">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="cuotaSocial"
+          >
             cuotaSocial:
           </label>
           <input
@@ -283,7 +335,10 @@ const AltaRecibo= ({Socio}) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="cuotaMensual">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="cuotaMensual"
+          >
             cuotaMensual:
           </label>
           <input
@@ -298,7 +353,7 @@ const AltaRecibo= ({Socio}) => {
             <span className="text-red-500 text-sm">{Errores.CuotaMensual}</span>
           )}
         </div>
-        
+
         <button
           type="submit"
           className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"

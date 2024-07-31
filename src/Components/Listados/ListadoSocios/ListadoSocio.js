@@ -7,7 +7,11 @@ import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
 import { parseISO, format } from "date-fns";
 
-const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
+const ListadoSocio = ({
+  setSocioRecibo,
+  setCedulaSocio,
+  setIdentificadorComponente,
+}) => {
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   useEffect(() => {
@@ -44,7 +48,10 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
     setCedulaSocio(cedula);
     setIdentificadorComponente(4);
   };
-
+  const handleCrearRecibo = (Socio) => {
+    setSocioRecibo(Socio);
+    setIdentificadorComponente(6);
+  };
   const handleEliminar = async (cedula) => {
     try {
       const data = await deleteSocio(cedula);
@@ -208,7 +215,9 @@ const ListadoSocio = ({ setCedulaSocio, setIdentificadorComponente }) => {
                         </MenuItem>
                         <MenuItem>
                           <a
-                            href="#"
+                            onClick={() =>
+                              handleCrearRecibo(socios.cedulaSocio)
+                            }
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Crear Recibo

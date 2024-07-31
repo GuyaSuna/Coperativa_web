@@ -71,23 +71,20 @@ const Header = ({ setIdentificadorComponente }) => {
           className={`fixed top-0 left-0 h-full bg-white dark:bg-gray-800 z-50 transition-opacity duration-300 ease-in-out ${
             menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
           } lg:hidden`}
-          style={{ width: '250px' }} // Ajusta el ancho según sea necesario
+          style={{ width: "250px" }} // Ajusta el ancho según sea necesario
         >
           <div className="flex flex-col h-full p-4">
             {/* Logo en la parte superior */}
             <div className="flex justify-center mb-4">
-              <Image
-                src={logo}
-                alt="Coviamuro Logo"
-                width={50}
-                height={50}
-              />
+              <Image src={logo} alt="Coviamuro Logo" width={50} height={50} />
             </div>
             {/* Botones del Sidebar */}
             <button
               onClick={() => handleSelection(2)}
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === 2 ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === 2
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : ""
               }`}
             >
               Agregar Viviendas
@@ -95,7 +92,9 @@ const Header = ({ setIdentificadorComponente }) => {
             <button
               onClick={() => handleSelection(3)}
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === 3 ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === 3
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : ""
               }`}
             >
               Agregar Socios
@@ -103,7 +102,9 @@ const Header = ({ setIdentificadorComponente }) => {
             <button
               onClick={() => handleSelection(6)}
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === 6 ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === 6
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : ""
               }`}
             >
               Agregar Suplente
@@ -111,7 +112,9 @@ const Header = ({ setIdentificadorComponente }) => {
             <a
               href="#"
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === "Crear Usuario" ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === "Crear Usuario"
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : ""
               }`}
               onClick={() => setSelectedOption("Crear Usuario")}
             >
@@ -120,16 +123,20 @@ const Header = ({ setIdentificadorComponente }) => {
             <a
               href="#"
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === "Generar Recibo" ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === "Generar Recibo"
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : ""
               }`}
-              onClick={() => setSelectedOption("Generar Recibo")}
+              onClick={() => handleSelection(6)}
             >
               Generar Recibo
             </a>
             <button
               href="#"
               className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === "Generar Recibo" ? "border-b-2 border-blue-500 text-blue-500" : ""
+                selectedOption === "Generar Recibo"
+                  ? "border-b-2 border-blue-500 text-blue-500"
+                  : ""
               }`}
               onClick={() => handleSelection(8)}
             >
@@ -140,16 +147,20 @@ const Header = ({ setIdentificadorComponente }) => {
         <div className="hidden lg:flex space-x-4">
           <button
             onClick={() => handleSelection(2)}
-            className={`cursor-pointer py-2 px-4 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-              selectedOption === 2 ? "border-b-2 border-blue-500 text-blue-500" : ""
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center  mt-4 lg:mt-0 ${
+              selectedOption === 2
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
             }`}
           >
             Agregar Viviendas
           </button>
           <button
             onClick={() => handleSelection(3)}
-            className={`cursor-pointer py-2 px-4 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-              selectedOption === 3 ? "border-b-2 border-blue-500 text-blue-500" : ""
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === 3
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
             }`}
           >
             Agregar Socios
@@ -157,7 +168,7 @@ const Header = ({ setIdentificadorComponente }) => {
           <button
             onClick={() => handleSelection(7)}
             className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
-              selectedOption === 6
+              selectedOption === 7
                 ? "border-b-2 border-blue-500 text-blue-500"
                 : ""
             }`}
@@ -166,8 +177,10 @@ const Header = ({ setIdentificadorComponente }) => {
           </button>
           <a
             href="#"
-            className={`cursor-pointer py-2 px-4 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-              selectedOption === "Crear Usuario" ? "border-b-2 border-blue-500 text-blue-500" : ""
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === 5
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
             }`}
             onClick={() => setSelectedOption("Crear Usuario")}
           >
@@ -175,22 +188,26 @@ const Header = ({ setIdentificadorComponente }) => {
           </a>
           <a
             href="#"
-            className={`cursor-pointer py-2 px-4 hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-              selectedOption === "Generar Recibo" ? "border-b-2 border-blue-500 text-blue-500" : ""
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === 6
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
             }`}
-            onClick={() => setSelectedOption("Generar Recibo")}
+            onClick={() => handleSelection(6)}
           >
             Generar Recibo
           </a>
           <button
-              href="#"
-              className={`cursor-pointer py-2 px-4 mb-2 text-center hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-none transition duration-300 ${
-                selectedOption === "Generar Recibo" ? "border-b-2 border-blue-500 text-blue-500" : ""
-              }`}
-              onClick={() => handleSelection(8)}
-            >
-              Generar Aviso
-            </button>
+            href="#"
+            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
+              selectedOption === 7
+                ? "border-b-2 border-blue-500 text-blue-500"
+                : ""
+            }`}
+            onClick={() => handleSelection(8)}
+          >
+            Generar Aviso
+          </button>
         </div>
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>

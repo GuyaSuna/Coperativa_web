@@ -99,70 +99,73 @@ const AltaSuplente = () => {
   };
 
   return (
-    <div className="general-container">
-      <form onSubmit={handleSubmit} className="form">
-        <label className="label">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
+        <label className="block text-sm font-medium mb-2">
           Cédula:
           <input
             type="text"
             name="cedulaSuplente"
             value={cedulaSuplente}
             onChange={handleChangeCedulaSuplente}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.cedulaSuplente && (
             <span className="error">{Errores.cedulaSuplente}</span>
           )}
         </label>
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Nombres:
           <input
             type="text"
             name="nombreSuplente"
             value={nombreSuplente}
             onChange={handleChangeNombreSuplente}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.nombreSuplente && (
             <span className="error">{Errores.nombreSuplente}</span>
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Apellidos:
           <input
             type="text"
             name="apellidoSuplente"
             value={apellidoSuplente}
             onChange={handleChangeApellidoSuplente}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.apellidoSuplente && (
             <span className="error">{Errores.apellidoSuplente}</span>
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Teléfono:
           <input
             type="text"
             name="telefonoSuplente"
             value={telefonoSuplente}
             onChange={handleChangeTelefonoSuplente}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.telefonoSuplente && (
             <span className="error">{Errores.telefonoSuplente}</span>
           )}
         </label>
 
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Seleccione el Socio para el Suplente:
           <select
             name="socioDelSuplente"
             value={socioDelSuplente}
             onChange={handleChangeSocioDelSuplente}
-            className="select"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
             <option value="">Seleccione un socio </option>
             {sociosDisponibles.map((socio) => (
@@ -176,7 +179,10 @@ const AltaSuplente = () => {
           )}
         </label>
 
-        <button type="submit" className="button">
+        <button
+          type="submit"
+          className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+        >
           Agregar
         </button>
       </form>

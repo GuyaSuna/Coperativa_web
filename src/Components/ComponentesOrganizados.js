@@ -10,6 +10,7 @@ import AltaAviso from "./Formularios/Avisos/AltaAviso";
 import AltaSuplente from "./Formularios/Suplentes/AltaSuplente/AltaSuplente";
 import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
 import ModificarSuplente from "./Formularios/Suplentes/ModificarSuplente/ModificarSuplente";
+import ListadoRecibos from "./Listados/ListadoRecibos/listadoRecibos";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -42,7 +43,9 @@ const ComponentesOrganizados = ({
       return <AltaVivienda />;
     }
     case 3: {
-      return <AltaSocio setIdentificadorComponente={setIdentificadorComponente}/>;
+      return (
+        <AltaSocio setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
     case 4: {
       return <ModificarSocio cedulaSocioParam={cedulaSocio} />;
@@ -56,8 +59,8 @@ const ComponentesOrganizados = ({
     case 7: {
       return <AltaSuplente />;
     }
-    case 8 :{
-      return <AltaAviso/>
+    case 8: {
+      return <AltaAviso />;
     }
     case 9: {
       return (
@@ -69,6 +72,13 @@ const ComponentesOrganizados = ({
     }
     case 10: {
       return <ModificarSuplente suplenteParam={suplente} />;
+    }
+    case 11: {
+      return (
+        <ListadoRecibos
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
   }
 };
