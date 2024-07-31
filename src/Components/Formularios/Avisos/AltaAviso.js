@@ -25,12 +25,12 @@ const AltaAviso = () => {
   }
 
   const handleChangeMensaje = (e) => {
-    setCantidadDormitorios(e.target.value);
+    setMensaje(e.target.value);
     console.log(e.target.value);
   };
 
   const handleChangeUsuario = (e) => {
-    setNroVivienda(e.target.value);
+    setUsuario(e.target.value);
     console.log(e.target.value);
   };
 
@@ -40,11 +40,11 @@ const AltaAviso = () => {
       mensaje: Mensaje,
       fecha: "" ,
       administrador : miembro.idMiembro,
-      usuario : usuario.Cedula
+      usuario : usuario.idMiembro
     };
     console.log(data);
 
-    const response = await postAviso(data);
+    const response = await postAviso(data, miembro.idMiembro , usuario.idMiembro);
 
     console.log(response);
   };
@@ -72,10 +72,10 @@ const AltaAviso = () => {
             onChange={handleChangeUsuario}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
-            <option value="">Seleccione un socio</option>
+            <option value="">Seleccione un usuario</option>
             {usuarios.map((usuario) => (
-              <option key={usuario.idMiembro} value={usuario.idMiembro}>
-                {`Usuario Nro.: ${usuario.idMiembro} - ${usuario.nombreMiembro} `}
+              <option key={usuario.idMiembro} value={usuario}>
+                {`Usuario Nro.: ${usuario.idMiembro} - ${usuario.nombreMiembro}`}
               </option>
             ))}
           </select>
