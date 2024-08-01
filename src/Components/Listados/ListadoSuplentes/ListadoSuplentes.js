@@ -2,25 +2,40 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { getAllSuplentes } from "../../../Api/api";
+import {
+  getAllSuplentes,
+  deleteSuplente,
+  getAllSocios,
+} from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 
 const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const [allSuplentes, setAllSuplentes] = useState([]);
+  const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
-    fetchAllSuplentes();
+    fetchDatosDeLaLista();
   }, []);
 
-  const fetchAllSuplentes = async () => {
+  const fetchDatosDeLaLista = async () => {
     try {
-      const response = await getAllSuplentes();
-      setAllSuplentes(response);
+      const suplentesResponse = await getAllSuplentes();
+      setAllSuplentes(suplentesResponse);
+      console.log("Suplentes recibidos:", suplentesResponse);
+
+      const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
+      const sociosConSuplentes = sociosResponse.filter(
+        (socio) => socio.suplente !== null
+      );
+      setAllSocios(sociosConSuplentes);
+
+      console.log("Socios recibidos:", sociosResponse);
     } catch (error) {
-      console.error("Error al obtener los suplentes:", error);
+      console.error("Error al obtener los datos:", error);
     }
   };
+
   const handleModificar = (suplente) => {
     setSuplente(suplente);
     setIdentificadorComponente(10);
@@ -30,10 +45,18 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
     try {
       const data = await deleteSuplente(cedulaSuplente);
       console.log("Suplente eliminado:", data);
-      fetchAllSuplentes();
+      fetchDatosDeLaLista();
     } catch (e) {
-      throw ("Fallo al eliminar la vivienda ", e.error);
+      console.error("Fallo al eliminar el suplente:", e);
     }
+  };
+
+  const getSocioPorSuplente = (cedulaSuplente) => {
+    const socio = allSocios.find(
+      (socio) => socio.suplenteEntity.cedulaSuplente === cedulaSuplente
+    );
+    console.log("socio del suplente", socio);
+    return socio;
   };
 
   return (
@@ -72,31 +95,40 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Socio
             </th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
           </tr>
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
-          {allSuplentes.map((suplente) => (
-            <tr key={suplente.cedulaSuplente}>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">
-                  {suplente.cedulaSuplente}
-                </div>
-              </td>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">
-                  {suplente.nombreSuplente}
-                </div>
-              </td>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">
-                  {suplente.apellidoSuplente}
-                </div>
-              </td>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">
-                  {suplente.telefonoSuplente}
-                </div>
-                <div>
+          {allSuplentes.map((suplente) => {
+            const socio = getSocioPorSuplente(suplente.cedulaSuplente);
+            return (
+              <tr key={suplente.cedulaSuplente}>
+                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center ml-4">
+                    {suplente.cedulaSuplente}
+                  </div>
+                </td>
+                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center ml-4">
+                    {suplente.nombreSuplente}
+                  </div>
+                </td>
+                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center">
+                    {suplente.apellidoSuplente}
+                  </div>
+                </td>
+                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center">
+                    {suplente.telefonoSuplente}
+                  </div>
+                </td>
+                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                  <div className="flex items-center">
+                    {socio?.nombreSocio} {socio?.apellidoSocio}
+                  </div>
+                </td>
+                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                   <Menu
                     as="div"
                     className="relative inline-block text-left justify-end"
@@ -145,10 +177,10 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                       </div>
                     </MenuItems>
                   </Menu>
-                </div>
-              </td>
-            </tr>
-          ))}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

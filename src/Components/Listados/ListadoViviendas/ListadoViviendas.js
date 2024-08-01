@@ -25,6 +25,7 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
     setNroVivienda(nroVivienda);
     setIdentificadorComponente(5);
   };
+
   const handleEliminar = async (nroVivienda) => {
     try {
       const data = await deleteVivienda(nroVivienda);
