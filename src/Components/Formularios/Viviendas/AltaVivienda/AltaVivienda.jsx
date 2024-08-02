@@ -71,7 +71,7 @@ const AltaVivienda = ({ setIdentificadorComponente}) => {
             onChange={handleChangeNroVivienda}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-           {Errores.nroVivienda && (
+           {Errores?.nroVivienda && (
             <span className="text-red-500 text-sm">{Errores.nroVivienda}</span>
           )}
         </div>
@@ -87,7 +87,7 @@ const AltaVivienda = ({ setIdentificadorComponente}) => {
             onChange={handleChangeCantidadDormitorios}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-           {Errores.cantidadDormitorios && (
+           {Errores?.cantidadDormitorios && (
             <span className="text-red-500 text-sm">{Errores.cantidadDormitorios}</span>
           )}
         </div>

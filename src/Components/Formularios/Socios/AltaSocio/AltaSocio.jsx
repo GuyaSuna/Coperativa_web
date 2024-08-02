@@ -25,7 +25,6 @@ const AltaSocio = ({setIdentificadorComponente}) => {
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
-  const [tieneTelefono, setTieneTelefono] = useState("si");
 
   useEffect(() => {
     fetchViviendasDisponibles();
@@ -47,12 +46,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
       console.error("Error al obtener las viviendas:", error);
     }
   };
-const handleRadioChange = (event) => {
-    setTieneTelefono(event.target.value);
-    if (event.target.value === "no") {
-      setTelefonoSocio(""); // Limpiar el campo si se selecciona "no"
-    }
-  };
+
   const handleChangeSeleccionVivienda = async (e) => {
     setSeleccionVivienda(e.target.value);
   };
@@ -302,38 +296,6 @@ const handleRadioChange = (event) => {
           )}
         </div>
         <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
-          ¿Tiene teléfono?
-        </label>
-        <div className="flex items-center space-x-4">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="tieneTelefono"
-              value="si"
-              checked={tieneTelefono === "si"}
-              onChange={handleRadioChange}
-              className="form-radio"
-            />
-            <span className="ml-2">Sí</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="tieneTelefono"
-              value="no"
-              checked={tieneTelefono === "no"}
-              onChange={handleRadioChange}
-              className="form-radio"
-            />
-            <span className="ml-2">No</span>
-          </label>
-        </div>
-      </div>
-
-      {/* Campo del teléfono, visible solo si se selecciona "Sí" */}
-      {tieneTelefono === "si" && (
-        <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
             htmlFor="telefonoSocio"
@@ -354,7 +316,6 @@ const handleRadioChange = (event) => {
             </span>
           )}
         </div>
-      )}
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
