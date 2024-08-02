@@ -26,7 +26,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
 
       const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
       const sociosConSuplentes = sociosResponse.filter(
-        (socio) => socio.suplente !== null
+        (socio) => socio.suplenteEntity !== null
       );
       setAllSocios(sociosConSuplentes);
 
@@ -52,6 +52,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
 
   const getSocioPorSuplente = (cedulaSuplente) => {
+    console.log("Suplentes recibidos:", allSuplentes);
     const socio = allSocios.find(
       (socio) => socio.suplenteEntity.cedulaSuplente === cedulaSuplente
     );
