@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from "react";
 import { getAllSocios } from "@/Api/api";
 import Buscador from "./Buscador";
+import Modal from "./Modal";
 
 const ListadoLateral = ({ idCooperativa }) => {
   const [socios, setSocios] = useState([]);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(socios);
+  const [isOpen, setIsOpen] = useState(false);
+  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
 
   useEffect(() => {
     fetchSocios();
@@ -32,9 +35,21 @@ const ListadoLateral = ({ idCooperativa }) => {
       setBuscadorFiltrado(buscadorFiltrado);
     }
   }, [socios, buscador]);
+
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
+
+  const handleClick = (socio) => {
+    setSocioSeleccionado(socio);
+    setIsOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setIsOpen(false);
+    setSocioSeleccionado(null);
+  }
+
   return (
     <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5">
       <div className="text-x dark:text-gray-400 text-black tracking-wider">
@@ -43,7 +58,10 @@ const ListadoLateral = ({ idCooperativa }) => {
       <Buscador value={buscador} onChange={handleChangeBuscador} />
       <div className="space-y-4 mt-3">
         {buscadorFiltrado.map((socio) => (
-          <button className="bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:ring-2 hover:ring-blue-500 focus:outline-none">
+          <button 
+          key={socio.idSocio}
+          onClick={() => handleClick(socio)}
+          className="bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:ring-2 hover:ring-blue-500 focus:outline-none">
             <div className="flex xl:flex-row flex-col items-center font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
               <a className="mr-2">{socio.nombreSocio}</a>
               <a>{socio.apellidoSocio}</a>
@@ -59,6 +77,9 @@ const ListadoLateral = ({ idCooperativa }) => {
           </button>
         ))}
       </div>
+      {isOpen && (
+        <Modal isOpen={isOpen} onClose={handleCloseModal} socio={socioSeleccionado} />
+      )}
     </div>
   );
 };
