@@ -25,6 +25,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
+  const [tieneTelefono, setTieneTelefono] = useState("si");
 
   useEffect(() => {
     fetchViviendasDisponibles();
@@ -46,7 +47,12 @@ const AltaSocio = ({setIdentificadorComponente}) => {
       console.error("Error al obtener las viviendas:", error);
     }
   };
-
+const handleRadioChange = (event) => {
+    setTieneTelefono(event.target.value);
+    if (event.target.value === "no") {
+      setTelefonoSocio(""); // Limpiar el campo si se selecciona "no"
+    }
+  };
   const handleChangeSeleccionVivienda = async (e) => {
     setSeleccionVivienda(e.target.value);
   };
@@ -101,32 +107,85 @@ const AltaSocio = ({setIdentificadorComponente}) => {
 
   const validarFormulario = () => {
     const errores = {};
-
-    if (!CedulaSocio) errores.cedulaSocio = "La cédula es obligatoria";
-    if (!NroSocio) errores.nroSocio = "El número de socio es obligatorio";
-    if (!NombreSocio) errores.nombreSocio = "El nombre es obligatorio";
-    if (!ApellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
-    if (!TelefonoSocio) errores.telefonoSocio = "El teléfono es obligatorio";
-    if (!CapitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!FechaIngreso)
-      errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-    if (!SeleccionVivienda)
-      errores.seleccionVivienda = "La selección de vivienda es obligatoria";
-
-    if (TieneSuplente) {
-      if (!CedulaSuplente)
-        errores.cedulaSuplente = "La cédula del suplente es obligatoria";
-      if (!NombreSuplente)
-        errores.nombreSuplente = "El nombre del suplente es obligatorio";
-      if (!ApellidoSuplente)
-        errores.apellidoSuplente = "El apellido del suplente es obligatorio";
-      if (!TelefonoSuplente)
-        errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
+  
+    if (!CedulaSocio) {
+      errores.cedulaSocio = "La cédula es obligatoria";
+    } else if (isNaN(CedulaSocio)) {
+      errores.cedulaSocio = "La cédula debe ser un número";
     }
-    setErrores(errores);
+  
+    if (!NroSocio) {
+      errores.nroSocio = "El número de socio es obligatorio";
+    } else if (isNaN(NroSocio)) {
+      errores.nroSocio = "El número de socio debe ser un número";
+    }
+    else if (NroSocio < 1){
+      errores.nroSocio = "El numero de socio debe ser mayor a 0"
+    }
 
+    if (!NombreSocio) {
+      errores.nombreSocio = "El nombre es obligatorio";
+    } else if (/[^a-zA-Z\s]/.test(NombreSocio)) {
+      errores.nombreSocio = "El nombre solo debe contener letras";
+    }
+  
+    if (!ApellidoSocio) {
+      errores.apellidoSocio = "El apellido es obligatorio";
+    } else if (/[^a-zA-Z\s]/.test(ApellidoSocio)) {
+      errores.apellidoSocio = "El apellido solo debe contener letras";
+    }
+  
+    if (!TelefonoSocio) {
+      errores.telefonoSocio = "El teléfono es obligatorio";
+    } else if (isNaN(TelefonoSocio)) {
+      errores.telefonoSocio = "El teléfono debe ser un número";
+    }
+  
+    if (!CapitalSocio) {
+      errores.capitalSocio = "El capital es obligatorio";
+    } else if (isNaN(CapitalSocio)) {
+      errores.capitalSocio = "El capital debe ser un número";
+    }
+  
+    if (!FechaIngreso) {
+      errores.fechaIngreso = "La fecha de ingreso es obligatoria";
+    }
+  
+    if (!SeleccionVivienda) {
+      errores.seleccionVivienda = "La selección de vivienda es obligatoria";
+    }
+  
+    if (TieneSuplente) {
+      if (!CedulaSuplente) {
+        errores.cedulaSuplente = "La cédula del suplente es obligatoria";
+      } else if (isNaN(CedulaSuplente)) {
+        errores.cedulaSuplente = "La cédula del suplente debe ser un número";
+      }
+  
+      if (!NombreSuplente) {
+        errores.nombreSuplente = "El nombre del suplente es obligatorio";
+      } else if (/[^a-zA-Z\s]/.test(NombreSuplente)) {
+        errores.nombreSuplente = "El nombre del suplente solo debe contener letras";
+      }
+  
+      if (!ApellidoSuplente) {
+        errores.apellidoSuplente = "El apellido del suplente es obligatorio";
+      } else if (/[^a-zA-Z\s]/.test(ApellidoSuplente)) {
+        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras";
+      }
+  
+      if (!TelefonoSuplente) {
+        errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
+      } else if (isNaN(TelefonoSuplente)) {
+        errores.telefonoSuplente = "El teléfono del suplente debe ser un número";
+      }
+    }
+  
+    setErrores(errores);
+  
     return Object.keys(errores).length === 0;
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -147,16 +206,9 @@ const AltaSocio = ({setIdentificadorComponente}) => {
       apellidoSuplente: ApellidoSuplente,
       telefonoSuplente: TelefonoSuplente,
     };
-    const ViviendaData = {
-      nroVivienda: SeleccionVivienda,
-      cantidadDormitorios:
-        ViviendasDisponibles.find((v) => v.nroVivienda === SeleccionVivienda)
-          ?.cantidadDormitorios || 0,
-    };
-    console.log(ViviendaData.nroVivienda);
 
     try {
-      const response = await postSocio(SocioData, ViviendaData.nroVivienda);
+      const response = await postSocio(SocioData, SeleccionVivienda);
       console.log(response);
       if (TieneSuplente === true) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
@@ -250,6 +302,38 @@ const AltaSocio = ({setIdentificadorComponente}) => {
           )}
         </div>
         <div className="mb-4">
+        <label className="block text-sm font-medium mb-2">
+          ¿Tiene teléfono?
+        </label>
+        <div className="flex items-center space-x-4">
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="tieneTelefono"
+              value="si"
+              checked={tieneTelefono === "si"}
+              onChange={handleRadioChange}
+              className="form-radio"
+            />
+            <span className="ml-2">Sí</span>
+          </label>
+          <label className="inline-flex items-center">
+            <input
+              type="radio"
+              name="tieneTelefono"
+              value="no"
+              checked={tieneTelefono === "no"}
+              onChange={handleRadioChange}
+              className="form-radio"
+            />
+            <span className="ml-2">No</span>
+          </label>
+        </div>
+      </div>
+
+      {/* Campo del teléfono, visible solo si se selecciona "Sí" */}
+      {tieneTelefono === "si" && (
+        <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
             htmlFor="telefonoSocio"
@@ -270,6 +354,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
             </span>
           )}
         </div>
+      )}
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"

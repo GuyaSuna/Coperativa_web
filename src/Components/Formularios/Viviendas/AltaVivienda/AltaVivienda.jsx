@@ -5,16 +5,37 @@ import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
 import { postVivienda } from "../../../../Api/api.js";
 
-const AltaVivienda = () => {
+const AltaVivienda = ({ setIdentificadorComponente}) => {
   const router = useRouter();
 
   const [NroVivienda, setNroVivienda] = useState();
   const [CantidadDormitorios, setCantidadDormitorios] = useState();
-
+  const [Errores , setErrores] = useState();
   const handleChangeCantidadDormitorios = (e) => {
     setCantidadDormitorios(e.target.value);
     console.log(e.target.value);
   };
+
+  const validarFormulario = () => {
+    const errores = {};
+  
+    if (!NroVivienda) {
+      errores.nroVivienda = "El número de vivienda es obligatorio";
+    } else if (isNaN(NroVivienda)) {
+      errores.nroVivienda = "El número de vivienda debe ser un número válido";
+    }
+  
+    if (!CantidadDormitorios) {
+      errores.cantidadDormitorios = "La cantidad de dormitorios es obligatoria";
+    } else if (isNaN(CantidadDormitorios)) {
+      errores.cantidadDormitorios = "La cantidad de dormitorios debe ser un número válido";
+    }
+  
+    setErrores(errores);
+  
+    return Object.keys(errores).length === 0;
+  };
+  
 
   const handleChangeNroVivienda = (e) => {
     setNroVivienda(e.target.value);
@@ -23,6 +44,7 @@ const AltaVivienda = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if(!validarFormulario()) return;
     const data = {
       nroVivienda: NroVivienda,
       cantidadDormitorios: CantidadDormitorios,
@@ -30,7 +52,7 @@ const AltaVivienda = () => {
     console.log(data);
 
     const response = await postVivienda(data);
-
+    setIdentificadorComponente(1)
     console.log(response);
   };
 
@@ -49,6 +71,9 @@ const AltaVivienda = () => {
             onChange={handleChangeNroVivienda}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+           {Errores.nroVivienda && (
+            <span className="text-red-500 text-sm">{Errores.nroVivienda}</span>
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="numberOfBedrooms">
@@ -62,6 +87,9 @@ const AltaVivienda = () => {
             onChange={handleChangeCantidadDormitorios}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+           {Errores.cantidadDormitorios && (
+            <span className="text-red-500 text-sm">{Errores.cantidadDormitorios}</span>
+          )}
         </div>
         <button
           type="submit"

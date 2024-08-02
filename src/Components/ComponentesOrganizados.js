@@ -40,7 +40,7 @@ const ComponentesOrganizados = ({
       );
     }
     case 2: {
-      return <AltaVivienda />;
+      return <AltaVivienda setIdentificadorComponente={setIdentificadorComponente} />;
     }
     case 3: {
       return (

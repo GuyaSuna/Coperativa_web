@@ -393,7 +393,6 @@ const getAllViviendas = async () => {
     }
 
     const data = await response.json();
-    console.log(data, "No llegan las viviendas");
 
     return data;
   } catch (error) {

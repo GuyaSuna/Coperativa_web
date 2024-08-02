@@ -1,23 +1,23 @@
 "use client";
-
-import Link from "next/link";
 import React, { useState, useContext, useEffect } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider";
 import ThemeToggle from "./ThemeToggle";
 import logo from "../../public/logovisoft.png";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Header = ({ setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [administrador, setAdministrador] = useState("");
-  const { miembro } = useContext(MiembroContext);
+  const { miembro ,logoutMiembro } = useContext(MiembroContext);
   const [selectedOption, setSelectedOption] = useState(null);
+  const router = useRouter();
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
-    setMenuOpen(false); // Cerrar el menú al seleccionar una opción
+    setMenuOpen(false); 
   };
 
   const handleCloseMenu = () => {
@@ -29,6 +29,11 @@ const Header = ({ setIdentificadorComponente }) => {
       setAdministrador(miembro.email);
     }
   }, [miembro]);
+
+  const handlePressCerrarSesion = () => {
+    logoutMiembro();
+    router.push("/")
+  }
 
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
@@ -186,17 +191,7 @@ const Header = ({ setIdentificadorComponente }) => {
           >
             Crear Usuario
           </a>
-          <a
-            href="#"
-            className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
-              selectedOption === 6
-                ? "border-b-2 border-blue-500 text-blue-500"
-                : ""
-            }`}
-            onClick={() => handleSelection(6)}
-          >
-            Generar Recibo
-          </a>
+          
           <button
             href="#"
             className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 mt-4 lg:mt-0 ${
@@ -242,14 +237,6 @@ const Header = ({ setIdentificadorComponente }) => {
             <div className="py-1">
               <MenuItem>
                 <button
-                  onClick={() => handleEliminar(socios.cedulaSocio)}
-                  className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                >
-                  Eliminar
-                </button>
-              </MenuItem>
-              <MenuItem>
-                <button
                   onClick={() => handleModificar(socios.cedulaSocio)}
                   className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                 >
@@ -257,12 +244,13 @@ const Header = ({ setIdentificadorComponente }) => {
                 </button>
               </MenuItem>
               <MenuItem>
-                <Link
+                <button
                   href={"/"}
+                  onClick={() => handlePressCerrarSesion()}
                   className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                 >
                   Cerrar Sesion
-                </Link>
+                </button>
               </MenuItem>
             </div>
           </MenuItems>

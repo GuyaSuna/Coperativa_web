@@ -7,7 +7,6 @@ import { MiembroContext } from "@/Provider/provider";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
 import ListadoLateral from "@/Components/ListadoLateral";
-import Sidebar from "@/Components/Sidebar";
 import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
