@@ -54,7 +54,7 @@ const ListadoSocio = ({
   };
   const handleEliminar = async (cedula) => {
     try {
-      const data = await deleteSocio(cedula);
+      const data = await deleteSocio(cedula , cooperativa.idCooperativa);
       console.log(data);
       fetchAllSocios();
     } catch (e) {
@@ -118,7 +118,7 @@ const ListadoSocio = ({
         </thead>
         <tbody className="text-gray-600 dark:text-gray-100">
           {allSocios?.map((socio) => (
-            <tr key={socio.nroSocio}>
+            <tr key={socio.cedulaSocio}>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center ml-4">{socio.nroSocio}</div>
               </td>

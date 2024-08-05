@@ -1,15 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext } from "react";
 import "./FormStyle.css";
 import {
   postSocio,
   postSuplente,
   getAllViviendas,
 } from "../../../../Api/api.js";
+import { MiembroContext } from "@/Provider/provider";
 
 const AltaSocio = ({setIdentificadorComponente}) => {
-
+  const {cooperativa} = useContext(MiembroContext)
   const [CedulaSocio, setCedulaSocio] = useState(0);
   const [NroSocio, setNroSocio] = useState(0);
   const [NombreSocio, setNombreSocio] = useState("");
@@ -32,7 +33,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
 
   const fetchViviendasDisponibles = async () => {
     try {
-      const response = await getAllViviendas();
+      const response = await getAllViviendas(cooperativa.idCooperativa);
       console.log(response);
       let viviendasDisponibles = [];
       response.forEach((vivienda) => {
@@ -182,6 +183,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
   
 
   const handleSubmit = async (e) => {
+    console.log("ID COOPERATIVA ", cooperativa.idCooperativa)
     e.preventDefault();
     console.log(FechaIngreso);
     if (!validarFormulario()) return;
@@ -202,7 +204,8 @@ const AltaSocio = ({setIdentificadorComponente}) => {
     };
 
     try {
-      const response = await postSocio(SocioData, SeleccionVivienda);
+      
+      const response = await postSocio(SocioData, SeleccionVivienda, cooperativa.idCooperativa);
       console.log(response);
       if (TieneSuplente === true) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);

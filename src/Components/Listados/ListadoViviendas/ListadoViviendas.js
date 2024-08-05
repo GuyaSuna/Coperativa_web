@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext } from "react";
 import { getAllViviendas, deleteVivienda } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-
+import { MiembroContext } from "@/Provider/provider.js";
 const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
+  const {cooperativa} = useContext(MiembroContext);
   const [viviendas, setAllViviendas] = useState([]);
+
 
   useEffect(() => {
     fetchAllViviendas();
@@ -13,7 +15,7 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
 
   const fetchAllViviendas = async () => {
     try {
-      const response = await getAllViviendas();
+      const response = await getAllViviendas(cooperativa.idCooperativa);
       setAllViviendas(response);
       console.log(response, "Viviendas");
     } catch (error) {
