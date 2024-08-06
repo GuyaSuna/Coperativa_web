@@ -11,17 +11,17 @@ import { MiembroContext } from "@/Provider/provider";
 
 const AltaSocio = ({setIdentificadorComponente}) => {
   const {cooperativa} = useContext(MiembroContext)
-  const [CedulaSocio, setCedulaSocio] = useState(0);
-  const [NroSocio, setNroSocio] = useState(0);
+  const [CedulaSocio, setCedulaSocio] = useState();
+  const [NroSocio, setNroSocio] = useState();
   const [NombreSocio, setNombreSocio] = useState("");
   const [ApellidoSocio, setApellidoSocio] = useState("");
-  const [TelefonoSocio, setTelefonoSocio] = useState(0);
-  const [CapitalSocio, setCapitalSocio] = useState(0);
+  const [TelefonoSocio, setTelefonoSocio] = useState();
+  const [CapitalSocio, setCapitalSocio] = useState();
   const [FechaIngreso, setFechaIngreso] = useState("");
-  const [CedulaSuplente, setCedulaSuplente] = useState(0);
+  const [CedulaSuplente, setCedulaSuplente] = useState();
   const [NombreSuplente, setNombreSuplente] = useState("");
   const [ApellidoSuplente, setApellidoSuplente] = useState("");
-  const [TelefonoSuplente, setTelefonoSuplente] = useState(0);
+  const [TelefonoSuplente, setTelefonoSuplente] = useState();
   const [TieneSuplente, setTieneSuplente] = useState(false);
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");

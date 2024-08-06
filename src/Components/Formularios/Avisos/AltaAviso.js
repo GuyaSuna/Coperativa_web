@@ -2,7 +2,7 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { postAviso, getAllUsuario } from "../../../Api/api.js";
+import { postAviso, getAllUsuarios } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
 const AltaAviso = () => {
@@ -17,7 +17,7 @@ const AltaAviso = () => {
 
   const fetchUsuarios = async () => {
     try {
-      const response = await getAllUsuario(cooperativa.idCooperativa);
+      const response = await getAllUsuarios(cooperativa.idCooperativa);
       setUsuarios(response);
     } catch (error) {
       console.error("Error al recibir los datos de los usuarios:", error);

@@ -1,85 +1,63 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getAllSocios } from "@/Api/api";
-import Buscador from "./Buscador";
 import Modal from "./Modal";
 
-const ListadoLateral = ({ idCooperativa }) => {
-  const [socios, setSocios] = useState([]);
-  const [buscador, setBuscador] = useState("");
-  const [buscadorFiltrado, setBuscadorFiltrado] = useState(socios);
-  const [isOpen, setIsOpen] = useState(false);
-  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
+const ListadoLateral = ({ setIdentificadorComponente }) => {
+  const [selectedOption, setSelectedOption] = useState(null);
 
-  useEffect(() => {
-    fetchSocios();
-  }, []);
 
-  const fetchSocios = async () => {
-    try {
-      const response = await getAllSocios(idCooperativa);
-      setSocios(response);
-      console.log("SOCIOS", response);
-    } catch (error) {
-      console.error("Error al obtener los socios:", error);
-    }
+
+  const handleSelection = (option) => {
+    setSelectedOption(option);
+    setIdentificadorComponente(option)
   };
-
-  useEffect(() => {
-    if (buscador === "") {
-      setBuscadorFiltrado(socios);
-    } else {
-      const buscadorFiltrado = socios.filter((socio) =>
-        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
-      );
-      setBuscadorFiltrado(buscadorFiltrado);
-    }
-  }, [socios, buscador]);
-
-  const handleChangeBuscador = (event) => {
-    setBuscador(event.target.value);
-  };
-
-  const handleClick = (socio) => {
-    setSocioSeleccionado(socio);
-    setIsOpen(true);
-  }
-
-  const handleCloseModal = () => {
-    setIsOpen(false);
-    setSocioSeleccionado(null);
-  }
 
   return (
-    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5">
-      <div className="text-x dark:text-gray-400 text-black tracking-wider">
-        SOCIOS
-      </div>
-      <Buscador value={buscador} onChange={handleChangeBuscador} />
+    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 h-full overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-gray-900">
+      
       <div className="space-y-4 mt-3">
-        {buscadorFiltrado.map((socio) => (
-          <button 
-          key={socio.idSocio}
-          onClick={() => handleClick(socio)}
-          className="bg-white p-3 w-full flex flex-col rounded-md dark:bg-gray-800 shadow hover:ring-2 hover:ring-blue-500 focus:outline-none">
-            <div className="flex xl:flex-row flex-col items-center font-medium text-gray-900 dark:text-white pb-2 mb-2 xl:border-b border-gray-200 border-opacity-75 dark:border-gray-700 w-full">
-              <a className="mr-2">{socio.nombreSocio}</a>
-              <a>{socio.apellidoSocio}</a>
-            </div>
-            <div className="flex items-center w-full">
-              <div className="text-xs py-1 px-2 leading-none dark:bg-gray-900 bg-blue-100 text-blue-500 rounded-md">
-                Capital
-              </div>
-              <div className="ml-auto text-xs text-gray-500">
-                ${socio.capitalSocio}
-              </div>
-            </div>
-          </button>
-        ))}
+        <button
+          onClick={() => handleSelection(2)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 2 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          Agregar Viviendas
+        </button>
+        <button
+          onClick={() => handleSelection(3)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 3 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          Agregar Socios
+        </button>
+        <button
+          onClick={() => handleSelection(7)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 7 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          Agregar Suplente
+        </button>
+        <button
+          href="#"
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 5 ? "bg-blue-500 text-white" : ""
+          }`}
+          // onClick={() => handleSelection(5)}
+        >
+          Crear Usuario
+        </button>
+        <button
+          onClick={() => handleSelection(8)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 8 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          Generar Aviso
+        </button>
       </div>
-      {isOpen && (
-        <Modal isOpen={isOpen} onClose={handleCloseModal} socio={socioSeleccionado} />
-      )}
     </div>
   );
 };

@@ -10,18 +10,31 @@ const Home = () => {
   const { loginMiembro } = useContext(MiembroContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errores , setErrores] = useState({});
+
+  
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
-    const dataAdmin = await loginAdministrador(email, password);
-    console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
-    const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro)
-    console.log(`Cooperativa admin: ${cooperativaData}`)
-    if (dataAdmin == null) {
-      alert("No se ha podido inicia sesion");
-    } else {
+    try {
+      const dataAdmin = await loginAdministrador(email, password);
+      if (typeof dataAdmin === 'string'){
+        alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
+        return;
+      }
+      console.log(dataAdmin)
+      if (!dataAdmin) {
+        alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
+        return;
+      }
+      console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
+      const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro);
+      console.log(`Cooperativa admin: ${cooperativaData}`);
       loginMiembro(dataAdmin, cooperativaData);
       router.push("./AdministradorHome");
+    } catch (error) {
+      console.error(error);
+      alert("Ocurrió un error al intentar iniciar sesión.");
     }
   };
 
@@ -48,37 +61,6 @@ const Home = () => {
   };
 
   return (
-    // <div className="container">
-    //   <h2>Iniciar Sesión</h2>
-    //   <form>
-    //     <label>
-    //       Usuario:
-    //       <input
-    //         type="text"
-    //         value={Nombre}
-    //         onChange={handleAdminNombreChange}
-    //         id="Nombre"
-    //         required
-    //       />
-    //     </label>
-    //     <label>
-    //       Contraseña:
-    //       <input
-    //         type="password"
-    //         value={password}
-    //         onChange={handlePasswordChange}
-    //         id="password"
-    //         required
-    //       />
-    //     </label>
-    //     <button type="submit" onClick={handleSubmitAdministrador} className="buttonLogin">
-    //       Iniciar Sesión Administrador
-    //     </button>
-    //     <button type="submit" onClick={handleSubmitUsuario} className="buttonLogin">
-    //       Iniciar Sesión Usuario
-    //     </button>
-    //   </form>
-    // </div>
     <div>
       <div className="lg:flex">
         <div className="lg:w-1/2 xl:max-w-screen-sm">

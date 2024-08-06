@@ -16,14 +16,17 @@ const loginAdministrador = async (email, contraseña) => {
     });
 
     if (!response.ok) {
-      throw new Error("Respuesta no es ok");
+      if (response.status === 400) {
+        return "Usuario o contraseña incorrectos."
+      } else {
+        throw new Error("Error en la solicitud de inicio de sesión.");
+      }
     }
-
     const data = await response.json();
     console.log(data.Socio);
     return data;
   } catch (error) {
-    console.error("Error en getSocio:", error);
+    console.error("Error en LogIn:", error);
     throw new Error("Error al obtener los datos del socio");
   }
 };
@@ -627,6 +630,48 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
   }
 };
 
+const getAllUsuarios = async (idCooperativa) => {
+  try {
+    const response = await fetch(`${URL}/usuario/allUsuarios/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllUsuarios:", error);
+    throw new Error("Error al obtener los datos de los Usuarios.");
+  }
+};
+
+const deleteUsuario = async (idMiembro) => {
+  try {
+    const response = await fetch(`${URL}/usuario/${idMiembro}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteUsuario:", error);
+    throw new Error("Error al eliminar el usuario.");
+  }
+};
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -650,5 +695,6 @@ export {
   getAllRecibos,
   postRecibo,
   postAviso,
-  getAllUsuario,
+  getAllUsuarios,
+  deleteUsuario,
 };
