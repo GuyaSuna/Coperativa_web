@@ -207,6 +207,18 @@ const AdminHome = () => {
                     >
                       Usuarios
                     </button>
+                    <button
+                      onClick={() => {
+                        handleSelection(14);
+                      }}
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                        selectedOption === 14
+                          ? "border-b-2 border-blue-500 text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Calculos
+                    </button>
                   </div>
                 </div>
                 <ComponentesOrganizados
