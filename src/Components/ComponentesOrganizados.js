@@ -13,6 +13,7 @@ import ModificarSuplente from "./Formularios/Suplentes/ModificarSuplente/Modific
 import ListadoRecibos from "./Listados/ListadoRecibos/listadoRecibos";
 import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
+import MuestraCalculos from "./Formularios/Calculos/MuestraCalculo";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -93,6 +94,11 @@ const ComponentesOrganizados = ({
     case 13:{
       return(
         <AltaUsuario/>
+      )
+    }
+    case 14:{
+      return(
+        <MuestraCalculos/>
       )
     }
   }
