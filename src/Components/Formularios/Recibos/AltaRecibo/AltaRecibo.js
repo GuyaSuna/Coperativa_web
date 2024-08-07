@@ -15,10 +15,10 @@ const AltaRecibo = ({ Socio }) => {
   const [apellidoAdministrador, setApellidoAdministrador] = useState("");
   const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
-  const [capital, setCapital] = useState(0); // sale del socio y se le resta el interes
+  const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
   const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
-  const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur
+  const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
   const [Errores, setErrores] = useState({});
 

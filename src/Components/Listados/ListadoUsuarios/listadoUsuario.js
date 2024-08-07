@@ -1,83 +1,59 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios } from "../../../Api/api.js";
+import { getAllUsuarios, deleteUsuario} from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import { parseISO, format } from "date-fns";
 
-const ListadoSocio = ({
-  setSocioRecibo,
-  setCedulaSocio,
+const ListadoUsuario = ({
+  setUsuarioRecibo,
+  setUsuario,
   setIdentificadorComponente,
 }) => {
-  const [allSocios, setAllSocios] = useState([]);
+  const [allUsuarios, setAllUsuarios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   useEffect(() => {
-    fetchAllSocios();
+    fetchAllUsuarios();
   }, []);
 
-  const fetchAllSocios = async () => {
+  const fetchAllUsuarios = async () => {
     try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngreso);
-
-        if (socio.fechaIngreso) {
-          const fechaISO = parseISO(socio.fechaIngreso);
-          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          console.log("Fecha formateada: ", fechaFormateada);
-          return {
-            ...socio,
-            fechaIngreso: fechaFormateada,
-          };
-        } else {
-          return socio;
-        }
-      });
-
-      setAllSocios(sociosConFechaFormateada);
-      console.log(sociosConFechaFormateada, "response con fecha formateada");
+      const response = await getAllUsuarios(cooperativa.idCooperativa);
+      setAllUsuarios(response);
     } catch (error) {
-      console.error("Error al obtener los socios:", error);
+      console.error("Error al obtener los usuarios:", error);
     }
   };
 
-  const handleModificar = (cedula) => {
-    setCedulaSocio(cedula);
-    setIdentificadorComponente(4);
+  const handleModificar = (usuario) => {
+    setUsuario(usuario);
+    setIdentificadorComponente(10);
   };
-  const handleCrearRecibo = (Socio) => {
-    setSocioRecibo(Socio);
-    setIdentificadorComponente(6);
+  const handleCrearRecibo = (Usuario) => {
+    setUsuario(Usuario);
+    setIdentificadorComponente(11);
   };
-  const handleEliminar = async (cedula) => {
+  const handleEliminar = async (idMiembro) => {
     try {
-      const data = await deleteSocio(cedula , cooperativa.idCooperativa);
+      const data = await deleteUsuario(idMiembro);
       console.log(data);
-      fetchAllSocios();
+      fetchAllUsuarios();
     } catch (e) {
-      throw ("Fallo al eliminar el socio ", e.error);
+      throw ("Fallo al eliminar el usuario ", e.error);
     }
   };
-  const handleOrderByFechaIngreso = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso)
-    );
-    setAllSocios(ordenarSocios);
-  };
 
-  const handleOrderByNroSocio = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => a.nroSocio - b.nroSocio
+
+  const handleOrderByIdMiembro = () => {
+    const usuariosOrdenados = [...allUsuarios].sort(
+      (a, b) => a.idMiembro- b.idMiemrbo
     );
-    setAllSocios(ordenarSocios);
+    setAllUsuarios(usuariosOrdenados);
   };
   return (
     <div className="sm:p-7 p-4">
-      {allSocios.length == 0 && <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">Todavia no existen socios</div>
+      {allUsuarios.length == 0 && <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex items-center ml-4">Todavia no existen usuarios</div>
               </td> || <>
       <div className="flex w-full items-center mb-7 relative">
         <Menu as="div" className="relative inline-block text-left justify-end">
@@ -100,8 +76,8 @@ const ListadoSocio = ({
               </MenuItem>
               <MenuItem>
                 {({ active }) => (
-                  <button onClick={handleOrderByNroSocio} className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
-                    Número de Socio
+                  <button onClick={handleOrderByIdMiembro} className={`block px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
+                    idMiembro
                   </button>
                 )}
               </MenuItem>
@@ -115,31 +91,28 @@ const ListadoSocio = ({
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">NroSocio</th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Nombre</th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Apellido</th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Capital</th>
+            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">Gmail</th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">Fecha Pago</th>
           </tr>
         </thead>
          
         <tbody className="text-gray-600 dark:text-gray-100">
-          {allSocios?.map((socio) => (
-            <tr key={socio.cedulaSocio}>
+          {allUsuarios?.map((usuario) => (
+            <tr key={usuario.idMiembro}>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">{socio.nroSocio}</div>
+                <div className="flex items-center ml-4">{usuario.socio.nroSocio}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{socio.nombreSocio}</div>
+                <div className="flex items-center">{usuario.socio.nombreSocio}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                {socio.apellidoSocio}
+                {usuario.socio.apellidoSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-green-500">
-                ${socio.capitalSocio}
+                ${usuario?.email}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between">
-                  <div className="sm:flex hidden flex-col">
-                    {socio.fechaIngreso}
-                  </div>
                   <Menu as="div" className="relative inline-block text-left justify-end">
                     <div>
                       <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
@@ -153,19 +126,14 @@ const ListadoSocio = ({
                     <MenuItems transition className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none">
                       <div className="py-1">
                         <MenuItem>
-                          <button onClick={() => handleEliminar(socio.cedulaSocio)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
+                          <button onClick={() => handleEliminar(usuario.idMiembro)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
                             Eliminar
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <button onClick={() => handleModificar(socio.cedulaSocio)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
+                          <button onClick={() => handleModificar(usuario)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
                             Modificar
                           </button>
-                        </MenuItem>
-                        <MenuItem>
-                          <a onClick={() => handleCrearRecibo(socio.cedulaSocio)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
-                            Crear Recibo
-                          </a>
                         </MenuItem>
                       </div>
                     </MenuItems>
@@ -205,4 +173,4 @@ const ListadoSocio = ({
   );
 };
 
-export default ListadoSocio;
+export default ListadoUsuario;

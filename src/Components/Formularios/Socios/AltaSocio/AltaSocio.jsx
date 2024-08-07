@@ -1,31 +1,31 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext } from "react";
 import "./FormStyle.css";
 import {
   postSocio,
   postSuplente,
   getAllViviendas,
 } from "../../../../Api/api.js";
+import { MiembroContext } from "@/Provider/provider";
 
 const AltaSocio = ({setIdentificadorComponente}) => {
-
-  const [CedulaSocio, setCedulaSocio] = useState(0);
-  const [NroSocio, setNroSocio] = useState(0);
+  const {cooperativa} = useContext(MiembroContext)
+  const [CedulaSocio, setCedulaSocio] = useState();
+  const [NroSocio, setNroSocio] = useState();
   const [NombreSocio, setNombreSocio] = useState("");
   const [ApellidoSocio, setApellidoSocio] = useState("");
-  const [TelefonoSocio, setTelefonoSocio] = useState(0);
-  const [CapitalSocio, setCapitalSocio] = useState(0);
+  const [TelefonoSocio, setTelefonoSocio] = useState();
+  const [CapitalSocio, setCapitalSocio] = useState();
   const [FechaIngreso, setFechaIngreso] = useState("");
-  const [CedulaSuplente, setCedulaSuplente] = useState(0);
+  const [CedulaSuplente, setCedulaSuplente] = useState();
   const [NombreSuplente, setNombreSuplente] = useState("");
   const [ApellidoSuplente, setApellidoSuplente] = useState("");
-  const [TelefonoSuplente, setTelefonoSuplente] = useState(0);
+  const [TelefonoSuplente, setTelefonoSuplente] = useState();
   const [TieneSuplente, setTieneSuplente] = useState(false);
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
-  const [tieneTelefono, setTieneTelefono] = useState("si");
 
   useEffect(() => {
     fetchViviendasDisponibles();
@@ -33,7 +33,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
 
   const fetchViviendasDisponibles = async () => {
     try {
-      const response = await getAllViviendas();
+      const response = await getAllViviendas(cooperativa.idCooperativa);
       console.log(response);
       let viviendasDisponibles = [];
       response.forEach((vivienda) => {
@@ -47,12 +47,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
       console.error("Error al obtener las viviendas:", error);
     }
   };
-const handleRadioChange = (event) => {
-    setTieneTelefono(event.target.value);
-    if (event.target.value === "no") {
-      setTelefonoSocio(""); // Limpiar el campo si se selecciona "no"
-    }
-  };
+
   const handleChangeSeleccionVivienda = async (e) => {
     setSeleccionVivienda(e.target.value);
   };
@@ -188,6 +183,7 @@ const handleRadioChange = (event) => {
   
 
   const handleSubmit = async (e) => {
+    console.log("ID COOPERATIVA ", cooperativa.idCooperativa)
     e.preventDefault();
     console.log(FechaIngreso);
     if (!validarFormulario()) return;
@@ -208,7 +204,8 @@ const handleRadioChange = (event) => {
     };
 
     try {
-      const response = await postSocio(SocioData, SeleccionVivienda);
+      
+      const response = await postSocio(SocioData, SeleccionVivienda, cooperativa.idCooperativa);
       console.log(response);
       if (TieneSuplente === true) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
@@ -302,38 +299,6 @@ const handleRadioChange = (event) => {
           )}
         </div>
         <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
-          ¿Tiene teléfono?
-        </label>
-        <div className="flex items-center space-x-4">
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="tieneTelefono"
-              value="si"
-              checked={tieneTelefono === "si"}
-              onChange={handleRadioChange}
-              className="form-radio"
-            />
-            <span className="ml-2">Sí</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input
-              type="radio"
-              name="tieneTelefono"
-              value="no"
-              checked={tieneTelefono === "no"}
-              onChange={handleRadioChange}
-              className="form-radio"
-            />
-            <span className="ml-2">No</span>
-          </label>
-        </div>
-      </div>
-
-      {/* Campo del teléfono, visible solo si se selecciona "Sí" */}
-      {tieneTelefono === "si" && (
-        <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
             htmlFor="telefonoSocio"
@@ -354,7 +319,6 @@ const handleRadioChange = (event) => {
             </span>
           )}
         </div>
-      )}
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"

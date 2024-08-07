@@ -11,6 +11,7 @@ import AltaSuplente from "./Formularios/Suplentes/AltaSuplente/AltaSuplente";
 import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
 import ModificarSuplente from "./Formularios/Suplentes/ModificarSuplente/ModificarSuplente";
 import ListadoRecibos from "./Listados/ListadoRecibos/listadoRecibos";
+import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -20,6 +21,7 @@ const ComponentesOrganizados = ({
   const [nroVivienda, setNroVivienda] = useState(0);
   const [socioRecibo, setSocioRecibo] = useState({});
   const [suplente, setSuplente] = useState({});
+  const [usuario , setUsuario] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -79,6 +81,13 @@ const ComponentesOrganizados = ({
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
+    }
+    case 12:{
+      return(
+        <ListadoUsuario setIdentificadorComponente={setIdentificadorComponente}
+        setUsuario={setUsuario} 
+        />
+      )
     }
   }
 };

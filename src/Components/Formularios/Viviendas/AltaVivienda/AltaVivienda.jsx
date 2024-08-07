@@ -78,7 +78,7 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores?.nroVivienda && (
-            <span className="text-red-500 text-sm">{Errores?.nroVivienda}</span>
+            <span className="text-red-500 text-sm">{Errores.nroVivienda}</span>
           )}
         </div>
         <div className="mb-4">
@@ -98,7 +98,7 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
           />
           {Errores?.cantidadDormitorios && (
             <span className="text-red-500 text-sm">
-              {Errores?.cantidadDormitorios}
+              {Errores.cantidadDormitorios}
             </span>
           )}
         </div>
