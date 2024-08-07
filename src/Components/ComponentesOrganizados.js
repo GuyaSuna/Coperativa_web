@@ -12,6 +12,7 @@ import ListadoSuplentes from "./Listados/ListadoSuplentes/ListadoSuplentes";
 import ModificarSuplente from "./Formularios/Suplentes/ModificarSuplente/ModificarSuplente";
 import ListadoRecibos from "./Listados/ListadoRecibos/listadoRecibos";
 import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
+import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -87,6 +88,11 @@ const ComponentesOrganizados = ({
         <ListadoUsuario setIdentificadorComponente={setIdentificadorComponente}
         setUsuario={setUsuario} 
         />
+      )
+    }
+    case 13:{
+      return(
+        <AltaUsuario/>
       )
     }
   }
