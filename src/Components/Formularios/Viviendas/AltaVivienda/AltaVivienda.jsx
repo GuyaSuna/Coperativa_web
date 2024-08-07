@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
 import { postVivienda } from "../../../../Api/api.js";
+import { MiembroContext } from "@/Provider/provider";
 
 const AltaVivienda = ({ setIdentificadorComponente }) => {
   const router = useRouter();
-
+  const { cooperativa } = useContext(MiembroContext);
   const [NroVivienda, setNroVivienda] = useState();
   const [CantidadDormitorios, setCantidadDormitorios] = useState();
   const [Errores, setErrores] = useState();
@@ -51,7 +52,7 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
     };
     console.log(data);
 
-    const response = await postVivienda(data);
+    const response = await postVivienda(data, cooperativa.idCooperativa);
     setIdentificadorComponente(1);
     console.log(response);
   };

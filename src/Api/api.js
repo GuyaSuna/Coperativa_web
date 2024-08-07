@@ -337,10 +337,10 @@ const updateSuplente = async (
 };
 
 //vivienda
-const postVivienda = async (viviendaEntity) => {
+const postVivienda = async (viviendaEntity , idCooperativa) => {
   try {
     console.log(viviendaEntity);
-    const response = await fetch(`${URL}/vivienda/1`, {
+    const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
