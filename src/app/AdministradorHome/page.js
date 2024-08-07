@@ -51,9 +51,11 @@ const AdminHome = () => {
         <Sidebar />
       </div> */}
           <div className="flex-grow overflow-hidden h-full flex flex-col">
-            <Header setIdentificadorComponente={setIdentificadorComponente}/>
+            <Header setIdentificadorComponente={setIdentificadorComponente} />
             <div className="flex-grow flex overflow-x-hidden">
-              <ListadoLateral setIdentificadorComponente={setIdentificadorComponente}/>
+              <ListadoLateral
+                setIdentificadorComponente={setIdentificadorComponente}
+              />
               <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
                 <div className="sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
                   <div className="flex w-full items-center">
@@ -185,10 +187,10 @@ const AdminHome = () => {
                     </button>
                     <button
                       onClick={() => {
-                        handleSelection(4);
+                        handleSelection(15);
                       }}
                       className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
-                        selectedOption === 4
+                        selectedOption === 15
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
                       }`}
