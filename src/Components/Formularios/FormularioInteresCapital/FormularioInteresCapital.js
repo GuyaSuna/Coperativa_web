@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-const Calculos = () => {
+const FormularioInteresCapital = () => {
   const [data, setData] = useState([]);
 
   const handleFileUpload = (event) => {
@@ -35,4 +35,4 @@ const Calculos = () => {
   );
 };
 
-export default Calculos;
+export default FormularioInteresCapital;

@@ -226,6 +226,7 @@ const AdminHome = () => {
                   setCedulaSocio={setCedulaSocio}
                   cedulaSocio={cedulaSocio}
                   setIdentificadorComponente={setIdentificadorComponente}
+                  ur = {ur}
                 />
               </div>
             </div>
