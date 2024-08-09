@@ -1,12 +1,12 @@
 // pages/index.js
 import React from "react";
-import Calculos from "./Calculos";
+import FormularioInteresCapital from "./FormularioInteresCapital";
 
 const MuestraCalculos = () => {
   return (
     <div>
       <h1>Leer archivo Excel en Next.js</h1>
-      <Calculos />
+      <FormularioInteresCapital />
     </div>
   );
 };

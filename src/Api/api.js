@@ -58,6 +58,28 @@ const loginUsuario = async (email, contraseña) => {
   }
 };
 
+const getAdministrador = async (idMiembro) => {
+  try {
+    const response = await fetch(`${URL}/administrador/${idMiembro}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAdministrador:", error);
+    throw new Error("Error al obtener los datos del administrador");
+  }
+};
+
 //socio
 const getSocio = async (cedulaSocio) => {
   try {
@@ -697,4 +719,5 @@ export {
   postAviso,
   getAllUsuarios,
   deleteUsuario,
+  getAdministrador,
 };

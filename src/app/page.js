@@ -1,7 +1,7 @@
 "use client";
 import "./globals.css";
 import React, { useState, useContext } from "react";
-import { loginAdministrador, loginUsuario , getCooperativaPorAdmin } from "../Api/api.js";
+import { loginAdministrador, loginUsuario , getCooperativaPorAdmin , getAdministrador } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
 
@@ -27,10 +27,11 @@ const Home = () => {
         alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
         return;
       }
-      console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
+      const getAdmin = await getAdministrador(dataAdmin.idMiembro);
+      console.log(`Datos Administrativos:  ${getAdmin.socio}`);
       const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro);
       console.log(`Cooperativa admin: ${cooperativaData}`);
-      loginMiembro(dataAdmin, cooperativaData);
+      loginMiembro(getAdmin, cooperativaData);
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
