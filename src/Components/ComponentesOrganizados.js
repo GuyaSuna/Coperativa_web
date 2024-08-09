@@ -15,6 +15,7 @@ import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
 import MuestraCalculos from "./Formularios/Calculos/MuestraCalculo";
 import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
+import VerVivienda from "./VerDetalles/VerVivienda";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -103,6 +104,10 @@ const ComponentesOrganizados = ({
     }
     case 15: {
       return <ListadoInformes />;
+    }
+
+    case 16: {
+      return <VerVivienda />;
     }
   }
 };

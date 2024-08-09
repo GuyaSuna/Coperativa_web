@@ -5,6 +5,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { postRecibo, getSocio } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
+
 const AltaRecibo = ({ Socio }) => {
   const router = useRouter();
   const { miembro } = useContext(MiembroContext);
@@ -20,6 +21,7 @@ const AltaRecibo = ({ Socio }) => {
   const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
+  const [subsidio, setSubsidio] = useState({}); // se agrega cuando se valida
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -63,18 +65,24 @@ const AltaRecibo = ({ Socio }) => {
 
   const handleChangeRecargo = (e) => {
     setRecargo(e.target.value);
+    // este dato se toma por fecha ingresada cuando el administrador ingresa la fecha en que fue efectuado el pago
   };
 
   const handleChangeInteres = (e) => {
     setInteres(e.target.value);
+    // eate dato se toma de el excel
   };
 
   const handleChangeCuotaSocial = (e) => {
     setCuotaSocial(e.target.value);
+    // dato constante de 400 pesos en este caso
   };
 
   const handleChangeConvenio = (e) => {
     setConvenio(e.target.value);
+    // convenio en unidades reajustables
+    // se le suma lo que deba pagar
+    // es lo que le debe el socio a la cooperativa
   };
   const handleChangeCuotaMensual = (e) => {
     setCuotaMensual(e.target.value);

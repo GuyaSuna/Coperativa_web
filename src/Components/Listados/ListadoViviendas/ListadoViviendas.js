@@ -27,6 +27,11 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
     setIdentificadorComponente(5);
   };
 
+  const handleVerDetalles = (nroVivienda) => {
+    setNroVivienda(nroVivienda);
+    setIdentificadorComponente(16);
+  };
+
   const handleEliminar = async (nroVivienda) => {
     try {
       const data = await deleteVivienda(nroVivienda);
@@ -177,6 +182,16 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                       className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                     >
                       <div className="py-1">
+                        <MenuItem>
+                          <button
+                            onClick={() =>
+                              handleVerDetalles(vivienda.nroVivienda)
+                            }
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Ver Detalle
+                          </button>
+                        </MenuItem>
                         <MenuItem>
                           <button
                             onClick={() => handleEliminar(vivienda.nroVivienda)}

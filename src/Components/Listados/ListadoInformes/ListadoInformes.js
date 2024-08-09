@@ -45,7 +45,7 @@ const ListadoInformes = () => {
             </th>
           </tr>
         </thead>
-        <tbody className="text-gray-600 dark:text-gray-100">
+        {/*<tbody className="text-gray-600 dark:text-gray-100">
           <tr>
             <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
               <div className="flex items-center ml-4"></div>
@@ -58,7 +58,7 @@ const ListadoInformes = () => {
             <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
               <div className="flex items-center justify-between">
                 <div className="sm:flex hidden flex-col"></div>
-                <Menu
+                 <Menu
                   as="div"
                   className="relative inline-block text-left justify-end"
                 >
@@ -103,11 +103,11 @@ const ListadoInformes = () => {
                       </MenuItem>
                     </div>
                   </MenuItems>
-                </Menu>
+                </Menu> 
               </div>
             </td>
           </tr>
-        </tbody>
+        </tbody>*/}
       </table>
       <div className="flex w-full mt-5 space-x-2 justify-end">
         <button className="inline-flex items-center h-8 w-8 justify-center text-gray-400 rounded-md shadow border border-gray-200 dark:border-gray-800 hover:bg-gray-400 hover:text-white leading-none">
