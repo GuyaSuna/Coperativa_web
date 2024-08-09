@@ -12,6 +12,7 @@ const vivienda3 = 6.93;
 
 const valorCuotaEnPesos = (ur) => {
     // vivienda2 = vivienda2 * ur.buy
+    
 }
 
 
