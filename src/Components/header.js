@@ -10,14 +10,14 @@ import { useRouter } from "next/navigation";
 const Header = ({ setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [administrador, setAdministrador] = useState("");
-  const { miembro ,logoutMiembro } = useContext(MiembroContext);
+  const { miembro, logoutMiembro } = useContext(MiembroContext);
   const [selectedOption, setSelectedOption] = useState(null);
   const router = useRouter();
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
-    setMenuOpen(false); 
+    setMenuOpen(false);
   };
 
   const handleCloseMenu = () => {
@@ -32,8 +32,8 @@ const Header = ({ setIdentificadorComponente }) => {
 
   const handlePressCerrarSesion = () => {
     logoutMiembro();
-    router.push("/")
-  }
+    router.push("/");
+  };
 
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
@@ -76,7 +76,7 @@ const Header = ({ setIdentificadorComponente }) => {
           className={`fixed top-0 left-0 h-full bg-white dark:bg-gray-800 z-50 transition-opacity duration-300 ease-in-out ${
             menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
           } lg:hidden`}
-          style={{ width: "250px" }} 
+          style={{ width: "250px" }}
         >
           <div className="flex flex-col h-full p-4">
             <div className="flex justify-center mb-4">
@@ -147,7 +147,7 @@ const Header = ({ setIdentificadorComponente }) => {
             </button>
           </div>
         </div>
-        <div className="hidden lg:flex space-x-4"/>
+        <div className="hidden lg:flex space-x-4" />
 
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>

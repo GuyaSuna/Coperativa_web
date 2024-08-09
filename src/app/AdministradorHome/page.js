@@ -46,37 +46,26 @@ const AdminHome = () => {
   return (
     <>
       {cooperativa && (
-        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 h-screen flex overflow-hidden text-sm">
-          {/* <div className="bg-white dark:bg-gray-900 dark:border-gray-800 w-20 flex-shrink-0 border-r border-gray-200 flex-col hidden sm:flex">
-        <Sidebar />
-      </div> */}
-          <div className="flex-grow overflow-hidden h-full flex flex-col">
+        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
+          <div className="flex-grow overflow-hidden flex flex-col">
             <Header setIdentificadorComponente={setIdentificadorComponente} />
-            <div className="flex-grow flex overflow-x-hidden">
+            <div className="flex-grow flex flex-col md:flex-row overflow-x-hidden">
               <ListadoLateral
                 setIdentificadorComponente={setIdentificadorComponente}
+                className="w-full md:w-1/4 lg:w-1/5"
               />
               <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
-                <div className="sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
-                  <div className="flex w-full items-center">
-                    <div className="flex items-center text-3xl text-gray-900 dark:text-white">
+                <div className="px-4 sm:px-7 pt-4 sm:pt-7 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
+                  <div className="flex w-full items-center flex-wrap">
+                    <div className="flex items-center text-2xl sm:text-3xl text-gray-900 dark:text-white">
                       <img
                         src="./LogoApp.jpg"
-                        className="w-16 mr-4 rounded-full"
+                        className="w-12 sm:w-16 mr-4 rounded-full"
                         alt="profile"
                       />
                       {cooperativa?.nombre} - {miembro?.email}
                     </div>
                     <div className="ml-auto sm:flex hidden items-center justify-end">
-                      <div className="text-right">
-                        {/* <div className="text-xs text-gray-400 dark:text-gray-400">
-                      Account balance:
-                    </div>
-                    <div className="text-gray-900 text-lg dark:text-white">
-                      $2,794.00
-                    </div> */}
-                      </div>
-
                       <Menu
                         as="div"
                         className="relative inline-block text-left justify-end"
@@ -98,7 +87,7 @@ const AdminHome = () => {
                         </MenuButton>
                         <MenuItems
                           transition
-                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                         >
                           <div className="py-1">
                             <MenuItem>
@@ -106,7 +95,7 @@ const AdminHome = () => {
                                 onClick={() =>
                                   handleEliminar(socios.cedulaSocio)
                                 }
-                                className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                               >
                                 Eliminar
                               </button>
@@ -134,7 +123,7 @@ const AdminHome = () => {
                       </Menu>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-6 sm:mt-7 my-6">
+                  <div className="flex items-center space-x-3 md:space-x-0 sm:space-x-6 sm:mt-7 mt-4">
                     <button
                       onClick={() => {
                         setIdentificadorComponente(0);
@@ -153,7 +142,7 @@ const AdminHome = () => {
                         setIdentificadorComponente(1, setCedulaSocio);
                         handleSelection(1);
                       }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
                         selectedOption === 1
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
@@ -165,7 +154,7 @@ const AdminHome = () => {
                       onClick={() => {
                         handleSelection(11);
                       }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
                         selectedOption === 11
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
@@ -177,7 +166,7 @@ const AdminHome = () => {
                       onClick={() => {
                         handleSelection(9);
                       }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
                         selectedOption === 9
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
@@ -189,7 +178,7 @@ const AdminHome = () => {
                       onClick={() => {
                         handleSelection(15);
                       }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
                         selectedOption === 15
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
@@ -201,7 +190,7 @@ const AdminHome = () => {
                       onClick={() => {
                         handleSelection(12);
                       }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
                         selectedOption === 12
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
@@ -213,7 +202,7 @@ const AdminHome = () => {
                       onClick={() => {
                         handleSelection(14);
                       }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center mr-8 ${
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
                         selectedOption === 14
                           ? "border-b-2 border-blue-500 text-blue-500"
                           : ""
@@ -228,14 +217,12 @@ const AdminHome = () => {
                   setCedulaSocio={setCedulaSocio}
                   cedulaSocio={cedulaSocio}
                   setIdentificadorComponente={setIdentificadorComponente}
-                  ur = {ur}
+                  ur={ur}
                 />
               </div>
             </div>
           </div>
-          <div className="fixed bottom-0 w-full">
-            <Footer />
-          </div>
+          <Footer className="mt-auto" />
         </div>
       )}
       {!cooperativa && <div>cargando...</div>}
