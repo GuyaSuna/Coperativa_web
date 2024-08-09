@@ -163,7 +163,7 @@ const ListadoSocio = ({
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <a onClick={() => handleCrearRecibo(socio.cedulaSocio)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
+                          <a onClick={() => handleCrearRecibo(socio)} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900">
                             Crear Recibo
                           </a>
                         </MenuItem>

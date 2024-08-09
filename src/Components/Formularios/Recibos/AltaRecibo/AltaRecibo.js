@@ -3,12 +3,12 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { useRouter } from "next/navigation";
-import { postRecibo, getSocio } from "../../../../Api/api.js";
+import { postRecibo, getSocio, getUltimoReajuste , getUr , getAllViviendas } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
 const AltaRecibo = ({ Socio , ur }) => {
   const router = useRouter();
-  const { miembro } = useContext(MiembroContext);
+  const { miembro ,cooperativa } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
@@ -22,15 +22,31 @@ const AltaRecibo = ({ Socio , ur }) => {
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
   const [fechaPago , setFechaPago] = useState();
+  const [reajuste , setReajuste] = useState();
+  const [valorVivienda , setValorVivienda] = useState(0);
   const [Errores, setErrores] = useState({});
+  const [vivienda , setVivienda] = useState({});
 
   //Nahuel- va en altaRecibo la peticion de ur
 
+// useEffect (() => {  
+//   fetchUr();
+// },[])
+
+// const fetchUr = async () => {
+//   const dataUr = await getUr();
+// }
+
+
+
   useEffect(() => {
     fetchCalculos();
+    setNombreSocio(Socio.nombreSocio || "");
+    setApellidoSocio(Socio.apellidoSocio || "");
   }, [Socio]);
+
   useEffect(() => {
-    setCedulaSocio(Socio);
+    setCedulaSocio(Socio.cedulaSocio);
   }, []);
 
 
@@ -39,32 +55,43 @@ const AltaRecibo = ({ Socio , ur }) => {
   }, [fechaPago]);
   console.log("El MIEMBRO EN RECIBO", miembro);
 
+
   useEffect(() => {
-    const fetchSocio = async () => {
-      try {
-        const data = await getSocio(cedulaSocio);
-        if (data) {
-          setNombreSocio(data.nombreSocio || "");
-          setApellidoSocio(data.apellidoSocio || "");
-        }
-        console.log(data);
-      } catch (error) {
-        console.error(`An error has occurred in fetchSocio: ${error.message}`);
-      }
-    };
-
-    if (cedulaSocio) {
-      fetchSocio();
+    if(vivienda.cantidadDormitorios === 2){
+      setValorVivienda(reajuste.cuotaMensualDosHabitacionesEnPesos)
     }
-  }, [cedulaSocio]);
-  const fetchCalculos = () => {
-    setInteres(300);
+    if(vivienda.cantidadDormitorios === 3){
+      setValorVivienda(reajuste.cuotaMensualTresHabitacionesEnPesos)
+    }
 
+    console.log("Valor vivienda" , valorVivienda)
+  },[vivienda])
+
+  const fetchCalculos = async () => {
+    
+    const reajusteData = await getUltimoReajuste();
+    setReajuste(reajusteData);
+    console.log("REAJUSTE",reajusteData)
+    
+    const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
+
+    viviendasData.forEach(vivienda => {
+      if(vivienda.socioTitular != null){
+        console.log("Entra al primero" , Socio)
+      if( vivienda.socioTitular.cedulaSocio == Socio.cedulaSocio){
+        setVivienda(vivienda);
+        console.log("Vivienda seleccionada",vivienda)
+      }
+    }
+    });
+  
+    setInteres(300);
     setCuotaSocial(300);
     setConvenio(300);
     setCuotaMensual(300);
     setSumaPesos(300);
   };
+
 
   const handleChangefechaRecibo = (e) => {
     setFechaEmision(e.target.value);
@@ -124,7 +151,6 @@ const AltaRecibo = ({ Socio , ur }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarFormulario()) return;
-    console.log(ViviendaData.nroVivienda);
 
     const ReciboData = {
       capital: capital,
@@ -201,7 +227,7 @@ const AltaRecibo = ({ Socio , ur }) => {
             id="cedulaSocio"
             name="cedulaSocio"
             readOnly
-            value={Socio}
+            value={Socio.cedulaSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>

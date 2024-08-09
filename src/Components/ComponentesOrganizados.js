@@ -26,6 +26,7 @@ const ComponentesOrganizados = ({
   const [suplente, setSuplente] = useState({});
   const [usuario , setUsuario] = useState({});
 
+
   switch (identificador) {
     case 0: {
       return (
