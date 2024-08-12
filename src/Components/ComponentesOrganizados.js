@@ -31,7 +31,6 @@ const ComponentesOrganizados = ({
   const [vivienda, setVivienda] = useState({});
   const [socio, setSocio] = useState({});
 
-
   switch (identificador) {
     case 0: {
       return (
@@ -114,9 +113,6 @@ const ComponentesOrganizados = ({
     }
     case 16: {
       return <VerVivienda vivienda={vivienda} />;
-    }
-    case 17: {
-      return <VerSuplente suplente={suplente} socio={socio} />;
     }
   }
 };

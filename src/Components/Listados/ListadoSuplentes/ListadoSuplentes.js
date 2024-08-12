@@ -8,6 +8,7 @@ import {
   getAllSocios,
 } from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
+import VerSuplente from "../../VerDetalles/VerSuplente/VerSuplente";
 
 const ListadoSuplentes = ({
   setSuplente,
@@ -17,6 +18,8 @@ const ListadoSuplentes = ({
   const [allSuplentes, setAllSuplentes] = useState([]);
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
+  const [suplenteSeleccionado, setSuplenteSeleccionado] = useState(null); // Estado para el s
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchDatosDeLaLista();
@@ -45,10 +48,12 @@ const ListadoSuplentes = ({
     setIdentificadorComponente(10);
   };
 
-  const handleVerDetalles = (suplente, socio) => {
-    setSuplente(suplente);
+  const handleVerSuplente = (suplente, socio) => {
+    console.log(suplente, "suplente");
+    console.log(socio, "socio");
+    setSuplenteSeleccionado(suplente);
     setSocio(socio);
-    setIdentificadorComponente(17);
+    setIsModalOpen(true);
   };
 
   const handleEliminar = async (cedulaSuplente) => {
@@ -169,7 +174,7 @@ const ListadoSuplentes = ({
                       <div className="py-1">
                         <MenuItem>
                           <button
-                            onClick={() => handleVerDetalles(suplente, socio)}
+                            onClick={() => handleVerSuplente(suplente, socio)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Ver Detalle
@@ -202,6 +207,14 @@ const ListadoSuplentes = ({
           })}
         </tbody>
       </table>
+      {isModalOpen && (
+        <VerSuplente
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          suplente={suplenteSeleccionado}
+          socio={socio}
+        />
+      )}
     </div>
   );
 };

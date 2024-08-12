@@ -1,11 +1,8 @@
 "use client";
 
-import React, { useContext } from "react";
-import { MiembroContext } from "../../../Provider/provider";
+import React from "react";
 
 const VerSuplente = ({ suplente, socio, isOpen, onClose }) => {
-  const { cooperativa } = useContext(MiembroContext);
-
   if (!isOpen) return null;
 
   return (
