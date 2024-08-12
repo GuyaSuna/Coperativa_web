@@ -9,7 +9,11 @@ import {
 } from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 
-const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
+const ListadoSuplentes = ({
+  setSuplente,
+  setSocio,
+  setIdentificadorComponente,
+}) => {
   const [allSuplentes, setAllSuplentes] = useState([]);
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
@@ -39,6 +43,12 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const handleModificar = (suplente) => {
     setSuplente(suplente);
     setIdentificadorComponente(10);
+  };
+
+  const handleVerDetalles = (suplente, socio) => {
+    setSuplente(suplente);
+    setSocio(socio);
+    setIdentificadorComponente(17);
   };
 
   const handleEliminar = async (cedulaSuplente) => {
@@ -157,6 +167,14 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                       className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
                     >
                       <div className="py-1">
+                        <MenuItem>
+                          <button
+                            onClick={() => handleVerDetalles(suplente, socio)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Ver Detalle
+                          </button>
+                        </MenuItem>
                         <MenuItem>
                           <button
                             onClick={() =>

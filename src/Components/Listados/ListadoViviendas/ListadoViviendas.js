@@ -4,7 +4,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { getAllViviendas, deleteVivienda } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
-const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
+
+const ListadoViviendas = ({
+  setVivienda,
+  setNroVivienda,
+  setIdentificadorComponente,
+}) => {
   const { cooperativa } = useContext(MiembroContext);
   const [viviendas, setAllViviendas] = useState([]);
 
@@ -27,8 +32,8 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
     setIdentificadorComponente(5);
   };
 
-  const handleVerDetalles = (nroVivienda) => {
-    setNroVivienda(nroVivienda);
+  const handleVerDetalles = (vivienda) => {
+    setVivienda(vivienda);
     setIdentificadorComponente(16);
   };
 
@@ -184,9 +189,7 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                       <div className="py-1">
                         <MenuItem>
                           <button
-                            onClick={() =>
-                              handleVerDetalles(vivienda.nroVivienda)
-                            }
+                            onClick={() => handleVerDetalles(vivienda)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Ver Detalle

@@ -15,6 +15,8 @@ import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
 import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
 import MuestraCalculos from "./Formularios/FormularioInteresCapital/MuestraCalculo";
+import VerVivienda from "./VerDetalles/VerVivienda/VerVivienda";
+import VerSuplente from "./VerDetalles/VerSuplente/VerSuplente";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -26,6 +28,8 @@ const ComponentesOrganizados = ({
   const [socioRecibo, setSocioRecibo] = useState({});
   const [suplente, setSuplente] = useState({});
   const [usuario, setUsuario] = useState({});
+  const [vivienda, setVivienda] = useState({});
+  const [socio, setSocio] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -40,6 +44,7 @@ const ComponentesOrganizados = ({
     case 1: {
       return (
         <ListadoViviendas
+          setVivienda={setVivienda}
           setNroVivienda={setNroVivienda}
           setIdentificadorComponente={setIdentificadorComponente}
         />
@@ -75,6 +80,7 @@ const ComponentesOrganizados = ({
         <ListadoSuplentes
           setIdentificadorComponente={setIdentificadorComponente}
           setSuplente={setSuplente}
+          setSocio={setSocio}
         />
       );
     }
@@ -105,9 +111,11 @@ const ComponentesOrganizados = ({
     case 15: {
       return <ListadoInformes />;
     }
-
     case 16: {
-      return <VerVivienda />;
+      return <VerVivienda vivienda={vivienda} />;
+    }
+    case 17: {
+      return <VerSuplente suplente={suplente} socio={socio} />;
     }
   }
 };

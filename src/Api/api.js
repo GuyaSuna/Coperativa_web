@@ -17,7 +17,7 @@ const loginAdministrador = async (email, contraseña) => {
 
     if (!response.ok) {
       if (response.status === 400) {
-        return "Usuario o contraseña incorrectos."
+        return "Usuario o contraseña incorrectos.";
       } else {
         throw new Error("Error en la solicitud de inicio de sesión.");
       }
@@ -142,14 +142,17 @@ const getAllSocios = async (idCooperativa) => {
 const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
   try {
     console.log(socioEntity);
-    console.log("ESTE ES LA API",idCooperativa)
-    const response = await fetch(`${URL}/socio/${nroVivienda}/${idCooperativa}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(socioEntity),
-    });
+    console.log("ESTE ES LA API", idCooperativa);
+    const response = await fetch(
+      `${URL}/socio/${nroVivienda}/${idCooperativa}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(socioEntity),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -215,14 +218,17 @@ const updateSocio = async (
   }
 };
 
-const deleteSocio = async (cedulaSocio , idCooperativa) => {
+const deleteSocio = async (cedulaSocio, idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/socio/${cedulaSocio}/${idCooperativa}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/socio/${cedulaSocio}/${idCooperativa}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Error en la solicitud de borrado");
@@ -359,7 +365,7 @@ const updateSuplente = async (
 };
 
 //vivienda
-const postVivienda = async (viviendaEntity , idCooperativa) => {
+const postVivienda = async (viviendaEntity, idCooperativa) => {
   try {
     console.log(viviendaEntity);
     const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
@@ -385,6 +391,7 @@ const postVivienda = async (viviendaEntity , idCooperativa) => {
 
 const getVivienda = async (nroVivienda) => {
   try {
+    console.log(nroVivienda, "nro vivienda getAPI");
     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "GET",
       headers: {
@@ -406,14 +413,17 @@ const getVivienda = async (nroVivienda) => {
 };
 
 const getAllViviendas = async (idCooperativa) => {
-  console.log("COOPERATIVA" , idCooperativa)
+  console.log("COOPERATIVA", idCooperativa);
   try {
-    const response = await fetch(`${URL}/vivienda/allViviendas/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/vivienda/allViviendas/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -654,12 +664,15 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 
 const getAllUsuarios = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/usuario/allUsuarios/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/usuario/allUsuarios/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
