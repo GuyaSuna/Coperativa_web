@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
-import { getSuplente, updateSuplente } from "../../../../Api/api";
+import { getAllSuplentes, updateSuplente } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const ModificarSuplente = ({ suplenteParam }) => {
@@ -10,6 +10,9 @@ const ModificarSuplente = ({ suplenteParam }) => {
   const [nombreSuplente, setNombreSuplente] = useState("");
   const [apellidoSuplente, setApellidoSuplente] = useState("");
   const [telefonoSuplente, setTelefonoSuplente] = useState(0);
+
+  const [allSuplentes, setAllSuplentes] = useState([]);
+  const [cedulaOriginal, setCedulaOriginal] = useState("");
   const [errores, setErrores] = useState({});
 
   const { cooperativa } = useContext(MiembroContext);
@@ -20,25 +23,49 @@ const ModificarSuplente = ({ suplenteParam }) => {
       setNombreSuplente(suplenteParam.nombreSuplente);
       setApellidoSuplente(suplenteParam.apellidoSuplente);
       setTelefonoSuplente(suplenteParam.telefonoSuplente);
+      setCedulaOriginal(suplenteParam.cedulaSuplente);
     }
   }, [suplenteParam]);
 
   useEffect(() => {
-    console.log(cedulaSuplente, "ACAAAAAA");
+    const fetchSuplentes = async () => {
+      try {
+        const suplentesResponse = await getAllSuplentes();
+        setAllSuplentes(suplentesResponse);
+        console.log(cedulaSuplente, "ACAAAAAA");
+      } catch (error) {
+        console.error("Error al obtener suplentes:", error);
+      }
+    };
+
+    fetchSuplentes();
   }, [cedulaSuplente]);
+
+  const cedulaExiste = () => {
+    return allSuplentes.find(
+      (suplente) =>
+        suplente.cedulaSuplente === cedulaSuplente &&
+        suplente.cedulaSuplente !== cedulaOriginal
+    );
+  };
 
   const validarFormulario = () => {
     const errores = {};
 
-    if (!cedulaSuplente)
-      errores.cedulaSuplente = "La cédula del suplente es obligatoria";
-    if (!nombreSuplente)
-      errores.nombreSuplente = "El nombre del suplente es obligatorio";
-    if (!apellidoSuplente)
-      errores.apellidoSuplente = "El apellido del suplente es obligatorio";
-    if (!telefonoSuplente)
-      errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
+    if (!cedulaSuplente) {
+      errores.cedulaSuplente = "La cédula es obligatoria";
+    } else if (cedulaExiste()) {
+      errores.cedulaSuplente = "La cédula ya existe";
+    }
 
+    if (!nombreSuplente) errores.nombreSuplente = "El nombre es obligatorio";
+    if (!apellidoSuplente)
+      errores.apellidoSuplente = "El apellido es obligatorio";
+    if (!telefonoSuplente) {
+      errores.telefonoSuplente = "El teléfono es obligatorio";
+    } else if (!/^\d+$/.test(telefonoSuplente)) {
+      errores.telefonoSuplente = "Debe ingresar números, no letras";
+    }
     setErrores(errores);
     return Object.keys(errores).length === 0;
   };

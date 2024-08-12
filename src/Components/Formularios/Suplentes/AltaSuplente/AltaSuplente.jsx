@@ -2,7 +2,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
 import { useRouter } from "next/navigation";
-import { postSuplente, getAllSocios } from "../../../../Api/api";
+import {
+  postSuplente,
+  getAllSocios,
+  getAllSuplentes,
+} from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaSuplente = () => {
@@ -16,6 +20,9 @@ const AltaSuplente = () => {
 
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
   const [socioDelSuplente, setSocioDelSuplente] = useState("");
+
+  const [allSuplentes, setAllSuplentes] = useState([]);
+
   const [Errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -24,6 +31,9 @@ const AltaSuplente = () => {
 
   const fetchSociosDisponibles = async () => {
     try {
+      const suplentesResponse = await getAllSuplentes();
+      setAllSuplentes(suplentesResponse);
+
       const response = await getAllSocios(cooperativa.idCooperativa);
       let sociosSinSuplente = [];
       response.forEach((socioTitular) => {
@@ -33,6 +43,7 @@ const AltaSuplente = () => {
       });
       setSociosDisponibles(sociosSinSuplente);
       console.log("Socios disponibles: ", sociosSinSuplente);
+      console.log("Suplentes existentes: ", suplentesResponse);
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -58,17 +69,31 @@ const AltaSuplente = () => {
     setTelefonoSuplente(e.target.value);
   };
 
+  const cedulaExiste = () => {
+    return allSuplentes.find(
+      (suplente) => suplente.cedulaSuplente == cedulaSuplente
+    );
+  };
+
   const validarFormulario = () => {
     const errores = {};
 
-    if (!cedulaSuplente) errores.cedulaSuplente = "La cédula es obligatoria";
+    if (!cedulaSuplente) {
+      errores.cedulaSuplente = "La cédula es obligatoria";
+    } else if (cedulaExiste()) {
+      errores.cedulaSuplente = "La cédula ya existe";
+    }
+
     if (!nombreSuplente) errores.nombreSuplente = "El nombre es obligatorio";
     if (!apellidoSuplente)
       errores.apellidoSuplente = "El apellido es obligatorio";
-    if (!telefonoSuplente)
+    if (!telefonoSuplente) {
       errores.telefonoSuplente = "El teléfono es obligatorio";
+    } else if (!/^\d+$/.test(telefonoSuplente)) {
+      errores.telefonoSuplente = "Debe ingresar números, no letras";
+    }
     if (!socioDelSuplente)
-      errores.socioDelSuplente = "El suplente debe pertenecer a un socio.";
+      errores.socioDelSuplente = "El suplente debe pertenecer a un socio";
     setErrores(errores);
     return Object.keys(errores).length === 0;
   };

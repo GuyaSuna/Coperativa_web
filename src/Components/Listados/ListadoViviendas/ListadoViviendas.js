@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useState, useEffect , useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getAllViviendas, deleteVivienda } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
 const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
-  const {cooperativa} = useContext(MiembroContext);
+  const { cooperativa } = useContext(MiembroContext);
   const [viviendas, setAllViviendas] = useState([]);
-
 
   useEffect(() => {
     fetchAllViviendas();
@@ -117,19 +116,13 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
         <thead>
           <tr className="text-gray-400">
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              NroVivienda
-            </th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Socio Titular
+              Nro. de Vivienda
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Dormitorios
             </th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">
-              Estado Cuota
-            </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Fecha Pago
+              Socio Titular
             </th>
           </tr>
         </thead>
@@ -141,16 +134,16 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                   {vivienda.nroVivienda}
                 </div>
               </td>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">
-                  {vivienda?.socioTitular?.nombreSocio || "Sin socio"}
-                </div>
-              </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
                 {vivienda.cantidadDormitorios}
               </td>
-              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-green-500">
-                $120.00
+              <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                <div className="flex items-center">
+                  {vivienda?.socioTitular?.nombreSocio &&
+                  vivienda?.socioTitular?.apellidoSocio
+                    ? `${vivienda.socioTitular.nombreSocio} ${vivienda.socioTitular.apellidoSocio}`
+                    : "Sin socio"}
+                </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center">
