@@ -5,8 +5,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { postRecibo, getSocio } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
-
-const AltaRecibo = ({ Socio }) => {
+import { Recargo } from "@/Calculos/Calculos.js";
+const AltaRecibo = ({ Socio, ur }) => {
   const router = useRouter();
   const { miembro } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
@@ -21,8 +21,10 @@ const AltaRecibo = ({ Socio }) => {
   const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
-  const [subsidio, setSubsidio] = useState({}); // se agrega cuando se valida
+  const [fechaPago, setFechaPago] = useState();
   const [Errores, setErrores] = useState({});
+
+  //Nahuel- va en altaRecibo la peticion de ur
 
   useEffect(() => {
     fetchCalculos();
@@ -30,7 +32,12 @@ const AltaRecibo = ({ Socio }) => {
   useEffect(() => {
     setCedulaSocio(Socio);
   }, []);
+
+  useEffect(() => {
+    Recargo(fechaPago, setRecargo, ur);
+  }, [fechaPago]);
   console.log("El MIEMBRO EN RECIBO", miembro);
+
   useEffect(() => {
     const fetchSocio = async () => {
       try {
@@ -50,7 +57,6 @@ const AltaRecibo = ({ Socio }) => {
     }
   }, [cedulaSocio]);
   const fetchCalculos = () => {
-    setRecargo(300);
     setInteres(300);
 
     setCuotaSocial(300);
@@ -63,6 +69,10 @@ const AltaRecibo = ({ Socio }) => {
     setFechaEmision(e.target.value);
   };
 
+  const handleChangefechaPago = (event) => {
+    const fechaSeleccionada = event.target.value;
+    setFechaPago(fechaSeleccionada);
+  };
   const handleChangeRecargo = (e) => {
     setRecargo(e.target.value);
     // este dato se toma por fecha ingresada cuando el administrador ingresa la fecha en que fue efectuado el pago
@@ -109,6 +119,7 @@ const AltaRecibo = ({ Socio }) => {
     if (!convenio) errores.Convenio = "El Convenio es obligatorio";
     if (!cuotaMensual) errores.CuotaMensual = "La CuotaMensual es obligatorio";
     if (!sumaPesos) errores.SumaPesos = "La Suma en Pesos es obligatorio";
+    if (!fechaPago) errores.fechaPago = "La fecha del pago es obligatoria";
 
     setErrores(errores);
 
@@ -211,7 +222,7 @@ const AltaRecibo = ({ Socio }) => {
             id="telefonoSocio"
             name="telefonoSocio"
             readOnly
-            value={miembro.nombreMiembro}
+            value={miembro.socio.nombreSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
@@ -228,7 +239,7 @@ const AltaRecibo = ({ Socio }) => {
             id="capitalSocio"
             name="capitalSocio"
             readOnly
-            value={miembro.apellidoMiembro}
+            value={miembro.socio.apellidoSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
@@ -253,6 +264,23 @@ const AltaRecibo = ({ Socio }) => {
           )}
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaPago">
+            Fecha de Pago:
+          </label>
+          <input
+            type="date"
+            id="fechaPago"
+            name="fechaPago"
+            value={fechaPago}
+            onChange={handleChangefechaPago}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.fechaPago && (
+            <span className="text-red-500 text-sm">{Errores.fechaPago}</span>
+          )}
+        </div>
+
         {/* posible optional */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="recargo">
@@ -262,6 +290,7 @@ const AltaRecibo = ({ Socio }) => {
             type="text"
             id="recargo"
             name="recargo"
+            readOnly
             value={recargo}
             onChange={handleChangeRecargo}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"

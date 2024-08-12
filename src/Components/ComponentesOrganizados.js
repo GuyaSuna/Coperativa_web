@@ -13,13 +13,13 @@ import ModificarSuplente from "./Formularios/Suplentes/ModificarSuplente/Modific
 import ListadoRecibos from "./Listados/ListadoRecibos/listadoRecibos";
 import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
-import MuestraCalculos from "./Formularios/Calculos/MuestraCalculo";
 import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
-import VerVivienda from "./VerDetalles/VerVivienda";
+import MuestraCalculos from "./Formularios/FormularioInteresCapital/MuestraCalculo";
 
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
+  ur,
 }) => {
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [nroVivienda, setNroVivienda] = useState(0);
@@ -62,7 +62,7 @@ const ComponentesOrganizados = ({
       return <ModificarVivienda nroViviendaParam={nroVivienda} />;
     }
     case 6: {
-      return <AltaRecibo Socio={socioRecibo} />;
+      return <AltaRecibo Socio={socioRecibo} ur={ur} />;
     }
     case 7: {
       return <AltaSuplente />;

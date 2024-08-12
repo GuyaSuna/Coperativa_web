@@ -6,7 +6,7 @@ const Buscador = ({ value, onChange }) => {
       <input
         type="text"
         className="pl-8 h-9 bg-transparent border border-gray-300 dark:border-gray-700 dark:text-white w-full rounded-md text-sm"
-        placeholder="Search"
+        placeholder="Buscar por nombre"
         value={value}
         onChange={onChange}
       />
