@@ -31,6 +31,7 @@ const ComponentesOrganizados = ({
   const [vivienda, setVivienda] = useState({});
   const [socio, setSocio] = useState({});
 
+
   switch (identificador) {
     case 0: {
       return (

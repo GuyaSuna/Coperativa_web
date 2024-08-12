@@ -519,30 +519,30 @@ const getCooperativaPorAdmin = async (idMiembro) => {
 
 // usuario
 
-const getAllUsuario = async (idCooperativa) => {
-  try {
-    const response = await fetch(
-      `${URL}/usuario/allUsuarios/${idCooperativa}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+// const getAllUsuario = async (idCooperativa) => {
+//   try {
+//     const response = await fetch(
+//       `${URL}/usuario/allUsuarios/${idCooperativa}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error("Error en getAllUsuario:", error);
-    throw new Error("Error al obtener los datos del usuario");
-  }
-};
+//     const data = await response.json();
+//     console.log(data);
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllUsuario:", error);
+//     throw new Error("Error al obtener los datos del usuario");
+//   }
+// };
 
 // const postUsuario = async (socioEntity, suplente, vivienda) => {
 //   try {
@@ -707,6 +707,54 @@ const deleteUsuario = async (idMiembro) => {
   }
 };
 
+
+
+const getReajuste = async (idReajuste) => {
+  try {
+    const response = await fetch(`${URL}/reajuste/${idReajuste}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getReajuste:", error);
+    throw new Error("Error al obtener los datos de los reajustes");
+  }
+};
+
+const getUltimoReajuste = async () => {
+  try {
+    const response = await fetch(`${URL}/reajuste`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getUltimoReajuste:", error);
+    throw new Error("Error al obtener los datos de el ultimo reajuste");
+  }
+};
+
+
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -733,4 +781,6 @@ export {
   getAllUsuarios,
   deleteUsuario,
   getAdministrador,
+  getReajuste,
+  getUltimoReajuste,
 };
