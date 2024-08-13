@@ -45,6 +45,7 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   useEffect(() => {
     fetchCalculos();
+    console.log(Socio , "SOCIO")
     setNombreSocio(Socio.nombreSocio || "");
     setApellidoSocio(Socio.apellidoSocio || "");
   }, [Socio]);
