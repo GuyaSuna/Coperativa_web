@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 text-center py-4">
+    <footer className="mt-auto w-full px-4 py-2 bg-gray-200 dark:bg-gray-800 text-center text-sm text-gray-600 dark:text-gray-400">
       <p>&copy; 2024 VISOFT - TRICOMA.STAR - Todos los derechos reservados.</p>
     </footer>
   );
