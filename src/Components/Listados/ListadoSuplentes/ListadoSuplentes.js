@@ -10,15 +10,12 @@ import {
 import { MiembroContext } from "@/Provider/provider.js";
 import VerSuplente from "../../VerDetalles/VerSuplente/VerSuplente";
 
-const ListadoSuplentes = ({
-  setSuplente,
-  setSocio,
-  setIdentificadorComponente,
-}) => {
+const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const [allSuplentes, setAllSuplentes] = useState([]);
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   const [suplenteSeleccionado, setSuplenteSeleccionado] = useState(null); // Estado para el s
+  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -49,10 +46,10 @@ const ListadoSuplentes = ({
   };
 
   const handleVerSuplente = (suplente, socio) => {
-    console.log(suplente, "suplente");
-    console.log(socio, "socio");
+    console.log("Suplente seleccionado:", suplente);
+    console.log("Socio seleccionado:", socio);
     setSuplenteSeleccionado(suplente);
-    setSocio(socio);
+    setSocioSeleccionado(socio);
     setIsModalOpen(true);
   };
 
@@ -212,7 +209,7 @@ const ListadoSuplentes = ({
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           suplente={suplenteSeleccionado}
-          socio={socio}
+          socio={socioSeleccionado}
         />
       )}
     </div>
