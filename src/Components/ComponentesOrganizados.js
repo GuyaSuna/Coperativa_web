@@ -111,9 +111,6 @@ const ComponentesOrganizados = ({
     case 15: {
       return <ListadoInformes />;
     }
-    case 16: {
-      return <VerVivienda vivienda={vivienda} />;
-    }
   }
 };
 

@@ -13,7 +13,7 @@ import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
 import { parseISO, format } from "date-fns";
 import Buscador from "@/Components/Buscador.js";
-import ModalDetail from "@/Components/Modal.js";
+import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 
 const ListadoSocio = ({
   setSocioRecibo,
@@ -421,7 +421,7 @@ const ListadoSocio = ({
         </table>
       </div>
       {isModalOpen && (
-        <ModalDetail
+        <VerSocio
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           socio={socioSeleccionado}

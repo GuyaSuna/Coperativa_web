@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { getAllViviendas, deleteVivienda } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
+import VerVivienda from "@/Components/VerDetalles/VerVivienda/VerVivienda.js";
 
 const ListadoViviendas = ({
   setVivienda,
@@ -12,6 +13,8 @@ const ListadoViviendas = ({
 }) => {
   const { cooperativa } = useContext(MiembroContext);
   const [viviendas, setAllViviendas] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viviendaSeleccionada, setViviendaSeleccionada] = useState(null);
 
   useEffect(() => {
     fetchAllViviendas();
@@ -34,7 +37,8 @@ const ListadoViviendas = ({
 
   const handleVerDetalles = (vivienda) => {
     setVivienda(vivienda);
-    setIdentificadorComponente(16);
+    setViviendaSeleccionada(vivienda);
+    setIsModalOpen(true);
   };
 
   const handleEliminar = async (nroVivienda) => {
@@ -262,6 +266,13 @@ const ListadoViviendas = ({
           </svg>
         </button>
       </div>
+      {isModalOpen && (
+        <VerVivienda
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          vivienda={viviendaSeleccionada}
+        />
+      )}
     </div>
   );
 };

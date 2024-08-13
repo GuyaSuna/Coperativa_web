@@ -26,52 +26,63 @@ const VerSuplente = ({ suplente, socio, isOpen, onClose }) => {
               <path d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
-          <table className="w-full text-left">
-            <thead>
-              <tr className="text-gray-400">
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Cedula del Suplente
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Nombre
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Apellido
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Telefono
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Pertenece al Socio
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600 dark:text-gray-100">
-              <tr>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center ml-4">
-                    {suplente.cedulaSuplente}
-                  </div>
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  {suplente.nombreSuplente}
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  {suplente.apellidoSuplente}
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  {suplente.telefonoSuplente}
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center">
-                    {socio
-                      ? `${socio.nombreSocio} ${socio.apellidoSocio}`
-                      : "No disponible"}
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="mx-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-gray-400">
+                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                    Cedula
+                  </th>
+                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                    Nombre
+                  </th>
+                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                    Apellido
+                  </th>
+                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                    Telefono
+                  </th>
+                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                    Socio
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-600 dark:text-gray-100">
+                <tr>
+                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center">
+                      {suplente.cedulaSuplente}
+                    </div>
+                  </td>
+                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                    {suplente.nombreSuplente}
+                  </td>
+                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                    {suplente.apellidoSuplente}
+                  </td>
+                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                    {suplente.telefonoSuplente}
+                  </td>
+                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                    <div className="flex items-center">
+                      {socio
+                        ? `${socio.nombreSocio} ${socio.apellidoSocio}`
+                        : "No disponible"}
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-8 flex justify-center">
+            <button
+              type="button"
+              className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-3 py-1 text-xs font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-150 ease-in-out"
+              onClick={onClose}
+            >
+              Cerrar
+            </button>
+          </div>
         </div>
       </div>
     </>
