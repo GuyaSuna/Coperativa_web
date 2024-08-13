@@ -36,7 +36,7 @@ const Header = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <header className="h-16 flex justify-between items-center w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative md:w-28">
+    <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
       <div className=" flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <Image
           className="logo-Img hover:scale-90 transform duration-700"
