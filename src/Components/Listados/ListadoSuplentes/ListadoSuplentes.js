@@ -8,11 +8,15 @@ import {
   getAllSocios,
 } from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
+import VerSuplente from "../../VerDetalles/VerSuplente/VerSuplente";
 
 const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const [allSuplentes, setAllSuplentes] = useState([]);
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
+  const [suplenteSeleccionado, setSuplenteSeleccionado] = useState(null); // Estado para el s
+  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetchDatosDeLaLista();
@@ -39,6 +43,14 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const handleModificar = (suplente) => {
     setSuplente(suplente);
     setIdentificadorComponente(10);
+  };
+
+  const handleVerSuplente = (suplente, socio) => {
+    console.log("Suplente seleccionado:", suplente);
+    console.log("Socio seleccionado:", socio);
+    setSuplenteSeleccionado(suplente);
+    setSocioSeleccionado(socio);
+    setIsModalOpen(true);
   };
 
   const handleEliminar = async (cedulaSuplente) => {
@@ -159,6 +171,14 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                       <div className="py-1">
                         <MenuItem>
                           <button
+                            onClick={() => handleVerSuplente(suplente, socio)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Ver Detalle
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
                             onClick={() =>
                               handleEliminar(suplente.cedulaSuplente)
                             }
@@ -184,6 +204,14 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
           })}
         </tbody>
       </table>
+      {isModalOpen && (
+        <VerSuplente
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          suplente={suplenteSeleccionado}
+          socio={socioSeleccionado}
+        />
+      )}
     </div>
   );
 };

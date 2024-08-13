@@ -9,6 +9,7 @@ import Header from "@/Components/header";
 import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import Cargando from "@/Components/Cargando";
 
 const AdminHome = () => {
   const router = useRouter();
@@ -48,82 +49,27 @@ const AdminHome = () => {
       {cooperativa && (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
-            <Header setIdentificadorComponente={setIdentificadorComponente} />
-            <div className="flex-grow flex flex-col md:flex-row overflow-x-hidden">
+            {/* <Header setIdentificadorComponente={setIdentificadorComponente} /> */}
+            <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">
               <ListadoLateral
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"
               />
-              <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
+              <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto ">
                 <div className="px-4 sm:px-7 pt-4 sm:pt-7 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
                   <div className="flex w-full items-center flex-wrap">
-                    <div className="flex items-center text-2xl sm:text-3xl text-gray-900 dark:text-white">
+                    <div className="flex items-center text-xl sm:text-2xl text-gray-900 dark:text-white">
                       <img
                         src="./LogoApp.jpg"
-                        className="w-12 sm:w-16 mr-4 rounded-full"
+                        className="w-10 sm:w-12 md:w-16 lg:w-20 mr-4 rounded-full"
                         alt="profile"
                       />
-                      {cooperativa?.nombre} - {miembro?.email}
-                    </div>
-                    <div className="ml-auto sm:flex hidden items-center justify-end">
-                      <Menu
-                        as="div"
-                        className="relative inline-block text-left justify-end"
-                      >
-                        <MenuButton className="w-8 h-8 ml-4 text-gray-400 shadow dark:text-gray-400 rounded-full flex items-center justify-center border border-gray-200 dark:border-gray-700">
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="w-4"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx={12} cy={12} r={1} />
-                            <circle cx={19} cy={12} r={1} />
-                            <circle cx={5} cy={12} r={1} />
-                          </svg>
-                        </MenuButton>
-                        <MenuItems
-                          transition
-                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                        >
-                          <div className="py-1">
-                            <MenuItem>
-                              <button
-                                onClick={() =>
-                                  handleEliminar(socios.cedulaSocio)
-                                }
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                              >
-                                Eliminar
-                              </button>
-                            </MenuItem>
-                            <MenuItem>
-                              <button
-                                onClick={() =>
-                                  handleModificar(socios.cedulaSocio)
-                                }
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                              >
-                                Modificar
-                              </button>
-                            </MenuItem>
-                            <MenuItem>
-                              <a
-                                href="#"
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                              >
-                                Crear Recibo
-                              </a>
-                            </MenuItem>
-                          </div>
-                        </MenuItems>
-                      </Menu>
+                      <a className="text-sm sm:text-base md:text-lg lg:text-xl">
+                        {cooperativa?.nombre} - {miembro?.email}
+                      </a>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 md:space-x-0 sm:space-x-6 sm:mt-7 mt-4">
+                  <div className="flex-initial items-center space-x-3 md:space-x-6 sm:space-x-6 sm:mt-7 mt-4">
                     <button
                       onClick={() => {
                         setIdentificadorComponente(0);
@@ -225,7 +171,7 @@ const AdminHome = () => {
           <Footer className="mt-auto" />
         </div>
       )}
-      {!cooperativa && <div>cargando...</div>}
+      {!cooperativa && <Cargando />}
     </>
   );
 };

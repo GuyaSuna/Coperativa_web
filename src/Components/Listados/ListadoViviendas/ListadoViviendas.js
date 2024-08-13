@@ -4,9 +4,17 @@ import React, { useState, useEffect, useContext } from "react";
 import { getAllViviendas, deleteVivienda } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
-const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
+import VerVivienda from "@/Components/VerDetalles/VerVivienda/VerVivienda.js";
+
+const ListadoViviendas = ({
+  setVivienda,
+  setNroVivienda,
+  setIdentificadorComponente,
+}) => {
   const { cooperativa } = useContext(MiembroContext);
   const [viviendas, setAllViviendas] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [viviendaSeleccionada, setViviendaSeleccionada] = useState(null);
 
   useEffect(() => {
     fetchAllViviendas();
@@ -25,6 +33,12 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
   const handleModificar = (nroVivienda) => {
     setNroVivienda(nroVivienda);
     setIdentificadorComponente(5);
+  };
+
+  const handleVerDetalles = (vivienda) => {
+    setVivienda(vivienda);
+    setViviendaSeleccionada(vivienda);
+    setIsModalOpen(true);
   };
 
   const handleEliminar = async (nroVivienda) => {
@@ -179,6 +193,14 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
                       <div className="py-1">
                         <MenuItem>
                           <button
+                            onClick={() => handleVerDetalles(vivienda)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Ver Detalle
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
                             onClick={() => handleEliminar(vivienda.nroVivienda)}
                             className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
@@ -244,6 +266,13 @@ const ListadoViviendas = ({ setNroVivienda, setIdentificadorComponente }) => {
           </svg>
         </button>
       </div>
+      {isModalOpen && (
+        <VerVivienda
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          vivienda={viviendaSeleccionada}
+        />
+      )}
     </div>
   );
 };

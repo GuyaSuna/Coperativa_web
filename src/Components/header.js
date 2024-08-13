@@ -36,8 +36,8 @@ const Header = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
-      <div className="h-full flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
+    <header className="h-16 flex justify-between items-center w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative md:w-28">
+      <div className=" flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <Image
           className="logo-Img hover:scale-90 transform duration-700"
           src={logo}
@@ -68,12 +68,12 @@ const Header = ({ setIdentificadorComponente }) => {
         </button>
         {menuOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+            className="fixed inset-0 h-screen w-full z-40 bg-black bg-opacity-50 lg:hidden"
             onClick={handleCloseMenu}
           />
         )}
         <div
-          className={`fixed top-0 left-0 h-full bg-white dark:bg-gray-800 z-50 transition-opacity duration-300 ease-in-out ${
+          className={`fixed top-0 left-0 h-screen bg-white dark:bg-gray-800 z-50 transition-opacity duration-300 ease-in-out ${
             menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
           } lg:hidden`}
           style={{ width: "250px" }}
@@ -160,7 +160,7 @@ const Header = ({ setIdentificadorComponente }) => {
                 />
                 <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
               </span>
-              <span className="ml-2">{administrador}</span>
+              <span className="ml-2 md:text-xs">{administrador}</span>
               <svg
                 viewBox="0 0 24 24"
                 className="w-4 ml-1 flex-shrink-0"

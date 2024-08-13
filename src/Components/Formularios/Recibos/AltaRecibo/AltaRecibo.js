@@ -3,12 +3,18 @@
 import React, { useState, useEffect, useContext } from "react";
 
 import { useRouter } from "next/navigation";
-import { postRecibo, getSocio, getUltimoReajuste , getUr , getAllViviendas } from "../../../../Api/api.js";
+import {
+  postRecibo,
+  getSocio,
+  getUltimoReajuste,
+  getUr,
+  getAllViviendas,
+} from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
-const AltaRecibo = ({ Socio , ur }) => {
+const AltaRecibo = ({ Socio, ur }) => {
   const router = useRouter();
-  const { miembro ,cooperativa } = useContext(MiembroContext);
+  const { miembro, cooperativa } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
   const [cedulaSocio, setCedulaSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
@@ -21,23 +27,21 @@ const AltaRecibo = ({ Socio , ur }) => {
   const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
-  const [fechaPago , setFechaPago] = useState();
-  const [reajuste , setReajuste] = useState();
-  const [valorVivienda , setValorVivienda] = useState(0);
+  const [fechaPago, setFechaPago] = useState();
+  const [reajuste, setReajuste] = useState();
+  const [valorVivienda, setValorVivienda] = useState(0);
   const [Errores, setErrores] = useState({});
-  const [vivienda , setVivienda] = useState({});
+  const [vivienda, setVivienda] = useState({});
 
   //Nahuel- va en altaRecibo la peticion de ur
 
-// useEffect (() => {  
-//   fetchUr();
-// },[])
+  // useEffect (() => {
+  //   fetchUr();
+  // },[])
 
-// const fetchUr = async () => {
-//   const dataUr = await getUr();
-// }
-
-
+  // const fetchUr = async () => {
+  //   const dataUr = await getUr();
+  // }
 
   useEffect(() => {
     fetchCalculos();
@@ -49,49 +53,45 @@ const AltaRecibo = ({ Socio , ur }) => {
     setCedulaSocio(Socio.cedulaSocio);
   }, []);
 
-
   useEffect(() => {
-    Recargo(fechaPago , setRecargo , ur);
+    Recargo(fechaPago, setRecargo, ur);
   }, [fechaPago]);
   console.log("El MIEMBRO EN RECIBO", miembro);
 
-
   useEffect(() => {
-    if(vivienda.cantidadDormitorios === 2){
-      setValorVivienda(reajuste.cuotaMensualDosHabitacionesEnPesos)
+    if (vivienda.cantidadDormitorios === 2) {
+      setValorVivienda(reajuste.cuotaMensualDosHabitacionesEnPesos);
     }
-    if(vivienda.cantidadDormitorios === 3){
-      setValorVivienda(reajuste.cuotaMensualTresHabitacionesEnPesos)
+    if (vivienda.cantidadDormitorios === 3) {
+      setValorVivienda(reajuste.cuotaMensualTresHabitacionesEnPesos);
     }
 
-    console.log("Valor vivienda" , valorVivienda)
-  },[vivienda])
+    console.log("Valor vivienda", valorVivienda);
+  }, [vivienda]);
 
   const fetchCalculos = async () => {
-    
     const reajusteData = await getUltimoReajuste();
     setReajuste(reajusteData);
-    console.log("REAJUSTE",reajusteData)
-    
+    console.log("REAJUSTE", reajusteData);
+
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
 
-    viviendasData.forEach(vivienda => {
-      if(vivienda.socioTitular != null){
-        console.log("Entra al primero" , Socio)
-      if( vivienda.socioTitular.cedulaSocio == Socio.cedulaSocio){
-        setVivienda(vivienda);
-        console.log("Vivienda seleccionada",vivienda)
+    viviendasData.forEach((vivienda) => {
+      if (vivienda.socioTitular != null) {
+        console.log("Entra al primero", Socio);
+        if (vivienda.socioTitular.cedulaSocio == Socio.cedulaSocio) {
+          setVivienda(vivienda);
+          console.log("Vivienda seleccionada", vivienda);
+        }
       }
-    }
     });
-  
+
     setInteres(300);
     setCuotaSocial(300);
     setConvenio(300);
     setCuotaMensual(300);
     setSumaPesos(300);
   };
-
 
   const handleChangefechaRecibo = (e) => {
     setFechaEmision(e.target.value);
@@ -103,18 +103,24 @@ const AltaRecibo = ({ Socio , ur }) => {
   };
   const handleChangeRecargo = (e) => {
     setRecargo(e.target.value);
+    // este dato se toma por fecha ingresada cuando el administrador ingresa la fecha en que fue efectuado el pago
   };
 
   const handleChangeInteres = (e) => {
     setInteres(e.target.value);
+    // eate dato se toma de el excel
   };
 
   const handleChangeCuotaSocial = (e) => {
     setCuotaSocial(e.target.value);
+    // dato constante de 400 pesos en este caso
   };
 
   const handleChangeConvenio = (e) => {
     setConvenio(e.target.value);
+    // convenio en unidades reajustables
+    // se le suma lo que deba pagar
+    // es lo que le debe el socio a la cooperativa
   };
   const handleChangeCuotaMensual = (e) => {
     setCuotaMensual(e.target.value);
@@ -286,10 +292,7 @@ const AltaRecibo = ({ Socio , ur }) => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="fechaPago"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaPago">
             Fecha de Pago:
           </label>
           <input
