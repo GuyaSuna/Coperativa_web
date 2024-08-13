@@ -49,7 +49,7 @@ const AdminHome = () => {
       {cooperativa && (
         <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
-            {/* <Header setIdentificadorComponente={setIdentificadorComponente} /> */}
+            <Header setIdentificadorComponente={setIdentificadorComponente} />
             <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">
               <ListadoLateral
                 setIdentificadorComponente={setIdentificadorComponente}
