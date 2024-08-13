@@ -403,7 +403,7 @@ const ListadoSocio = ({
                           <MenuItem>
                             <a
                               onClick={() =>
-                                handleCrearRecibo(socio.cedulaSocio)
+                                handleCrearRecibo(socio)
                               }
                               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                             >
