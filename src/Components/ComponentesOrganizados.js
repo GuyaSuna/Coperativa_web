@@ -15,8 +15,8 @@ import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
 import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
 import MuestraCalculos from "./Formularios/FormularioInteresCapital/MuestraCalculo";
-import VerVivienda from "./VerDetalles/VerVivienda/VerVivienda";
-import VerSuplente from "./VerDetalles/VerSuplente/VerSuplente";
+import AltaSubsidio from "./Formularios/Subsidio/AltaSubsidio";
+import ListadoSubsidios from "./Listados/ListadoSubsidios/ListadoSubsidios";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -111,6 +111,15 @@ const ComponentesOrganizados = ({
     case 15: {
       return <ListadoInformes />;
     }
+    case 16: {
+      return <AltaSubsidio />;
+    }
+    case 17:
+      return (
+        <ListadoSubsidios
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
   }
 };
 

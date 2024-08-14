@@ -517,57 +517,6 @@ const getCooperativaPorAdmin = async (idMiembro) => {
   }
 };
 
-// usuario
-
-// const getAllUsuario = async (idCooperativa) => {
-//   try {
-//     const response = await fetch(
-//       `${URL}/usuario/allUsuarios/${idCooperativa}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     if (!response.ok) {
-//       throw new Error("The petition has failed, response isn't ok");
-//     }
-
-//     const data = await response.json();
-//     console.log(data);
-//     return data;
-//   } catch (error) {
-//     console.error("Error en getAllUsuario:", error);
-//     throw new Error("Error al obtener los datos del usuario");
-//   }
-// };
-
-// const postUsuario = async (socioEntity, suplente, vivienda) => {
-//   try {
-//     console.log(socioEntity);
-//     const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(socioEntity),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error("The petition has failed, response isn't ok");
-//     }
-
-//     const data = await response.json();
-
-//     return data;
-//   } catch (error) {
-//     console.error("Error en postSocio:", error);
-//     throw new Error("Error al enviar los datos del socio");
-//   }
-// };
-
 const getUr = async () => {
   try {
     const response = await fetch(
@@ -662,6 +611,56 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
   }
 };
 
+// usuario
+// const getAllUsuario = async (idCooperativa) => {
+//   try {
+//     const response = await fetch(
+//       `${URL}/usuario/allUsuarios/${idCooperativa}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+//     console.log(data);
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllUsuario:", error);
+//     throw new Error("Error al obtener los datos del usuario");
+//   }
+// };
+
+// const postUsuario = async (socioEntity, suplente, vivienda) => {
+//   try {
+//     console.log(socioEntity);
+//     const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(socioEntity),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postSocio:", error);
+//     throw new Error("Error al enviar los datos del socio");
+//   }
+// };
+
 const getAllUsuarios = async (idCooperativa) => {
   try {
     const response = await fetch(
@@ -707,8 +706,51 @@ const deleteUsuario = async (idMiembro) => {
   }
 };
 
+//Subsidio
+const postSubsidio = async (subsidioEntity) => {
+  try {
+    console.log(subsidioEntity);
+    const response = await fetch(`${URL}/subsidio`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(subsidioEntity),
+    });
 
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error interno del servidor");
+    }
 
+    return await response.json();
+  } catch (error) {
+    console.error("Error al crear el subsidio:", error);
+    throw error;
+  }
+};
+
+const getAllSubsidios = async () => {
+  try {
+    const response = await fetch(`${URL}/subsidio/allSubsidios`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSubsidios:", error);
+    throw new Error("Error al obtener los datos de los subsidios.");
+  }
+};
+
+//Reajuste
 const getReajuste = async (idReajuste) => {
   try {
     const response = await fetch(`${URL}/reajuste/${idReajuste}`, {
@@ -753,8 +795,6 @@ const getUltimoReajuste = async () => {
   }
 };
 
-
-
 export {
   loginAdministrador,
   loginUsuario,
@@ -783,4 +823,6 @@ export {
   getAdministrador,
   getReajuste,
   getUltimoReajuste,
+  postSubsidio,
+  getAllSubsidios,
 };
