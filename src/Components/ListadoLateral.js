@@ -62,6 +62,14 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
         >
           Agregar Subsidio
         </button>
+        <button
+          onClick={() => handleSelection(18)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 18 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          Agregar Convenio
+        </button>
       </div>
     </div>
   );

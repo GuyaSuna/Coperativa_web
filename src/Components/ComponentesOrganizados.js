@@ -17,6 +17,7 @@ import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
 import MuestraCalculos from "./Formularios/FormularioInteresCapital/MuestraCalculo";
 import AltaSubsidio from "./Formularios/Subsidio/AltaSubsidio";
 import ListadoSubsidios from "./Listados/ListadoSubsidios/ListadoSubsidios";
+import AltaConvenio from "./Formularios/Convenios/AltaConvenio";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -114,12 +115,16 @@ const ComponentesOrganizados = ({
     case 16: {
       return <AltaSubsidio />;
     }
-    case 17:
+    case 17: {
       return (
         <ListadoSubsidios
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
+    }
+    case 18: {
+      return <AltaConvenio />;
+    }
   }
 };
 
