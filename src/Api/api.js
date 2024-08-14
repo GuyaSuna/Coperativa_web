@@ -707,8 +707,6 @@ const deleteUsuario = async (idMiembro) => {
   }
 };
 
-
-
 const getReajuste = async (idReajuste) => {
   try {
     const response = await fetch(`${URL}/reajuste/${idReajuste}`, {
@@ -752,8 +750,6 @@ const getUltimoReajuste = async () => {
     throw new Error("Error al obtener los datos de el ultimo reajuste");
   }
 };
-
-
 
 export {
   loginAdministrador,
