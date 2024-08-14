@@ -750,7 +750,28 @@ const getUltimoReajuste = async () => {
     throw new Error("Error al obtener los datos de el ultimo reajuste");
   }
 };
+const postConvenio = async (convenio, cedulaSocio) => {
+  try {
+    const response = await fetch(`${URL}/convenios/${cedulaSocio}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(convenio),
+    });
 
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postConvenio:", error);
+    throw new Error("Error al enviar los datos de el convenio");
+  }
+};
 export {
   loginAdministrador,
   loginUsuario,
@@ -779,4 +800,5 @@ export {
   getAdministrador,
   getReajuste,
   getUltimoReajuste,
+  postConvenio,
 };
