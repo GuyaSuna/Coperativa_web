@@ -750,6 +750,47 @@ const getAllSubsidios = async () => {
   }
 };
 
+const updateSubsidio = async (
+  cuotaTotalUr,
+  cuotaApagarUr,
+  subsidioUr,
+  porcentaje,
+  vigenciaEnMeses,
+  fechaOtorgado,
+  fechaExpira,
+  socio
+) => {
+  try {
+    const response = await fetch(`${URL}/subsidio`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cuotaTotalUr,
+        cuotaApagarUr,
+        subsidioUr,
+        porcentaje,
+        vigenciaEnMeses,
+        fechaOtorgado,
+        fechaExpira,
+        socio,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error("Error al actualizar el subsidio");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateSubsidio:", error);
+    throw error;
+  }
+};
+
 //Reajuste
 const getReajuste = async (idReajuste) => {
   try {
@@ -847,4 +888,5 @@ export {
   postConvenio,
   postSubsidio,
   getAllSubsidios,
+  updateSubsidio,
 };

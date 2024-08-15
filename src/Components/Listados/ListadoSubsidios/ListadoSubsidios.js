@@ -4,9 +4,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { getAllSubsidios } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
+import VerSubsidio from "@/Components/VerDetalles/VerSubsidio/VerSubsidio.js";
 
-const ListadoSubsidios = ({ setIdentificadorComponente }) => {
+const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const [allSubsidios, setAllSubsidios] = useState([]);
+  const [subsidioSeleccionado, setSubsidioSeleccionado] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
@@ -21,6 +25,23 @@ const ListadoSubsidios = ({ setIdentificadorComponente }) => {
     } catch (error) {
       console.error("Error al obtener los subsidios:", error);
     }
+  };
+
+  const handleVerSubsidio = (subsidio) => {
+    setSubsidioSeleccionado(subsidio);
+    setIsModalOpen(true);
+    console.log("Ver subsidio", subsidio);
+  };
+
+  const handleEliminarSubsidio = (idSubsidio) => {
+    // Aquí podrías manejar la lógica para eliminar un subsidio
+    console.log("Eliminar subsidio", idSubsidio);
+  };
+
+  const handleModificarSubsidio = (subsidio) => {
+    setSubsidio(subsidio);
+    setIdentificadorComponente(19);
+    console.log("Modificar subsidio", subsidio);
   };
 
   return (
@@ -71,7 +92,6 @@ const ListadoSubsidios = ({ setIdentificadorComponente }) => {
                       </button>
                     )}
                   </MenuItem>
-                  {/* Add more sorting options if needed */}
                 </div>
               </MenuItems>
             </Menu>
@@ -100,12 +120,15 @@ const ListadoSubsidios = ({ setIdentificadorComponente }) => {
                 <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
                   Fecha Expira
                 </th>
+                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  Acciones
+                </th>
               </tr>
             </thead>
 
             <tbody className="text-gray-600 dark:text-gray-100">
               {allSubsidios?.map((subsidio) => (
-                <tr key={subsidio.IdSubsidio}>
+                <tr key={subsidio.idSubsidio}>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                     {subsidio.socio.nombreSocio} {subsidio.socio.apellidoSocio}
                   </td>
@@ -127,10 +150,72 @@ const ListadoSubsidios = ({ setIdentificadorComponente }) => {
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                     {new Date(subsidio.fechaExpira).toLocaleDateString()}
                   </td>
+                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
+                    <Menu as="div" className="relative inline-block text-left">
+                      <div>
+                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="w-5"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx={12} cy={12} r={1} />
+                            <circle cx={19} cy={12} r={1} />
+                            <circle cx={5} cy={12} r={1} />
+                          </svg>
+                        </MenuButton>
+                      </div>
+
+                      <MenuItems
+                        transition
+                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md  bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+                      >
+                        <div className="py-1">
+                          <MenuItem>
+                            <button
+                              onClick={() => handleVerSubsidio(subsidio)}
+                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                            >
+                              Ver Detalle
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              onClick={() =>
+                                handleEliminarSubsidio(subsidio.idSubsidio)
+                              }
+                              className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                            >
+                              Eliminar
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              onClick={() => handleModificarSubsidio(subsidio)}
+                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                            >
+                              Modificar
+                            </button>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </Menu>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {isModalOpen && (
+            <VerSubsidio
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+              subsidio={subsidioSeleccionado}
+            />
+          )}
         </>
       )}
     </div>
