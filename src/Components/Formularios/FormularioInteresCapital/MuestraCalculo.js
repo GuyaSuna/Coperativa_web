@@ -2,11 +2,11 @@
 import React from "react";
 import FormularioInteresCapital from "./FormularioInteresCapital";
 
-const MuestraCalculos = () => {
+const MuestraCalculos = ({setInteres , setCapital}) => {
   return (
     <div>
       <h1>Leer archivo Excel en Next.js</h1>
-      <FormularioInteresCapital />
+      <FormularioInteresCapital setInteresParm={setInteres} setCapitalParm={setCapital} />
     </div>
   );
 };

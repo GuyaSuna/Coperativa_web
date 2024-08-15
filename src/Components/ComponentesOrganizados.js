@@ -30,6 +30,8 @@ const ComponentesOrganizados = ({
   const [usuario, setUsuario] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [socio, setSocio] = useState({});
+  const [interes , setInteres] = useState();
+  const [capital , setCapital] = useState();
 
   switch (identificador) {
     case 0: {
@@ -67,7 +69,7 @@ const ComponentesOrganizados = ({
       return <ModificarVivienda nroViviendaParam={nroVivienda} />;
     }
     case 6: {
-      return <AltaRecibo Socio={socioRecibo} ur={ur} />;
+      return <AltaRecibo Socio={socioRecibo} ur={ur} interesParm={interes} capitalParm={capital} />;
     }
     case 7: {
       return <AltaSuplente />;
@@ -106,7 +108,7 @@ const ComponentesOrganizados = ({
       return <AltaUsuario />;
     }
     case 14: {
-      return <MuestraCalculos />;
+      return <MuestraCalculos  setInteres={setInteres} setCapital={setCapital}/>;
     }
     case 15: {
       return <ListadoInformes />;

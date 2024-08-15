@@ -27,7 +27,7 @@ const Home = () => {
         alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
         return;
       }
-      const getAdmin = await getAdministrador(dataAdmin.idMiembro);
+      const getAdmin = await getAdministrador(dataAdmin.idMiembro); //sacar esto
       console.log(`Datos Administrativos:  ${getAdmin.socio}`);
       const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro);
       console.log(`Cooperativa admin: ${cooperativaData}`);
