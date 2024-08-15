@@ -836,6 +836,7 @@ const getUltimoReajuste = async () => {
   }
 };
 const postConvenio = async (convenio, cedulaSocio) => {
+  console.log("Cedula que mandamos", cedulaSocio);
   try {
     const response = await fetch(`${URL}/convenios/${cedulaSocio}`, {
       method: "POST",
