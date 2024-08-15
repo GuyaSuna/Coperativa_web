@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./subsidioStyle.css";
 import { useRouter } from "next/navigation";
-import { postSubsidio, getAllSocios } from "../../../Api/api";
-import { MiembroContext } from "../../../Provider/provider";
+import { postSubsidio, getAllSocios } from "../../../../Api/api";
+import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaSubsidio = () => {
   const router = useRouter();
