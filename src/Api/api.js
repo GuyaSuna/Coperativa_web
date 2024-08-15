@@ -791,6 +791,25 @@ const updateSubsidio = async (
   }
 };
 
+const deleteSubsidio = async (idSubsidio) => {
+  try {
+    const response = await fetch(`${URL}/subsidio/${idSubsidio}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado del subsidio");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteSubsidio:", error);
+    throw new Error("Error al eliminar la vivienda.");
+  }
+};
+
 //Reajuste
 const getReajuste = async (idReajuste) => {
   try {
@@ -867,4 +886,5 @@ export {
   postSubsidio,
   getAllSubsidios,
   updateSubsidio,
+  deleteSubsidio,
 };

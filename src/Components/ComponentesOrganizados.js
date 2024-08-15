@@ -31,6 +31,7 @@ const ComponentesOrganizados = ({
   const [usuario, setUsuario] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [socio, setSocio] = useState({});
+  const [subsidio, setSubsidio] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -116,10 +117,12 @@ const ComponentesOrganizados = ({
       return <AltaSubsidio />;
     }
     case 17: {
-      return;
-      <ListadoSubsidios
-        setIdentificadorComponente={setIdentificadorComponente}
-      />;
+      return (
+        <ListadoSubsidios
+          setSubsidio={setSubsidio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
     case 19: {
       return (
