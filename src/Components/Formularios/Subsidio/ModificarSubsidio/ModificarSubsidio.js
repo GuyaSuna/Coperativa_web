@@ -14,8 +14,6 @@ const ModificarSubsidio = ({ subsidioParam }) => {
   const [fechaOtorgado, setFechaOtorgado] = useState("");
   const [fechaExpira, setFechaExpira] = useState("");
 
-  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
-  const [allSocios, setAllSocios] = useState([]);
   const [errores, setErrores] = useState({});
 
   const { cooperativa } = useContext(MiembroContext);
@@ -32,20 +30,6 @@ const ModificarSubsidio = ({ subsidioParam }) => {
       setSocioSeleccionado(subsidioParam.socio);
     }
   }, [subsidioParam]);
-
-  useEffect(() => {
-    const fetchSocios = async () => {
-      try {
-        const sociosResponse = await getAll;
-        setAllSocios(sociosResponse);
-        console.log(sociosResponse, "estan los socios");
-      } catch (error) {
-        console.error("Error al obtener socios:", error);
-      }
-    };
-
-    fetchSocios();
-  }, []);
 
   const validarFormulario = () => {
     const errores = {};
@@ -74,7 +58,6 @@ const ModificarSubsidio = ({ subsidioParam }) => {
 
     try {
       const subsidioActualizado = {
-        id: subsidioParam.id, // Asegúrate de incluir el ID del subsidio si es necesario
         cuotaTotalUr,
         cuotaApagarUr,
         subsidioUr,
@@ -192,27 +175,6 @@ const ModificarSubsidio = ({ subsidioParam }) => {
           )}
         </label>
         <br />
-        <label className="label">
-          Socio:
-          <select
-            name="socioSeleccionado"
-            value={socioSeleccionado ? socioSeleccionado.id : ""}
-            onChange={(e) =>
-              setSocioSeleccionado(
-                allSocios.find((socio) => socio.id === e.target.value)
-              )
-            }
-            className="input"
-          >
-            <option value="">Selecciona un socio</option>
-            {allSocios.map((socio) => (
-              <option key={socio.id} value={socio.id}>
-                {socio.nombreSocio}
-              </option>
-            ))}
-          </select>
-          {errores.socio && <span className="error">{errores.socio}</span>}
-        </label>
 
         <button type="submit" className="button">
           Modificar
