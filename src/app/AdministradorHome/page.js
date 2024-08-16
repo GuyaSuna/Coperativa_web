@@ -156,6 +156,18 @@ const AdminHome = () => {
                     >
                       Calculos
                     </button>
+                    <button
+                      onClick={() => {
+                        handleSelection(17);
+                      }}
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                        selectedOption === 17
+                          ? "border-b-2 border-blue-500 text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Subsidios
+                    </button>
                   </div>
                 </div>
                 <ComponentesOrganizados
