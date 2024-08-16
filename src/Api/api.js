@@ -751,6 +751,7 @@ const getAllSubsidios = async () => {
 };
 
 const updateSubsidio = async (
+  idSubsidio,
   cuotaTotalUr,
   cuotaApagarUr,
   subsidioUr,
@@ -767,6 +768,7 @@ const updateSubsidio = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        idSubsidio,
         cuotaTotalUr,
         cuotaApagarUr,
         subsidioUr,

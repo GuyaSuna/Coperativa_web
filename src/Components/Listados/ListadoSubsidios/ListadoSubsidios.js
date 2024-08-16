@@ -134,7 +134,8 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
               {allSubsidios?.map((subsidio) => (
                 <tr key={subsidio.idSubsidio}>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.socio.nombreSocio} {subsidio.socio.apellidoSocio}
+                    {subsidio.socio?.nombreSocio}{" "}
+                    {subsidio.socio?.apellidoSocio}
                   </td>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                     {subsidio.cuotaTotalUr}

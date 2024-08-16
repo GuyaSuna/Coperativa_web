@@ -2,10 +2,15 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
-import { getAllSubsidios, updateSubsidio } from "../../../../Api/api";
+import {
+  deleteSubsidio,
+  getAllSubsidios,
+  updateSubsidio,
+} from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
-const ModificarSubsidio = ({ subsidioParam }) => {
+const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
+  const [idSubsidio, setIdSubsidio] = useState(0);
   const [cuotaTotalUr, setCuotaTotalUr] = useState(0);
   const [cuotaApagarUr, setCuotaApagarUr] = useState(0);
   const [subsidioUr, setSubsidioUr] = useState(0);
@@ -20,6 +25,7 @@ const ModificarSubsidio = ({ subsidioParam }) => {
 
   useEffect(() => {
     if (subsidioParam) {
+      setIdSubsidio(subsidioParam.idSubsidio);
       setCuotaTotalUr(subsidioParam.cuotaTotalUr);
       setCuotaApagarUr(subsidioParam.cuotaApagarUr);
       setSubsidioUr(subsidioParam.subsidioUr);
@@ -27,7 +33,6 @@ const ModificarSubsidio = ({ subsidioParam }) => {
       setVigenciaEnMeses(subsidioParam.vigenciaEnMeses);
       setFechaOtorgado(subsidioParam.fechaOtorgado);
       setFechaExpira(subsidioParam.fechaExpira);
-      setSocioSeleccionado(subsidioParam.socio);
     }
   }, [subsidioParam]);
 
@@ -46,7 +51,6 @@ const ModificarSubsidio = ({ subsidioParam }) => {
       errores.fechaOtorgado = "La fecha otorgada es obligatoria";
     if (!fechaExpira)
       errores.fechaExpira = "La fecha de expiración es obligatoria";
-    if (!socioSeleccionado) errores.socio = "El socio es obligatorio";
 
     setErrores(errores);
     return Object.keys(errores).length === 0;
@@ -58,6 +62,7 @@ const ModificarSubsidio = ({ subsidioParam }) => {
 
     try {
       const subsidioActualizado = {
+        idSubsidio,
         cuotaTotalUr,
         cuotaApagarUr,
         subsidioUr,
@@ -65,15 +70,42 @@ const ModificarSubsidio = ({ subsidioParam }) => {
         vigenciaEnMeses,
         fechaOtorgado,
         fechaExpira,
-        socio: socioSeleccionado,
+        socio: subsidioParam.socio,
       };
+      console.log("Datos enviados:", subsidioActualizado);
 
-      await updateSubsidio(subsidioActualizado);
+      const subsidioNuevo = await updateSubsidio(
+        idSubsidio,
+        cuotaTotalUr,
+        cuotaApagarUr,
+        subsidioUr,
+        porcentaje,
+        vigenciaEnMeses,
+        fechaOtorgado,
+        fechaExpira,
+        subsidioParam.socio
+      );
+      setIdentificadorComponente(17);
     } catch (error) {
       console.error("Error al actualizar subsidio:", error);
     }
   };
-
+  const handleDelete = async () => {
+    const confirmDelete = confirm(
+      "¿Estás seguro de que quieres eliminar este Subsidio?"
+    );
+    if (confirmDelete) {
+      try {
+        await deleteSubsidio(subsidioParam.idSubsidio);
+        alert("Subsidio eliminado con éxito");
+        setIdentificadorComponente(17);
+      } catch (error) {
+        console.error(
+          `An error has occurred in deleteSubsidio: ${error.message}`
+        );
+      }
+    }
+  };
   return (
     <div className="general-container">
       <form onSubmit={handleSubmit} className="form">
@@ -178,6 +210,9 @@ const ModificarSubsidio = ({ subsidioParam }) => {
 
         <button type="submit" className="button">
           Modificar
+        </button>
+        <button type="button" onClick={handleDelete} className="button">
+          Borrar
         </button>
       </form>
     </div>
