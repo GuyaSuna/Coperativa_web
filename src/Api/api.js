@@ -753,6 +753,102 @@ const getUltimoReajuste = async () => {
   }
 };
 
+const postIngreso = async (ingreso) =>{
+  try {
+    console.log(ingreso);
+    const response = await fetch(`${URL}/ingresos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ingreso),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postIngreso:", error);
+    throw new Error("Error al enviar los datos del aviso");
+  }
+}
+
+const postEgreso = async (egreso) =>{
+  try {
+    console.log(egreso);
+    const response = await fetch(`${URL}/egresos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(egreso),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postIngreso:", error);
+    throw new Error("Error al enviar los datos del aviso");
+  }
+}
+
+const updateIngreso = async (subRubro, denominacion, ingreso) => {
+  try {
+    const response = await fetch(`${URL}/ingresos`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subRubro,
+        denominacion,
+        ingreso,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error al actualizar el ingreso");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateIngreso:", error);
+    throw error;
+  }
+};
+const updateEgreso = async (subRubro, denominacion, egreso) => {
+  try {
+    const response = await fetch(`${URL}/egresos`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subRubro,
+        denominacion,
+        egreso,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error al actualizar el egreso");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateEgreso:", error);
+    throw error;
+  }
+};
 
 
 export {
@@ -783,4 +879,8 @@ export {
   getAdministrador,
   getReajuste,
   getUltimoReajuste,
+  postIngreso,
+  postEgreso,
+  updateIngreso,
+  updateEgreso,
 };
