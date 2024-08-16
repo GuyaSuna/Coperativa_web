@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import { getAllSocios, postConvenio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
-const AltaConvenio = ({ setIdentificadorComponente }) => {
+const AltaConvenio = () => {
   const { cooperativa } = useContext(MiembroContext);
-  const [deudaSocio, setDeudaSocio] = useState("");
-  const [valorConvenio, setValorConvenio] = useState("");
-  const [cantidadCuotas, setCantidadCuotas] = useState("");
+  const router = useRouter();
+  const [deudaUrOriginal, setdeudaUrOriginal] = useState("");
+  const [urPorMes, seturPorMes] = useState("");
   const [fechaInicioConvenio, setFechaInicioConvenio] = useState("");
-  const [fechaFinConvenio, setFechaFinConvenio] = useState("");
-  const [socioSeleccionado, setSocioSeleccionado] = useState("");
+  const [socioSeleccionado, setsocioSeleccionado] = useState("");
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
   const [errores, setErrores] = useState({});
 
@@ -31,42 +30,24 @@ const AltaConvenio = ({ setIdentificadorComponente }) => {
     }
   };
 
-  const handleChangeDeudaSocio = (e) => setDeudaSocio(e.target.value);
-  const handleChangeValorConvenio = (e) => setValorConvenio(e.target.value);
-  const handleChangeCantidadCuotas = (e) => setCantidadCuotas(e.target.value);
+  const handleChangedeudaUrOriginal = (e) => setdeudaUrOriginal(e.target.value);
+  const handleChangeurPorMes = (e) => seturPorMes(e.target.value);
   const handleChangeFechaInicio = (e) => setFechaInicioConvenio(e.target.value);
-  const handleChangeFechaFin = (e) => setFechaFinConvenio(e.target.value);
-  const handleChangeSocioSeleccionado = (e) => {
-    const selectedCedula = e.target.value;
-    console.log(selectedCedula, "cedula seleccionada handle");
-    const selectedSocio = sociosDisponibles.find(
-      (socio) => socio.cedulaSocio == selectedCedula
-    );
-    setSocioSeleccionado(selectedSocio);
-    console.log(selectedSocio, "socio seleccionado");
-  };
+  const handleChangesocioSeleccionado = (e) =>
+    setsocioSeleccionado(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!deudaSocio)
-      errores.deudaSocio = "La deuda del convenio es obligatoria";
-    if (!valorConvenio)
-      errores.valorConvenio = "El valor del convenio es obligatorio";
-    if (!cantidadCuotas)
-      errores.cantidadCuotas = "La cantidad de cuotas es obligatoria";
+    if (!deudaUrOriginal)
+      errores.deudaUrOriginal = "La deuda del convenio es obligatoria";
+    if (!urPorMes) errores.urPorMes = "El valor del convenio es obligatorio";
     if (!fechaInicioConvenio) {
       errores.fechaInicioConvenio = "La fecha de inicio es obligatoria";
     } else if (fechaInicioConvenio > fechaHoy) {
       errores.fechaOtorgado =
         "La fecha de inicio no puede ser mayor a la fecha actual";
-    }
-
-    if (!fechaFinConvenio) {
-      errores.fechaFinConvenio = "La fecha de finalizacion es obligatoria";
-    } else if (fechaFinConvenio < fechaHoy) {
-      ("La fecha de fin no puede ser menor a las fecha actual.");
     }
     if (!socioSeleccionado)
       errores.socioSeleccionado = "Debe seleccionar un socio";
@@ -80,21 +61,19 @@ const AltaConvenio = ({ setIdentificadorComponente }) => {
     if (!validarFormulario()) return;
 
     const ConvenioData = {
-      deudaSocio: deudaSocio,
-      valorConvenio: valorConvenio,
-      cantidadCuotas: cantidadCuotas,
+      deudaUrOriginal: deudaUrOriginal,
+      urPorMes: urPorMes,
       fechaInicioConvenio: fechaInicioConvenio,
-      fechaFinConvenio: fechaFinConvenio,
     };
 
     try {
       const response = await postConvenio(
         ConvenioData,
-        socioSeleccionado.cedulaSocio
+        socioSeleccionado,
+        cooperativa.idCooperativa
       );
       console.log(response);
       alert("Dado de alta correctamente");
-      setIdentificadorComponente(0);
     } catch (error) {
       console.error("Error al enviar los datos del convenio:", error);
     }
@@ -105,59 +84,43 @@ const AltaConvenio = ({ setIdentificadorComponente }) => {
         className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
         onSubmit={handleSubmit}
       >
-        <div className="relative z-0 w-full mb-5 group">
-          <input
-            type="text"
-            name="deudaSocio"
-            id="deudaSocio"
-            value={deudaSocio}
-            onChange={handleChangeDeudaSocio}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-            required
-          />
-          <label
-            htmlFor="floating_email"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Deuda Socio
-          </label>
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-          <input
-            type="text"
-            name="valorConvenio"
-            id="valorConvenio"
-            value={valorConvenio}
-            onChange={handleChangeValorConvenio}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-            required
-          />
-          <label
-            htmlFor="floating_password"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Valor Convenio
-          </label>
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-          <input
-            type="text"
-            name="cantidadCuotas"
-            id="cantidadCuotas"
-            value={cantidadCuotas}
-            onChange={handleChangeCantidadCuotas}
-            className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
-            required
-          />
-          <label
-            htmlFor="floating_repeat_password"
-            className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-          >
-            Cantidad De Cuotas
-          </label>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="relative z-0 w-full mb-5 group">
+            <label
+              htmlFor="floating_email"
+              className="block text-sm font-medium mb-2"
+            >
+              Deuda general Ur
+            </label>
+            <input
+              type="text"
+              name="deudaUrOriginal"
+              id="deudaUrOriginal"
+              value={deudaUrOriginal}
+              onChange={handleChangedeudaUrOriginal}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              placeholder=" "
+              required
+            />
+          </div>
+          <div className="relative z-0 w-full mb-5 group">
+            <label
+              htmlFor="floating_password"
+              className="block text-sm font-medium mb-2"
+            >
+              UR por mes convenidas
+            </label>
+            <input
+              type="text"
+              name="urPorMes"
+              id="urPorMes"
+              value={urPorMes}
+              onChange={handleChangeurPorMes}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              placeholder=" "
+              required
+            />
+          </div>
         </div>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-5 group">
@@ -183,40 +146,17 @@ const AltaConvenio = ({ setIdentificadorComponente }) => {
           </div>
           <div className="relative z-0 w-full mb-5 group">
             <label
+              htmlFor="seleccionSocio"
               className="block text-sm font-medium mb-2"
-              htmlFor="fechaFin"
             >
-              Fecha de Finalizacion
-            </label>
-            <input
-              type="date"
-              id="fechaDeFin"
-              name="fechaDeFin"
-              value={fechaFinConvenio}
-              onChange={handleChangeFechaFin}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {errores.fechaFinConvenio && (
-              <span className="text-red-500 text-sm">
-                {errores.fechaFinConvenio}
-              </span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <label
-              for="countries"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-            >
-              Select un socio
+              Seleccionar un socio
             </label>
             <select
               id="seleccionSocio"
               name="seleccionSocio"
               value={socioSeleccionado}
-              onChange={handleChangeSocioSeleccionado}
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              onChange={handleChangesocioSeleccionado}
+              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             >
               <option value="">Seleccione un socio </option>
               {sociosDisponibles.map((socio) => (
@@ -231,7 +171,6 @@ const AltaConvenio = ({ setIdentificadorComponente }) => {
               </span>
             )}
           </div>
-          <div className="relative z-0 w-full mb-5 group"></div>
         </div>
         <button
           type="submit"

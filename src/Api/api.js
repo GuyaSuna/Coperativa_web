@@ -856,16 +856,19 @@ const getUltimoReajuste = async () => {
     throw new Error("Error al obtener los datos de el ultimo reajuste");
   }
 };
-const postConvenio = async (convenio, cedulaSocio) => {
+const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
   console.log("Cedula que mandamos", cedulaSocio);
   try {
-    const response = await fetch(`${URL}/convenios/${cedulaSocio}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(convenio),
-    });
+    const response = await fetch(
+      `${URL}/convenios/${cedulaSocio}/${idCooperativa}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(convenio),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -879,6 +882,227 @@ const postConvenio = async (convenio, cedulaSocio) => {
     throw new Error("Error al enviar los datos de el convenio");
   }
 };
+const postIngreso = async (ingreso) => {
+  try {
+    console.log(ingreso);
+    const response = await fetch(`${URL}/ingresos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ingreso),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postIngreso:", error);
+    throw new Error("Error al enviar los datos del aviso");
+  }
+};
+
+const deleteIngreso = async (idIngreso) => {
+  try {
+    const response = await fetch(`${URL}/ingresos/${idIngreso}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado del Igreso");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteSubsidio:", error);
+    throw new Error("Error al eliminar el ingreso.");
+  }
+};
+
+const updateIngreso = async (subRubro, denominacion, ingreso) => {
+  try {
+    const response = await fetch(`${URL}/ingresos`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subRubro,
+        denominacion,
+        ingreso,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error al actualizar el ingreso");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateIngreso:", error);
+    throw error;
+  }
+};
+
+const getAllIngresos = async () => {
+  try {
+    const response = await fetch(`${URL}/ingresos/allIngresos`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSubsidios:", error);
+    throw new Error("Error al obtener los datos de los subsidios.");
+  }
+};
+const deleteConvenio = async (idConvenio) => {
+  try {
+    const response = await fetch(`${URL}/convenios/${idConvenio}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado del Convenio");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteConvenio:", error);
+    throw new Error("Error al eliminar el convenio.");
+  }
+};
+
+const updateConvenio = async (subRubro, denominacion, ingreso) => {
+  try {
+    const response = await fetch(`${URL}/convenios`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subRubro,
+        denominacion,
+        ingreso,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error al actualizar el ingreso");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateIngreso:", error);
+    throw error;
+  }
+};
+
+const getAllConvenios = async (idCooperativa) => {
+  try {
+    const response = await fetch(
+      `${URL}/convenios/allConvenios/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllConvenios:", error);
+    throw new Error("Error al obtener los datos de los Convenios.");
+  }
+};
+
+const postEgreso = async (egreso) => {
+  try {
+    console.log(egreso);
+    const response = await fetch(`${URL}/egresos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(egreso),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postIngreso:", error);
+    throw new Error("Error al enviar los datos del aviso");
+  }
+};
+
+const deleteEgreso = async (idEgreso) => {
+  try {
+    const response = await fetch(`${URL}/egresos/${idEgreso}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado del Egreso");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteSubsidio:", error);
+    throw new Error("Error al eliminar el Egreso.");
+  }
+};
+const updateEgreso = async (subRubro, denominacion, egreso) => {
+  try {
+    const response = await fetch(`${URL}/egresos`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        subRubro,
+        denominacion,
+        egreso,
+      }),
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error("Error al actualizar el egreso");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en updateEgreso:", error);
+    throw error;
+  }
+};
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -916,4 +1140,5 @@ export {
   getAllSubsidios,
   updateSubsidio,
   deleteSubsidio,
+  getAllConvenios,
 };

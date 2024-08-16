@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect , useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./FormStyle.css";
 import {
   postSocio,
@@ -9,8 +9,8 @@ import {
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
-const AltaSocio = ({setIdentificadorComponente}) => {
-  const {cooperativa} = useContext(MiembroContext)
+const AltaSocio = ({ setIdentificadorComponente }) => {
+  const { cooperativa } = useContext(MiembroContext);
   const [CedulaSocio, setCedulaSocio] = useState();
   const [NroSocio, setNroSocio] = useState();
   const [NombreSocio, setNombreSocio] = useState("");
@@ -26,7 +26,7 @@ const AltaSocio = ({setIdentificadorComponente}) => {
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
-
+  console.log("Vivienda seleccionada", SeleccionVivienda);
   useEffect(() => {
     fetchViviendasDisponibles();
   }, []);
@@ -102,20 +102,19 @@ const AltaSocio = ({setIdentificadorComponente}) => {
 
   const validarFormulario = () => {
     const errores = {};
-  
+
     if (!CedulaSocio) {
       errores.cedulaSocio = "La cédula es obligatoria";
     } else if (isNaN(CedulaSocio)) {
       errores.cedulaSocio = "La cédula debe ser un número";
     }
-  
+
     if (!NroSocio) {
       errores.nroSocio = "El número de socio es obligatorio";
     } else if (isNaN(NroSocio)) {
       errores.nroSocio = "El número de socio debe ser un número";
-    }
-    else if (NroSocio < 1){
-      errores.nroSocio = "El numero de socio debe ser mayor a 0"
+    } else if (NroSocio < 1) {
+      errores.nroSocio = "El numero de socio debe ser mayor a 0";
     }
 
     if (!NombreSocio) {
@@ -123,67 +122,69 @@ const AltaSocio = ({setIdentificadorComponente}) => {
     } else if (/[^a-zA-Z\s]/.test(NombreSocio)) {
       errores.nombreSocio = "El nombre solo debe contener letras";
     }
-  
+
     if (!ApellidoSocio) {
       errores.apellidoSocio = "El apellido es obligatorio";
     } else if (/[^a-zA-Z\s]/.test(ApellidoSocio)) {
       errores.apellidoSocio = "El apellido solo debe contener letras";
     }
-  
+
     if (!TelefonoSocio) {
       errores.telefonoSocio = "El teléfono es obligatorio";
     } else if (isNaN(TelefonoSocio)) {
       errores.telefonoSocio = "El teléfono debe ser un número";
     }
-  
+
     if (!CapitalSocio) {
       errores.capitalSocio = "El capital es obligatorio";
     } else if (isNaN(CapitalSocio)) {
       errores.capitalSocio = "El capital debe ser un número";
     }
-  
+
     if (!FechaIngreso) {
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
     }
-  
+
     if (!SeleccionVivienda) {
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
     }
-  
+
     if (TieneSuplente) {
       if (!CedulaSuplente) {
         errores.cedulaSuplente = "La cédula del suplente es obligatoria";
       } else if (isNaN(CedulaSuplente)) {
         errores.cedulaSuplente = "La cédula del suplente debe ser un número";
       }
-  
+
       if (!NombreSuplente) {
         errores.nombreSuplente = "El nombre del suplente es obligatorio";
       } else if (/[^a-zA-Z\s]/.test(NombreSuplente)) {
-        errores.nombreSuplente = "El nombre del suplente solo debe contener letras";
+        errores.nombreSuplente =
+          "El nombre del suplente solo debe contener letras";
       }
-  
+
       if (!ApellidoSuplente) {
         errores.apellidoSuplente = "El apellido del suplente es obligatorio";
       } else if (/[^a-zA-Z\s]/.test(ApellidoSuplente)) {
-        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras";
+        errores.apellidoSuplente =
+          "El apellido del suplente solo debe contener letras";
       }
-  
+
       if (!TelefonoSuplente) {
         errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
       } else if (isNaN(TelefonoSuplente)) {
-        errores.telefonoSuplente = "El teléfono del suplente debe ser un número";
+        errores.telefonoSuplente =
+          "El teléfono del suplente debe ser un número";
       }
     }
-  
+
     setErrores(errores);
-  
+
     return Object.keys(errores).length === 0;
   };
-  
 
   const handleSubmit = async (e) => {
-    console.log("ID COOPERATIVA ", cooperativa.idCooperativa)
+    console.log("ID COOPERATIVA ", cooperativa.idCooperativa);
     e.preventDefault();
     console.log(FechaIngreso);
     if (!validarFormulario()) return;
@@ -204,8 +205,11 @@ const AltaSocio = ({setIdentificadorComponente}) => {
     };
 
     try {
-      
-      const response = await postSocio(SocioData, SeleccionVivienda, cooperativa.idCooperativa);
+      const response = await postSocio(
+        SocioData,
+        SeleccionVivienda,
+        cooperativa.idCooperativa
+      );
       console.log(response);
       if (TieneSuplente === true) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
