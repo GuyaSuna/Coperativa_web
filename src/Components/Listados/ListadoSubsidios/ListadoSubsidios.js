@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSubsidios } from "../../../Api/api.js";
+import { deleteSubsidio, getAllSubsidios } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
 import VerSubsidio from "@/Components/VerDetalles/VerSubsidio/VerSubsidio.js";
@@ -33,9 +33,13 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
     console.log("Ver subsidio", subsidio);
   };
 
-  const handleEliminarSubsidio = (idSubsidio) => {
-    // Aquí podrías manejar la lógica para eliminar un subsidio
-    console.log("Eliminar subsidio", idSubsidio);
+  const handleEliminarSubsidio = async (idSubsidio) => {
+    try {
+      const data = await deleteSubsidio(idSubsidio);
+      fetchAllSubsidios();
+    } catch (e) {
+      throw ("Fallo al eliminar el subsidio", e.error);
+    }
   };
 
   const handleModificarSubsidio = (subsidio) => {
@@ -130,7 +134,8 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
               {allSubsidios?.map((subsidio) => (
                 <tr key={subsidio.idSubsidio}>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.socio.nombreSocio} {subsidio.socio.apellidoSocio}
+                    {subsidio.socio?.nombreSocio}{" "}
+                    {subsidio.socio?.apellidoSocio}
                   </td>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                     {subsidio.cuotaTotalUr}

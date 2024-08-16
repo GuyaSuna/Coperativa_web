@@ -751,6 +751,7 @@ const getAllSubsidios = async () => {
 };
 
 const updateSubsidio = async (
+  idSubsidio,
   cuotaTotalUr,
   cuotaApagarUr,
   subsidioUr,
@@ -767,6 +768,7 @@ const updateSubsidio = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        idSubsidio,
         cuotaTotalUr,
         cuotaApagarUr,
         subsidioUr,
@@ -788,6 +790,25 @@ const updateSubsidio = async (
   } catch (error) {
     console.error("Error en updateSubsidio:", error);
     throw error;
+  }
+};
+
+const deleteSubsidio = async (idSubsidio) => {
+  try {
+    const response = await fetch(`${URL}/subsidio/${idSubsidio}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado del subsidio");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteSubsidio:", error);
+    throw new Error("Error al eliminar la vivienda.");
   }
 };
 
@@ -887,7 +908,12 @@ export {
   getReajuste,
   getUltimoReajuste,
   postConvenio,
+  postIngreso,
+  postEgreso,
+  updateIngreso,
+  updateEgreso,
   postSubsidio,
   getAllSubsidios,
   updateSubsidio,
+  deleteSubsidio,
 };

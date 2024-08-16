@@ -83,6 +83,12 @@ const AltaSubsidio = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const confirmacion = window.confirm(
+      `¿Está seguro de que quiere seleccionar al socio ${socioSeleccionado.nombreSocio} ${socioSeleccionado.apellidoSocio}?`
+    );
+    if (!confirmacion) return;
+
     if (!validarFormulario()) return;
 
     const subsidioEntity = {

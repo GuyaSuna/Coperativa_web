@@ -12,14 +12,12 @@ import {
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
-const AltaRecibo = ({ Socio, ur }) => {
+const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
-  const [cedulaSocio, setCedulaSocio] = useState("");
   const [nombreSocio, setNombreSocio] = useState("");
   const [apellidoSocio, setApellidoSocio] = useState("");
-  const [apellidoAdministrador, setApellidoAdministrador] = useState("");
   const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
@@ -50,30 +48,49 @@ const AltaRecibo = ({ Socio, ur }) => {
     setApellidoSocio(Socio.apellidoSocio || "");
   }, [Socio]);
 
-  useEffect(() => {
-    setCedulaSocio(Socio.cedulaSocio);
-  }, []);
-
+  //Corregir fecha a mas de un mes
   useEffect(() => {
     Recargo(fechaPago, setRecargo, ur);
   }, [fechaPago]);
-  console.log("El MIEMBRO EN RECIBO", miembro);
 
   useEffect(() => {
-    if (vivienda.cantidadDormitorios === 2) {
-      setValorVivienda(reajuste.cuotaMensualDosHabitacionesEnPesos);
-    }
-    if (vivienda.cantidadDormitorios === 3) {
-      setValorVivienda(reajuste.cuotaMensualTresHabitacionesEnPesos);
-    }
+    if (vivienda.cantidadDormitorios == 2) {
+        setValorVivienda(reajuste.cuotaMensualDosHabitacionesEnPesos);
+      }
+      if (vivienda.cantidadDormitorios == 3) {
+        setValorVivienda(reajuste.cuotaMensualTresHabitacionesEnPesos);
+      }
 
-    console.log("Valor vivienda", valorVivienda);
   }, [vivienda]);
 
+  useEffect(() => {
+
+      //Resta subsidio y/o agrega convenio
+      //  let valorTotalSubsidio = viviendaPrueba.valorVivienda - subsidio
+      //  let valorTotalConvenio = viviendaPrueba.valorVivienda + convenio
+  
+      setInteres(interesParm * (valorVivienda / ur.buy))
+     
+      setCapital(capitalParm * (valorVivienda / ur.buy))
+   
+      
+      setConvenio(300);
+      setCuotaMensual(valorVivienda);
+      setSumaPesos(300);
+    console.log("Valor vivienda", valorVivienda);
+  },[valorVivienda])
+
+  useEffect(() => {
+    let cuenta = parseFloat(valorVivienda) + parseFloat(cuotaSocial);
+    setCuotaMensual(cuenta)
+  },[cuotaSocial])
+  
   const fetchCalculos = async () => {
+    setCuotaSocial(300);
     const reajusteData = await getUltimoReajuste();
     setReajuste(reajusteData);
     console.log("REAJUSTE", reajusteData);
+    
 
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
 
@@ -87,11 +104,6 @@ const AltaRecibo = ({ Socio, ur }) => {
       }
     });
 
-    setInteres(300);
-    setCuotaSocial(300);
-    setConvenio(300);
-    setCuotaMensual(300);
-    setSumaPesos(300);
   };
 
   const handleChangefechaRecibo = (e) => {
@@ -354,7 +366,7 @@ const AltaRecibo = ({ Socio, ur }) => {
             type="text"
             id="capital"
             name="capital"
-            value={Socio.capitalSocio}
+            value={capital}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.Capital && (
@@ -387,7 +399,7 @@ const AltaRecibo = ({ Socio, ur }) => {
             cuotaSocial:
           </label>
           <input
-            type="text"
+            type="number"
             id="cuotaSocial"
             name="cuotaSocial"
             value={cuotaSocial}
@@ -407,9 +419,10 @@ const AltaRecibo = ({ Socio, ur }) => {
             cuotaMensual:
           </label>
           <input
-            type="text"
+            type="number"
             id="cuotaMensual"
             name="cuotaMensual"
+            readOnly
             value={cuotaMensual}
             onChange={handleChangeCuotaMensual}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
