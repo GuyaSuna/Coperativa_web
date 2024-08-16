@@ -1,24 +1,24 @@
 "use client";
 
 import React, { useState } from "react";
-import { postIngreso} from "../../../../Api/api.js";
+import { postEgreso } from "../../../../Api/api.js";
 
-const Ingreso = () => {
+const AltaEgreso = () => {
   const [subRubro, setSubRubro] = useState("");
   const [denominacion, setDenominacion] = useState("");
-  const [ingreso, setIngreso] = useState("");
+  const [egreso, setEgreso] = useState("");
   const [errores, setErrores] = useState({});
 
   const handleChangeSubRubro = (e) => setSubRubro(e.target.value);
   const handleChangeDenominacion = (e) => setDenominacion(e.target.value);
-  const handleChangeIngreso = (e) => setIngreso(e.target.value);
+  const handleChangeEgreso = (e) => setEgreso(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
 
     if (!subRubro) errores.subRubro = "El subrubro es obligatorio";
     if (!denominacion) errores.denominacion = "La denominación es obligatoria";
-    if (!ingreso) errores.ingreso = "El ingreso es obligatorio";
+    if (!egreso) errores.egreso = "El egreso es obligatorio";
 
     setErrores(errores);
 
@@ -29,17 +29,17 @@ const Ingreso = () => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
-    const ingresoData = {
+    const egresoData = {
       subRubro,
       denominacion,
-      ingreso,
+      egreso,
     };
 
     try {
-      const response = await postIngreso(ingresoData);
-      console.log("Ingreso registrado:", response);
+      const response = await postEgreso(egresoData);
+      console.log("Egreso registrado:", response);
     } catch (error) {
-      console.error("Error al registrar el ingreso:", error);
+      console.error("Error al registrar el egreso:", error);
     }
   };
 
@@ -85,18 +85,18 @@ const Ingreso = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="ingreso">
-            Ingreso:
+          <label className="block text-sm font-medium mb-2" htmlFor="egreso">
+            Egreso:
           </label>
           <input
             type="text"
-            id="ingreso"
-            value={ingreso}
-            onChange={handleChangeIngreso}
+            id="egreso"
+            value={egreso}
+            onChange={handleChangeEgreso}
             className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
           />
-          {errores.ingreso && (
-            <span className="text-red-500 text-sm">{errores.ingreso}</span>
+          {errores.egreso && (
+            <span className="text-red-500 text-sm">{errores.egreso}</span>
           )}
         </div>
 
@@ -104,11 +104,11 @@ const Ingreso = () => {
           type="submit"
           className="w-full py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
         >
-          Registrar Ingreso
+          Registrar Egreso
         </button>
       </form>
     </div>
   );
 };
 
-export default Ingreso;
+export default AltaEgreso;

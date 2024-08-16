@@ -1,24 +1,26 @@
 "use client";
 
-import React, { useState } from "react";
-import { postEgreso } from "../../../../Api/api.js";
-
-const Egreso = () => {
+import React, { useState , useContext } from "react";
+import { postIngreso} from "../../../../Api/api.js";
+import { MiembroContext } from "@/Provider/provider.js";
+const AltaIngreso = () => {
   const [subRubro, setSubRubro] = useState("");
   const [denominacion, setDenominacion] = useState("");
-  const [egreso, setEgreso] = useState("");
+  const [ingreso, setIngreso] = useState("");
   const [errores, setErrores] = useState({});
+
+  const {cooperativa} = useContext(MiembroContext);
 
   const handleChangeSubRubro = (e) => setSubRubro(e.target.value);
   const handleChangeDenominacion = (e) => setDenominacion(e.target.value);
-  const handleChangeEgreso = (e) => setEgreso(e.target.value);
+  const handleChangeIngreso = (e) => setIngreso(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
 
     if (!subRubro) errores.subRubro = "El subrubro es obligatorio";
     if (!denominacion) errores.denominacion = "La denominación es obligatoria";
-    if (!egreso) errores.egreso = "El egreso es obligatorio";
+    if (!ingreso) errores.ingreso = "El ingreso es obligatorio";
 
     setErrores(errores);
 
@@ -29,17 +31,18 @@ const Egreso = () => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
-    const egresoData = {
+    const ingresoData = {
       subRubro,
       denominacion,
-      egreso,
+      ingreso,
+      cooperativaEntity : cooperativa,
     };
 
     try {
-      const response = await postEgreso(egresoData);
-      console.log("Egreso registrado:", response);
+      const response = await postIngreso(ingresoData);
+      console.log("Ingreso registrado:", response);
     } catch (error) {
-      console.error("Error al registrar el egreso:", error);
+      console.error("Error al registrar el ingreso:", error);
     }
   };
 
@@ -85,18 +88,18 @@ const Egreso = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="egreso">
-            Egreso:
+          <label className="block text-sm font-medium mb-2" htmlFor="ingreso">
+            Ingreso:
           </label>
           <input
             type="text"
-            id="egreso"
-            value={egreso}
-            onChange={handleChangeEgreso}
+            id="ingreso"
+            value={ingreso}
+            onChange={handleChangeIngreso}
             className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
           />
-          {errores.egreso && (
-            <span className="text-red-500 text-sm">{errores.egreso}</span>
+          {errores.ingreso && (
+            <span className="text-red-500 text-sm">{errores.ingreso}</span>
           )}
         </div>
 
@@ -104,11 +107,11 @@ const Egreso = () => {
           type="submit"
           className="w-full py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
         >
-          Registrar Egreso
+          Registrar Ingreso
         </button>
       </form>
     </div>
   );
 };
 
-export default Egreso;
+export default AltaIngreso;
