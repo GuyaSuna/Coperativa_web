@@ -15,8 +15,7 @@ import ListadoUsuario from "./Listados/ListadoUsuarios/listadoUsuario";
 import AltaUsuario from "./Formularios/Usuarios/AltaUsuarios/altaUsuarios";
 import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
 import MuestraCalculos from "./Formularios/FormularioInteresCapital/MuestraCalculo";
-import VerVivienda from "./VerDetalles/VerVivienda/VerVivienda";
-import VerSuplente from "./VerDetalles/VerSuplente/VerSuplente";
+
 
 const ComponentesOrganizados = ({
   identificador,
