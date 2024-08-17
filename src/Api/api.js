@@ -1141,4 +1141,6 @@ export {
   updateSubsidio,
   deleteSubsidio,
   getAllConvenios,
+  deleteConvenio,
+  updateConvenio,
 };

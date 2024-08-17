@@ -8,7 +8,7 @@ import { MiembroContext } from "@/Provider/provider";
 const AltaConvenio = () => {
   const { cooperativa } = useContext(MiembroContext);
   const router = useRouter();
-  const [deudaUrOriginal, setdeudaUrOriginal] = useState("");
+  const [deudaEnUrOriginal, setdeudaEnUrOriginal] = useState("");
   const [urPorMes, seturPorMes] = useState("");
   const [fechaInicioConvenio, setFechaInicioConvenio] = useState("");
   const [socioSeleccionado, setsocioSeleccionado] = useState("");
@@ -30,7 +30,8 @@ const AltaConvenio = () => {
     }
   };
 
-  const handleChangedeudaUrOriginal = (e) => setdeudaUrOriginal(e.target.value);
+  const handleChangedeudaEnUrOriginal = (e) =>
+    setdeudaEnUrOriginal(e.target.value);
   const handleChangeurPorMes = (e) => seturPorMes(e.target.value);
   const handleChangeFechaInicio = (e) => setFechaInicioConvenio(e.target.value);
   const handleChangesocioSeleccionado = (e) =>
@@ -40,8 +41,8 @@ const AltaConvenio = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!deudaUrOriginal)
-      errores.deudaUrOriginal = "La deuda del convenio es obligatoria";
+    if (!deudaEnUrOriginal)
+      errores.deudaEnUrOriginal = "La deuda del convenio es obligatoria";
     if (!urPorMes) errores.urPorMes = "El valor del convenio es obligatorio";
     if (!fechaInicioConvenio) {
       errores.fechaInicioConvenio = "La fecha de inicio es obligatoria";
@@ -61,7 +62,7 @@ const AltaConvenio = () => {
     if (!validarFormulario()) return;
 
     const ConvenioData = {
-      deudaUrOriginal: deudaUrOriginal,
+      deudaEnUrOriginal: deudaEnUrOriginal,
       urPorMes: urPorMes,
       fechaInicioConvenio: fechaInicioConvenio,
     };
@@ -96,8 +97,8 @@ const AltaConvenio = () => {
               type="text"
               name="deudaUrOriginal"
               id="deudaUrOriginal"
-              value={deudaUrOriginal}
-              onChange={handleChangedeudaUrOriginal}
+              value={deudaEnUrOriginal}
+              onChange={handleChangedeudaEnUrOriginal}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               placeholder=" "
               required

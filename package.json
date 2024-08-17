@@ -9,8 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.x.x",
+    "@emotion/styled": "^11.x.x",
     "@headlessui/react": "^2.1.2",
     "@heroicons/react": "^2.1.5",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.x.x",
+    "coperativa_web": "file:",
     "date-fns": "^3.6.0",
     "file-saver": "^2.0.5",
     "flowbite": "^2.5.1",
