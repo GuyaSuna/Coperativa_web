@@ -812,6 +812,28 @@ const deleteSubsidio = async (idSubsidio) => {
   }
 };
 
+const getUltimoSubsidioSocio = async (cedulaSocio) => {
+  try {
+    const response = await fetch(`${URL}/subsidio/socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get Ultimo subsidio por socio:", error);
+    throw new Error("Error al obtener los datos de los Subsidio por socio");
+  }
+};
+
 //Reajuste
 const getReajuste = async (idReajuste) => {
   try {
@@ -1162,11 +1184,11 @@ export {
   getAllSubsidios,
   updateSubsidio,
   deleteSubsidio,
+  getUltimoSubsidioSocio,
   deleteEgreso,
   deleteIngreso,
   getAllIngresos,
   getAllEgresos,
-
   getAllConvenios,
   deleteConvenio,
   updateConvenio,

@@ -180,7 +180,7 @@ const ComponentesOrganizados = ({
   case 26: {
       return (
         <ListadoConvenio
-          setSubsidio={setConvenio}
+          setConvenio={setConvenio}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
