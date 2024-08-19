@@ -5,10 +5,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import {
   postRecibo,
-  getSocio,
   getUltimoReajuste,
   getUr,
   getAllViviendas,
+  getUltimoConvenioSocio,
+  getUltimoSubsidioSocio
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
@@ -23,10 +24,12 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
   const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
+  const [subsidio , setSubsidio] = useState(0);
+  const [cuotaMensualBase , setCuotaMensualBase] = useState(0);
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
   const [fechaPago, setFechaPago] = useState();
-  const [reajuste, setReajuste] = useState();
+  const [reajuste, setReajuste] = useState({});
   const [valorVivienda, setValorVivienda] = useState(0);
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
@@ -42,56 +45,91 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   // }
 
   useEffect(() => {
-    fetchCalculos();
-    console.log(Socio , "SOCIO")
-    setNombreSocio(Socio.nombreSocio || "");
-    setApellidoSocio(Socio.apellidoSocio || "");
+    fetchReajusteAnual();
   }, [Socio]);
 
+  useEffect(() => {
+  fetchSubsidio();
+  fetchConvenio();
+  },[reajuste])
+
+  useEffect(() => {
+    fetchCalculos();
+    setCuotaSocial(300);
+     console.log(Socio , "SOCIO")
+    setNombreSocio(Socio.nombreSocio || "");
+    setApellidoSocio(Socio.apellidoSocio || "");
+  },[convenio])
+    
+  useEffect(() => {
+    setCuotaMensual(cuotaMensualBase + recargo);
+  },[recargo])
+   
+
+  const fetchReajusteAnual = async () =>{
+    const reajusteData = await getUltimoReajuste();
+    console.log("Reajuste Anual" , reajusteData)
+    setReajuste(reajusteData);
+  }
+
+  const fetchSubsidio = async () => {
+    const subsidioResponse = await getUltimoSubsidioSocio(Socio.cedulaSocio);
+
+    console.log(subsidioResponse);
+
+    setSubsidio(subsidioResponse.subsidioUr)
+  }
+
+  const fetchConvenio = async () => {
+    const convenioResponse = await getUltimoConvenioSocio(Socio.cedulaSocio);
+    console.log(convenioResponse);
+    setConvenio(convenioResponse.urPorMes)
+  }
   //Corregir fecha a mas de un mes
   useEffect(() => {
     Recargo(fechaPago, setRecargo, ur);
   }, [fechaPago]);
 
   useEffect(() => {
-    if (vivienda.cantidadDormitorios == 2) {
-        setValorVivienda(reajuste.cuotaMensualDosHabitacionesEnPesos);
-      }
-      if (vivienda.cantidadDormitorios == 3) {
-        setValorVivienda(reajuste.cuotaMensualTresHabitacionesEnPesos);
-      }
-
+    setValorVivienda(vivienda.valorVivienda);
   }, [vivienda]);
 
   useEffect(() => {
 
-      //Resta subsidio y/o agrega convenio
-      //  let valorTotalSubsidio = viviendaPrueba.valorVivienda - subsidio
-      //  let valorTotalConvenio = viviendaPrueba.valorVivienda + convenio
-  
-      setInteres(interesParm * (valorVivienda / ur.buy))
-     
-      setCapital(capitalParm * (valorVivienda / ur.buy))
-   
-      
-      setConvenio(300);
-      setCuotaMensual(valorVivienda);
-      setSumaPesos(300);
-    console.log("Valor vivienda", valorVivienda);
-  },[valorVivienda])
+    let valorDormitorios
+     if (vivienda.cantidadDormitorios == 2) {
+        valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
+      }
+      if (vivienda.cantidadDormitorios == 3) {
+        valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
+      }
 
-  useEffect(() => {
-    let cuenta = parseFloat(valorVivienda) + parseFloat(cuotaSocial);
+      setInteres(interesParm * (valorDormitorios / ur.buy))
+     
+      setCapital(capitalParm * (valorDormitorios / ur.buy))
+
+      let valorSubsidiadoUr;
+      let valorConConvenioUr;
+      valorSubsidiadoUr = valorVivienda - subsidio;
+      valorConConvenioUr = valorSubsidiadoUr + convenio;
+
+      console.log("Prueba muestra reajuste" , reajuste)
+      let valorCuotaTotalEnPesos =  valorConConvenioUr * reajuste.valorUr
+
+
+    console.log("Valor Total", valorCuotaTotalEnPesos);
+
+    let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
+
+    setCuotaMensualBase(cuenta)
     setCuotaMensual(cuenta)
-  },[cuotaSocial])
+
+  },[valorVivienda, reajuste])
+
   
   const fetchCalculos = async () => {
-    setCuotaSocial(300);
-    const reajusteData = await getUltimoReajuste();
-    setReajuste(reajusteData);
-    console.log("REAJUSTE", reajusteData);
     
-
+    
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
 
     viviendasData.forEach((vivienda) => {
@@ -130,7 +168,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   };
 
   const handleChangeConvenio = (e) => {
-    setConvenio(e.target.value);
+    console.log(e.target.value);
     // convenio en unidades reajustables
     // se le suma lo que deba pagar
     // es lo que le debe el socio a la cooperativa
@@ -138,12 +176,17 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const handleChangeCuotaMensual = (e) => {
     setCuotaMensual(e.target.value);
   };
+
+
   const handleChangeSumaPesos = (e) => {
     setSumaPesos(e.target.value);
   };
   const handleChangeCapital = (e) => {
     setCapital(e.target.value);
   };
+  const handleChangeSubsidio = (e) => {
+    console.log(e.target.value);
+  } 
 
   const handleChangeTieneSuplente = (e) => {
     setTieneSuplente(e.target.checked);
@@ -161,6 +204,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
     if (!cuotaMensual) errores.CuotaMensual = "La CuotaMensual es obligatorio";
     if (!sumaPesos) errores.SumaPesos = "La Suma en Pesos es obligatorio";
     if (!fechaPago) errores.fechaPago = "La fecha del pago es obligatoria";
+    if (!subsidio) errores.subsidio = "El subsidio es obligatorio";
 
     setErrores(errores);
 
@@ -382,6 +426,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             type="text"
             id="convenio"
             name="convenio"
+            readOnly
             value={convenio}
             onChange={handleChangeConvenio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
@@ -391,6 +436,23 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
           )}
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="subsidio">
+            Subsidio:
+          </label>
+          <input
+            type="text"
+            id="subsidio"
+            name="subsidio"
+            readOnly
+            value={subsidio}
+            onChange={handleChangeSubsidio}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.Subsidio && (
+            <span className="text-red-500 text-sm">{Errores.Subsidio}</span>
+          )}
+        </div>
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
