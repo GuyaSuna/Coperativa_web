@@ -29,6 +29,7 @@ const ListadoSocio = ({
 
   useEffect(() => {
     fetchAllSocios();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAllSocios = async () => {
@@ -325,6 +326,7 @@ const ListadoSocio = ({
           </thead>
           <tbody>
             {buscadorFiltrado?.map((socio) => (
+              // eslint-disable-next-line react/jsx-key
               <tr className="border-b dark:border-gray-700">
                 <th
                   scope="row"
@@ -376,7 +378,6 @@ const ListadoSocio = ({
                           </svg>
                         </MenuButton>
                       </div>
-
                       <MenuItems
                         transition
                         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
@@ -402,9 +403,7 @@ const ListadoSocio = ({
 
                           <MenuItem>
                             <a
-                              onClick={() =>
-                                handleCrearRecibo(socio)
-                              }
+                              onClick={() => handleCrearRecibo(socio)}
                               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                             >
                               Crear Recibo

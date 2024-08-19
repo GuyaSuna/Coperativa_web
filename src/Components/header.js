@@ -45,8 +45,6 @@ const Header = ({ setIdentificadorComponente }) => {
           width={65}
           height={65}
         />
-      </div>
-      <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
         <button
           className="lg:hidden text-white focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -147,7 +145,10 @@ const Header = ({ setIdentificadorComponente }) => {
             </button>
           </div>
         </div>
+      </div>
+      <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
         <div className="hidden lg:flex space-x-4" />
+        <span className="ml-2 md:text-xs">{administrador}</span>
 
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>
@@ -160,7 +161,7 @@ const Header = ({ setIdentificadorComponente }) => {
                 />
                 <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
               </span>
-              <span className="ml-2 md:text-xs">{administrador}</span>
+
               <svg
                 viewBox="0 0 24 24"
                 className="w-4 ml-1 flex-shrink-0"
@@ -174,7 +175,6 @@ const Header = ({ setIdentificadorComponente }) => {
               </svg>
             </MenuButton>
           </div>
-
           <MenuItems
             transition
             className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
@@ -200,6 +200,7 @@ const Header = ({ setIdentificadorComponente }) => {
             </div>
           </MenuItems>
         </Menu>
+
         <ThemeToggle />
       </div>
     </header>
