@@ -856,6 +856,7 @@ const getUltimoReajuste = async () => {
     throw new Error("Error al obtener los datos de el ultimo reajuste");
   }
 };
+
 const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
   console.log("Cedula que mandamos", cedulaSocio);
   try {
@@ -882,6 +883,7 @@ const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
     throw new Error("Error al enviar los datos de el convenio");
   }
 };
+
 const postIngreso = async (ingreso) => {
   try {
     console.log(ingreso);
@@ -1123,8 +1125,6 @@ const getAllEgresos = async (idCooperativa) => {
   }
 };
 
-
-
 export {
   loginAdministrador,
   loginUsuario,
@@ -1166,7 +1166,6 @@ export {
   deleteIngreso,
   getAllIngresos,
   getAllEgresos,
-
   getAllConvenios,
   deleteConvenio,
   updateConvenio,
