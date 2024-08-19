@@ -904,6 +904,28 @@ const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
     throw new Error("Error al enviar los datos de el convenio");
   }
 };
+
+const getUltimoConvenioSocio = async (cedulaSocio) => {
+  try {
+    const response = await fetch(`${URL}/convenios/socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get Ultimo convenio por socio:", error);
+    throw new Error("Error al obtener los datos del ultiomo convenio por socio");
+  }
+};
 const postIngreso = async (ingreso) => {
   try {
     console.log(ingreso);
@@ -1175,7 +1197,7 @@ export {
   getAdministrador,
   getReajuste,
   getUltimoReajuste,
-  postConvenio,
+
   postIngreso,
   postEgreso,
   updateIngreso,
@@ -1188,7 +1210,9 @@ export {
   deleteEgreso,
   deleteIngreso,
   getAllIngresos,
-  getAllEgresos,
+  getAllEgresos, 
+  postConvenio,
+  getUltimoConvenioSocio,
   getAllConvenios,
   deleteConvenio,
   updateConvenio,
