@@ -1,8 +1,28 @@
 "use client";
 
-import React from "react";
+import { getUltimoSubsidioSocio } from "@/Api/api";
+import React, { useState, useEffect } from "react";
 
 const VerSocio = ({ isOpen, onClose, socio }) => {
+  const [ultimoSubsidio, setUltimoSubsidio] = useState(null);
+  const [isSuplenteExpanded, setIsSuplenteExpanded] = useState(false);
+  const [isSubsidioExpanded, setIsSubsidioExpanded] = useState(false);
+
+  useEffect(() => {
+    if (socio && socio.cedulaSocio) {
+      const fetchUltimoSubsidio = async () => {
+        try {
+          const subsidio = await getUltimoSubsidioSocio(socio.cedulaSocio);
+          setUltimoSubsidio(subsidio);
+        } catch (error) {
+          console.error("Error al obtener el último subsidio:", error);
+          setUltimoSubsidio(null);
+        }
+      };
+      fetchUltimoSubsidio();
+    }
+  }, [socio]);
+
   if (!isOpen) return null;
 
   return (
@@ -33,78 +53,144 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
             <table className="w-full text-left">
               <tbody className="text-gray-600 dark:text-gray-100">
                 <tr>
-                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Nombre:
                   </td>
-                  <td className="py-2 px-3">
+                  <td className="py-1 px-3">
                     {socio.nombreSocio} {socio.apellidoSocio}
                   </td>
                 </tr>
                 <tr>
-                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Cédula:
                   </td>
-                  <td className="py-2 px-3">{socio.cedulaSocio}</td>
+                  <td className="py-1 px-3">{socio.cedulaSocio}</td>
                 </tr>
                 <tr>
-                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Número de Socio:
                   </td>
-                  <td className="py-2 px-3">{socio.nroSocio}</td>
+                  <td className="py-1 px-3">{socio.nroSocio}</td>
                 </tr>
                 <tr>
-                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Capital:
                   </td>
-                  <td className="py-2 px-3">${socio.capitalSocio}</td>
+                  <td className="py-1 px-3">${socio.capitalSocio}</td>
                 </tr>
                 <tr>
-                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Fecha de Ingreso:
                   </td>
-                  <td className="py-2 px-3">{socio.fechaIngreso}</td>
+                  <td className="py-1 px-3">{socio.fechaIngreso}</td>
                 </tr>
                 <tr>
-                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Teléfono:
                   </td>
-                  <td className="py-2 px-3">{socio.telefono}</td>
+                  <td className="py-1 px-3">{socio.telefono}</td>
                 </tr>
-                {socio.suplenteEntity && (
+
+                {/* Sección del Suplente */}
+                <tr>
+                  <td
+                    colSpan="2"
+                    className="font-semibold text-black-900 py-4 cursor-pointer"
+                    onClick={() => setIsSuplenteExpanded(!isSuplenteExpanded)}
+                  >
+                    {isSuplenteExpanded
+                      ? "▼ Datos del Suplente"
+                      : "► Datos del Suplente"}
+                  </td>
+                </tr>
+                {isSuplenteExpanded && (
                   <>
-                    <tr>
-                      <td
-                        colSpan="2"
-                        className="font-semibold text-black-900 py-4"
-                      >
-                        Datos del Suplente
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                        Nombre:
-                      </td>
-                      <td className="py-2 px-3">
-                        {socio.suplenteEntity.nombreSuplente}{" "}
-                        {socio.suplenteEntity.apellidoSuplente}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                        Número de Cédula:
-                      </td>
-                      <td className="py-2 px-3">
-                        {socio.suplenteEntity.cedulaSuplente}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                        Teléfono:
-                      </td>
-                      <td className="py-2 px-3">
-                        {socio.suplenteEntity.telefonoSuplente}
-                      </td>
-                    </tr>
+                    {socio.suplenteEntity ? (
+                      <>
+                        <tr>
+                          <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                            Nombre:
+                          </td>
+                          <td className="py-1 px-3">
+                            {socio.suplenteEntity.nombreSuplente}{" "}
+                            {socio.suplenteEntity.apellidoSuplente}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                            Número de Cédula:
+                          </td>
+                          <td className="py-1 px-3">
+                            {socio.suplenteEntity.cedulaSuplente}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                            Teléfono:
+                          </td>
+                          <td className="py-1 px-3">
+                            {socio.suplenteEntity.telefonoSuplente}
+                          </td>
+                        </tr>
+                      </>
+                    ) : (
+                      <tr>
+                        <td colSpan="2" className="py-1 px-3 text-center">
+                          No tiene suplente.
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                )}
+
+                {/* Sección del Subsidio */}
+                <tr>
+                  <td
+                    colSpan="2"
+                    className="font-semibold text-black-900 py-4 cursor-pointer"
+                    onClick={() => setIsSubsidioExpanded(!isSubsidioExpanded)}
+                  >
+                    {isSubsidioExpanded
+                      ? "▼ Último Subsidio"
+                      : "► Último Subsidio"}
+                  </td>
+                </tr>
+                {isSubsidioExpanded && (
+                  <>
+                    {ultimoSubsidio ? (
+                      <>
+                        <tr>
+                          <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                            Fecha de Otorgado:
+                          </td>
+                          <td className="py-1 px-3">
+                            {ultimoSubsidio.fechaOtorgado}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                            Monto de Subsidio:
+                          </td>
+                          <td className="py-1 px-3">
+                            {ultimoSubsidio.subsidioUr}
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                            Vigencia en Meses:
+                          </td>
+                          <td className="py-1 px-3">
+                            {ultimoSubsidio.vigenciaEnMeses}
+                          </td>
+                        </tr>
+                      </>
+                    ) : (
+                      <tr>
+                        <td colSpan="2" className="py-1 px-3 text-center">
+                          No tiene subsidio.
+                        </td>
+                      </tr>
+                    )}
                   </>
                 )}
               </tbody>
