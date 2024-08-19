@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 
-const ExcelReader = () => {
+const ExcelReader = ({setInteresParm , setCapitalParm}) => {
   const [data, setData] = useState([]);
-  const [capital, setCapital] = useState(null);
-  const [interes, setInteres] = useState(null);
+  const [capital, setCapital] = useState(0);
+  const [interes, setInteres] = useState(0);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -33,6 +33,8 @@ const ExcelReader = () => {
       if (todayData) {
         setCapital(todayData[8]);  // Capital
         setInteres(todayData[9]);  // Interés
+        setCapitalParm(todayData[8])
+        setInteresParm(todayData[9]);
       } else {
         console.log("No se encontró una fila para el mes y año actuales.");
       }

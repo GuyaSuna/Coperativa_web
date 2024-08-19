@@ -168,6 +168,30 @@ const AdminHome = () => {
                     >
                       Subsidios
                     </button>
+                    <button
+                      onClick={() => {
+                        handleSelection(20);
+                      }}
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                        selectedOption === 20
+                          ? "border-b-2 border-blue-500 text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Ingresos
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleSelection(21);
+                      }}
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                        selectedOption === 21
+                          ? "border-b-2 border-blue-500 text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Egresos
+                    </button>
                   </div>
                 </div>
                 <ComponentesOrganizados

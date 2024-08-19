@@ -17,7 +17,15 @@ import ListadoInformes from "./Listados/ListadoInformes/ListadoInformes";
 import MuestraCalculos from "./Formularios/FormularioInteresCapital/MuestraCalculo";
 import AltaSubsidio from "./Formularios/Subsidio/AltaSubsidio/AltaSubsidio";
 import ListadoSubsidios from "./Listados/ListadoSubsidios/ListadoSubsidios";
+import AltaConvenio from "./Formularios/Convenios/AltaConvenio";
 import ModificarSubsidio from "./Formularios/Subsidio/ModificarSubsidio/ModificarSubsidio";
+import AltaIngreso from "./Formularios/Ingresos/AltaIngresos/AltaIngresos";
+import ModificarIngreso from "./Formularios/Ingresos/ModificarIngresos/ModificarIngresos";
+import AltaEgreso from "./Formularios/Egresos/AltaEgresos/AltaEgresos";
+import ModificarEgreso from "./Formularios/Egresos/ModificarEgresos/modificarEgresos";
+import ListadoIngresos from "./Listados/ListadoIngresos/listadoIngresos";
+import ListadoEgresos from "./Listados/ListadoEgresos/listadoEgresos";
+import ListadoConvenio from "./Listados/ListadoConvenio/ListadoConvenio";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -31,7 +39,13 @@ const ComponentesOrganizados = ({
   const [usuario, setUsuario] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [socio, setSocio] = useState({});
+  const [interes, setInteres] = useState();
+  const [capital, setCapital] = useState();
   const [subsidio, setSubsidio] = useState({});
+  const [ingreso , setIngreso] = useState({});
+  const [egreso , setEgreso] = useState({});
+  const [convenio, setConvenio] = useState({});
+
 
   switch (identificador) {
     case 0: {
@@ -69,7 +83,14 @@ const ComponentesOrganizados = ({
       return <ModificarVivienda nroViviendaParam={nroVivienda} />;
     }
     case 6: {
-      return <AltaRecibo Socio={socioRecibo} ur={ur} />;
+      return (
+        <AltaRecibo
+          Socio={socioRecibo}
+          ur={ur}
+          interesParm={interes}
+          capitalParm={capital}
+        />
+      );
     }
     case 7: {
       return <AltaSuplente />;
@@ -108,7 +129,9 @@ const ComponentesOrganizados = ({
       return <AltaUsuario />;
     }
     case 14: {
-      return <MuestraCalculos />;
+      return (
+        <MuestraCalculos setInteres={setInteres} setCapital={setCapital} />
+      );
     }
     case 15: {
       return <ListadoInformes />;
@@ -124,10 +147,40 @@ const ComponentesOrganizados = ({
         />
       );
     }
+    case 18: {
+      return <AltaConvenio />;
+    }
     case 19: {
       return (
         <ModificarSubsidio
           subsidioParam={subsidio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 20:{
+      return <ListadoIngresos setIdentificadorComponente={setIdentificadorComponente} setIngreso={setIngreso}/>
+    }
+    case 21:{
+      return <ListadoEgresos setIdentificadorComponente={setIdentificadorComponente} setEgreso={setEgreso}/>
+    }
+    case 22 :{
+      return <AltaIngreso setIdentificadorComponente={setIdentificadorComponente} />
+    }
+    case 23:{
+      return <ModificarIngreso ingresoData={ingreso}/>
+    }
+    case 24: {
+      return <AltaEgreso setIdentificadorComponente={setIdentificadorComponente} />
+    }
+    case 25: {
+      <ModificarEgreso egresoData={egreso}/>
+    
+  }
+  case 26: {
+      return (
+        <ListadoConvenio
+          setSubsidio={setConvenio}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
