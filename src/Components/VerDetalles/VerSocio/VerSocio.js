@@ -42,6 +42,12 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                    Cédula:
+                  </td>
+                  <td className="py-2 px-3">{socio.cedulaSocio}</td>
+                </tr>
+                <tr>
+                  <td className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
                     Número de Socio:
                   </td>
                   <td className="py-2 px-3">{socio.nroSocio}</td>
