@@ -27,17 +27,20 @@ const Home = () => {
         alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
         return;
       }
-      const getAdmin = await getAdministrador(dataAdmin.idMiembro); //sacar esto
-      console.log(`Datos Administrativos:  ${getAdmin.socio}`);
+      console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
       const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro);
       console.log(`Cooperativa admin: ${cooperativaData}`);
-      loginMiembro(getAdmin, cooperativaData);
+      ProviderData(dataAdmin,cooperativaData)
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
       alert("Ocurrió un error al intentar iniciar sesión.");
     }
   };
+
+  const ProviderData = (dataAdmin , cooperativaData) =>{
+    loginMiembro(dataAdmin, cooperativaData);
+  }
 
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();

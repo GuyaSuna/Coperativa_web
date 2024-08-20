@@ -24,7 +24,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
   const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
-  const [subsidio , setSubsidio] = useState(0);
+  const [subsidio , setSubsidio] = useState({});
   const [cuotaMensualBase , setCuotaMensualBase] = useState(0);
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
@@ -77,13 +77,13 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
 
     console.log(subsidioResponse);
 
-    setSubsidio(subsidioResponse.subsidioUr)
+    setSubsidio(subsidioResponse)
   }
 
   const fetchConvenio = async () => {
     const convenioResponse = await getUltimoConvenioSocio(Socio.cedulaSocio);
     console.log(convenioResponse);
-    setConvenio(convenioResponse.urPorMes)
+    setConvenio(convenioResponse)
   }
   //Corregir fecha a mas de un mes
   useEffect(() => {
@@ -110,8 +110,8 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
 
       let valorSubsidiadoUr;
       let valorConConvenioUr;
-      valorSubsidiadoUr = valorVivienda - subsidio;
-      valorConConvenioUr = valorSubsidiadoUr + convenio;
+      valorSubsidiadoUr = valorVivienda - subsidio.subsidioUr;
+      valorConConvenioUr = valorSubsidiadoUr + convenio.urPorMes;
 
       console.log("Prueba muestra reajuste" , reajuste)
       let valorCuotaTotalEnPesos =  valorConConvenioUr * reajuste.valorUr
@@ -212,25 +212,23 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("ENTRA")
     e.preventDefault();
-    if (!validarFormulario()) return;
-
-    const ReciboData = {
-      capital: capital,
-      convenio: convenio,
-      cuota_mensual: cuotaMensual,
-      cuota_social: cuotaSocial,
-      fecha_recibo: fechaIngreso,
-      interes: interes,
-      recargo: recargo,
-      suma_en_pesos: sumaPesos,
-    };
 
     try {
       const response = await postRecibo(
-        ReciboData,
-        Socio.cedulaSocio,
-        miembro.idMiembro
+        fechaEmision,
+        fechaPago,
+        recargo,
+        interes,
+        capital,
+        cuotaSocial,
+        convenio,
+        subsidio,
+        cuotaMensual,
+        sumaPesos,
+        Socio,
+        miembro
       );
       console.log(response);
       alert("Dado de alta correctamente");
@@ -427,7 +425,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             id="convenio"
             name="convenio"
             readOnly
-            value={convenio}
+            value={convenio.urPorMes}
             onChange={handleChangeConvenio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
@@ -445,7 +443,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             id="subsidio"
             name="subsidio"
             readOnly
-            value={subsidio}
+            value={subsidio.subsidioUr}
             onChange={handleChangeSubsidio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />

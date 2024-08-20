@@ -564,14 +564,46 @@ const getAllRecibos = async (idCooperativa) => {
   }
 };
 
-const postRecibo = async (recibo, socio, tesorero) => {
+const postRecibo = async (
+  fechaRecibo,
+  fechaPago,
+  recargo,
+  interes,
+  capital,
+  cuotaSocial,
+  convenio,
+  subsidio,
+  cuotaMensual,
+  sumaPesos,
+  socio,
+  tesorero
+) => {
+  console.log("datos del recibo en api: " + fechaRecibo, fechaPago, recargo, interes, capital, cuotaSocial, convenio, subsidio, cuotaMensual, sumaPesos, socio, tesorero);
+
   try {
-    const response = await fetch(`${URL}/recibo/${socio}/${tesorero}`, {
+    // Crear un objeto con las propiedades correctamente estructuradas
+    const reciboData = {
+      fechaRecibo,
+      fechaPago,
+      recargo,
+      interes,
+      capital,
+      cuotaSocial,
+      convenio,
+      subsidio,
+      cuotaMensual,
+      sumaPesos,
+      socio,
+      tesorero,
+    };
+
+    const response = await fetch(`${URL}/recibo`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(recibo),
+      // Convertir el objeto a JSON
+      body: JSON.stringify(reciboData),
     });
 
     if (!response.ok) {
@@ -579,10 +611,9 @@ const postRecibo = async (recibo, socio, tesorero) => {
     }
 
     const data = await response.json();
-
     return data;
   } catch (error) {
-    console.error("Error en postVivienda:", error);
+    console.error("Error en postRecibo:", error);
     throw new Error("Error al enviar los datos de el recibo");
   }
 };
