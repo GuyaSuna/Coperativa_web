@@ -20,24 +20,35 @@ const valorCuotaEnPesos = (ur) => {
 
 
 // 1/4 * UR -> pesos  = recargoPesos 
-const Recargo = (fechaPago , setRecargo , ur) => {
-    if (!fechaPago) {
+const Recargo = (fechaPago, setRecargo, ur) => {
+    if (!fechaPago || !ur) {
         return;
-      }
-      const fecha = new Date(fechaPago + 'T00:00:00');
-      const dia = fecha.getUTCDate();
-      console.log(dia)
+    }
 
-      console.log("Ur" , ur)
+    const fechaActual = new Date(); 
+    const fecha = new Date(fechaPago + 'T00:00:00'); 
 
-    if (dia < 16) {
-        setRecargo(0);
-    } else if (dia > 15 && dia <= 30) {
-        setRecargo(Math.round(ur.buy * (1 / 4)));
-    } else if (dia > 30) {
-        setRecargo(Math.round(ur.buy * (1 / 2))); 
+    const dia = fecha.getUTCDate();
+    const mesPago = fecha.getUTCMonth(); 
+    const mesActual = fechaActual.getUTCMonth(); 
+
+    console.log("Fecha de pago:", fecha);
+    console.log("Fecha actual:", fechaActual);
+    console.log("Mes de pago:", mesPago);
+    console.log("Mes actual:", mesActual);
+
+    if (mesPago < mesActual) {
+        setRecargo(Math.round(ur.buy * (1 / 2)));
+    } 
+    else if (mesPago === mesActual) {
+        if (dia <= 15) {
+            setRecargo(0);
+        } else if (dia > 15) {
+            setRecargo(Math.round(ur.buy * (1 / 4)));
+        }
     }
 }
+  
 
 
 
