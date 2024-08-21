@@ -70,6 +70,15 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
         >
           Agregar Ingreso
         </button>
+
+        <button
+          onClick={() => handleSelection(24)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 24 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          Agregar Egreso
+        </button>
       </div>
     </div>
   );

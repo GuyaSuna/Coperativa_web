@@ -1031,9 +1031,9 @@ const updateIngreso = async (subRubro, denominacion, ingreso) => {
   }
 };
 
-const getAllIngresos = async () => {
+const getAllIngresos = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/ingresos/allIngresos`, {
+    const response = await fetch(`${URL}/ingresos/allIngresos/${idCooperativa}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -1046,8 +1046,8 @@ const getAllIngresos = async () => {
 
     return data;
   } catch (error) {
-    console.error("Error en getAllSubsidios:", error);
-    throw new Error("Error al obtener los datos de los subsidios.");
+    console.error("Error en getAllIngresos:", error);
+    throw new Error("Error al obtener los datos de los Ingresos.");
   }
 };
 const deleteConvenio = async (idConvenio) => {

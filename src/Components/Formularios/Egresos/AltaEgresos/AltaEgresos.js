@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState , useContext} from "react";
 import { postEgreso } from "../../../../Api/api.js";
-
+import { MiembroContext } from "@/Provider/provider.js";
 const AltaEgreso = () => {
   const [subRubro, setSubRubro] = useState("");
   const [denominacion, setDenominacion] = useState("");
   const [egreso, setEgreso] = useState("");
   const [errores, setErrores] = useState({});
+  const [tipoMoneda, setTipoMoneda] = useState("UR");
+  const{cooperativa} = useContext(MiembroContext);
 
-  const handleChangeSubRubro = (e) => setSubRubro(e.target.value);
   const handleChangeDenominacion = (e) => setDenominacion(e.target.value);
   const handleChangeEgreso = (e) => setEgreso(e.target.value);
-
+  const handleChangeSeleccionSubRubro = (e) => setSubRubro(e.target.value);
+  const handleChangeTipoMoneda = (e) => setTipoMoneda(e.target.value);
   const validarFormulario = () => {
     const errores = {};
 
@@ -33,6 +35,8 @@ const AltaEgreso = () => {
       subRubro,
       denominacion,
       egreso,
+      tipoMoneda,
+      cooperativaEntity : cooperativa
     };
 
     try {
@@ -50,21 +54,37 @@ const AltaEgreso = () => {
         className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
       >
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="subRubro">
-            SubRubro:
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="seleccionSubVivienda"
+          >
+            Seleccione un subRubro:
           </label>
-          <input
-            type="text"
-            id="subRubro"
+          <select
+            id="seleccionSubRubro"
+            name="seleccionSubRubro"
             value={subRubro}
-            onChange={handleChangeSubRubro}
-            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
-          />
-          {errores.subRubro && (
-            <span className="text-red-500 text-sm">{errores.subRubro}</span>
+            onChange={handleChangeSeleccionSubRubro}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            <option value="">Seleccione un subRubro</option>
+            <option value="Gastos Extras en Dolares">Gastos Extras en Dolares</option>
+            <option value="Cuota Social">ANV</option>
+            <option value="F.U.C.V.A.M">F.U.C.V.A.M</option>
+            <option value="Limpieza">Limpieza</option>
+            <option value="Barraca">Barraca</option>
+            <option value="Libreria">Libreria</option>
+            <option value="Gastos Fijos">Gastos fijos</option>
+            <option value="INACOOP">INACOOP</option>
+            <option value="Tramites">Tramites</option>
+            <option value="Otros">Otros</option>
+          </select>
+          {errores.seleccionSubRubro && (
+            <span className="text-red-500 text-sm">
+              {errores.seleccionSubRubro}
+            </span>
           )}
         </div>
-
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
@@ -81,6 +101,30 @@ const AltaEgreso = () => {
           />
           {errores.denominacion && (
             <span className="text-red-500 text-sm">{errores.denominacion}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="seleccionSubVivienda"
+          >
+            Seleccione un tipo de moneda:
+          </label>
+          <select
+            id="tipoMoneda"
+            name="tipoMoneda"
+            value={tipoMoneda}
+            onChange={handleChangeTipoMoneda}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            <option value="UR">Pesos Uruguayos</option>
+            <option value="USD">Dolares</option>
+          </select>
+          {errores.tipoMoneda && (
+            <span className="text-red-500 text-sm">
+              {errores.tipoMoneda}
+            </span>
           )}
         </div>
 

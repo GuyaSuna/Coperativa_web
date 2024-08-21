@@ -8,12 +8,14 @@ const AltaIngreso = () => {
   const [denominacion, setDenominacion] = useState("");
   const [ingreso, setIngreso] = useState("");
   const [errores, setErrores] = useState({});
+  const [tipoMoneda, setTipoMoneda] = useState("UR");
 
   const {cooperativa} = useContext(MiembroContext);
 
-  const handleChangeSubRubro = (e) => setSubRubro(e.target.value);
   const handleChangeDenominacion = (e) => setDenominacion(e.target.value);
   const handleChangeIngreso = (e) => setIngreso(e.target.value);
+  const handleChangeSeleccionSubRubro = (e) => setSubRubro(e.target.value);
+  const handleChangeTipoMoneda = (e) => setTipoMoneda(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
@@ -36,6 +38,7 @@ const AltaIngreso = () => {
       denominacion,
       ingreso,
       cooperativaEntity : cooperativa,
+      tipoMoneda
     };
 
     try {
@@ -52,19 +55,35 @@ const AltaIngreso = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
       >
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="subRubro">
-            SubRubro:
+       <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="seleccionSubVivienda"
+          >
+            Seleccione un subRubro:
           </label>
-          <input
-            type="text"
-            id="subRubro"
+          <select
+            id="seleccionSubRubro"
+            name="seleccionSubRubro"
             value={subRubro}
-            onChange={handleChangeSubRubro}
-            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
-          />
-          {errores.subRubro && (
-            <span className="text-red-500 text-sm">{errores.subRubro}</span>
+            onChange={handleChangeSeleccionSubRubro}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            <option value="">Seleccione un subRubro</option>
+            <option value="Amortización">Amortización</option>
+            <option value="Cuota Social">Cuota Social</option>
+            <option value="Convenios">Convenios</option>
+            <option value="Comision de Fomento">Comision de Fomento</option>
+            <option value="Salon comercial">Salon comercial</option>
+            <option value="Ingresos extraordinarios">Ingresos extraordinarios</option>
+            <option value="Multas">Multas</option>
+            <option value="Cambio de moneda extranjera">Cambio de moneda extranjera</option>
+            <option value="Otros">Otros</option>
+          </select>
+          {errores.seleccionVivienda && (
+            <span className="text-red-500 text-sm">
+              {errores.seleccionVivienda}
+            </span>
           )}
         </div>
 
@@ -84,6 +103,29 @@ const AltaIngreso = () => {
           />
           {errores.denominacion && (
             <span className="text-red-500 text-sm">{errores.denominacion}</span>
+          )}
+        </div>
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="seleccionSubVivienda"
+          >
+            Seleccione un tipo de moneda:
+          </label>
+          <select
+            id="tipoMoneda"
+            name="tipoMoneda"
+            value={tipoMoneda}
+            onChange={handleChangeTipoMoneda}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            <option value="UR">Pesos Uruguayos</option>
+            <option value="USD">Dolares</option>
+          </select>
+          {errores.tipoMoneda && (
+            <span className="text-red-500 text-sm">
+              {errores.tipoMoneda}
+            </span>
           )}
         </div>
 
