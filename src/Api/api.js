@@ -581,7 +581,12 @@ const postRecibo = async (
   console.log("datos del recibo en api: " + fechaRecibo, fechaPago, recargo, interes, capital, cuotaSocial, convenio, subsidio, cuotaMensual, sumaPesos, socio, tesorero);
 
   try {
-    // Crear un objeto con las propiedades correctamente estructuradas
+    if(subsidio == 0){
+      subsidio = null;
+    }
+    if(convenio == 0){
+      convenio = null;
+    }
     const reciboData = {
       fechaRecibo,
       fechaPago,
@@ -861,7 +866,7 @@ const getUltimoSubsidioSocio = async (cedulaSocio) => {
     return data;
   } catch (error) {
     console.error("Error en get Ultimo subsidio por socio:", error);
-    throw new Error("Error al obtener los datos de los Subsidio por socio");
+   return null;
   }
 };
 
@@ -955,9 +960,7 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
     return data;
   } catch (error) {
     console.error("Error en get Ultimo convenio por socio:", error);
-    throw new Error(
-      "Error al obtener los datos del ultiomo convenio por socio"
-    );
+    return null
   }
 };
 const postIngreso = async (ingreso) => {
@@ -1028,9 +1031,9 @@ const updateIngreso = async (subRubro, denominacion, ingreso) => {
   }
 };
 
-const getAllIngresos = async () => {
+const getAllIngresos = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/ingresos/allIngresos`, {
+    const response = await fetch(`${URL}/ingresos/allIngresos/${idCooperativa}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
@@ -1043,8 +1046,8 @@ const getAllIngresos = async () => {
 
     return data;
   } catch (error) {
-    console.error("Error en getAllSubsidios:", error);
-    throw new Error("Error al obtener los datos de los subsidios.");
+    console.error("Error en getAllIngresos:", error);
+    throw new Error("Error al obtener los datos de los Ingresos.");
   }
 };
 const deleteConvenio = async (idConvenio) => {

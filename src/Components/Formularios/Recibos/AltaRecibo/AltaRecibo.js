@@ -23,7 +23,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
-  const [convenio, setConvenio] = useState(0); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
+  const [convenio, setConvenio] = useState({}); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
   const [subsidio , setSubsidio] = useState({});
   const [cuotaMensualBase , setCuotaMensualBase] = useState(0);
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
@@ -74,16 +74,22 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
 
   const fetchSubsidio = async () => {
     const subsidioResponse = await getUltimoSubsidioSocio(Socio.cedulaSocio);
-
-    console.log(subsidioResponse);
-
-    setSubsidio(subsidioResponse)
+    if(subsidioResponse != null){
+      console.log(subsidioResponse);
+      setSubsidio(subsidioResponse)
+    }else{
+      setSubsidio(0);
+    }
   }
 
   const fetchConvenio = async () => {
     const convenioResponse = await getUltimoConvenioSocio(Socio.cedulaSocio);
+    if(convenioResponse != null){
     console.log(convenioResponse);
-    setConvenio(convenioResponse)
+    setConvenio(convenioResponse);
+    }else{
+      setConvenio(0);
+    }
   }
   //Corregir fecha a mas de un mes
   useEffect(() => {
@@ -95,37 +101,35 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   }, [vivienda]);
 
   useEffect(() => {
-
-    let valorDormitorios
-     if (vivienda.cantidadDormitorios == 2) {
-        valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
-      }
-      if (vivienda.cantidadDormitorios == 3) {
-        valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
-      }
-
-      setInteres(interesParm * (valorDormitorios / ur.buy))
-     
-      setCapital(capitalParm * (valorDormitorios / ur.buy))
-
-      let valorSubsidiadoUr;
-      let valorConConvenioUr;
-      valorSubsidiadoUr = valorVivienda - subsidio.subsidioUr;
-      valorConConvenioUr = valorSubsidiadoUr + convenio.urPorMes;
-
-      console.log("Prueba muestra reajuste" , reajuste)
-      let valorCuotaTotalEnPesos =  valorConConvenioUr * reajuste.valorUr
-
-
+    let valorDormitorios;
+    if (vivienda.cantidadDormitorios === 2) {
+      valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
+    } else if (vivienda.cantidadDormitorios === 3) {
+      valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
+    }
+  
+    setInteres(interesParm * (valorDormitorios / ur.buy));
+    setCapital(capitalParm * (valorDormitorios / ur.buy));
+  
+    let valorSubsidiadoUr = valorVivienda;
+    if (subsidio && subsidio.subsidioUr) {
+      valorSubsidiadoUr -= subsidio.subsidioUr;
+    }
+  
+    let valorConConvenioUr = valorSubsidiadoUr;
+    if (convenio && convenio.urPorMes) {
+      valorConConvenioUr += convenio.urPorMes;
+    }
+  
+    const valorCuotaTotalEnPesos = valorConConvenioUr * reajuste.valorUr;
+  
     console.log("Valor Total", valorCuotaTotalEnPesos);
-
+  
     let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
-
-    setCuotaMensualBase(cuenta)
-    setCuotaMensual(cuenta)
-
-  },[valorVivienda, reajuste])
-
+    setCuotaMensualBase(cuenta);
+    setCuotaMensual(cuenta);
+  
+  }, [valorVivienda, reajuste, subsidio, convenio]);
   
   const fetchCalculos = async () => {
     
@@ -152,59 +156,23 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
     const fechaSeleccionada = event.target.value;
     setFechaPago(fechaSeleccionada);
   };
-  const handleChangeRecargo = (e) => {
-    setRecargo(e.target.value);
-    // este dato se toma por fecha ingresada cuando el administrador ingresa la fecha en que fue efectuado el pago
-  };
-
-  const handleChangeInteres = (e) => {
-    setInteres(e.target.value);
-    // eate dato se toma de el excel
-  };
-
-  const handleChangeCuotaSocial = (e) => {
-    setCuotaSocial(e.target.value);
-    // dato constante de 400 pesos en este caso
-  };
-
-  const handleChangeConvenio = (e) => {
-    console.log(e.target.value);
-    // convenio en unidades reajustables
-    // se le suma lo que deba pagar
-    // es lo que le debe el socio a la cooperativa
-  };
-  const handleChangeCuotaMensual = (e) => {
-    setCuotaMensual(e.target.value);
-  };
 
 
   const handleChangeSumaPesos = (e) => {
     setSumaPesos(e.target.value);
   };
-  const handleChangeCapital = (e) => {
-    setCapital(e.target.value);
-  };
-  const handleChangeSubsidio = (e) => {
-    console.log(e.target.value);
-  } 
 
-  const handleChangeTieneSuplente = (e) => {
-    setTieneSuplente(e.target.checked);
-  };
 
   const validarFormulario = () => {
     const errores = {};
-    if (!fechaIngreso)
-      errores.FechaIngreso = "La fecha de ingreso es obligatoria";
-    if (!recargo) errores.Recargo = "El Recargo es obligatoria";
+    if (!fechaEmision)
+      errores.fechaEmision = "La fecha de ingreso es obligatoria";
     if (!interes) errores.Interes = "El Interes es obligatorio";
-    if (!capital) errores.Capital = "La Capital es obligatorio";
+    if (!capital) errores.Capital = "El Capital es obligatorio";
     if (!cuotaSocial) errores.CuotaSocial = "La Cuota Social es obligatorio";
-    if (!convenio) errores.Convenio = "El Convenio es obligatorio";
-    if (!cuotaMensual) errores.CuotaMensual = "La CuotaMensual es obligatorio";
+    if (!cuotaMensual) errores.CuotaMensual = "La CuotaMensual es obligatorio"; 
     if (!sumaPesos) errores.SumaPesos = "La Suma en Pesos es obligatorio";
     if (!fechaPago) errores.fechaPago = "La fecha del pago es obligatoria";
-    if (!subsidio) errores.subsidio = "El subsidio es obligatorio";
 
     setErrores(errores);
 
@@ -214,6 +182,8 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const handleSubmit = async (e) => {
     console.log("ENTRA")
     e.preventDefault();
+    if(!validarFormulario()) return;
+    
 
     try {
       const response = await postRecibo(
@@ -341,8 +311,8 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             onChange={handleChangefechaRecibo}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {Errores.fechaIngreso && (
-            <span className="text-red-500 text-sm">{Errores.fechaIngreso}</span>
+          {Errores.fechaEmision && (
+            <span className="text-red-500 text-sm">{Errores.fechaEmision}</span>
           )}
         </div>
 
@@ -374,7 +344,6 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             name="recargo"
             readOnly
             value={recargo}
-            onChange={handleChangeRecargo}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.Recargo && (
@@ -392,7 +361,6 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             name="interes"
             readOnly
             value={interes}
-            onChange={handleChangeInteres}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.Interes && (
@@ -425,8 +393,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             id="convenio"
             name="convenio"
             readOnly
-            value={convenio.urPorMes}
-            onChange={handleChangeConvenio}
+            value={convenio?.urPorMes || 0}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.Convenio && (
@@ -443,8 +410,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             id="subsidio"
             name="subsidio"
             readOnly
-            value={subsidio.subsidioUr}
-            onChange={handleChangeSubsidio}
+            value={subsidio?.subsidioUr || 0}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.Subsidio && (
@@ -463,7 +429,6 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             id="cuotaSocial"
             name="cuotaSocial"
             value={cuotaSocial}
-            onChange={handleChangeCuotaSocial}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.CuotaSocial && (
@@ -484,7 +449,6 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             name="cuotaMensual"
             readOnly
             value={cuotaMensual}
-            onChange={handleChangeCuotaMensual}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.CuotaMensual && (
