@@ -14,7 +14,8 @@ import { MiembroContext } from "@/Provider/provider.js";
 import { parseISO, format } from "date-fns";
 import Buscador from "@/Components/Buscador.js";
 import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
-
+import SortIcon from "@mui/icons-material/Sort";
+import OrdenarPor from "@/Components/OrdenarPor.js";
 const ListadoSocio = ({
   setSocioRecibo,
   setCedulaSocio,
@@ -26,10 +27,10 @@ const ListadoSocio = ({
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allSocios);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
   const [socioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
-  const [estadoCuota , setEstadoCuota] = useState("");
+  const [estadoCuota, setEstadoCuota] = useState("");
   useEffect(() => {
     fetchAllSocios();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAllSocios = async () => {
@@ -81,19 +82,6 @@ const ListadoSocio = ({
       throw ("Fallo al eliminar el socio ", e.error);
     }
   };
-  const handleOrderByFechaIngreso = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso)
-    );
-    setAllSocios(ordenarSocios);
-  };
-
-  const handleOrderByNroSocio = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => a.nroSocio - b.nroSocio
-    );
-    setAllSocios(ordenarSocios);
-  };
 
   useEffect(() => {
     if (buscador === "") {
@@ -108,6 +96,34 @@ const ListadoSocio = ({
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
+
+  const ordenarOptions = [
+    {
+      label: "Número socio",
+      key: "nroSocio",
+      icon: <SortIcon />,
+      comparator: (a, b) => a.nroSocio - b.nroSocio,
+    },
+    {
+      label: "Más Recientes",
+      key: "fechaIngreso",
+      icon: <SortIcon />,
+      comparator: (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso),
+    },
+    {
+      label: "Más Antiguos",
+      key: "fechaIngreso",
+      icon: <SortIcon />,
+      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
+    },
+  ];
+
+  const handleSortChange = (option) => {
+    console.log("Orden seleccionado:", option.label);
+    const ordenarSocios = [...allSocios].sort(option.comparator);
+    setAllSocios(ordenarSocios);
+  };
+
   return (
     <div className="sm:p-7 p-4 ">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -132,173 +148,14 @@ const ListadoSocio = ({
                 d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
               />
             </svg>
-            Add product
+            AGREGAR SOCIO
           </button>
           <div className="flex items-center space-x-3 w-full md:w-auto">
-            <button
-              id="actionsDropdownButton"
-              data-dropdown-toggle="actionsDropdown"
-              className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-              type="button"
-            >
-              <svg
-                className="-ml-1 mr-1.5 w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  clipRule="evenodd"
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                />
-              </svg>
-              Actions
-            </button>
-            <div
-              id="actionsDropdown"
-              className="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-            >
-              <ul
-                className="py-1 text-sm text-gray-700 dark:text-gray-200"
-                aria-labelledby="actionsDropdownButton"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Mass Edit
-                  </a>
-                </li>
-              </ul>
-              <div className="py-1">
-                <a
-                  href="#"
-                  className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Delete all
-                </a>
-              </div>
-            </div>
-            <button
-              id="filterDropdownButton"
-              data-dropdown-toggle="filterDropdown"
-              className="w-full md:w-auto flex items-center justify-center py-2 px-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-              type="button"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-                className="h-4 w-4 mr-2 text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Filter
-              <svg
-                className="-mr-1 ml-1.5 w-5 h-5"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  clipRule="evenodd"
-                  fillRule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                />
-              </svg>
-            </button>
-            <div
-              id="filterDropdown"
-              className="z-10 hidden w-48 p-3 bg-white rounded-lg shadow dark:bg-gray-700"
-            >
-              <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">
-                Choose brand
-              </h6>
-              <ul
-                className="space-y-2 text-sm"
-                aria-labelledby="filterDropdownButton"
-              >
-                <li className="flex items-center">
-                  <input
-                    id="apple"
-                    type="checkbox"
-                    defaultValue
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    htmlFor="apple"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Apple (56)
-                  </label>
-                </li>
-                <li className="flex items-center">
-                  <input
-                    id="fitbit"
-                    type="checkbox"
-                    defaultValue
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    htmlFor="fitbit"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Microsoft (16)
-                  </label>
-                </li>
-                <li className="flex items-center">
-                  <input
-                    id="razor"
-                    type="checkbox"
-                    defaultValue
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    htmlFor="razor"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Razor (49)
-                  </label>
-                </li>
-                <li className="flex items-center">
-                  <input
-                    id="nikon"
-                    type="checkbox"
-                    defaultValue
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    htmlFor="nikon"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    Nikon (12)
-                  </label>
-                </li>
-                <li className="flex items-center">
-                  <input
-                    id="benq"
-                    type="checkbox"
-                    defaultValue
-                    className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-                  />
-                  <label
-                    htmlFor="benq"
-                    className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-                  >
-                    BenQ (74)
-                  </label>
-                </li>
-              </ul>
-            </div>
+            <OrdenarPor
+              options={ordenarOptions}
+              buttonText="Ordenar por"
+              onOptionSelect={handleSortChange}
+            />
           </div>
         </div>
       </div>

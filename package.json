@@ -15,6 +15,7 @@
     "@heroicons/react": "^2.1.5",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.x.x",
+    "@tabler/icons-react": "^3.12.0",
     "coperativa_web": "file:",
     "date-fns": "^3.6.0",
     "file-saver": "^2.0.5",
