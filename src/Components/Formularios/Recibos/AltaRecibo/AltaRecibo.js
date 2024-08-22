@@ -55,7 +55,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
 
   useEffect(() => {
     fetchCalculos();
-    setCuotaSocial(300);
+    setCuotaSocial(400);
      console.log(Socio , "SOCIO")
     setNombreSocio(Socio.nombreSocio || "");
     setApellidoSocio(Socio.apellidoSocio || "");
@@ -111,17 +111,25 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
     setInteres(interesParm * (valorDormitorios / ur.buy));
     setCapital(capitalParm * (valorDormitorios / ur.buy));
   
-    let valorSubsidiadoUr = valorVivienda;
+    console.log("Subsidio", subsidio.subsidioUr)
+    console.log("Vivienda" , valorVivienda)
+
+    let ValorViviendaModificar = valorVivienda;
+
     if (subsidio && subsidio.subsidioUr) {
-      valorSubsidiadoUr -= subsidio.subsidioUr;
+      console.log("Esta entrando al subsidio")
+      ValorViviendaModificar -= subsidio.subsidioUr;
+      console.log("Valor cuotaPesos del mes" , ValorViviendaModificar * reajuste.valorUr)
     }
   
-    let valorConConvenioUr = valorSubsidiadoUr;
+    let valorConConvenioPesos = 0;
     if (convenio && convenio.urPorMes) {
-      valorConConvenioUr += convenio.urPorMes;
+      valorConConvenioPesos += (convenio.urPorMes * ur.buy);
     }
   
-    const valorCuotaTotalEnPesos = valorConConvenioUr * reajuste.valorUr;
+    let valorCuotaTotalEnPesos = (ValorViviendaModificar * reajuste.valorUr) + valorConConvenioPesos;
+
+
   
     console.log("Valor Total", valorCuotaTotalEnPesos);
   
@@ -448,11 +456,31 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
             id="cuotaMensual"
             name="cuotaMensual"
             readOnly
-            value={cuotaMensual}
+            value={Math.round(cuotaMensual)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.CuotaMensual && (
             <span className="text-red-500 text-sm">{Errores.CuotaMensual}</span>
+          )}
+        </div>
+
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="sumaPesos"
+          >
+            Pesos Uruguayos:
+          </label>
+          <input
+            type="text"
+            id="sumaPesos"
+            name="sumaPesos"
+            value={sumaPesos}
+            onChange={handleChangeSumaPesos}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {Errores.sumaPesos && (
+            <span className="text-red-500 text-sm">{Errores.SumaPesos}</span>
           )}
         </div>
 

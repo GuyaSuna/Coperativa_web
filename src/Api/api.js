@@ -574,11 +574,11 @@ const postRecibo = async (
   convenio,
   subsidio,
   cuotaMensual,
-  sumaPesos,
+  sumaEnPesos,
   socio,
   tesorero
 ) => {
-  console.log("datos del recibo en api: " + fechaRecibo, fechaPago, recargo, interes, capital, cuotaSocial, convenio, subsidio, cuotaMensual, sumaPesos, socio, tesorero);
+  console.log("datos del recibo en api: " + fechaRecibo, fechaPago, recargo, interes, capital, cuotaSocial, convenio, subsidio, cuotaMensual, sumaEnPesos, socio, tesorero);
 
   try {
     if(subsidio == 0){
@@ -597,7 +597,7 @@ const postRecibo = async (
       convenio,
       subsidio,
       cuotaMensual,
-      sumaPesos,
+      sumaEnPesos,
       socio,
       tesorero,
     };

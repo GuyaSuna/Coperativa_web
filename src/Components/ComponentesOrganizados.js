@@ -26,7 +26,7 @@ import ModificarEgreso from "./Formularios/Egresos/ModificarEgresos/modificarEgr
 import ListadoIngresos from "./Listados/ListadoIngresos/listadoIngresos";
 import ListadoEgresos from "./Listados/ListadoEgresos/listadoEgresos";
 import ListadoConvenio from "./Listados/ListadoConvenio/ListadoConvenio";
-import AltaEgreso from "./Formularios/Egresos/AltaEgresos/AltaEgresos";
+
 
 const ComponentesOrganizados = ({
   identificador,
