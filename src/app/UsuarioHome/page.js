@@ -23,9 +23,10 @@ const UsuarioHome = () => {
     setSelectedOption(option);
   };
   useEffect(() => {
+    console.log("Entra maistro?")
     if (!miembro || !cooperativa) {
       console.log("es esto");
-      router.push("./UsuarioHome");
+      router.push("/");
     }
   }, []);
 

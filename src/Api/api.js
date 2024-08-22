@@ -517,6 +517,29 @@ const getCooperativaPorAdmin = async (idMiembro) => {
   }
 };
 
+const getCooperativaPorSocio = async (cedulaSocio) => {
+  try {
+    const response = await fetch(`${URL}/cooperativa/Socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error("Error en getCooperativasPorSocio:", error);
+    throw new Error("Error al obtener los datos de la Cooperativa");
+  }
+};
+
+
 const getUr = async () => {
   try {
     const response = await fetch(
@@ -1223,6 +1246,7 @@ export {
   updateVivienda,
   deleteVivienda,
   getCooperativaPorAdmin,
+  getCooperativaPorSocio,
   getUr,
   getAllRecibos,
   postRecibo,

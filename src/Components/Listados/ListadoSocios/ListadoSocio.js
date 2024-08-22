@@ -26,7 +26,7 @@ const ListadoSocio = ({
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allSocios);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
   const [socioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
-
+  const [estadoCuota , setEstadoCuota] = useState("");
   useEffect(() => {
     fetchAllSocios();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -343,7 +343,7 @@ const ListadoSocio = ({
                 <td className="px-4 py-3">{socio.fechaIngreso}</td>
                 <td className="px-4 py-3">
                   <span class="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
-                    Pago
+                    {estadoCuota}
                   </span>
                 </td>
                 <td className="px-4 py-3">

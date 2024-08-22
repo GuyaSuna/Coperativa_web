@@ -1,7 +1,7 @@
 "use client";
 import "./globals.css";
 import React, { useState, useContext } from "react";
-import { loginAdministrador, loginUsuario , getCooperativaPorAdmin , getAdministrador } from "../Api/api.js";
+import { loginAdministrador, loginUsuario , getCooperativaPorAdmin , getAdministrador , getCooperativaPorSocio } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
 
@@ -38,22 +38,27 @@ const Home = () => {
     }
   };
 
-  const ProviderData = (dataAdmin , cooperativaData) =>{
-    loginMiembro(dataAdmin, cooperativaData);
-  }
-
+  
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();
     const data = await loginUsuario(email, password);
-    console.log(data);
+    console.log("Abr",data);
+
+
+    const cooperativaMiembro = await getCooperativaPorSocio(data.socio.cedulaSocio);
+
+
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      loginMiembro(data);
+      ProviderData(data, cooperativaMiembro);
       router.push("./UsuarioHome");
     }
   };
 
+const ProviderData = (dataAdmin , cooperativaData) =>{
+    loginMiembro(dataAdmin, cooperativaData);
+  }
   //checkbox
 
   const handleEmailChange = (e) => {
