@@ -9,7 +9,8 @@ import {
   getUr,
   getAllViviendas,
   getUltimoConvenioSocio,
-  getUltimoSubsidioSocio
+  getUltimoSubsidioSocio,
+  postIngreso
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
@@ -209,6 +210,16 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
         miembro
       );
       console.log(response);
+
+      const ingreso = {
+        subRubro : "Amortizacion",
+        denominacion :`Recibo dado de alta el ${fechaEmision}`,
+        ingreso : cuotaMensual,
+        cooperativaEntity : cooperativa,
+        tipoMoneda : "UR"
+      }
+      const IngresoResponse = await postIngreso(ingreso)
+      console.log("Es esto????", IngresoResponse)
       alert("Dado de alta correctamente");
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);

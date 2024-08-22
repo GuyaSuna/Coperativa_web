@@ -544,7 +544,7 @@ const getUr = async () => {
 
 const getAllRecibos = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/recibo/allRecibos/${idCooperativa}`, {
+    const response = await fetch(`${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -965,7 +965,7 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
 };
 const postIngreso = async (ingreso) => {
   try {
-    console.log(ingreso);
+    console.log("Pruebaaaa" , ingreso);
     const response = await fetch(`${URL}/ingresos`, {
       method: "POST",
       headers: {

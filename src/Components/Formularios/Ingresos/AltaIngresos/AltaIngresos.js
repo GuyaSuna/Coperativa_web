@@ -80,9 +80,9 @@ const AltaIngreso = () => {
             <option value="Cambio de moneda extranjera">Cambio de moneda extranjera</option>
             <option value="Otros">Otros</option>
           </select>
-          {errores.seleccionVivienda && (
+          {errores.subRubro && (
             <span className="text-red-500 text-sm">
-              {errores.seleccionVivienda}
+              {errores.subRubro}
             </span>
           )}
         </div>

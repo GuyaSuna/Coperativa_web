@@ -63,10 +63,10 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
               NroRecibo
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Nombre
+              Monto
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Apellido
+              Nombre Socio
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800 hidden md:table-cell">
               Estado Cuota
@@ -80,16 +80,16 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
           {allRecibos?.map((recibo) => (
             <tr>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">{recibo?.idRecibo}</div>
+                <div className="flex items-center ml-4">{recibo?.nroRecibo}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">{recibo?.nombreSocio}</div>
+                <div className="flex items-center">$ {recibo?.cuotaMensual}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 md:table-cell hidden">
-                {recibo?.apellidoSocio}
+                {recibo?.socio.nombreSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800 text-green-500">
-                ${recibo?.capitalSocio}
+                {recibo?.capitalSocio}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center justify-between">
