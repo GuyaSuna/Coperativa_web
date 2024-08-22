@@ -27,7 +27,6 @@ import ListadoIngresos from "./Listados/ListadoIngresos/listadoIngresos";
 import ListadoEgresos from "./Listados/ListadoEgresos/listadoEgresos";
 import ListadoConvenio from "./Listados/ListadoConvenio/ListadoConvenio";
 
-
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -43,10 +42,9 @@ const ComponentesOrganizados = ({
   const [interes, setInteres] = useState();
   const [capital, setCapital] = useState();
   const [subsidio, setSubsidio] = useState({});
-  const [ingreso , setIngreso] = useState({});
-  const [egreso , setEgreso] = useState({});
+  const [ingreso, setIngreso] = useState({});
+  const [egreso, setEgreso] = useState({});
   const [convenio, setConvenio] = useState({});
-
 
   switch (identificador) {
     case 0: {
@@ -159,35 +157,47 @@ const ComponentesOrganizados = ({
         />
       );
     }
-    case 20:{
-      return <ListadoIngresos setIdentificadorComponente={setIdentificadorComponente} setIngreso={setIngreso}/>
+    case 20: {
+      return (
+        <ListadoIngresos
+          setIdentificadorComponente={setIdentificadorComponente}
+          setIngreso={setIngreso}
+        />
+      );
     }
-    case 21:{
-      return <ListadoEgresos setIdentificadorComponente={setIdentificadorComponente} setEgreso={setEgreso}/>
+    case 21: {
+      return (
+        <ListadoEgresos
+          setIdentificadorComponente={setIdentificadorComponente}
+          setEgreso={setEgreso}
+        />
+      );
     }
-    case 22 :{
-      return <AltaIngreso setIdentificadorComponente={setIdentificadorComponente} />
+    case 22: {
+      return (
+        <AltaIngreso setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
-    case 23:{
-      return <ModificarIngreso ingresoData={ingreso}/>
+    case 23: {
+      return <ModificarIngreso ingresoData={ingreso} />;
     }
     case 24: {
-      return <AltaEgreso setIdentificadorComponente={setIdentificadorComponente} />
+      return (
+        <AltaEgreso setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
     case 25: {
-      <ModificarEgreso egresoData={egreso}/>
-    
-  }
-  case 26: {
+      <ModificarEgreso egresoData={egreso} />;
+    }
+    case 26: {
       return (
         <ListadoConvenio
           setConvenio={setConvenio}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
-    } 
+    }
   }
- 
 };
 
 export default ComponentesOrganizados;

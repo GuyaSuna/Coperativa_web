@@ -73,7 +73,7 @@ export default function OrdenarPor({
 
   return (
     <div>
-      <Button
+      <button
         id="sort-menu-button"
         aria-controls={open ? "sort-menu" : undefined}
         aria-haspopup="true"
@@ -82,9 +82,10 @@ export default function OrdenarPor({
         disableElevation
         onClick={handleClick}
         endIcon={<KeyboardArrowDownIcon />}
+        className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500  focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
       >
         {buttonText}
-      </Button>
+      </button>
       <StyledMenu
         id="sort-menu"
         MenuListProps={{
