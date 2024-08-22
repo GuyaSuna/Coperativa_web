@@ -8,7 +8,6 @@ import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
 import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Cargando from "@/Components/Cargando";
 
 const UsuarioHome = () => {
@@ -26,7 +25,7 @@ const UsuarioHome = () => {
   useEffect(() => {
     if (!miembro || !cooperativa) {
       console.log("es esto");
-      router.push("/");
+      router.push("./UsuarioHome");
     }
   }, []);
 

@@ -144,7 +144,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
               <th scope="col" className="px-4 py-3 text-center">
                 Nro Convenio
               </th>
-              <th scope="col" className="px-4 py-3">
+              <th scope="col" className="pl-8 py-3">
                 Deuda en Ur
               </th>
               <th scope="col" className="px-4 py-3">
@@ -176,13 +176,13 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                   scope="row"
                   className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {convenio.deudaEnUrOriginal}
+                  {convenio.deudaEnUrOriginal} Ur
                 </th>
                 <th
                   scope="row"
                   className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {convenio.urPorMes}
+                  {convenio.urPorMes} Ur
                 </th>
                 <td className="px-4 py-3">{convenio.fechaInicioConvenio}</td>
                 <td className="px-4 py-3">{convenio.socio.nombreSocio}</td>
