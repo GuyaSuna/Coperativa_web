@@ -646,6 +646,29 @@ const postRecibo = async (
   }
 };
 
+const getAllRecibosPorSocio = async (cedulaSocio) => {
+  try {
+    const response = await fetch(`${URL}/recibos/getAllRecibosPorSocios/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllRecibosPorSocio:", error);
+    throw new Error("Error al obtener los datos de los recibos.");
+  }
+};
+
 const postAviso = async (aviso, idAdmin, idUsuario) => {
   try {
     console.log(aviso);
@@ -1274,4 +1297,5 @@ export {
   getAllConvenios,
   deleteConvenio,
   updateConvenio,
+  getAllRecibosPorSocio,
 };
