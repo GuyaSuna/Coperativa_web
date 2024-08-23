@@ -91,7 +91,7 @@ const AltaConvenio = () => {
               htmlFor="floating_email"
               className="block text-sm font-medium mb-2"
             >
-              Deuda general Ur
+              Deuda general UR
             </label>
             <input
               type="text"

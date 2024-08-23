@@ -10,11 +10,10 @@ import {
 } from "@headlessui/react";
 import { deleteConvenio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import { parseISO, format } from "date-fns";
 import Buscador from "@/Components/Buscador.js";
-import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
+import VerConvenio from "@/Components/VerDetalles/VerConvenio/VerConvenio.js";
 
 const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   const [allConvenios, setAllConvenios] = useState([]);
@@ -22,7 +21,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allConvenios);
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
-  const [socioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
+  const [convenioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
 
   useEffect(() => {
     fetchAllConvenios();
@@ -39,6 +38,22 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     }
   };
 
+  useEffect(() => {
+    if (buscador === "") {
+      setBuscadorFiltrado(allConvenios);
+    } else {
+      const buscadorFiltrado = allSocios.filter((convenio) =>
+        convenio.socio.nombreSocio
+          .toLowerCase()
+          .includes(buscador.toLowerCase())
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allConvenios, buscador]);
+  const handleChangeBuscador = (event) => {
+    setBuscador(event.target.value);
+  };
+
   const handleModificar = (cedula) => {
     setCedulaSocio(cedula);
     setIdentificadorComponente(4);
@@ -48,9 +63,9 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     setIdentificadorComponente(18);
   };
 
-  const handleVerSocio = (socio) => {
-    console.log(socio);
-    setSocioSeleccionado(socio);
+  const handleVerConvenio = (convenio) => {
+    console.log(convenio);
+    setSocioSeleccionado(convenio);
     setIsModalOpen(true);
   };
   const handleEliminar = async (idConvenio) => {
@@ -79,28 +94,21 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     setAllSocios(ordenarSocios);
   };
 
-  const handleOrderByNroSocio = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => a.nroSocio - b.nroSocio
-    );
-    setAllSocios(ordenarSocios);
+  // const handleOrderByNroSocio = () => {
+  //   const ordenarSocios = [...allSocios].sort(
+  //     (a, b) => a.nroSocio - b.nroSocio
+  //   );
+  //   setAllSocios(ordenarSocios);
+  // };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
 
-  useEffect(() => {
-    if (buscador === "") {
-      setBuscadorFiltrado(allConvenios);
-    } else {
-      const buscadorFiltrado = allSocios.filter((convenio) =>
-        convenio.socio.nombreSocio
-          .toLowerCase()
-          .includes(buscador.toLowerCase())
-      );
-      setBuscadorFiltrado(buscadorFiltrado);
-    }
-  }, [allConvenios, buscador]);
-  const handleChangeBuscador = (event) => {
-    setBuscador(event.target.value);
-  };
   return (
     <div className="sm:p-7 p-4 ">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -142,16 +150,16 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           <thead className="text-xs text-gray-700 uppercase  dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr>
               <th scope="col" className="px-4 py-3 text-center">
-                Nro Convenio
+                Nro. Convenio
               </th>
               <th scope="col" className="pl-8 py-3">
-                Deuda en Ur
+                Deuda en UR
               </th>
               <th scope="col" className="px-4 py-3">
-                Paga por mes
+                Paga Por Mes
               </th>
               <th scope="col" className="px-4 py-3">
-                Fecha
+                Fecha Inicio
               </th>
               <th scope="col" className="px-4 py-3">
                 Socio
@@ -176,20 +184,22 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                   scope="row"
                   className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {convenio.deudaEnUrOriginal} Ur
+                  {convenio.deudaEnUrOriginal} UR
                 </th>
                 <th
                   scope="row"
-                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
                 >
-                  {convenio.urPorMes} Ur
+                  {convenio.urPorMes} UR
                 </th>
-                <td className="px-4 py-3">{convenio.fechaInicioConvenio}</td>
+                <td className="px-4 py-3">
+                  {formatDate(convenio.fechaInicioConvenio)}
+                </td>
                 <td className="px-4 py-3">{convenio.socio.nombreSocio}</td>
                 <td className="px-4 py-3">
                   <button
                     type="button"
-                    onClick={() => handleVerSocio(socio)}
+                    onClick={() => handleVerConvenio(convenio)}
                     class="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
@@ -262,10 +272,10 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
         </table>
       </div>
       {isModalOpen && (
-        <VerSocio
+        <VerConvenio
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          socio={socioSeleccionado}
+          convenio={convenioSeleccionado}
         />
       )}
     </div>
