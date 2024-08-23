@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios } from "../../../Api/api.js";
+import { getAllSocios , getAllRecibos} from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -27,11 +27,74 @@ const ListadoSocio = ({
   const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
   const [socioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
   const [estadoCuota , setEstadoCuota] = useState("");
+  const [recibos , setRecibos] = useState([]);
+
+
+  useEffect(() => {
+    fetchRecibos();
+  }, [])
+
   useEffect(() => {
     fetchAllSocios();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const fetchRecibos = async () => {
+    const ReciboResponse = await getAllRecibos(cooperativa.idCooperativa);
+    setRecibos(ReciboResponse);
+  }
+
+
+  useEffect(() => {
+    if (recibos.length && allSocios.length) {
+      const sociosConEstadoCuota = allSocios.map((socio) => {
+        const recibosDelSocio = recibos
+          .filter(recibo => recibo.socio.cedulaSocio === socio.cedulaSocio) // Usamos cedulaSocio como identificador
+          .sort((a, b) => new Date(a.fechaPago) - new Date(b.fechaPago)); // Ordenamos por fechaPago
+  
+        const today = new Date();
+        const currentMonth = today.getMonth() + 1; // Mes actual (enero es 0)
+        const currentYear = today.getFullYear();
+  
+        let estaImpago = false;
+        let mesesPagados = new Set();
+  
+        // Convertir fechaIngreso a Date
+        const fechaIngreso = new Date(socio.fechaIngreso);
+  
+        recibosDelSocio.forEach((recibo) => {
+          const fechaPago = new Date(recibo.fechaPago);
+          const mesPago = fechaPago.getMonth() + 1; // Obtenemos el mes del recibo pagado
+          const añoPago = fechaPago.getFullYear();
+          
+          // Guardamos los meses y años pagados
+          mesesPagados.add(`${añoPago}-${mesPago}`);
+        });
+  
+        // Comprobamos si todos los meses hasta el mes actual están pagados
+        for (let year = fechaIngreso.getFullYear(); year <= currentYear; year++) {
+          const mesInicio = year === fechaIngreso.getFullYear() ? fechaIngreso.getMonth() + 1 : 1;
+          const mesFinal = year === currentYear ? currentMonth : 12;
+  
+          for (let mes = mesInicio; mes <= mesFinal; mes++) {
+            if (!mesesPagados.has(`${year}-${mes}`)) {
+              estaImpago = true; // Si falta algún mes, está en deuda
+              break;
+            }
+          }
+          if (estaImpago) break;
+        }
+  
+        return {
+          ...socio,
+          estaImpago,
+        };
+      });
+  
+      setAllSocios(sociosConEstadoCuota);
+    }
+  }, [recibos, allSocios]);
+
+  
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
@@ -343,7 +406,7 @@ const ListadoSocio = ({
                 <td className="px-4 py-3">{socio.fechaIngreso}</td>
                 <td className="px-4 py-3">
                   <span class="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
-                    {estadoCuota}
+                  {socio.estaImpago ? "Impago" : "Pago"}
                   </span>
                 </td>
                 <td className="px-4 py-3">

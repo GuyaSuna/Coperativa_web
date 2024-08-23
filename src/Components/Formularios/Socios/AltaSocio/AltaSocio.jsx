@@ -17,7 +17,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const [ApellidoSocio, setApellidoSocio] = useState("");
   const [TelefonoSocio, setTelefonoSocio] = useState();
   const [CapitalSocio, setCapitalSocio] = useState();
-  const [FechaIngreso, setFechaIngreso] = useState("");
+  const [FechaIngresoCooperativa, setFechaIngresoCooperativa] = useState("");
   const [CedulaSuplente, setCedulaSuplente] = useState();
   const [NombreSuplente, setNombreSuplente] = useState("");
   const [ApellidoSuplente, setApellidoSuplente] = useState("");
@@ -77,7 +77,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   };
 
   const handleChangeFechaIngreso = (e) => {
-    setFechaIngreso(e.target.value);
+    setFechaIngresoCooperativa(e.target.value);
   };
 
   const handleChangeTelefonoSuplente = (e) => {
@@ -141,8 +141,8 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       errores.capitalSocio = "El capital debe ser un número";
     }
 
-    if (!FechaIngreso) {
-      errores.fechaIngreso = "La fecha de ingreso es obligatoria";
+    if (!FechaIngresoCooperativa) {
+      errores.fechaIngresoCooperativa = "La fecha de ingreso es obligatoria";
     }
 
     if (!SeleccionVivienda) {
@@ -186,8 +186,9 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const handleSubmit = async (e) => {
     console.log("ID COOPERATIVA ", cooperativa.idCooperativa);
     e.preventDefault();
-    console.log(FechaIngreso);
+    console.log(FechaIngresoCooperativa);
     if (!validarFormulario()) return;
+    const today = new Date().toISOString().split('T')[0];
     const SocioData = {
       cedulaSocio: CedulaSocio,
       nroSocio: NroSocio,
@@ -195,7 +196,8 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       apellidoSocio: ApellidoSocio,
       telefono: TelefonoSocio,
       capitalSocio: CapitalSocio,
-      fechaIngreso: FechaIngreso,
+      fechaIngresoCooeprativa: FechaIngresoCooperativa,
+      fechaIngreso: today
     };
     const SuplenteData = {
       cedulaSuplente: CedulaSuplente,
@@ -205,6 +207,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     };
 
     try {
+      
       const response = await postSocio(
         SocioData,
         SeleccionVivienda,
@@ -347,18 +350,18 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
             className="block text-sm font-medium mb-2"
             htmlFor="fechaIngreso"
           >
-            Fecha de Ingreso:
+            Fecha de Ingreso a La Cooeprativa:
           </label>
           <input
             type="date"
             id="fechaIngreso"
             name="fechaIngreso"
-            value={FechaIngreso}
+            value={FechaIngresoCooperativa}
             onChange={handleChangeFechaIngreso}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {Errores.fechaIngreso && (
-            <span className="text-red-500 text-sm">{Errores.fechaIngreso}</span>
+            <span className="text-red-500 text-sm">{Errores.fechaIngresoCooeprativa}</span>
           )}
         </div>
         <div className="mb-4">
