@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState , useContext } from "react";
-import { postIngreso} from "../../../../Api/api.js";
+import React, { useState, useContext } from "react";
+import { postIngreso } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
 const AltaIngreso = () => {
   const [subRubro, setSubRubro] = useState("");
@@ -10,7 +10,7 @@ const AltaIngreso = () => {
   const [errores, setErrores] = useState({});
   const [tipoMoneda, setTipoMoneda] = useState("UR");
 
-  const {cooperativa} = useContext(MiembroContext);
+  const { cooperativa } = useContext(MiembroContext);
 
   const handleChangeDenominacion = (e) => setDenominacion(e.target.value);
   const handleChangeIngreso = (e) => setIngreso(e.target.value);
@@ -37,15 +37,20 @@ const AltaIngreso = () => {
       subRubro,
       denominacion,
       ingreso,
-      cooperativaEntity : cooperativa,
-      tipoMoneda
+      cooperativaEntity: cooperativa,
+      tipoMoneda,
     };
 
     try {
       const response = await postIngreso(ingresoData);
-      console.log("Ingreso registrado:", response);
+      if (response.status === 201) {
+        alert("Error al agregar un Ingreso");
+      } else {
+        alert("El Ingreso fue agregado exitosamente");
+      }
     } catch (error) {
-      console.error("Error al registrar el ingreso:", error);
+      console.error("Error al enviar los datos del Ingreso:", error);
+      alert("Error interno del servidor");
     }
   };
 
@@ -55,7 +60,7 @@ const AltaIngreso = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
       >
-       <div className="mb-4">
+        <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
             htmlFor="seleccionSubVivienda"
@@ -75,15 +80,17 @@ const AltaIngreso = () => {
             <option value="Convenios">Convenios</option>
             <option value="Comision de Fomento">Comision de Fomento</option>
             <option value="Salon comercial">Salon comercial</option>
-            <option value="Ingresos extraordinarios">Ingresos extraordinarios</option>
+            <option value="Ingresos extraordinarios">
+              Ingresos extraordinarios
+            </option>
             <option value="Multas">Multas</option>
-            <option value="Cambio de moneda extranjera">Cambio de moneda extranjera</option>
+            <option value="Cambio de moneda extranjera">
+              Cambio de moneda extranjera
+            </option>
             <option value="Otros">Otros</option>
           </select>
           {errores.subRubro && (
-            <span className="text-red-500 text-sm">
-              {errores.subRubro}
-            </span>
+            <span className="text-red-500 text-sm">{errores.subRubro}</span>
           )}
         </div>
 
@@ -123,9 +130,7 @@ const AltaIngreso = () => {
             <option value="USD">Dolares</option>
           </select>
           {errores.tipoMoneda && (
-            <span className="text-red-500 text-sm">
-              {errores.tipoMoneda}
-            </span>
+            <span className="text-red-500 text-sm">{errores.tipoMoneda}</span>
           )}
         </div>
 

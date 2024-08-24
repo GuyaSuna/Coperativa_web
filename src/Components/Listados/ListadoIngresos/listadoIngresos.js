@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { getAllIngresos, deleteIngreso } from "../../../Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
+import VerIngreso from "@/Components/VerDetalles/VerIngreso/VerIngreso";
 
 const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
   const [allIngresos, setAllIngresos] = useState([]);
@@ -83,9 +84,7 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
           {allIngresos.map((ingreso) => (
             <tr key={ingreso.id}>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center ml-4">
-                  {ingreso.subRubro}
-                </div>
+                <div className="flex items-center ml-4">{ingreso.subRubro}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center ml-4">
@@ -93,12 +92,13 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
                 </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <div className="flex items-center">
-                  {ingreso.ingreso}
-                </div>
+                <div className="flex items-center">{ingreso.ingreso}</div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <Menu as="div" className="relative inline-block text-left justify-end">
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left justify-end"
+                >
                   <div>
                     <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
                       <svg
@@ -154,6 +154,13 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
           ))}
         </tbody>
       </table>
+      {isModalOpen && (
+        <VerIngreso
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          ingreso={ingresoSeleccionado}
+        />
+      )}
     </div>
   );
 };
