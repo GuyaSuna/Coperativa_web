@@ -43,7 +43,8 @@ const AltaSubsidio = () => {
   const handleChangeVigenciaEnMeses = (e) => setVigenciaEnMeses(e.target.value);
   const handleChangeFechaOtorgado = (e) => setFechaOtorgado(e.target.value);
   const handleChangeFechaExpira = (e) => setFechaExpira(e.target.value);
-  const handleChangeSocioSeleccionado = (e) => {
+
+  const handleChangeSocioSeleccionado = async (e) => {
     const selectedCedula = e.target.value;
     console.log(selectedCedula, "cedula seleccionada handle");
     const selectedSocio = sociosDisponibles.find(
@@ -51,6 +52,17 @@ const AltaSubsidio = () => {
     );
     setSocioSeleccionado(selectedSocio);
     console.log(selectedSocio, "socio seleccionado");
+
+    if (selectedSocio) {
+      try {
+        const vivienda = await getViviendaBySocio(selectedSocio.cedulaSocio);
+        if (vivienda) {
+          setCuotaTotalUr(vivienda.cuotaUr);
+        }
+      } catch (error) {
+        console.error("Error al obtener la vivienda del socio:", error);
+      }
+    }
   };
 
   const validarFormulario = () => {

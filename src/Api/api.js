@@ -493,6 +493,29 @@ const deleteVivienda = async (nroVivienda) => {
   }
 };
 
+const getViviendaPorSocio = async (cedulaSocio) => {
+  try {
+    const response = await fetch(`${URL}/vivienda/socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al obtener la vivienda del socio");
+    }
+
+    const vivienda = await response.json();
+    return vivienda;
+  } catch (error) {
+    console.error("Error en getViviendaPorSocio:", error);
+    throw new Error(
+      "Error al obtener los datos de la la vivienda por el socio."
+    );
+  }
+};
+
 // cooperativas
 
 const getCooperativaPorAdmin = async (idMiembro) => {
@@ -539,7 +562,6 @@ const getCooperativaPorSocio = async (cedulaSocio) => {
   }
 };
 
-
 const getUr = async () => {
   try {
     const response = await fetch(
@@ -567,12 +589,15 @@ const getUr = async () => {
 
 const getAllRecibos = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -601,13 +626,26 @@ const postRecibo = async (
   socio,
   tesorero
 ) => {
-  console.log("datos del recibo en api: " + fechaRecibo, fechaPago, recargo, interes, capital, cuotaSocial, convenio, subsidio, cuotaMensual, sumaEnPesos, socio, tesorero);
+  console.log(
+    "datos del recibo en api: " + fechaRecibo,
+    fechaPago,
+    recargo,
+    interes,
+    capital,
+    cuotaSocial,
+    convenio,
+    subsidio,
+    cuotaMensual,
+    sumaEnPesos,
+    socio,
+    tesorero
+  );
 
   try {
-    if(subsidio == 0){
+    if (subsidio == 0) {
       subsidio = null;
     }
-    if(convenio == 0){
+    if (convenio == 0) {
       convenio = null;
     }
     const reciboData = {
@@ -648,12 +686,15 @@ const postRecibo = async (
 
 const getAllRecibosPorSocio = async (cedulaSocio) => {
   try {
-    const response = await fetch(`${URL}/recibos/getAllRecibosPorSocios/${cedulaSocio}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/recibos/getAllRecibosPorSocios/${cedulaSocio}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -912,7 +953,7 @@ const getUltimoSubsidioSocio = async (cedulaSocio) => {
     return data;
   } catch (error) {
     console.error("Error en get Ultimo subsidio por socio:", error);
-   return null;
+    return null;
   }
 };
 
@@ -1006,12 +1047,12 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
     return data;
   } catch (error) {
     console.error("Error en get Ultimo convenio por socio:", error);
-    return null
+    return null;
   }
 };
 const postIngreso = async (ingreso) => {
   try {
-    console.log("Pruebaaaa" , ingreso);
+    console.log("Pruebaaaa", ingreso);
     const response = await fetch(`${URL}/ingresos`, {
       method: "POST",
       headers: {
@@ -1079,10 +1120,13 @@ const updateIngreso = async (subRubro, denominacion, ingreso) => {
 
 const getAllIngresos = async (idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/ingresos/allIngresos/${idCooperativa}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await fetch(
+      `${URL}/ingresos/allIngresos/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -1268,6 +1312,7 @@ export {
   getAllViviendas,
   updateVivienda,
   deleteVivienda,
+  getViviendaPorSocio,
   getCooperativaPorAdmin,
   getCooperativaPorSocio,
   getUr,
