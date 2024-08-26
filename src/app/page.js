@@ -43,11 +43,7 @@ const Home = () => {
     e.preventDefault();
     const data = await loginUsuario(email, password);
     console.log("Abr",data);
-
-
     const cooperativaMiembro = await getCooperativaPorSocio(data.socio.cedulaSocio);
-
-
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
