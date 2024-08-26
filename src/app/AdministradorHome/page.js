@@ -17,7 +17,7 @@ const AdminHome = () => {
   const [ur, setUr] = useState([]);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(0);
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
