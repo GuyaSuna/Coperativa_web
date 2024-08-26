@@ -140,98 +140,105 @@ const AltaSubsidio = () => {
             <span className="error">{errores.socioSeleccionado}</span>
           )}
         </label>
-        <label className="block text-sm font-medium mb-2">
-          Valor Cuota UR:
-          <input
-            type="text"
-            name="cuotaTotalUr"
-            value={cuotaTotalUr}
-            onChange={handleChangeCuotaTotalUr}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.cuotaTotalUr && (
-            <span className="error">{errores.cuotaTotalUr}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Cuota a Pagar UR:
-          <input
-            type="text"
-            name="cuotaApagarUr"
-            value={cuotaApagarUr}
-            onChange={handleChangeCuotaApagarUr}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.cuotaApagarUr && (
-            <span className="error">{errores.cuotaApagarUr}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Subsidio UR:
-          <input
-            type="text"
-            name="subsidioUr"
-            value={subsidioUr}
-            onChange={handleChangeSubsidioUr}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.subsidioUr && (
-            <span className="error">{errores.subsidioUr}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Porcentaje de Subsidio:
-          <input
-            type="text"
-            name="porcentaje"
-            value={porcentaje}
-            onChange={handleChangePorcentaje}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.porcentaje && (
-            <span className="error">{errores.porcentaje}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Vigencia en cantidad de meses:
-          <input
-            type="text"
-            name="vigenciaEnMeses"
-            value={vigenciaEnMeses}
-            onChange={handleChangeVigenciaEnMeses}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.vigenciaEnMeses && (
-            <span className="error">{errores.vigenciaEnMeses}</span>
-          )}
-        </label>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <label className="block text-sm font-medium mb-2">
+            Valor Cuota UR:
+            <input
+              type="text"
+              name="cuotaTotalUr"
+              value={cuotaTotalUr}
+              onChange={handleChangeCuotaTotalUr}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.cuotaTotalUr && (
+              <span className="error">{errores.cuotaTotalUr}</span>
+            )}
+          </label>
+          <label className="block text-sm font-medium mb-2">
+            Cuota a Pagar UR:
+            <input
+              type="text"
+              name="cuotaApagarUr"
+              value={cuotaApagarUr}
+              onChange={handleChangeCuotaApagarUr}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.cuotaApagarUr && (
+              <span className="error">{errores.cuotaApagarUr}</span>
+            )}
+          </label>
+        </div>
+        <div className="grid md:grid-cols-3 md:gap-6">
+          <label className="block text-sm font-medium mb-2">
+            Subsidio UR:
+            <input
+              type="text"
+              name="subsidioUr"
+              value={subsidioUr}
+              onChange={handleChangeSubsidioUr}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.subsidioUr && (
+              <span className="error">{errores.subsidioUr}</span>
+            )}
+          </label>
+          <label className="block text-sm font-medium mb-2">
+            Porcentaje de Subsidio:
+            <input
+              type="text"
+              name="porcentaje"
+              value={porcentaje}
+              onChange={handleChangePorcentaje}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.porcentaje && (
+              <span className="error">{errores.porcentaje}</span>
+            )}
+          </label>
 
-        <label className="block text-sm font-medium mb-2">
-          Fecha de Otorgamiento:
-          <input
-            type="date"
-            name="fechaOtorgado"
-            value={fechaOtorgado}
-            onChange={handleChangeFechaOtorgado}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.fechaOtorgado && (
-            <span className="error">{errores.fechaOtorgado}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Fecha de Expiración:
-          <input
-            type="date"
-            name="fechaExpira"
-            value={fechaExpira}
-            onChange={handleChangeFechaExpira}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.fechaExpira && (
-            <span className="error">{errores.fechaExpira}</span>
-          )}
-        </label>
+          <label className="block text-sm font-medium mb-2">
+            Vigencia en cantidad de meses:
+            <input
+              type="text"
+              name="vigenciaEnMeses"
+              value={vigenciaEnMeses}
+              onChange={handleChangeVigenciaEnMeses}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.vigenciaEnMeses && (
+              <span className="error">{errores.vigenciaEnMeses}</span>
+            )}
+          </label>
+        </div>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <label className="block text-sm font-medium mb-2">
+            Fecha de Otorgamiento:
+            <input
+              type="date"
+              name="fechaOtorgado"
+              value={fechaOtorgado}
+              onChange={handleChangeFechaOtorgado}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.fechaOtorgado && (
+              <span className="error">{errores.fechaOtorgado}</span>
+            )}
+          </label>
+
+          <label className="block text-sm font-medium mb-2">
+            Fecha de Expiración:
+            <input
+              type="date"
+              name="fechaExpira"
+              value={fechaExpira}
+              onChange={handleChangeFechaExpira}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.fechaExpira && (
+              <span className="error">{errores.fechaExpira}</span>
+            )}
+          </label>
+        </div>
         <button
           type="submit"
           className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"

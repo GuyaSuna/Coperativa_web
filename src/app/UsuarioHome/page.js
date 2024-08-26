@@ -9,6 +9,7 @@ import Header from "@/Components/header";
 import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
 import Cargando from "@/Components/Cargando";
+import SidebarUsuario from "@/Components/SidebarUsuario";
 
 const UsuarioHome = () => {
   const router = useRouter();
@@ -23,7 +24,7 @@ const UsuarioHome = () => {
     setSelectedOption(option);
   };
   useEffect(() => {
-    console.log("Entra maistro?")
+    console.log("Entra maistro?");
     if (!miembro || !cooperativa) {
       console.log("es esto");
       router.push("/");
@@ -51,7 +52,7 @@ const UsuarioHome = () => {
           <div className="flex-grow overflow-hidden flex flex-col">
             <Header setIdentificadorComponente={setIdentificadorComponente} />
             <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">
-              <ListadoLateral
+              <SidebarUsuario
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"
               />

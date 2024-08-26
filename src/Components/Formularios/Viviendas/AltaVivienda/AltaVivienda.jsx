@@ -63,45 +63,49 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
         onSubmit={handleSubmit}
         className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="houseNumber"
-          >
-            Número de vivienda:
-          </label>
-          <input
-            type="text"
-            id="houseNumber"
-            name="houseNumber"
-            value={NroVivienda}
-            onChange={handleChangeNroVivienda}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores?.nroVivienda && (
-            <span className="text-red-500 text-sm">{Errores.nroVivienda}</span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="numberOfBedrooms"
-          >
-            Cantidad de Dormitorios:
-          </label>
-          <input
-            type="text"
-            id="numberOfBedrooms"
-            name="numberOfBedrooms"
-            value={CantidadDormitorios}
-            onChange={handleChangeCantidadDormitorios}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores?.cantidadDormitorios && (
-            <span className="text-red-500 text-sm">
-              {Errores.cantidadDormitorios}
-            </span>
-          )}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="houseNumber"
+            >
+              Número de vivienda:
+            </label>
+            <input
+              type="text"
+              id="houseNumber"
+              name="houseNumber"
+              value={NroVivienda}
+              onChange={handleChangeNroVivienda}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores?.nroVivienda && (
+              <span className="text-red-500 text-sm">
+                {Errores.nroVivienda}
+              </span>
+            )}
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="numberOfBedrooms"
+            >
+              Cantidad de Dormitorios:
+            </label>
+            <input
+              type="text"
+              id="numberOfBedrooms"
+              name="numberOfBedrooms"
+              value={CantidadDormitorios}
+              onChange={handleChangeCantidadDormitorios}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores?.cantidadDormitorios && (
+              <span className="text-red-500 text-sm">
+                {Errores.cantidadDormitorios}
+              </span>
+            )}
+          </div>
         </div>
         <button
           type="submit"

@@ -188,7 +188,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     e.preventDefault();
     console.log(FechaIngresoCooperativa);
     if (!validarFormulario()) return;
-    const today = new Date().toISOString().split('T')[0];
+    const today = new Date().toISOString().split("T")[0];
     const SocioData = {
       cedulaSocio: CedulaSocio,
       nroSocio: NroSocio,
@@ -197,7 +197,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       telefono: TelefonoSocio,
       capitalSocio: CapitalSocio,
       fechaIngresoCooeprativa: FechaIngresoCooperativa,
-      fechaIngreso: today
+      fechaIngreso: today,
     };
     const SuplenteData = {
       cedulaSuplente: CedulaSuplente,
@@ -207,7 +207,6 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     };
 
     try {
-      
       const response = await postSocio(
         SocioData,
         SeleccionVivienda,
@@ -246,123 +245,137 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
             <span className="text-red-500 text-sm">{Errores.nroSocio}</span>
           )}
         </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="nombreSocio"
-          >
-            Nombres:
-          </label>
-          <input
-            type="text"
-            id="nombreSocio"
-            name="nombreSocio"
-            value={NombreSocio}
-            onChange={handleChangeNombreSocio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.nombreSocio && (
-            <span className="text-red-500 text-sm">{Errores.nombreSocio}</span>
-          )}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="nombreSocio"
+            >
+              Nombres:
+            </label>
+            <input
+              type="text"
+              id="nombreSocio"
+              name="nombreSocio"
+              value={NombreSocio}
+              onChange={handleChangeNombreSocio}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.nombreSocio && (
+              <span className="text-red-500 text-sm">
+                {Errores.nombreSocio}
+              </span>
+            )}
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="apellidoSocio"
+            >
+              Apellidos:
+            </label>
+            <input
+              type="text"
+              id="apellidoSocio"
+              name="apellidoSocio"
+              value={ApellidoSocio}
+              onChange={handleChangeApellidoSocio}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.apellidoSocio && (
+              <span className="text-red-500 text-sm">
+                {Errores.apellidoSocio}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="apellidoSocio"
-          >
-            Apellidos:
-          </label>
-          <input
-            type="text"
-            id="apellidoSocio"
-            name="apellidoSocio"
-            value={ApellidoSocio}
-            onChange={handleChangeApellidoSocio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.apellidoSocio && (
-            <span className="text-red-500 text-sm">
-              {Errores.apellidoSocio}
-            </span>
-          )}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="cedulaSocio"
+            >
+              Número de CI.:
+            </label>
+            <input
+              type="text"
+              id="cedulaSocio"
+              name="cedulaSocio"
+              value={CedulaSocio}
+              onChange={handleChangeCedulaSocio}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.cedulaSocio && (
+              <span className="text-red-500 text-sm">
+                {Errores.cedulaSocio}
+              </span>
+            )}
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="telefonoSocio"
+            >
+              Teléfono:
+            </label>
+            <input
+              type="text"
+              id="telefonoSocio"
+              name="telefonoSocio"
+              value={TelefonoSocio}
+              onChange={handleChangeTelefonoSocio}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.telefonoSocio && (
+              <span className="text-red-500 text-sm">
+                {Errores.telefonoSocio}
+              </span>
+            )}
+          </div>
         </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="cedulaSocio"
-          >
-            Número de CI.:
-          </label>
-          <input
-            type="text"
-            id="cedulaSocio"
-            name="cedulaSocio"
-            value={CedulaSocio}
-            onChange={handleChangeCedulaSocio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.cedulaSocio && (
-            <span className="text-red-500 text-sm">{Errores.cedulaSocio}</span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="telefonoSocio"
-          >
-            Teléfono:
-          </label>
-          <input
-            type="text"
-            id="telefonoSocio"
-            name="telefonoSocio"
-            value={TelefonoSocio}
-            onChange={handleChangeTelefonoSocio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.telefonoSocio && (
-            <span className="text-red-500 text-sm">
-              {Errores.telefonoSocio}
-            </span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="capitalSocio"
-          >
-            Capital:
-          </label>
-          <input
-            type="text"
-            id="capitalSocio"
-            name="capitalSocio"
-            value={CapitalSocio}
-            onChange={handleChangeCapitalSocio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.capitalSocio && (
-            <span className="text-red-500 text-sm">{Errores.capitalSocio}</span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="fechaIngreso"
-          >
-            Fecha de Ingreso a La Cooeprativa:
-          </label>
-          <input
-            type="date"
-            id="fechaIngreso"
-            name="fechaIngreso"
-            value={FechaIngresoCooperativa}
-            onChange={handleChangeFechaIngreso}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.fechaIngreso && (
-            <span className="text-red-500 text-sm">{Errores.fechaIngresoCooeprativa}</span>
-          )}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="capitalSocio"
+            >
+              Capital:
+            </label>
+            <input
+              type="text"
+              id="capitalSocio"
+              name="capitalSocio"
+              value={CapitalSocio}
+              onChange={handleChangeCapitalSocio}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.capitalSocio && (
+              <span className="text-red-500 text-sm">
+                {Errores.capitalSocio}
+              </span>
+            )}
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="fechaIngreso"
+            >
+              Fecha de Ingreso a La Cooeprativa:
+            </label>
+            <input
+              type="date"
+              id="fechaIngreso"
+              name="fechaIngreso"
+              value={FechaIngresoCooperativa}
+              onChange={handleChangeFechaIngreso}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.fechaIngreso && (
+              <span className="text-red-500 text-sm">
+                {Errores.fechaIngresoCooeprativa}
+              </span>
+            )}
+          </div>
         </div>
         <div className="mb-4">
           <label
@@ -409,89 +422,93 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
         </div>
         {TieneSuplente && (
           <>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-medium mb-2"
-                htmlFor="nombreSuplente"
-              >
-                Nombre del Suplente:
-              </label>
-              <input
-                type="text"
-                id="nombreSuplente"
-                name="nombreSuplente"
-                value={NombreSuplente}
-                onChange={handleChangeNombreSuplente}
-                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-              {Errores.nombreSuplente && (
-                <span className="text-red-500 text-sm">
-                  {Errores.nombreSuplente}
-                </span>
-              )}
+            <div className="grid md:grid-cols-2 md:gap-6">
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  htmlFor="nombreSuplente"
+                >
+                  Nombre del Suplente:
+                </label>
+                <input
+                  type="text"
+                  id="nombreSuplente"
+                  name="nombreSuplente"
+                  value={NombreSuplente}
+                  onChange={handleChangeNombreSuplente}
+                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                />
+                {Errores.nombreSuplente && (
+                  <span className="text-red-500 text-sm">
+                    {Errores.nombreSuplente}
+                  </span>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  htmlFor="apellidoSuplente"
+                >
+                  Apellido del Suplente:
+                </label>
+                <input
+                  type="text"
+                  id="apellidoSuplente"
+                  name="apellidoSuplente"
+                  value={ApellidoSuplente}
+                  onChange={handleChangeApellidoSuplente}
+                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                />
+                {Errores.apellidoSuplente && (
+                  <span className="text-red-500 text-sm">
+                    {Errores.apellidoSuplente}
+                  </span>
+                )}
+              </div>
             </div>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-medium mb-2"
-                htmlFor="apellidoSuplente"
-              >
-                Apellido del Suplente:
-              </label>
-              <input
-                type="text"
-                id="apellidoSuplente"
-                name="apellidoSuplente"
-                value={ApellidoSuplente}
-                onChange={handleChangeApellidoSuplente}
-                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-              {Errores.apellidoSuplente && (
-                <span className="text-red-500 text-sm">
-                  {Errores.apellidoSuplente}
-                </span>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-medium mb-2"
-                htmlFor="cedulaSuplente"
-              >
-                Número de CI del Suplente:
-              </label>
-              <input
-                type="text"
-                id="cedulaSuplente"
-                name="cedulaSuplente"
-                value={CedulaSuplente}
-                onChange={handleChangeCedulaSuplente}
-                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-              {Errores.cedulaSuplente && (
-                <span className="text-red-500 text-sm">
-                  {Errores.cedulaSuplente}
-                </span>
-              )}
-            </div>
-            <div className="mb-4">
-              <label
-                className="block text-sm font-medium mb-2"
-                htmlFor="telefonoSuplente"
-              >
-                Teléfono del Suplente:
-              </label>
-              <input
-                type="text"
-                id="telefonoSuplente"
-                name="telefonoSuplente"
-                value={TelefonoSuplente}
-                onChange={handleChangeTelefonoSuplente}
-                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              />
-              {Errores.telefonoSuplente && (
-                <span className="text-red-500 text-sm">
-                  {Errores.telefonoSuplente}
-                </span>
-              )}
+            <div className="grid md:grid-cols-2 md:gap-6">
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  htmlFor="cedulaSuplente"
+                >
+                  Número de CI del Suplente:
+                </label>
+                <input
+                  type="text"
+                  id="cedulaSuplente"
+                  name="cedulaSuplente"
+                  value={CedulaSuplente}
+                  onChange={handleChangeCedulaSuplente}
+                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                />
+                {Errores.cedulaSuplente && (
+                  <span className="text-red-500 text-sm">
+                    {Errores.cedulaSuplente}
+                  </span>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  htmlFor="telefonoSuplente"
+                >
+                  Teléfono del Suplente:
+                </label>
+                <input
+                  type="text"
+                  id="telefonoSuplente"
+                  name="telefonoSuplente"
+                  value={TelefonoSuplente}
+                  onChange={handleChangeTelefonoSuplente}
+                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                />
+                {Errores.telefonoSuplente && (
+                  <span className="text-red-500 text-sm">
+                    {Errores.telefonoSuplente}
+                  </span>
+                )}
+              </div>
             </div>
           </>
         )}
