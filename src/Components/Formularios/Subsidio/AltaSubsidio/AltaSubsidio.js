@@ -79,13 +79,10 @@ const AltaSubsidio = () => {
     }
   };
 
-  const handleChangeValorViviendaUr = (e) => setValorViviendaUr(e.target.value);
   const handleChangeCuotaApagarUr = (e) => setCuotaApagarUr(e.target.value);
   const handleChangeSubsidioUr = (e) => setSubsidioUr(e.target.value);
-  const handleChangePorcentaje = (e) => setPorcentaje(e.target.value);
   const handleChangeVigenciaEnMeses = (e) => setVigenciaEnMeses(e.target.value);
   const handleChangeFechaOtorgado = (e) => setFechaOtorgado(e.target.value);
-  const handleChangeFechaExpira = (e) => setFechaExpira(e.target.value);
 
   const handleChangeSocioSeleccionado = async (e) => {
     const selectedCedula = e.target.value;
@@ -202,8 +199,8 @@ const AltaSubsidio = () => {
             type="text"
             name="valorViviendaUr"
             value={valorViviendaUr}
-            onChange={handleChangeValorViviendaUr}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            readonly
           />
           {errores.valorViviendaUr && (
             <span className="error">{errores.valorViviendaUr}</span>
@@ -228,8 +225,8 @@ const AltaSubsidio = () => {
             type="text"
             name="porcentaje"
             value={porcentaje}
-            onChange={handleChangePorcentaje}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            readonly
           />
           {errores.porcentaje && (
             <span className="error">{errores.porcentaje}</span>
@@ -243,6 +240,7 @@ const AltaSubsidio = () => {
             value={cuotaApagarUr}
             onChange={handleChangeCuotaApagarUr}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            readOnly
           />
           {errores.cuotaApagarUr && (
             <span className="error">{errores.cuotaApagarUr}</span>
@@ -281,8 +279,8 @@ const AltaSubsidio = () => {
             type="date"
             name="fechaExpira"
             value={fechaExpira}
-            onChange={handleChangeFechaExpira}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            readOnly
           />
           {errores.fechaExpira && (
             <span className="error">{errores.fechaExpira}</span>

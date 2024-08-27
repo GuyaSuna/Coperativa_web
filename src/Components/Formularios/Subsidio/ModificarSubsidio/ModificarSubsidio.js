@@ -63,7 +63,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
   useEffect(() => {
     if (subsidioUr && cuotaTotalUr) {
       const nuevoPorcentaje = ((subsidioUr / cuotaTotalUr) * 100).toFixed(2);
-      setPorcentaje(nuevoPorcentaje);
+      setPorcentaje(Math.round(nuevoPorcentaje));
     }
   }, [subsidioUr, cuotaTotalUr]);
 
@@ -93,19 +93,6 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
     if (!validarFormulario()) return;
 
     try {
-      const subsidioActualizado = {
-        idSubsidio,
-        cuotaTotalUr,
-        cuotaApagarUr,
-        subsidioUr,
-        porcentaje: Math.round(porcentaje),
-        vigenciaEnMeses: Number(vigenciaEnMeses),
-        fechaOtorgado,
-        fechaExpira,
-        socio: subsidioParam.socio,
-      };
-      console.log("Datos enviados:", subsidioActualizado);
-
       const subsidioNuevo = await updateSubsidio(
         idSubsidio,
         cuotaTotalUr,
@@ -117,6 +104,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
         fechaExpira,
         subsidioParam.socio
       );
+      console.log("Subsidio nuevo", subsidioNuevo);
       setIdentificadorComponente(17);
     } catch (error) {
       console.error("Error al actualizar subsidio:", error);
@@ -149,6 +137,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
             value={cuotaTotalUr}
             onChange={(e) => setCuotaTotalUr(e.target.value)}
             className="input"
+            readOnly
           />
           {errores.cuotaTotalUr && (
             <span className="error">{errores.cuotaTotalUr}</span>
@@ -176,6 +165,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
             value={porcentaje}
             onChange={(e) => setPorcentaje(e.target.value)}
             className="input"
+            readOnly
           />
           {errores.porcentaje && (
             <span className="error">{errores.porcentaje}</span>
@@ -189,6 +179,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
             value={cuotaApagarUr}
             onChange={(e) => setCuotaApagarUr(e.target.value)}
             className="input"
+            readOnly
           />
           {errores.cuotaApagarUr && (
             <span className="error">{errores.cuotaApagarUr}</span>
@@ -231,6 +222,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
             value={fechaExpira}
             onChange={(e) => setFechaExpira(e.target.value)}
             className="input"
+            readOnly
           />
           {errores.fechaExpira && (
             <span className="error">{errores.fechaExpira}</span>

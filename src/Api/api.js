@@ -929,6 +929,17 @@ const updateSubsidio = async (
   socio
 ) => {
   try {
+    console.log(
+      idSubsidio,
+      cuotaTotalUr,
+      cuotaApagarUr,
+      subsidioUr,
+      porcentaje,
+      vigenciaEnMeses,
+      fechaOtorgado,
+      fechaExpira,
+      socio
+    );
     const response = await fetch(`${URL}/subsidio`, {
       method: "PUT",
       headers: {
