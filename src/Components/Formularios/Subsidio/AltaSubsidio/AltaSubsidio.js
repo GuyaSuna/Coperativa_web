@@ -200,7 +200,7 @@ const AltaSubsidio = () => {
             name="valorViviendaUr"
             value={valorViviendaUr}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            readonly
+            readOnly
           />
           {errores.valorViviendaUr && (
             <span className="error">{errores.valorViviendaUr}</span>
@@ -226,7 +226,7 @@ const AltaSubsidio = () => {
             name="porcentaje"
             value={porcentaje}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            readonly
+            readOnly
           />
           {errores.porcentaje && (
             <span className="error">{errores.porcentaje}</span>
