@@ -26,6 +26,8 @@ import ModificarEgreso from "./Formularios/Egresos/ModificarEgresos/modificarEgr
 import ListadoIngresos from "./Listados/ListadoIngresos/listadoIngresos";
 import ListadoEgresos from "./Listados/ListadoEgresos/listadoEgresos";
 import ListadoConvenio from "./Listados/ListadoConvenio/ListadoConvenio";
+import ListadoCooperativa from "./Listados/ListadoCooperativa/listaCooperativa";
+import AltaCooperativa from "./Formularios/Cooperativas/AltaCooperativa";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -45,6 +47,7 @@ const ComponentesOrganizados = ({
   const [ingreso, setIngreso] = useState({});
   const [egreso, setEgreso] = useState({});
   const [convenio, setConvenio] = useState({});
+  const [cooperativa , setCooperativa] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -196,6 +199,21 @@ const ComponentesOrganizados = ({
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
+    }
+    case 27:{
+      return(
+        <ListadoCooperativa
+        setCooperativa={setCooperativa}
+        setIdentificadorComponente={setIdentificadorComponente}
+        />
+      )
+    }
+    case 28:{
+      return(
+        <AltaCooperativa
+        setIdentificadorComponente={setIdentificadorComponente}
+        />
+      )
     }
   }
 };

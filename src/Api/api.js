@@ -31,6 +31,56 @@ const loginAdministrador = async (email, contraseña) => {
   }
 };
 
+const getAllCooperativas = async () => {
+  try {
+    const response = await fetch(
+      `${URL}/cooperativa/allCooperativas`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllCooperativas:", error);
+    throw new Error("Error al obtener los datos de las Cooperativas.");
+  }
+};
+
+const postCooperativa = async (cooperativaEntity) => {
+  try {
+    console.log(cooperativaEntity);
+    console.log("ESTE ES LA API", cooperativaEntity);
+    const response = await fetch(
+      `${URL}/cooperativa`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(cooperativaEntity),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postCooperativa:", error);
+    throw new Error("Error al enviar los datos de la cooperativa");
+  }
+};
 const loginUsuario = async (email, contraseña) => {
   try {
     const body = {
@@ -1343,4 +1393,6 @@ export {
   deleteConvenio,
   updateConvenio,
   getAllRecibosPorSocio,
+  getAllCooperativas,
+  postCooperativa,
 };
