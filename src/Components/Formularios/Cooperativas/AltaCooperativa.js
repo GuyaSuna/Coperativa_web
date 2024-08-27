@@ -3,7 +3,7 @@
 import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { postCooperativa } from "../../../Api/api";
-import MapComponent from "@/Components/MapComponent"; // Importa el componente del mapa
+import MapComponent from "@/Components/MapComponent";
 
 const AltaCooperativa = () => {
   const [nombre, setNombre] = useState("");

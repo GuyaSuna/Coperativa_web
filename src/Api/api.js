@@ -225,16 +225,11 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 // };
 
 const updateSocio = async (
-  cedulaSocio,
-  nroSocio,
-  nombreSocio,
-  apellidoSocio,
-  capitalSocio,
-  telefono,
-  fechaIngreso
+  socioEntity
 ) => {
+  let cedulaSocio = socioEntity.cedulaSocio;
   console.log("La cedula del socio es: " + cedulaSocio);
-  console.log("Telefono que se envía: " + telefono);
+
   try {
     // const fechaFormateada = formatDateToSQL(FechaIngreso);
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
@@ -242,15 +237,7 @@ const updateSocio = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        cedulaSocio,
-        nroSocio,
-        nombreSocio,
-        apellidoSocio,
-        capitalSocio,
-        telefono,
-        fechaIngreso,
-      }),
+      body: JSON.stringify(socioEntity),
     });
 
     if (!response.ok) {
