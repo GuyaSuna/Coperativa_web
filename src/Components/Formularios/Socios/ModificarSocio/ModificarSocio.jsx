@@ -14,6 +14,8 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
   const [capitalSocio, setCapitalSocio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fechaIngreso, setFechaIngreso] = useState("");
+  const [fechaIngresoCooperativa , setFechaIngresoCooperativa] = useState("");
+  const [suplente , setSuplente] = useState(null);
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -25,26 +27,33 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
       try {
         const data = await getSocio(cedulaSocio);
         if (data) {
+          // Procesa y establece las fechas
+          const ingreso = data.fechaIngreso ? new Date(data.fechaIngreso).toISOString().split('T')[0] : "";
+          console.log("Fecha Ingreso Cooperativa recibida:", data.fechaIngresoCooperativa);
+const ingresoCooperativa = data.fechaIngresoCooperativa ? new Date(data.fechaIngresoCooperativa).toISOString().split('T')[0] : "";
+console.log("Fecha Ingreso Cooperativa formateada:", ingresoCooperativa);
+setFechaIngresoCooperativa(ingresoCooperativa);
+          
+          setFechaIngresoCooperativa(ingresoCooperativa);
+          setFechaIngreso(ingreso);
+          
           setNroSocio(data.nroSocio || "");
           setNombreSocio(data.nombreSocio || "");
           setApellidoSocio(data.apellidoSocio || "");
           setCapitalSocio(data.capitalSocio || "");
           setTelefono(data.telefono || "");
-          setFechaIngreso(
-            data.FechaIngreso ? data.FechaIngreso.substring(0, 10) : ""
-          ); 
+          setSuplente(data.suplenteEntity);
         }
         console.log(data);
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
     };
-
+  
     if (cedulaSocio) {
       fetchSocio();
     }
   }, [cedulaSocio]);
-
   const validarFormulario = () => {
     const errores = {};
 
@@ -56,6 +65,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
     if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
+    if(!fechaIngresoCooperativa) errores.fechaIngresoCooperativa="La fecha de ingreso a la cooperativa es obligatoria";
     setErrores(errores);
 
     return Object.keys(errores).length === 0;
@@ -66,17 +76,21 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
 
     console.log(fechaIngreso);
     if (!validarFormulario()) return;
-
+    let socioUpdate={
+      cedulaSocio,
+      nroSocio,
+      nombreSocio,
+      apellidoSocio,
+      capitalSocio,
+      telefono,
+      fechaIngreso,
+      fechaIngresoCooperativa,
+      suplenteEntity : suplente,
+    }
     try {
-      const result = await updateSocio(
-        cedulaSocio,
-        nroSocio,
-        nombreSocio,
-        apellidoSocio,
-        capitalSocio,
-        telefono,
-        fechaIngreso
-      );
+      const result = await updateSocio(socioUpdate);
+      
+      
       console.log("Socio actualizado:", result);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
@@ -183,7 +197,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
             <span className="error">{errores.capitalSocio}</span>
           )}
         </label>
-        <br />
+        <br/>
         <label className="label">
           Fecha de Ingreso:
           <input
@@ -195,6 +209,20 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
           />
           {errores.fechaIngreso && (
             <span className="error">{errores.fechaIngreso}</span>
+          )}
+        </label>
+        <br />
+        <label className="label">
+          Fecha de Ingreso Cooperativa:
+          <input
+            type="date"
+            name="fechaIngresoCooperativa"
+            value={fechaIngresoCooperativa || ""}
+            onChange={(e) => setFechaIngresoCooperativa(e.target.value)}
+            className="input"
+          />
+          {errores.fechaIngresoCooperativa && (
+            <span className="error">{errores.fechaIngresoCooperativa}</span>
           )}
         </label>
         <br />

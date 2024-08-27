@@ -10,7 +10,8 @@ import {
   getAllViviendas,
   getUltimoConvenioSocio,
   getUltimoSubsidioSocio,
-  postIngreso
+  postIngreso,
+  updateSocio
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
@@ -24,8 +25,8 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
-  const [convenio, setConvenio] = useState({}); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
-  const [subsidio , setSubsidio] = useState({});
+  const [convenio, setConvenio] = useState(null); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
+  const [subsidio , setSubsidio] = useState(null);
   const [cuotaMensualBase , setCuotaMensualBase] = useState(0);
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
@@ -34,6 +35,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   const [valorVivienda, setValorVivienda] = useState(0);
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
+  const [ingreso , setIngreso] = useState(null);
 
   //Nahuel- va en altaRecibo la peticion de ur
 
@@ -55,6 +57,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
   },[reajuste])
 
   useEffect(() => {
+    if(convenio == null) return;
     fetchCalculos();
     setCuotaSocial(400);
      console.log(Socio , "SOCIO")
@@ -112,8 +115,7 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
     setInteres(interesParm * (valorDormitorios / ur.buy));
     setCapital(capitalParm * (valorDormitorios / ur.buy));
   
-    console.log("Subsidio", subsidio.subsidioUr)
-    console.log("Vivienda" , valorVivienda)
+
 
     let ValorViviendaModificar = valorVivienda;
 
@@ -219,12 +221,28 @@ const AltaRecibo = ({ Socio, ur , interesParm , capitalParm }) => {
         tipoMoneda : "UR"
       }
       const IngresoResponse = await postIngreso(ingreso)
-      console.log("Es esto????", IngresoResponse)
+      setIngreso(IngresoResponse);
+      console.log("Ingreso Response", IngresoResponse)
       alert("Dado de alta correctamente");
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
     }
   };
+
+  useEffect(() => {
+    automaticUpdate();
+  },[ingreso])
+
+
+  const automaticUpdate = async () => {
+    let socioActualizar = Socio;
+    socioActualizar.capitalSocio +=  capital;
+    if(ingreso != null){
+    const socioUpdate = await updateSocio(socioActualizar);
+    console.log("Socio Update", socioUpdate);
+    }
+    
+  }
   //      ruta dinamica
   //      router.push(`/UserInfo/${NroSocio}`);
   return (
