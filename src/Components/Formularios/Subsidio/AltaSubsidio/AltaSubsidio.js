@@ -52,6 +52,23 @@ const AltaSubsidio = () => {
     }
   }, [subsidioUr, valorViviendaUr]);
 
+  useEffect(() => {
+    if (fechaOtorgado && vigenciaEnMeses) {
+      const fechaOtorgamiento = new Date(fechaOtorgado);
+      fechaOtorgamiento.setMonth(
+        fechaOtorgamiento.getMonth() + parseInt(vigenciaEnMeses)
+      );
+
+      // Asegurarse de que la fecha sea UTC para evitar problemas de zona horaria
+      const year = fechaOtorgamiento.getUTCFullYear();
+      const month = ("0" + (fechaOtorgamiento.getUTCMonth() + 1)).slice(-2);
+      const day = ("0" + fechaOtorgamiento.getUTCDate()).slice(-2);
+
+      const nuevaFechaExpira = `${year}-${month}-${day}`;
+      setFechaExpira(nuevaFechaExpira);
+    }
+  }, [vigenciaEnMeses, fechaOtorgado]);
+
   const fetchSociosDisponibles = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
@@ -95,7 +112,8 @@ const AltaSubsidio = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!cuotaTotalUr) errores.cuotaTotalUr = "La cuota total es obligatoria";
+    if (!valorViviendaUr)
+      errores.valorViviendaUr = "La cuota total es obligatoria";
     if (!cuotaApagarUr)
       errores.cuotaApagarUr = "La cuota a pagar es obligatoria";
     if (!subsidioUr) errores.subsidioUr = "El subsidio es obligatorio";
@@ -130,10 +148,10 @@ const AltaSubsidio = () => {
     if (!validarFormulario()) return;
 
     const subsidioEntity = {
-      cuotaTotalUr,
+      cuotaTotalUr: valorViviendaUr,
       cuotaApagarUr,
       subsidioUr,
-      porcentaje,
+      porcentaje: Math.round(porcentaje),
       vigenciaEnMeses,
       fechaOtorgado,
       fechaExpira,

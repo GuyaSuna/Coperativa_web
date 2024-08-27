@@ -31,10 +31,41 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
       setSubsidioUr(subsidioParam.subsidioUr);
       setPorcentaje(subsidioParam.porcentaje);
       setVigenciaEnMeses(subsidioParam.vigenciaEnMeses);
-      setFechaOtorgado(subsidioParam.fechaOtorgado);
-      setFechaExpira(subsidioParam.fechaExpira);
+      // Asegurar que las fechas se manejen correctamente
+      const fechaOtorgadoFormatted = new Date(subsidioParam.fechaOtorgado)
+        .toISOString()
+        .split("T")[0];
+      const fechaExpiraFormatted = new Date(subsidioParam.fechaExpira)
+        .toISOString()
+        .split("T")[0];
+
+      setFechaOtorgado(fechaOtorgadoFormatted);
+      setFechaExpira(fechaExpiraFormatted);
     }
   }, [subsidioParam]);
+
+  useEffect(() => {
+    if (fechaOtorgado && vigenciaEnMeses) {
+      const fechaOtorgamiento = new Date(fechaOtorgado);
+      fechaOtorgamiento.setMonth(
+        fechaOtorgamiento.getMonth() + parseInt(vigenciaEnMeses)
+      );
+
+      const day = ("0" + fechaOtorgamiento.getUTCDate()).slice(-2);
+      const month = ("0" + (fechaOtorgamiento.getUTCMonth() + 1)).slice(-2);
+      const year = fechaOtorgamiento.getUTCFullYear();
+
+      const nuevaFechaExpira = `${year}-${month}-${day}`;
+      setFechaExpira(nuevaFechaExpira);
+    }
+  }, [vigenciaEnMeses, fechaOtorgado]);
+
+  useEffect(() => {
+    if (subsidioUr && cuotaTotalUr) {
+      const nuevoPorcentaje = ((subsidioUr / cuotaTotalUr) * 100).toFixed(2);
+      setPorcentaje(nuevoPorcentaje);
+    }
+  }, [subsidioUr, cuotaTotalUr]);
 
   const validarFormulario = () => {
     const errores = {};
@@ -58,6 +89,7 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("handleSubmit ejecutado");
     if (!validarFormulario()) return;
 
     try {
@@ -66,8 +98,8 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
         cuotaTotalUr,
         cuotaApagarUr,
         subsidioUr,
-        porcentaje,
-        vigenciaEnMeses,
+        porcentaje: Math.round(porcentaje),
+        vigenciaEnMeses: Number(vigenciaEnMeses),
         fechaOtorgado,
         fechaExpira,
         socio: subsidioParam.socio,
@@ -122,21 +154,6 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
             <span className="error">{errores.cuotaTotalUr}</span>
           )}
         </label>
-        <br />
-        <label className="label">
-          Cuota a Pagar UR:
-          <input
-            type="text"
-            name="cuotaApagarUr"
-            value={cuotaApagarUr}
-            onChange={(e) => setCuotaApagarUr(e.target.value)}
-            className="input"
-          />
-          {errores.cuotaApagarUr && (
-            <span className="error">{errores.cuotaApagarUr}</span>
-          )}
-        </label>
-        <br />
         <label className="label">
           Subsidio UR:
           <input
@@ -162,6 +179,19 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
           />
           {errores.porcentaje && (
             <span className="error">{errores.porcentaje}</span>
+          )}
+        </label>
+        <label className="label">
+          Cuota a Pagar UR:
+          <input
+            type="text"
+            name="cuotaApagarUr"
+            value={cuotaApagarUr}
+            onChange={(e) => setCuotaApagarUr(e.target.value)}
+            className="input"
+          />
+          {errores.cuotaApagarUr && (
+            <span className="error">{errores.cuotaApagarUr}</span>
           )}
         </label>
         <br />

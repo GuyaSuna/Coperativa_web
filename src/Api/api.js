@@ -33,13 +33,10 @@ const loginAdministrador = async (email, contraseña) => {
 
 const getAllCooperativas = async () => {
   try {
-    const response = await fetch(
-      `${URL}/cooperativa/allCooperativas`,
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -58,16 +55,13 @@ const postCooperativa = async (cooperativaEntity) => {
   try {
     console.log(cooperativaEntity);
     console.log("ESTE ES LA API", cooperativaEntity);
-    const response = await fetch(
-      `${URL}/cooperativa`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(cooperativaEntity),
-      }
-    );
+    const response = await fetch(`${URL}/cooperativa`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cooperativaEntity),
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -974,14 +968,18 @@ const deleteSubsidio = async (idSubsidio) => {
         "Content-Type": "application/json",
       },
     });
+
     if (!response.ok) {
-      throw new Error("Error en la solicitud de borrado del subsidio");
+      const errorDetails = await response.text();
+      throw new Error(
+        `Error en la solicitud de borrado del subsidio: ${errorDetails}`
+      );
     }
 
     return true;
   } catch (error) {
     console.error("Error en deleteSubsidio:", error);
-    throw new Error("Error al eliminar la vivienda.");
+    throw new Error(`Error al eliminar el subsidio: ${error.message}`);
   }
 };
 
@@ -1190,6 +1188,7 @@ const getAllIngresos = async (idCooperativa) => {
     throw new Error("Error al obtener los datos de los Ingresos.");
   }
 };
+
 const deleteConvenio = async (idConvenio) => {
   try {
     const response = await fetch(`${URL}/convenios/${idConvenio}`, {
@@ -1299,6 +1298,7 @@ const deleteEgreso = async (idEgreso) => {
     throw new Error("Error al eliminar el Egreso.");
   }
 };
+
 const updateEgreso = async (subRubro, denominacion, egreso) => {
   try {
     const response = await fetch(`${URL}/egresos`, {
