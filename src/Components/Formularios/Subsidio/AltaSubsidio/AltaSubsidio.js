@@ -3,14 +3,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import "./subsidioStyle.css";
 import { useRouter } from "next/navigation";
-import { postSubsidio, getAllSocios } from "../../../../Api/api";
+import {
+  postSubsidio,
+  getAllSocios,
+  getViviendaPorSocio,
+} from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaSubsidio = () => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
 
-  const [cuotaTotalUr, setCuotaTotalUr] = useState("");
+  const [valorViviendaUr, setValorViviendaUr] = useState("");
   const [cuotaApagarUr, setCuotaApagarUr] = useState("");
   const [subsidioUr, setSubsidioUr] = useState("");
   const [porcentaje, setPorcentaje] = useState("");
@@ -26,6 +30,28 @@ const AltaSubsidio = () => {
     fetchSociosDisponibles();
   }, []);
 
+  useEffect(() => {
+    if (subsidioUr && valorViviendaUr) {
+      const subsidioValue = parseFloat(subsidioUr);
+      const valorViviendaValue = parseFloat(valorViviendaUr);
+      if (
+        !isNaN(subsidioValue) &&
+        !isNaN(valorViviendaValue) &&
+        valorViviendaValue !== 0
+      ) {
+        // Calcular cuota a pagar
+        const cuota = valorViviendaValue - subsidioValue;
+        setCuotaApagarUr(cuota.toFixed(2));
+
+        // Calcular porcentaje
+        const porcentaje = (subsidioValue / valorViviendaValue) * 100;
+        setPorcentaje(porcentaje.toFixed(2));
+      } else {
+        console.error("Valores no válidos:", { subsidioUr, valorViviendaUr });
+      }
+    }
+  }, [subsidioUr, valorViviendaUr]);
+
   const fetchSociosDisponibles = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
@@ -36,7 +62,7 @@ const AltaSubsidio = () => {
     }
   };
 
-  const handleChangeCuotaTotalUr = (e) => setCuotaTotalUr(e.target.value);
+  const handleChangeValorViviendaUr = (e) => setValorViviendaUr(e.target.value);
   const handleChangeCuotaApagarUr = (e) => setCuotaApagarUr(e.target.value);
   const handleChangeSubsidioUr = (e) => setSubsidioUr(e.target.value);
   const handleChangePorcentaje = (e) => setPorcentaje(e.target.value);
@@ -52,12 +78,12 @@ const AltaSubsidio = () => {
     );
     setSocioSeleccionado(selectedSocio);
     console.log(selectedSocio, "socio seleccionado");
-
     if (selectedSocio) {
       try {
-        const vivienda = await getViviendaBySocio(selectedSocio.cedulaSocio);
+        const vivienda = await getViviendaPorSocio(selectedSocio.cedulaSocio);
         if (vivienda) {
-          setCuotaTotalUr(vivienda.cuotaUr);
+          setValorViviendaUr(vivienda.valorVivienda);
+          console.log("Vivienda obtenida:", vivienda);
         }
       } catch (error) {
         console.error("Error al obtener la vivienda del socio:", error);
@@ -156,26 +182,13 @@ const AltaSubsidio = () => {
           Valor Cuota UR:
           <input
             type="text"
-            name="cuotaTotalUr"
-            value={cuotaTotalUr}
-            onChange={handleChangeCuotaTotalUr}
+            name="valorViviendaUr"
+            value={valorViviendaUr}
+            onChange={handleChangeValorViviendaUr}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {errores.cuotaTotalUr && (
-            <span className="error">{errores.cuotaTotalUr}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Cuota a Pagar UR:
-          <input
-            type="text"
-            name="cuotaApagarUr"
-            value={cuotaApagarUr}
-            onChange={handleChangeCuotaApagarUr}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.cuotaApagarUr && (
-            <span className="error">{errores.cuotaApagarUr}</span>
+          {errores.valorViviendaUr && (
+            <span className="error">{errores.valorViviendaUr}</span>
           )}
         </label>
         <label className="block text-sm font-medium mb-2">
@@ -202,6 +215,19 @@ const AltaSubsidio = () => {
           />
           {errores.porcentaje && (
             <span className="error">{errores.porcentaje}</span>
+          )}
+        </label>
+        <label className="block text-sm font-medium mb-2">
+          Cuota a Pagar UR:
+          <input
+            type="text"
+            name="cuotaApagarUr"
+            value={cuotaApagarUr}
+            onChange={handleChangeCuotaApagarUr}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {errores.cuotaApagarUr && (
+            <span className="error">{errores.cuotaApagarUr}</span>
           )}
         </label>
         <label className="block text-sm font-medium mb-2">
