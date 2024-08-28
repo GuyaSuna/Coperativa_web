@@ -24,11 +24,11 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark">
+    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-800 dark:border-gray-200 overflow-y-auto lg:block hidden p-5 bg-dark dark:bg-gray-50">
       <div className="space-y-4 mt-3">
         <button
           onClick={() => handleSelection(2)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-black text-white hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 2 ? "bg-blue-500 text-white" : ""
           }`}
         >
@@ -37,7 +37,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
 
         <button
           onClick={() => handleSelection(3)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-black text-white hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 3 ? "bg-blue-500 text-white" : ""
           }`}
         >
@@ -46,7 +46,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
 
         <button
           onClick={() => handleSelection(7)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-black text-white hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 7 ? "bg-blue-500 text-white" : ""
           }`}
         >
@@ -57,7 +57,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
         <div className="relative">
           <button
             onClick={() => toggleDropdown(1)}
-            className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-black text-white hover:bg-blue-100 dark:hover:bg-blue-900 ${
               openDropdown === 1 ? "bg-blue-500 text-white" : ""
             }`}
           >
@@ -78,7 +78,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
             <div className="mt-2 space-y-2 ml-4">
               <button
                 onClick={() => handleSelection(4)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-black text-white hover:bg-blue-100 dark:hover:bg-blue-900 ${
                   selectedOption === 4 ? "bg-blue-500 text-white" : ""
                 }`}
               >
@@ -86,7 +86,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
               </button>
               <button
                 onClick={() => handleSelection(5)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-black text-white hover:bg-blue-100 dark:hover:bg-blue-900 ${
                   selectedOption === 5 ? "bg-blue-500 text-white" : ""
                 }`}
               >
@@ -95,42 +95,6 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
             </div>
           )}
         </div>
-
-        <button
-          onClick={() => handleSelection(8)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-            selectedOption === 8 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaBell className="mr-2" /> Generar Aviso
-        </button>
-
-        <button
-          onClick={() => handleSelection(16)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-            selectedOption === 16 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaHandHoldingUsd className="mr-2" /> Agregar Subsidio
-        </button>
-
-        <button
-          onClick={() => handleSelection(22)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-            selectedOption === 22 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaMoneyBillWave className="mr-2" /> Agregar Ingreso
-        </button>
-
-        <button
-          onClick={() => handleSelection(24)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-            selectedOption === 24 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaMoneyBill className="mr-2" /> Agregar Egreso
-        </button>
       </div>
     </div>
   );
