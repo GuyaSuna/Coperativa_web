@@ -390,7 +390,7 @@ const ListadoSocio = ({
           <tbody>
             {buscadorFiltrado?.map((socio) => (
               // eslint-disable-next-line react/jsx-key
-              <tr className="border-b dark:border-gray-700">
+              <tr className="border-b dark:border-gray-700" key={socio.cedulaSocio}>
                 <th
                   scope="row"
                   className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"

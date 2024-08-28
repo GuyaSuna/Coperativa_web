@@ -38,9 +38,9 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
           Agregar Suplente
         </button>
         <button
-          href="#"
+          onClick={() => handleSelection(13)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-            selectedOption === 5 ? "bg-blue-500 text-white" : ""
+            selectedOption === 13 ? "bg-blue-500 text-white" : ""
           }`}
           // onClick={() => handleSelection(5)}
         >

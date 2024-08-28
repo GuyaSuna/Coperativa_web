@@ -18,17 +18,21 @@ const AdminHome = () => {
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // Nuevo estado para manejar la carga inicial
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
   };
+
   useEffect(() => {
-    if (!miembro || !cooperativa) {
-      console.log("es esto");
+    if (miembro && cooperativa) {
+      setIsLoading(false); // Una vez que los datos están disponibles, deja de cargar
+    } else {
+      console.log("Datos del Provider no están disponibles");
       router.push("/");
     }
-  }, []);
+  }, [miembro?.idMiembro, cooperativa?.idCooperativa]); // Solo corre cuando estos valores cambian
 
   useEffect(() => {
     fetchUr();
@@ -43,6 +47,10 @@ const AdminHome = () => {
       console.error("Error al obtener las unidades reajustables:", error);
     }
   };
+
+  if (isLoading) {
+    return <Cargando />; // Mostrar un componente de carga mientras se esperan los datos
+  }
 
   return (
     <>
