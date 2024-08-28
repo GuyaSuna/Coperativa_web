@@ -170,9 +170,9 @@ const ListadoViviendas = ({
                   scope="row"
                   className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                 >
-                  {vivienda?.socioTitular?.nombreSocio &&
-                  vivienda?.socioTitular?.apellidoSocio
-                    ? `${vivienda.socioTitular.nombreSocio} ${vivienda.socioTitular.apellidoSocio}`
+                  {vivienda?.socio?.nombreSocio &&
+                  vivienda?.socio?.apellidoSocio
+                    ? `${vivienda.socio.nombreSocio} ${vivienda.socio.apellidoSocio}`
                     : "Sin socio"}
                 </th>
                 <td className="px-20 py-3"> {vivienda.cantidadDormitorios}</td>

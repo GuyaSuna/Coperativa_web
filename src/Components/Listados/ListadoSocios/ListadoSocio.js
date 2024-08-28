@@ -104,6 +104,8 @@ const ListadoSocio = ({
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
+      console.log("Cooperativa" , cooperativa)
+      console.log("Respuesta all socios", response)
       const sociosConFechaFormateada = response.map((socio) => {
         console.log("Fecha ingreso antes: ", socio.fechaIngreso);
 
@@ -152,7 +154,7 @@ const ListadoSocio = ({
   };
 
   useEffect(() => {
-    if (buscador === "") {
+    if (buscador == "") {
       setBuscadorFiltrado(allSocios);
     } else {
       const buscadorFiltrado = allSocios.filter((socio) =>

@@ -161,7 +161,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                 <td className="px-4 py-3">{recibo.fechaPago}</td>
                 <td className="px-4 py-3">
                   <span class="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
-                    {socio.estaImpago ? "Impago" : "Pago"}
+                    {recibo.socio?.estaImpago ? "Impago" : "Pago"}
                   </span>
                 </td>
                 <td className="px-4 py-3">
