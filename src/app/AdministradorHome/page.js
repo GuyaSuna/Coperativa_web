@@ -10,6 +10,7 @@ import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Cargando from "@/Components/Cargando";
+import Sidebar from "@/Components/Sidebar";
 
 const AdminHome = () => {
   const router = useRouter();
@@ -63,6 +64,7 @@ const AdminHome = () => {
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"
               />
+
               <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto ">
                 <div className="px-4 sm:px-7 pt-4 sm:pt-7 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
                   <div className="flex w-full items-center flex-wrap">

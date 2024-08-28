@@ -77,29 +77,6 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
       throw ("Fallo al eliminar el convenio ", e.error);
     }
   };
-  const ordenarOptions = [
-    { label: "Más recientes", icon: <SortIcon /> },
-    { label: "Más antiguos", icon: <SortIcon /> },
-    { label: "Mayor deuda", icon: <SortIcon /> },
-  ];
-
-  const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
-    // Lógica para ordenar los elementos según la opción seleccionada
-  };
-  const handleOrder = () => {
-    const ordenarSocios = [...allSocios].sort(
-      (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso)
-    );
-    setAllSocios(ordenarSocios);
-  };
-
-  // const handleOrderByNroSocio = () => {
-  //   const ordenarSocios = [...allSocios].sort(
-  //     (a, b) => a.nroSocio - b.nroSocio
-  //   );
-  //   setAllSocios(ordenarSocios);
-  // };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -107,6 +84,34 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+  const ordenarOptions = [
+    {
+      label: "Número convenio",
+      key: "nroConvenio",
+      icon: <SortIcon />,
+      comparator: (a, b) => a.idConvenio - b.idConvenio,
+    },
+    {
+      label: "Más Recientes",
+      key: "fechaIngreso",
+      icon: <SortIcon />,
+      comparator: (a, b) =>
+        new Date(b.fechaInicioConvenio) - new Date(a.fechaInicioConvenio),
+    },
+    {
+      label: "Más Antiguos",
+      key: "fechaIngreso",
+      icon: <SortIcon />,
+      comparator: (a, b) =>
+        new Date(a.fechaInicioConvenio) - new Date(b.fechaInicioConvenio),
+    },
+  ];
+
+  const handleSortChange = (option) => {
+    console.log("Orden seleccionado:", option.label);
+    const ordenarConvenios = [...allConvenios].sort(option.comparator);
+    setAllConvenios(ordenarConvenios);
   };
 
   return (
