@@ -27,7 +27,7 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
 
   const handleModificar = (cooperativa) => {
     setCooperativa(cooperativa);
-    setIdentificadorComponente(28); // Ajusta el identificador del componente si es necesario
+    setIdentificadorComponente(29);
   };
 
   const handleVerCooperativa = (cooperativa) => {

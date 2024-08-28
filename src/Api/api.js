@@ -31,6 +31,60 @@ const loginAdministrador = async (email, contraseña) => {
   }
 };
 
+
+const postAdministrador = async (administradorEntity) => {
+  try {
+    const response = await fetch(
+      `${URL}/administrador`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(administradorEntity),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postAdministrador:", error);
+    throw new Error("Error al enviar los datos del administrador");
+  }
+};
+
+const updateAdministrador = async (
+  administradorEntity
+) => {
+  try {
+    const response = await fetch(`${URL}/administrador`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(administradorEntity),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error en la solicitud: ${response.status} - ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`El error ocurrio en updateAdministrador: ${error.message}`);
+    throw error;
+  }
+};
+
 const getAllCooperativas = async () => {
   try {
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
@@ -75,6 +129,34 @@ const postCooperativa = async (cooperativaEntity) => {
     throw new Error("Error al enviar los datos de la cooperativa");
   }
 };
+
+const updateCooperativa = async (
+  cooperativaEntity
+) => {
+  try {
+    const response = await fetch(`${URL}/cooperativa`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cooperativaEntity),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error en la solicitud: ${response.status} - ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`El error ocurrio en updateCooperativa: ${error.message}`);
+    throw error;
+  }
+};
+
 const loginUsuario = async (email, contraseña) => {
   try {
     const body = {
@@ -1393,4 +1475,7 @@ export {
   getAllRecibosPorSocio,
   getAllCooperativas,
   postCooperativa,
+  updateCooperativa,
+  updateAdministrador,
+  postAdministrador,
 };

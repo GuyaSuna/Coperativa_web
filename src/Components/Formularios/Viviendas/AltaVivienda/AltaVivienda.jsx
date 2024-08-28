@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
-import { postVivienda } from "../../../../Api/api.js";
+import { postVivienda , getAllViviendas } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
 const AltaVivienda = ({ setIdentificadorComponente }) => {
@@ -11,15 +11,19 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
   const [NroVivienda, setNroVivienda] = useState();
   const [CantidadDormitorios, setCantidadDormitorios] = useState();
+  const [isOpen , setIsOpen] = useState(true);
   const [Errores, setErrores] = useState();
   const handleChangeCantidadDormitorios = (e) => {
     setCantidadDormitorios(e.target.value);
     console.log(e.target.value);
   };
 
+  useEffect(() => {
+    validarCupos();
+  },[])
+
   const validarFormulario = () => {
     const errores = {};
-
     if (!NroVivienda) {
       errores.nroVivienda = "El número de vivienda es obligatorio";
     } else if (isNaN(NroVivienda)) {
@@ -43,9 +47,24 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
     console.log(e.target.value);
   };
 
+  const validarCupos = async () => {
+    const ViviendaResponse = await getAllViviendas(cooperativa.idCooperativa);
+    console.log("Cantidad viviendas",ViviendaResponse.length);
+    if(ViviendaResponse.length >= cooperativa.cuposLibre){
+      console.log("Seteo false")
+      setIsOpen(false);
+     
+    }
+    return
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarFormulario()) return;
+    if(!isOpen) {
+      alert("No quedan cupos libres en la cooperativa"); 
+      return;
+    }
     const data = {
       nroVivienda: NroVivienda,
       cantidadDormitorios: CantidadDormitorios,

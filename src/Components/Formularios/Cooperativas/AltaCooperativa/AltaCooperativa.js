@@ -2,7 +2,7 @@
 
 import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { postCooperativa } from "../../../Api/api";
+import { postCooperativa } from "../../../../Api/api";
 import MapComponent from "@/Components/MapComponent";
 
 const AltaCooperativa = () => {
@@ -14,8 +14,6 @@ const AltaCooperativa = () => {
   const [cantidadViviendas, setCantidadViviendas] = useState("");
   const [cuposLibre, setCuposLibre] = useState("");
   const [estadoCooperativa, setEstadoCooperativa] = useState("Activa");
-  const [latitud, setLatitud] = useState("");
-  const [longitud, setLongitud] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   const router = useRouter();
@@ -31,15 +29,12 @@ const AltaCooperativa = () => {
       cantidadViviendas: parseInt(cantidadViviendas),
       cuposLibre: parseInt(cuposLibre),
       estadoCooperativa,
-      latitud: parseFloat(latitud),
-      longitud: parseFloat(longitud),
     };
 
     try {
       const response = await postCooperativa(data);
       console.log(response);
       setMensaje("Cooperativa creada con éxito");
-      router.push("/ruta-a-redirigir"); // Cambia la ruta según sea necesario
     } catch (error) {
       console.error("Error al crear la cooperativa:", error);
       setMensaje("Error al crear la cooperativa");
@@ -165,37 +160,6 @@ const AltaCooperativa = () => {
             <option value="Inactiva">Inactiva</option>
           </select>
         </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="latitud">
-            Latitud:
-          </label>
-          <input
-            type="text"
-            id="latitud"
-            name="latitud"
-            value={latitud}
-            onChange={(e) => setLatitud(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            readOnly
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="longitud">
-            Longitud:
-          </label>
-          <input
-            type="text"
-            id="longitud"
-            name="longitud"
-            value={longitud}
-            onChange={(e) => setLongitud(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            readOnly
-          />
-        </div>
-
-        <MapComponent setLatitud={setLatitud} setLongitud={setLongitud} />
 
         <button
           type="submit"
