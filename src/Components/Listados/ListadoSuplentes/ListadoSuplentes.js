@@ -124,7 +124,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
             type="button"
-            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500  focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
             <svg
               className="h-3.5 w-3.5 mr-2"
@@ -152,10 +152,10 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
       </div>
       <div className="overflow-y-auto">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase  dark:text-white dark:border-gray-700 border-gray-700 border-b">
-            <tr>
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+            <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3 text-center">
-                Cedula
+                Cédula
               </th>
               <th scope="col" className="px-4 py-3">
                 Nombre
@@ -163,6 +163,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
               <th scope="col" className="px-4 py-3">
                 Socio
               </th>
+              <th scope="col" className="px-4 py-3"></th>
               <th scope="col" className="px-4 py-3">
                 <span className="sr-only">Actions</span>
               </th>
@@ -172,32 +173,32 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
             {buscadorFiltrado.map((suplente) => {
               const socio = getSocioPorSuplente(suplente.cedulaSuplente);
               return (
-                <tr className="border-b dark:border-gray-700">
-                  <th
-                    scope="row"
-                    className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
+                <tr
+                  className="border-b dark:border-gray-700 sm:table-row"
+                  key={suplente.cedulaSuplente}
+                >
+                  <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <span className="sm:hidden font-semibold">Cédula:</span>
                     {suplente.cedulaSuplente}
-                  </th>
-                  <th
-                    scope="row"
-                    className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
+                  </td>
+                  <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <span className="sm:hidden font-semibold">Nombre:</span>
                     {suplente.nombreSuplente} {suplente.apellidoSuplente}
-                  </th>
-                  <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  </td>
+                  <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <span className="sm:hidden font-semibold">Socio:</span>
                     {socio?.nombreSocio} {socio?.apellidoSocio}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="block sm:table-cell px-4 py-3">
                     <button
                       type="button"
                       onClick={() => handleVerSuplente(suplente, socio)}
-                      class="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                      className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md hover:scale-[1.02] transition-transform"
                     >
                       Ver
                     </button>
                   </td>
-                  <td className="px-4 py-3 flex items-center justify-end">
+                  <td className="block sm:table-cell px-4 py-3 flex items-center justify-end">
                     <div className="flex items-center justify-between">
                       <Menu
                         as="div"
@@ -228,24 +229,19 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                             <MenuItem>
                               <button
                                 onClick={() =>
-                                  handleEliminar(
-                                    suplenteSeleccionado?.cedulaSuplente
-                                  )
+                                  handleEliminar(suplente.cedulaSuplente)
                                 }
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                                className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                               >
                                 Eliminar
                               </button>
                             </MenuItem>
-
                             <MenuItem>
                               <button
                                 onClick={() =>
-                                  handleModificar(
-                                    suplenteSeleccionado?.cedulaSuplente
-                                  )
+                                  handleModificar(suplente.cedulaSuplente)
                                 }
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                                className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                               >
                                 Modificar
                               </button>

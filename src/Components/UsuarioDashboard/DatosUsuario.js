@@ -48,59 +48,75 @@ const DatosUsuario = () => {
           py: 0,
           overflow: "hidden",
           position: "relative",
-          width: { xs: "280px", sm: "100%" },
+          width: { xs: "100%", sm: "100%" }, // Full width on all screen sizes
+          maxWidth: "600px", // Set a max-width if needed
+          margin: "0 auto", // Center the card horizontally
         }}
       >
-        <CardContent sx={{ px: "20px" }}>
+        <CardContent sx={{ px: { xs: "10px", sm: "20px" } }}>
           {datosUsuario && (
             <Grid container spacing={3} justifyContent="space-between">
-              <Grid item sm={5} display="flex" alignItems="center">
+              <Grid item xs={12} sm={5} alignItems="center">
                 <Box
                   sx={{
                     textAlign: {
                       xs: "center",
                       sm: "left",
                     },
+                    width: "100%",
                   }}
                 >
-                  <Typography variant="h3" component="div" pb={6}>
-                    Hola de nuevo!
+                  <Typography variant="h5" component="div" pb={3}>
+                    ¡Hola de nuevo!
                   </Typography>
-                  <Typography>
-                    Nombre : {datosUsuario.nombreSocio}{" "}
+                  <Typography variant="body1">
+                    Nombre: {datosUsuario.nombreSocio}{" "}
                     {datosUsuario.apellidoSocio}
                   </Typography>
-                  <Typography>C.I: {datosUsuario.cedulaSocio}</Typography>
-                  <Typography>
+                  <Typography variant="body1">
+                    C.I: {datosUsuario.cedulaSocio}
+                  </Typography>
+                  <Typography variant="body1">
                     Fecha Ingreso: {datosUsuario.fechaIngreso}
                   </Typography>
-                  <Typography>Telefono: {datosUsuario.telefono}</Typography>
-                  <Typography variant="h4" component="div" pt={4} pb={2}>
-                    Datos del Suplente:
+                  <Typography variant="body1">
+                    Teléfono: {datosUsuario.telefono}
                   </Typography>
-                  <Typography>
-                    Nombre Suplente:{" "}
-                    {datosUsuario.suplenteEntity.nombreSuplente}{" "}
-                    {datosUsuario.suplenteEntity.apellidoSuplente}
-                  </Typography>
-                  <Typography>
-                    C.I: {datosUsuario.suplenteEntity.cedulaSuplente}
-                  </Typography>
-
-                  <Typography>
-                    Telefono: {datosUsuario.suplenteEntity.telefonoSuplente}
-                  </Typography>
+                  {datosUsuario.suplenteEntity && (
+                    <>
+                      <Typography variant="h6" component="div" pt={4} pb={2}>
+                        Datos del Suplente:
+                      </Typography>
+                      <Typography variant="body1">
+                        Nombre Suplente:{" "}
+                        {datosUsuario.suplenteEntity.nombreSuplente}{" "}
+                        {datosUsuario.suplenteEntity.apellidoSuplente}
+                      </Typography>
+                      <Typography variant="body1">
+                        C.I: {datosUsuario.suplenteEntity.cedulaSuplente}
+                      </Typography>
+                      <Typography variant="body1">
+                        Teléfono: {datosUsuario.suplenteEntity.telefonoSuplente}
+                      </Typography>
+                    </>
+                  )}
                 </Box>
               </Grid>
-              <Grid item sm={5} justifyContent="end">
-                <Box mb="-30px">
+              <Grid
+                item
+                xs={12}
+                sm={5}
+                display="flex"
+                justifyContent={{ xs: "center", sm: "flex-end" }}
+              >
+                <Box mb="-30px" sx={{ width: "100%" }}>
                   <Typography
                     variant="h6"
                     component="div"
                     pb={6}
-                    textAlign="end"
+                    textAlign={{ xs: "center", sm: "right" }}
                   >
-                    Numero Socio: {datosUsuario.nroSocio}
+                    Número Socio: {datosUsuario.nroSocio}
                   </Typography>
                 </Box>
               </Grid>

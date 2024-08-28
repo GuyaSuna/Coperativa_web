@@ -60,11 +60,11 @@ const UsuarioHome = () => {
                 className="w-full md:w-1/4 lg:w-1/5"
               />
 
-              <Grid container spacing={3} p={4}>
-                <Grid item xs={8} lg={8}>
+              <Grid container spacing={3} p={2}>
+                <Grid item xs={12} md={8} lg={8}>
                   <DatosUsuario />
                 </Grid>
-                <Grid item xs={8} lg={8}>
+                <Grid item xs={12} md={8} lg={8}>
                   <ListadoRecibosSocios />
                 </Grid>
               </Grid>

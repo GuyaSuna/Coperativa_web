@@ -64,12 +64,18 @@ const ListadoRecibosSocios = () => {
   };
   return (
     <DashboardCard>
-      <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
+      <Box
+        sx={{
+          overflowX: "auto", // Allows horizontal scrolling if content overflows
+          width: "100%", // Ensure the box takes full width
+        }}
+      >
         <Table
           aria-label="simple table"
           sx={{
-            whiteSpace: "nowrap",
+            whiteSpace: "nowrap", // Prevent text wrapping
             mt: 2,
+            minWidth: { xs: "500px", sm: "650px" }, // Set a minimum width for the table
           }}
         >
           <TableHead>

@@ -92,7 +92,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
             type="button"
-            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500  focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
             <svg
               className="h-3.5 w-3.5 mr-2"
@@ -119,8 +119,8 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         </div>
       </div>
       <div className="overflow-y-auto">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase  dark:text-white dark:border-gray-700 border-gray-700 border-b">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr>
               <th scope="col" className="px-4 py-3 text-center">
                 NroRecibo
@@ -142,38 +142,45 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="block md:table-row-group">
             {buscadorFiltrado?.map((recibo) => (
-              // eslint-disable-next-line react/jsx-key
-              <tr className="border-b dark:border-gray-700">
+              <tr className="border-b dark:border-gray-700 block md:table-row">
                 <th
                   scope="row"
-                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell"
                 >
                   {recibo.nroRecibo}
                 </th>
                 <th
                   scope="row"
-                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell"
                 >
                   {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
                 </th>
-                <td className="px-4 py-3">{recibo.fechaPago}</td>
-                <td className="px-4 py-3">
-                  <span class="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
-                    {socio.estaImpago ? "Impago" : "Pago"}
+                <td className="px-4 py-3 block md:table-cell">
+                  {recibo.fechaPago}
+                </td>
+                <td className="px-4 py-3 block md:table-cell">
+                  <span
+                    className={`bg-gradient-to-br ${
+                      recibo.estaImpago
+                        ? "from-red-500 to-red-700"
+                        : "from-green-500 to-green-700"
+                    } text-white text-sm font-semibold mr-2 px-3 py-1 rounded`}
+                  >
+                    {recibo.estaImpago ? "Impago" : "Pago"}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="px-4 py-3 block md:table-cell">
                   <button
                     type="button"
-                    onClick={() => handleVerSocio(socio)}
-                    class="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    onClick={() => handleVerSocio(recibo.socio)}
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
                 </td>
-                <td className="px-4 py-3 flex items-center justify-end">
+                <td className="px-4 py-3 flex items-center justify-end block md:table-cell">
                   <div className="flex items-center justify-between">
                     <Menu
                       as="div"
@@ -209,7 +216,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                               Eliminar
                             </button>
                           </MenuItem>
-
                           <MenuItem>
                             <button
                               onClick={() => handleModificar(recibo?.idRecibo)}
@@ -218,10 +224,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                               Modificar
                             </button>
                           </MenuItem>
-
                           <MenuItem>
                             <a
-                              onClick={() => handleCrearRecibo(socio)}
+                              onClick={() => handleCrearRecibo(recibo.socio)}
                               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                             >
                               Crear Recibo
@@ -245,6 +250,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         />
       )}
     </div>
+
     // <div className="sm:p-7 p-4">
     //   <div className="flex w-full items-center mb-7">
     //     <button className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">

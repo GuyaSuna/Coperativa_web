@@ -37,7 +37,7 @@ const ListadoSocio = ({
 
   useEffect(() => {
     fetchAllSocios();
-  },[cooperativa.idCooperativa]);
+  }, [cooperativa.idCooperativa]);
 
   const fetchRecibos = async () => {
     const ReciboResponse = await getAllRecibos(cooperativa.idCooperativa);
@@ -45,8 +45,8 @@ const ListadoSocio = ({
   };
 
   useEffect(() => {
-      if (recibos.length && allSocios.length) {
-        const sociosConEstadoCuota = allSocios.map((socio) => {
+    if (recibos.length && allSocios.length) {
+      const sociosConEstadoCuota = allSocios.map((socio) => {
         const recibosDelSocio = recibos
           .filter((recibo) => recibo.socio.cedulaSocio === socio.cedulaSocio) // Usamos cedulaSocio como identificador
           .sort((a, b) => new Date(a.fechaPago) - new Date(b.fechaPago)); // Ordenamos por fechaPago
@@ -193,7 +193,7 @@ const ListadoSocio = ({
   };
 
   return (
-    <div className="sm:p-7 p-4 ">
+    <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
           <Buscador value={buscador} onChange={handleChangeBuscador} />
@@ -201,7 +201,7 @@ const ListadoSocio = ({
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
             type="button"
-            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500  focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
             <svg
               className="h-3.5 w-3.5 mr-2"
@@ -229,8 +229,8 @@ const ListadoSocio = ({
       </div>
       <div className="overflow-y-auto">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase  dark:text-white dark:border-gray-700 border-gray-700 border-b">
-            <tr>
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+            <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3 text-center">
                 NroSocio
               </th>
@@ -251,36 +251,40 @@ const ListadoSocio = ({
           </thead>
           <tbody>
             {buscadorFiltrado?.map((socio) => (
-              // eslint-disable-next-line react/jsx-key
-              <tr className="border-b dark:border-gray-700" key={socio.cedulaSocio}>
-                <th
-                  scope="row"
-                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+              <tr
+                className="border-b dark:border-gray-700 sm:table-row"
+                key={socio.cedulaSocio}
+              >
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">NroSocio:</span>
                   {socio.nroSocio}
-                </th>
-                <th
-                  scope="row"
-                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                </td>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Nombre:</span>
                   {socio.nombreSocio} {socio.apellidoSocio}
-                </th>
-                <td className="px-4 py-3">{socio.fechaIngreso}</td>
-                <td className="px-4 py-3">
-                  <span class="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
+                </td>
+                <td className="block sm:table-cell px-4 py-3">
+                  <span className="sm:hidden font-semibold">
+                    Fecha Ingreso:
+                  </span>
+                  {socio.fechaIngreso}
+                </td>
+                <td className="block sm:table-cell px-4 py-3">
+                  <span className="sm:hidden font-semibold">Estado:</span>
+                  <span className="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
                     {socio.estaImpago ? "Impago" : "Pago"}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3">
                   <button
                     type="button"
                     onClick={() => handleVerSocio(socio)}
-                    class="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
                 </td>
-                <td className="px-4 py-3 flex items-center justify-end">
+                <td className="block sm:table-cell px-4 py-3 flex items-center justify-end">
                   <div className="flex items-center justify-between">
                     <Menu
                       as="div"
@@ -311,25 +315,23 @@ const ListadoSocio = ({
                           <MenuItem>
                             <button
                               onClick={() => handleEliminar(socio.cedulaSocio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Eliminar
                             </button>
                           </MenuItem>
-
                           <MenuItem>
                             <button
                               onClick={() => handleModificar(socio.cedulaSocio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Modificar
                             </button>
                           </MenuItem>
-
                           <MenuItem>
                             <a
                               onClick={() => handleCrearRecibo(socio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Crear Recibo
                             </a>

@@ -3,7 +3,6 @@
 import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { postCooperativa } from "../../../../Api/api";
-import MapComponent from "@/Components/MapComponent";
 
 const AltaCooperativa = () => {
   const [nombre, setNombre] = useState("");
@@ -60,7 +59,7 @@ const AltaCooperativa = () => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
-        
+
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="direccion">
             Dirección:
@@ -90,7 +89,10 @@ const AltaCooperativa = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nombrePresidente">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="nombrePresidente"
+          >
             Nombre del Presidente:
           </label>
           <input
@@ -104,7 +106,10 @@ const AltaCooperativa = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nombreVicePresidente">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="nombreVicePresidente"
+          >
             Nombre del Vicepresidente:
           </label>
           <input
@@ -118,7 +123,10 @@ const AltaCooperativa = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="cantidadViviendas">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="cantidadViviendas"
+          >
             Cantidad de Viviendas:
           </label>
           <input
@@ -132,7 +140,10 @@ const AltaCooperativa = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="cuposLibre">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="cuposLibre"
+          >
             Cupos Libres:
           </label>
           <input
@@ -146,7 +157,10 @@ const AltaCooperativa = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="estadoCooperativa">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="estadoCooperativa"
+          >
             Estado de la Cooperativa:
           </label>
           <select
