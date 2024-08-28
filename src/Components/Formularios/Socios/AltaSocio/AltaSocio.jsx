@@ -37,7 +37,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       console.log(response);
       let viviendasDisponibles = [];
       response.forEach((vivienda) => {
-        if (vivienda.socioTitular === null) {
+        if (vivienda.socio == null) {
           viviendasDisponibles.push(vivienda);
         }
       });
