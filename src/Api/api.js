@@ -766,9 +766,10 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 };
 
 // usuario
-const postUsuario = async (usuarioEntity, cedulaSocio) => {
+const postUsuario = async (usuarioEntity) => {
   try {
-    const response = await fetch(`"${URL}/usuario"/${cedulaSocio}`, {
+    console.log("UsuarioEntityAPI", usuarioEntity);
+    const response = await fetch(`"${URL}/usuario"`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

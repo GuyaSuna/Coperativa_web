@@ -1,97 +1,75 @@
 "use client";
+
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { postUsuario, getAllSocios, getAllUsuarios } from "../../../../Api/api";
+import { postUsuario, getAllSocios } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaUsuario = () => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
 
-  const [email, setEmail] = useState("");
   const [contraseña, setContraseña] = useState("");
-  const [usuarios, setUsuarios] = useState([]);
+  const [email, setEmail] = useState("");
+  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
-  const [socioDelUsuario, setSocioDelUsuario] = useState("");
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
-    fetchUsuarios();
     fetchSociosDisponibles();
   }, []);
 
-  useEffect(() => {
-    fetchSociosDisponibles();
-  }, [usuarios]);
-
-  const fetchUsuarios = async () => {
-    try {
-      const usuariosResponse = await getAllUsuarios(cooperativa.idCooperativa);
-      setUsuarios(usuariosResponse);
-    } catch (error) {
-      console.error("Error al obtener los usuarios:", error);
-    }
-  };
-
   const fetchSociosDisponibles = async () => {
     try {
-      const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
-      const sociosSinUsuario = sociosResponse.filter(
-        (socio) =>
-          !usuarios.some(
-            (usuario) => usuario.socio.cedulaSocio === socio.cedulaSocio
-          )
-      );
-      console.log("Aca estan los Socios Disponibles", sociosSinUsuario);
-      setSociosDisponibles(sociosSinUsuario);
+      const response = await getAllSocios(cooperativa.idCooperativa);
+      console.log("Socios disponibles:", response);
+      setSociosDisponibles(response);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
 
-  const handleChangeEmail = (e) => setEmail(e.target.value);
-  const handleChangeContraseña = (e) => setContraseña(e.target.value);
-
-  const handleChangeSocioDelUsuario = (e) => {
-    const selectedCedula = e.target.value;
-    const selectedSocio = sociosDisponibles.find(
-      (socio) => socio.cedulaSocio === selectedCedula
-    );
-    setSocioDelUsuario(selectedSocio || "");
-  };
-
   const validarFormulario = () => {
     const errores = {};
-    if (!email) errores.email = "El Email es obligatorio";
     if (!contraseña) errores.contraseña = "La contraseña es obligatoria";
-    if (!socioDelUsuario) errores.socioDelUsuario = "Debe seleccionar un socio";
+    if (!email) errores.email = "El email es obligatorio";
+    if (!socioSeleccionado)
+      errores.socioSeleccionado = "Debe seleccionar un socio";
     setErrores(errores);
     return Object.keys(errores).length === 0;
   };
 
+  const handleSocioChange = (e) => {
+    const cedulaSeleccionada = e.target.value;
+    console.log("Cedula seleccionada:", cedulaSeleccionada);
+
+    // Buscar el socio en los disponibles
+    const socioEncontrado = sociosDisponibles.find(
+      (socio) => socio.cedulaSocio == cedulaSeleccionada
+    );
+
+    console.log("Socio encontrado:", socioEncontrado);
+
+    // Establecer el socio seleccionado
+    setSocioSeleccionado(socioEncontrado || null);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validarFormulario()) return;
 
-    const UsuarioEntity = {
-      email: email,
-      contraseña: contraseña,
-      socio: socioDelUsuario,
+    const usuarioEntity = {
+      contraseña,
+      email,
+      socio: socioSeleccionado,
     };
 
-    const confirmacion = window.confirm(
-      `¿Está seguro de que quiere asignar el usuario al socio ${socioDelUsuario.nombreSocio} ${socioDelUsuario.apellidoSocio}?`
-    );
-    if (!confirmacion) return;
-
     try {
-      const response = await postUsuario(UsuarioEntity);
-      console.log("Respuesta del servidor:", response);
-      if (response.status !== 201) {
-        alert("Error al agregar usuario");
-      } else {
+      const response = await postUsuario(usuarioEntity);
+      if (response.status === 201) {
         alert("Usuario agregado exitosamente");
+      } else {
+        alert("Error al agregar usuario");
       }
     } catch (error) {
       console.error("Error al enviar los datos del usuario:", error);
@@ -106,57 +84,55 @@ const AltaUsuario = () => {
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
         <label className="block text-sm font-medium mb-2">
-          Email:
-          <input
-            type="text"
-            name="emailUsuario"
-            value={email}
-            onChange={handleChangeEmail}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.email && (
-            <span className="text-red-500">{errores.email}</span>
-          )}
-        </label>
-        <label className="block text-sm font-medium mb-2">
-          Contraseña:
-          <input
-            type="password"
-            name="contraseñaUsuario"
-            value={contraseña}
-            onChange={handleChangeContraseña}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.contraseña && (
-            <span className="text-red-500">{errores.contraseña}</span>
-          )}
-        </label>
-
-        <label className="block text-sm font-medium mb-2">
           Seleccione el Socio:
           <select
-            name="socioDelUsuario"
-            value={socioDelUsuario?.cedulaSocio || ""}
-            onChange={handleChangeSocioDelUsuario}
+            name="socioDelusuario"
+            value={socioSeleccionado ? socioSeleccionado.cedulaSocio : ""}
+            onChange={handleSocioChange}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
             <option value="">Seleccione un socio</option>
             {sociosDisponibles.map((socio) => (
               <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {socio.nombreSocio} {socio.apellidoSocio}
+                {`${socio.nombreSocio} ${socio.apellidoSocio}`}
               </option>
             ))}
           </select>
-          {errores.socioDelUsuario && (
-            <span className="text-red-500">{errores.socioDelUsuario}</span>
-          )}
         </label>
+
+        <label className="block text-sm font-medium mb-2">
+          Contraseña:
+          <input
+            type="password"
+            value={contraseña}
+            onChange={(e) => setContraseña(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </label>
+
+        <label className="block text-sm font-medium mb-2">
+          Email:
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </label>
+
+        {Object.keys(errores).length > 0 && (
+          <div className="text-red-500">
+            {Object.values(errores).map((error, index) => (
+              <p key={index}>{error}</p>
+            ))}
+          </div>
+        )}
 
         <button
           type="submit"
-          className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Agregar Usuario
+          Crear Usuario
         </button>
       </form>
     </div>
