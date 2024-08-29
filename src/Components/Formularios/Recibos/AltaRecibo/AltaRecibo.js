@@ -48,6 +48,7 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
   // }
 
   useEffect(() => {
+    console.log(interesParm , capitalParm)
     fetchReajusteAnual();
   }, [Socio]);
 
@@ -105,12 +106,14 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
 
   useEffect(() => {
     let valorDormitorios;
-    if (vivienda.cantidadDormitorios === 2) {
+    console.log(vivienda)
+    if (vivienda.cantidadDormitorios == 2) {
       valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
-    } else if (vivienda.cantidadDormitorios === 3) {
+    } else if (vivienda.cantidadDormitorios == 3) {
       valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
     }
 
+    console.log("Valor dormitorios",valorDormitorios)
     setInteres(interesParm * (valorDormitorios / ur.buy));
     setCapital(capitalParm * (valorDormitorios / ur.buy));
   
@@ -146,9 +149,9 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
 
     viviendasData.forEach((vivienda) => {
-      if (vivienda.socioTitular != null) {
+      if (vivienda.socio != null) {
         console.log("Entra al primero", Socio);
-        if (vivienda.socioTitular.cedulaSocio == Socio.cedulaSocio) {
+        if (vivienda.socio.cedulaSocio == Socio.cedulaSocio) {
           setVivienda(vivienda);
           console.log("Vivienda seleccionada", vivienda);
         }
