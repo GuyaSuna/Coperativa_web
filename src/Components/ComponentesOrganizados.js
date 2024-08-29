@@ -47,7 +47,7 @@ const ComponentesOrganizados = ({
   const [ingreso, setIngreso] = useState({});
   const [egreso, setEgreso] = useState({});
   const [convenio, setConvenio] = useState({});
-  const [cooperativa , setCooperativa] = useState({});
+  const [cooperativa, setCooperativa] = useState({});
 
   switch (identificador) {
     case 0: {
@@ -200,20 +200,20 @@ const ComponentesOrganizados = ({
         />
       );
     }
-    case 27:{
-      return(
+    case 27: {
+      return (
         <ListadoCooperativa
-        setCooperativa={setCooperativa}
-        setIdentificadorComponente={setIdentificadorComponente}
+          setCooperativa={setCooperativa}
+          setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
-    case 28:{
-      return(
+    case 28: {
+      return (
         <AltaCooperativa
-        setIdentificadorComponente={setIdentificadorComponente}
+          setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
   }
 };
