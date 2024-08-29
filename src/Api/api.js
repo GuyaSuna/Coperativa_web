@@ -32,10 +32,10 @@ const loginAdministrador = async (email, contraseña) => {
 };
 
 
-const postAdministrador = async (administradorEntity) => {
+const postAdministrador = async (administradorEntity, idCooperativa) => {
   try {
     const response = await fetch(
-      `${URL}/administrador`,
+      `${URL}/administrador/register/${idCooperativa}`,
       {
         method: "POST",
         headers: {
@@ -1073,17 +1073,25 @@ const getUltimoSubsidioSocio = async (cedulaSocio) => {
     });
 
     if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+      throw new Error("The request failed, response isn't ok");
+    }
+
+    // Verifica si la respuesta tiene contenido
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; // No hay contenido o no es JSON
     }
 
     const data = await response.json();
-
     return data;
+
   } catch (error) {
     console.error("Error en get Ultimo subsidio por socio:", error);
     return null;
   }
 };
+
+
 
 //Reajuste
 const getReajuste = async (idReajuste) => {
@@ -1105,6 +1113,30 @@ const getReajuste = async (idReajuste) => {
   } catch (error) {
     console.error("Error en getReajuste:", error);
     throw new Error("Error al obtener los datos de los reajustes");
+  }
+};
+
+const postReajuste = async (reajuste, idCooperativa) => {
+  try {
+    console.log("Pruebaaaa reajuste", reajuste);
+    const response = await fetch(`${URL}/reajuste/${idCooperativa}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reajuste),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postReajuste:", error);
+    throw new Error("Error al enviar los datos del reajuste");
   }
 };
 
@@ -1453,6 +1485,7 @@ export {
   deleteUsuario,
   getAdministrador,
   getReajuste,
+  postReajuste,
   getUltimoReajuste,
   postIngreso,
   postEgreso,

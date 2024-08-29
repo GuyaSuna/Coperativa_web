@@ -4,6 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { getAllCooperativas, deleteIngreso } from "../../../Api/api";
 import VerCooperativa from "@/Components/VerDetalles/VerCooperativa/VerCooperativa";
+import { handler } from "flowbite/plugin";
 
 
 const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
@@ -19,7 +20,6 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     try {
       const cooperativaResponse = await getAllCooperativas();
       setAllCooperativas(cooperativaResponse);
-      console.log("Cooperativa recibidos:", ingresosResponse);
     } catch (error) {
       console.error("Error al obtener las cooperativas:", error);
     }
@@ -36,6 +36,23 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     setIsModalOpen(true);
   };
 
+  const handleAdministrador = (cooperativa) => {
+    setCooperativa(cooperativa);
+    setIdentificadorComponente(30);
+  }
+  const handleReajuste = (cooperativa) => {
+    setCooperativa(cooperativa);
+    setIdentificadorComponente(31);
+  }
+  const handleVivienda = (cooperativa) => {
+    setIdentificadorComponente(2)
+    setCooperativa(cooperativa)
+  }
+
+  const handleSocio = (cooperativa) => {
+    setIdentificadorComponente(3)
+    setCooperativa(cooperativa)
+  }
 //   const handleEliminar = async (idIngreso) => {
 //     try {
 //       const data = await deleteIngreso(idIngreso);
@@ -146,6 +163,38 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                         >
                           Modificar
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleAdministrador(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Agregar Administrador
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleReajuste(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Agregar Reajuste
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleVivienda(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Agregar Vivienda
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleSocio(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Agregar Socio
                         </button>
                       </MenuItem>
                     </div>
