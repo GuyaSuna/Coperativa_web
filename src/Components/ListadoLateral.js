@@ -11,7 +11,7 @@ import {
   FaMoneyBillWave,
   FaMoneyBill,
 } from "react-icons/fa";
-
+import logo from "../../public/logovisoft.png";
 const ListadoLateral = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -27,6 +27,13 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
 
   return (
     <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark">
+      <Image
+        className="logo-Img hover:scale-90 transform duration-700"
+        src={logo}
+        alt="Coviamuro Logo"
+        width={65}
+        height={65}
+      />
       <div className="space-y-4 mt-3">
         <div className="relative">
           <button
@@ -36,10 +43,11 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             }`}
           >
             <div className="flex items-center">
-              <FaUserShield className="mr-2" /> Agregar Entidades
+              <FaUserShield className="mr-2 text-2xl" />{" "}
+              <a className="text-base">Agregar Entidades</a>
             </div>
             <span
-              className="transform transition-transform duration-200"
+              className="transform transition-transform duration-200 text-1xl"
               style={{
                 transform: openDropdown === 1 ? "rotate(180deg)" : "rotate(0)",
               }}
@@ -56,7 +64,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 2 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaHome className="mr-2" /> Agregar Viviendas
+                <FaHome className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Vivienda</a>
               </button>
               <button
                 onClick={() => handleSelection(3)}
@@ -64,7 +73,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 3 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaUserPlus className="mr-2" /> Agregar Socios
+                <FaUserPlus className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Socio</a>
               </button>
 
               <button
@@ -73,7 +83,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 7 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaUserTie className="mr-2" /> Agregar Suplente
+                <FaUserTie className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Suplente</a>
               </button>
               <button
                 onClick={() => handleSelection(16)}
@@ -81,7 +92,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 16 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaHandHoldingUsd className="mr-2" /> Agregar Subsidio
+                <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Subsidio</a>
               </button>
             </div>
           )}
@@ -93,7 +105,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             selectedOption === 8 ? "bg-blue-500 text-white" : ""
           }`}
         >
-          <FaBell className="mr-2" /> Generar Aviso
+          <FaBell className="mr-2 text-2xl" />{" "}
+          <a className="text-base">Generar Aviso</a>
         </button>
         <button
           onClick={() => handleSelection(22)}
@@ -101,7 +114,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             selectedOption === 22 ? "bg-blue-500 text-white" : ""
           }`}
         >
-          <FaMoneyBillWave className="mr-2" /> Declarar Ingreso
+          <FaMoneyBillWave className="mr-2 text-2xl" />
+          <a className="text-base">Declarar Ingreso</a>
         </button>
 
         <button
@@ -110,7 +124,8 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             selectedOption === 24 ? "bg-blue-500 text-white" : ""
           }`}
         >
-          <FaMoneyBill className="mr-2" /> Declarar Egreso
+          <FaMoneyBill className="mr-2 text-2xl" />
+          <a className="text-base">Declarar Egreso</a>
         </button>
       </div>
     </div>
