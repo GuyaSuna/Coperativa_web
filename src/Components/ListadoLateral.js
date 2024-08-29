@@ -12,6 +12,7 @@ import {
   FaMoneyBill,
 } from "react-icons/fa";
 import logo from "../../public/logovisoft.png";
+import Image from "next/image";
 const ListadoLateral = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
