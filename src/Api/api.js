@@ -31,7 +31,6 @@ const loginAdministrador = async (email, contraseña) => {
   }
 };
 
-
 const postAdministrador = async (administradorEntity, idCooperativa) => {
   try {
     const response = await fetch(
@@ -58,9 +57,7 @@ const postAdministrador = async (administradorEntity, idCooperativa) => {
   }
 };
 
-const updateAdministrador = async (
-  administradorEntity
-) => {
+const updateAdministrador = async (administradorEntity) => {
   try {
     const response = await fetch(`${URL}/administrador`, {
       method: "PUT",
@@ -130,9 +127,7 @@ const postCooperativa = async (cooperativaEntity) => {
   }
 };
 
-const updateCooperativa = async (
-  cooperativaEntity
-) => {
+const updateCooperativa = async (cooperativaEntity) => {
   try {
     const response = await fetch(`${URL}/cooperativa`, {
       method: "PUT",
@@ -292,6 +287,7 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
     throw new Error("Error al enviar los datos del socio");
   }
 };
+
 // const formatDateToSQL = (date) => {
 //   const d = new Date(date);
 //   const month = `${d.getMonth() + 1}`.padStart(2, "0");
@@ -300,9 +296,7 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 //   return [year, month, day].join("-");
 // };
 
-const updateSocio = async (
-  socioEntity
-) => {
+const updateSocio = async (socioEntity) => {
   let cedulaSocio = socioEntity.cedulaSocio;
   console.log("La cedula del socio es: " + cedulaSocio);
 
@@ -630,7 +624,6 @@ const getViviendaPorSocio = async (cedulaSocio) => {
 };
 
 // cooperativas
-
 const getCooperativaPorAdmin = async (idMiembro) => {
   try {
     const response = await fetch(`${URL}/cooperativa/Admin/${idMiembro}`, {
@@ -675,6 +668,7 @@ const getCooperativaPorSocio = async (cedulaSocio) => {
   }
 };
 
+//Recibos
 const getUr = async () => {
   try {
     const response = await fetch(
@@ -848,54 +842,27 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 };
 
 // usuario
-// const getAllUsuario = async (idCooperativa) => {
-//   try {
-//     const response = await fetch(
-//       `${URL}/usuario/allUsuarios/${idCooperativa}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
+const postUsuario = async (usuarioEntity) => {
+  try {
+    console.log("UsuarioEntityAPI", usuarioEntity);
+    const response = await fetch(`${URL}/usuario`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(usuarioEntity),
+    });
 
-//     if (!response.ok) {
-//       throw new Error("The petition has failed, response isn't ok");
-//     }
+    if (!response.ok) {
+      throw new Error("Error en la solicitud");
+    }
 
-//     const data = await response.json();
-//     console.log(data);
-//     return data;
-//   } catch (error) {
-//     console.error("Error en getAllUsuario:", error);
-//     throw new Error("Error al obtener los datos del usuario");
-//   }
-// };
-
-// const postUsuario = async (socioEntity, suplente, vivienda) => {
-//   try {
-//     console.log(socioEntity);
-//     const response = await fetch(`${URL}/socio/${suplente}/${vivienda}`, {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(socioEntity),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error("The petition has failed, response isn't ok");
-//     }
-
-//     const data = await response.json();
-
-//     return data;
-//   } catch (error) {
-//     console.error("Error en postSocio:", error);
-//     throw new Error("Error al enviar los datos del socio");
-//   }
-// };
+    return response;
+  } catch (error) {
+    console.error("Error al enviar la solicitud:", error);
+    throw error;
+  }
+};
 
 const getAllUsuarios = async (idCooperativa) => {
   try {
@@ -1084,14 +1051,11 @@ const getUltimoSubsidioSocio = async (cedulaSocio) => {
 
     const data = await response.json();
     return data;
-
   } catch (error) {
     console.error("Error en get Ultimo subsidio por socio:", error);
     return null;
   }
 };
-
-
 
 //Reajuste
 const getReajuste = async (idReajuste) => {
@@ -1481,6 +1445,7 @@ export {
   getAllRecibos,
   postRecibo,
   postAviso,
+  postUsuario,
   getAllUsuarios,
   deleteUsuario,
   getAdministrador,
