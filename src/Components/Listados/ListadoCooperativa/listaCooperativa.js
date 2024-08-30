@@ -5,13 +5,14 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { getAllCooperativas, deleteIngreso } from "../../../Api/api";
 import VerCooperativa from "@/Components/VerDetalles/VerCooperativa/VerCooperativa";
 import { handler } from "flowbite/plugin";
+import { MiembroContext } from "@/Provider/provider";
 
 
 const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
   const [allCooperativas, setAllCooperativas] = useState([]);
   const [cooperativaSeleccionada, setCooperativaSeleccionada] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const { loginMiembro } = useContext(MiembroContext);
   useEffect(() => {
     fetchDatosDeLaLista();
   }, []);
@@ -46,13 +47,14 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
   }
   const handleVivienda = (cooperativa) => {
     setIdentificadorComponente(2)
-    setCooperativa(cooperativa)
+    loginMiembro(null , cooperativa)
   }
 
   const handleSocio = (cooperativa) => {
     setIdentificadorComponente(3)
-    setCooperativa(cooperativa)
+    loginMiembro(null , cooperativa)
   }
+
 //   const handleEliminar = async (idIngreso) => {
 //     try {
 //       const data = await deleteIngreso(idIngreso);
