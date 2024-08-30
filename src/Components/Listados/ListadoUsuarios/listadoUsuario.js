@@ -25,14 +25,6 @@ const ListadoUsuario = ({
     }
   };
 
-  const handleModificar = (usuario) => {
-    setUsuario(usuario);
-    setIdentificadorComponente(10);
-  };
-  const handleCrearRecibo = (Usuario) => {
-    setUsuario(Usuario);
-    setIdentificadorComponente(11);
-  };
   const handleEliminar = async (idMiembro) => {
     try {
       const data = await deleteUsuario(idMiembro);
@@ -186,14 +178,6 @@ const ListadoUsuario = ({
                                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                               >
                                 Eliminar
-                              </button>
-                            </MenuItem>
-                            <MenuItem>
-                              <button
-                                onClick={() => handleModificar(usuario)}
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                              >
-                                Modificar
                               </button>
                             </MenuItem>
                           </div>
