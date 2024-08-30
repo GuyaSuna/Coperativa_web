@@ -1,36 +1,45 @@
 "use client";
 import "./globals.css";
 import React, { useState, useContext } from "react";
-import { loginAdministrador, loginUsuario , getCooperativaPorAdmin , getAdministrador , getCooperativaPorSocio } from "../Api/api.js";
+import {
+  loginAdministrador,
+  loginUsuario,
+  getCooperativaPorAdmin,
+  getAdministrador,
+  getCooperativaPorSocio,
+} from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
+import Image from "next/image";
 
 const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errores , setErrores] = useState({});
-
-  
+  const [errores, setErrores] = useState({});
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
     try {
       const dataAdmin = await loginAdministrador(email, password);
-      if (typeof dataAdmin === 'string'){
-        alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
+      if (typeof dataAdmin === "string") {
+        alert(
+          "No se ha podido iniciar sesión: Usuario o contraseña incorrectos."
+        );
         return;
       }
-      console.log(dataAdmin)
+      console.log(dataAdmin);
       if (!dataAdmin) {
-        alert("No se ha podido iniciar sesión: Usuario o contraseña incorrectos.");
+        alert(
+          "No se ha podido iniciar sesión: Usuario o contraseña incorrectos."
+        );
         return;
       }
       console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
       const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro);
       console.log(`Cooperativa admin: ${cooperativaData}`);
-      ProviderData(dataAdmin,cooperativaData)
+      ProviderData(dataAdmin, cooperativaData);
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
@@ -38,12 +47,13 @@ const Home = () => {
     }
   };
 
-  
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();
     const data = await loginUsuario(email, password);
-    console.log("Abr",data);
-    const cooperativaMiembro = await getCooperativaPorSocio(data.socio.cedulaSocio);
+    console.log("Abr", data);
+    const cooperativaMiembro = await getCooperativaPorSocio(
+      data.socio.cedulaSocio
+    );
     if (data == null) {
       alert("No se ha podido inicia sesion");
     } else {
@@ -52,9 +62,9 @@ const Home = () => {
     }
   };
 
-const ProviderData = (dataAdmin , cooperativaData) =>{
+  const ProviderData = (dataAdmin, cooperativaData) => {
     loginMiembro(dataAdmin, cooperativaData);
-  }
+  };
   //checkbox
 
   const handleEmailChange = (e) => {

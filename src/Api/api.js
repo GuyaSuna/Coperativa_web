@@ -31,6 +31,57 @@ const loginAdministrador = async (email, contraseña) => {
   }
 };
 
+const postAdministrador = async (administradorEntity, idCooperativa) => {
+  try {
+    const response = await fetch(
+      `${URL}/administrador/register/${idCooperativa}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(administradorEntity),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postAdministrador:", error);
+    throw new Error("Error al enviar los datos del administrador");
+  }
+};
+
+const updateAdministrador = async (administradorEntity) => {
+  try {
+    const response = await fetch(`${URL}/administrador`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(administradorEntity),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error en la solicitud: ${response.status} - ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`El error ocurrio en updateAdministrador: ${error.message}`);
+    throw error;
+  }
+};
+
 const getAllCooperativas = async () => {
   try {
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
@@ -73,6 +124,31 @@ const postCooperativa = async (cooperativaEntity) => {
   } catch (error) {
     console.error("Error en postCooperativa:", error);
     throw new Error("Error al enviar los datos de la cooperativa");
+  }
+};
+
+const updateCooperativa = async (cooperativaEntity) => {
+  try {
+    const response = await fetch(`${URL}/cooperativa`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(cooperativaEntity),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Error en la solicitud: ${response.status} - ${errorText}`
+      );
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`El error ocurrio en updateCooperativa: ${error.message}`);
+    throw error;
   }
 };
 
@@ -964,11 +1040,16 @@ const getUltimoSubsidioSocio = async (cedulaSocio) => {
     });
 
     if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+      throw new Error("The request failed, response isn't ok");
+    }
+
+    // Verifica si la respuesta tiene contenido
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; // No hay contenido o no es JSON
     }
 
     const data = await response.json();
-
     return data;
   } catch (error) {
     console.error("Error en get Ultimo subsidio por socio:", error);
@@ -996,6 +1077,30 @@ const getReajuste = async (idReajuste) => {
   } catch (error) {
     console.error("Error en getReajuste:", error);
     throw new Error("Error al obtener los datos de los reajustes");
+  }
+};
+
+const postReajuste = async (reajuste, idCooperativa) => {
+  try {
+    console.log("Pruebaaaa reajuste", reajuste);
+    const response = await fetch(`${URL}/reajuste/${idCooperativa}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reajuste),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postReajuste:", error);
+    throw new Error("Error al enviar los datos del reajuste");
   }
 };
 
@@ -1345,6 +1450,7 @@ export {
   deleteUsuario,
   getAdministrador,
   getReajuste,
+  postReajuste,
   getUltimoReajuste,
   postIngreso,
   postEgreso,
@@ -1367,4 +1473,7 @@ export {
   getAllRecibosPorSocio,
   getAllCooperativas,
   postCooperativa,
+  updateCooperativa,
+  updateAdministrador,
+  postAdministrador,
 };

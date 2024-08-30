@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { postCooperativa } from "../../../Api/api";
-import MapComponent from "@/Components/MapComponent";
+import { updateCooperativa } from "@/Api/api";
 
-const AltaCooperativa = () => {
+const ModificarCooperativa = ({ cooperativa , setIdentificadorComponente }) => {
   const [nombre, setNombre] = useState("");
   const [direccion, setDireccion] = useState("");
   const [telefono, setTelefono] = useState("");
@@ -14,15 +13,33 @@ const AltaCooperativa = () => {
   const [cantidadViviendas, setCantidadViviendas] = useState("");
   const [cuposLibre, setCuposLibre] = useState("");
   const [estadoCooperativa, setEstadoCooperativa] = useState("Activa");
-  const [latitud, setLatitud] = useState("");
-  const [longitud, setLongitud] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchData = () => {
+      try {
+        setNombre(cooperativa.nombre);
+        setDireccion(cooperativa.direccion);
+        setTelefono(cooperativa.telefono);
+        setNombrePresidente(cooperativa.nombrePresidente);
+        setNombreVicePresidente(cooperativa.nombreVicePresidente);
+        setCantidadViviendas(cooperativa.cantidadViviendas);
+        setCuposLibre(cooperativa.cuposLibre);
+        setEstadoCooperativa(cooperativa.estadoCooperativa);
+      } catch (error) {
+        console.error("Error al cargar la cooperativa:", error);
+      }
+    };
+
+    fetchData();
+  }, [cooperativa]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
+      idCooperativa: cooperativa.idCooperativa,
       nombre,
       direccion,
       telefono,
@@ -31,23 +48,23 @@ const AltaCooperativa = () => {
       cantidadViviendas: parseInt(cantidadViviendas),
       cuposLibre: parseInt(cuposLibre),
       estadoCooperativa,
-      latitud: parseFloat(latitud),
-      longitud: parseFloat(longitud),
+      listaSocios: cooperativa.listaSocios,
+      tesorero : cooperativa.tesorero,
     };
 
     try {
-      const response = await postCooperativa(data);
+      const response = await updateCooperativa(data);
       console.log(response);
-      setMensaje("Cooperativa creada con éxito");
-      router.push("/ruta-a-redirigir"); // Cambia la ruta según sea necesario
+      setMensaje("Cooperativa modificada con éxito");
+      setIdentificadorComponente(27);  
     } catch (error) {
-      console.error("Error al crear la cooperativa:", error);
-      setMensaje("Error al crear la cooperativa");
+      console.error("Error al modificar la cooperativa:", error);
+      setMensaje("Error al modificar la cooperativa");
     }
   };
 
   return (
-    <div className="max-h-screen  items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+    <div className="max-h-screen items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
         className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
@@ -65,7 +82,8 @@ const AltaCooperativa = () => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
-        
+
+        {/* Otros campos similares al alta */}
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="direccion">
             Dirección:
@@ -166,42 +184,11 @@ const AltaCooperativa = () => {
           </select>
         </div>
 
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="latitud">
-            Latitud:
-          </label>
-          <input
-            type="text"
-            id="latitud"
-            name="latitud"
-            value={latitud}
-            onChange={(e) => setLatitud(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            readOnly
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="longitud">
-            Longitud:
-          </label>
-          <input
-            type="text"
-            id="longitud"
-            name="longitud"
-            value={longitud}
-            onChange={(e) => setLongitud(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            readOnly
-          />
-        </div>
-
-        <MapComponent setLatitud={setLatitud} setLongitud={setLongitud} />
-
         <button
           type="submit"
           className="w-full mt-6 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
         >
-          Crear Cooperativa
+          Modificar Cooperativa
         </button>
         {mensaje && <p className="mt-4 text-red-600">{mensaje}</p>}
       </form>
@@ -209,4 +196,4 @@ const AltaCooperativa = () => {
   );
 };
 
-export default AltaCooperativa;
+export default ModificarCooperativa;

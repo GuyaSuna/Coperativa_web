@@ -10,6 +10,7 @@ import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Cargando from "@/Components/Cargando";
+import Sidebar from "@/Components/Sidebar";
 
 const AdminHome = () => {
   const router = useRouter();
@@ -18,17 +19,21 @@ const AdminHome = () => {
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
+  const [isLoading, setIsLoading] = useState(true); // Nuevo estado para manejar la carga inicial
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
   };
+
   useEffect(() => {
-    if (!miembro || !cooperativa) {
-      console.log("es esto");
+    if (miembro && cooperativa) {
+      setIsLoading(false); // Una vez que los datos están disponibles, deja de cargar
+    } else {
+      console.log("Datos del Provider no están disponibles");
       router.push("/");
     }
-  }, []);
+  }, [miembro?.idMiembro, cooperativa?.idCooperativa]); // Solo corre cuando estos valores cambian
 
   useEffect(() => {
     fetchUr();
@@ -44,6 +49,10 @@ const AdminHome = () => {
     }
   };
 
+  if (isLoading) {
+    return <Cargando />; // Mostrar un componente de carga mientras se esperan los datos
+  }
+
   return (
     <>
       {cooperativa && (
@@ -55,6 +64,7 @@ const AdminHome = () => {
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"
               />
+
               <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto ">
                 <div className="px-4 sm:px-7 pt-4 sm:pt-7 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
                   <div className="flex w-full items-center flex-wrap">
