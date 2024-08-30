@@ -41,16 +41,10 @@ const AltaUsuario = () => {
 
   const handleSocioChange = (e) => {
     const cedulaSeleccionada = e.target.value;
-    console.log("Cedula seleccionada:", cedulaSeleccionada);
-
-    // Buscar el socio en los disponibles
     const socioEncontrado = sociosDisponibles.find(
       (socio) => socio.cedulaSocio == cedulaSeleccionada
     );
-
-    console.log("Socio encontrado:", socioEncontrado);
-
-    // Establecer el socio seleccionado
+    console.log("Socio seleccionado:", socioEncontrado);
     setSocioSeleccionado(socioEncontrado || null);
   };
 
@@ -59,13 +53,14 @@ const AltaUsuario = () => {
     if (!validarFormulario()) return;
 
     const usuarioEntity = {
+      socio: socioSeleccionado,
       contraseña,
       email,
-      socio: socioSeleccionado,
     };
-
+    console.log("UsuarioEtity:", usuarioEntity);
     try {
       const response = await postUsuario(usuarioEntity);
+      console.log("response", response);
       if (response.status === 201) {
         alert("Usuario agregado exitosamente");
       } else {

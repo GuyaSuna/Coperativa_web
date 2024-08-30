@@ -845,7 +845,7 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 const postUsuario = async (usuarioEntity) => {
   try {
     console.log("UsuarioEntityAPI", usuarioEntity);
-    const response = await fetch(`"${URL}/usuario"`, {
+    const response = await fetch(`${URL}/usuario`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
