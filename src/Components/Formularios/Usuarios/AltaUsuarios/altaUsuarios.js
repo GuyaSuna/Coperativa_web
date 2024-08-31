@@ -2,13 +2,12 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { postUsuario, getAllSocios } from "../../../../Api/api";
+import { postUsuario, getAllSocios, getAllUsuarios } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaUsuario = () => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
-
   const [contraseña, setContraseña] = useState("");
   const [email, setEmail] = useState("");
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
@@ -22,8 +21,12 @@ const AltaUsuario = () => {
   const fetchSociosDisponibles = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
+      const usuarioResponse = await getAllUsuarios(cooperativa.idCooperativa);
+
+      const socioConUsuario = usuarioResponse.map(usuario => usuario.socio.cedulaSocio);
+      const sociosSinUsuario = response.filter(socio => !socioConUsuario.includes(socio.cedulaSocio))
       console.log("Socios disponibles:", response);
-      setSociosDisponibles(response);
+      setSociosDisponibles(sociosSinUsuario);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
