@@ -55,6 +55,11 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     loginMiembro(null , cooperativa)
   }
 
+  const handleCapitalInteres = (cooperativa) => {
+    setCooperativa(cooperativa);
+    setIdentificadorComponente(14);
+  }
+
 //   const handleEliminar = async (idIngreso) => {
 //     try {
 //       const data = await deleteIngreso(idIngreso);
@@ -197,6 +202,14 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                         >
                           Agregar Socio
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleCapitalInteres(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Agregar Capital-Interes
                         </button>
                       </MenuItem>
                     </div>

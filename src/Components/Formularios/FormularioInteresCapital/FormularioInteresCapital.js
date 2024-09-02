@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import { postCapitalInteres } from '@/Api/api';
 
-const ExcelReader = ({setInteresParm , setCapitalParm}) => {
+const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
   const [data, setData] = useState([]);
   const [capital, setCapital] = useState(0);
   const [interes, setInteres] = useState(0);
@@ -17,9 +18,16 @@ const ExcelReader = ({setInteresParm , setCapitalParm}) => {
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); 
+    
+      setData(jsonData.slice(2));
 
-      setData(jsonData);
-
+      console.log(jsonData.slice[0])
+      const capitalInteresEntities = jsonData.slice(2).map(row => ({
+        interes: row[9] || 0,  // Reemplaza con el índice correcto
+        capital: row[8] || 0,  // Reemplaza con el índice correcto
+        fecha: new Date((row[0] - 25567) * 86400 * 1000).toISOString()  // Convertir el número a fecha
+    }));
+      handleCpitalInteres(capitalInteresEntities);
       const today = new Date();
       const currentMonth = today.getMonth() + 1; 
       const currentYear = today.getFullYear();
@@ -29,7 +37,7 @@ const ExcelReader = ({setInteresParm , setCapitalParm}) => {
         const excelDate = new Date((row[0] - 25567) * 86400 * 1000);
         return excelDate.getMonth() + 1 === currentMonth && excelDate.getFullYear() === currentYear;
       });
-
+      
       if (todayData) {
         setCapital(todayData[8]);  // Capital
         setInteres(todayData[9]);  // Interés
@@ -43,6 +51,10 @@ const ExcelReader = ({setInteresParm , setCapitalParm}) => {
     reader.readAsBinaryString(file);
   };
 
+  const handleCpitalInteres = async (jsonData) => {
+    const response = await postCapitalInteres(jsonData, cooperativa.idCooperativa);
+    console.log(response);
+  }
   return (
     <div>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
