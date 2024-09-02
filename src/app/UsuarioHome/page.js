@@ -1,16 +1,14 @@
 "use client";
-import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios, getUr } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
-import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
-import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
 import Cargando from "@/Components/Cargando";
 import SidebarUsuario from "@/Components/SidebarUsuario";
-import { Grid, Box } from "@mui/material";
+import { Grid } from "@mui/material";
 import DatosUsuario from "@/Components/UsuarioDashboard/DatosUsuario";
 import ListadoRecibosSocios from "@/Components/UsuarioDashboard/ListadoRecibosSocio";
 
