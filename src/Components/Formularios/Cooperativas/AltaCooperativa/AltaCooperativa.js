@@ -7,6 +7,8 @@ import { postCooperativa } from "../../../../Api/api";
 const AltaCooperativa = () => {
   const [nombre, setNombre] = useState("");
   const [direccion, setDireccion] = useState("");
+  const [localidad, setLocalidad] = useState("");
+  const [departamento, setDepartamento] = useState("");
   const [telefono, setTelefono] = useState("");
   const [nombrePresidente, setNombrePresidente] = useState("");
   const [nombreVicePresidente, setNombreVicePresidente] = useState("");
@@ -22,6 +24,8 @@ const AltaCooperativa = () => {
     const data = {
       nombre,
       direccion,
+      localidad,
+      departamento,
       telefono,
       nombrePresidente,
       nombreVicePresidente,
@@ -75,6 +79,34 @@ const AltaCooperativa = () => {
         </div>
 
         <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="direccion">
+            Localidad:
+          </label>
+          <input
+            type="text"
+            id="localidad"
+            name="localidad"
+            value={localidad}
+            onChange={(e) => setLocalidad(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2" htmlFor="direccion">
+            Departamento:
+          </label>
+          <input
+            type="text"
+            id="departamento"
+            name="departamento"
+            value={departamento}
+            onChange={(e) => setDepartamento(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+        </div>
+
+        <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="telefono">
             Teléfono:
           </label>
@@ -93,7 +125,7 @@ const AltaCooperativa = () => {
             className="block text-sm font-medium mb-2"
             htmlFor="nombrePresidente"
           >
-            Nombre del Presidente:
+            Presidente:
           </label>
           <input
             type="text"
@@ -110,7 +142,7 @@ const AltaCooperativa = () => {
             className="block text-sm font-medium mb-2"
             htmlFor="nombreVicePresidente"
           >
-            Nombre del Vicepresidente:
+            Vicepresidente:
           </label>
           <input
             type="text"
