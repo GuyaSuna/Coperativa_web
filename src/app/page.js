@@ -2,10 +2,8 @@
 import "./globals.css";
 import React, { useState, useContext } from "react";
 import {
-  loginAdministrador,
-  loginUsuario,
+  Login,
   getCooperativaPorAdmin,
-  getAdministrador,
   getCooperativaPorSocio,
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
@@ -15,31 +13,32 @@ import Image from "next/image";
 const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errores, setErrores] = useState({});
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
     try {
-      const dataAdmin = await loginAdministrador(email, password);
-      if (typeof dataAdmin === "string") {
+      const RequestLogin = await Login(username, password);
+      if (typeof RequestLogin === "string") {
         alert(
           "No se ha podido iniciar sesión: Usuario o contraseña incorrectos."
         );
         return;
       }
-      console.log(dataAdmin);
-      if (!dataAdmin) {
+      if (!RequestLogin) {
         alert(
           "No se ha podido iniciar sesión: Usuario o contraseña incorrectos."
         );
         return;
       }
-      console.log(`Datos Administrativos:  ${dataAdmin.socio}`);
-      const cooperativaData = await getCooperativaPorAdmin(dataAdmin.idMiembro);
-      console.log(`Cooperativa admin: ${cooperativaData}`);
-      ProviderData(dataAdmin, cooperativaData);
+      console.log("Respuesta", RequestLogin);
+      const cooperativaLoginRequest = await getCooperativaPorAdmin(
+        RequestLogin.username
+      );
+      console.log(`Cooperativa admin: ${cooperativaLoginRequest}`);
+      ProviderLoginRequest(RequestLogin, cooperativaLoginRequest);
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
@@ -49,26 +48,26 @@ const Home = () => {
 
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();
-    const data = await loginUsuario(email, password);
-    console.log("Abr", data);
+    const loginRequest = await Login(username, password);
+    console.log("Abr", loginRequest);
     const cooperativaMiembro = await getCooperativaPorSocio(
-      data.socio.cedulaSocio
+      loginRequest.socio.cedulaSocio
     );
-    if (data == null) {
+    if (loginRequest == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      ProviderData(data, cooperativaMiembro);
+      ProviderLoginRequest(loginRequest, cooperativaMiembro);
       router.push("./UsuarioHome");
     }
   };
 
-  const ProviderData = (dataAdmin, cooperativaData) => {
-    loginMiembro(dataAdmin, cooperativaData);
+  const ProviderLoginRequest = (RequestLogin, cooperativaLoginRequest) => {
+    loginMiembro(RequestLogin, cooperativaLoginRequest);
   };
   //checkbox
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -100,15 +99,15 @@ const Home = () => {
               <form>
                 <div>
                   <div className="text-sm font-bold text-gray-700 tracking-wide">
-                    Correo electronico
+                    Nombre de usuario
                   </div>
                   <input
                     className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
                     type="email"
-                    placeholder="mike@gmail.com"
-                    value={email}
-                    onChange={handleEmailChange}
-                    id="Email"
+                    placeholder="username"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    id="text"
                     required
                   />
                 </div>

@@ -1,13 +1,15 @@
+import { Password } from "@mui/icons-material";
+
 const URL = "http://localhost:5000";
 
 //logins
-const loginAdministrador = async (email, contraseña) => {
+const Login = async (username, password) => {
   try {
     const body = {
-      email: email,
-      contraseña: contraseña,
+      username: username,
+      password: password,
     };
-    const response = await fetch(`${URL}/administrador/login`, {
+    const response = await fetch(`${URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -23,7 +25,6 @@ const loginAdministrador = async (email, contraseña) => {
       }
     }
     const data = await response.json();
-    console.log(data.Socio);
     return data;
   } catch (error) {
     console.error("Error en LogIn:", error);
@@ -31,18 +32,15 @@ const loginAdministrador = async (email, contraseña) => {
   }
 };
 
-const postAdministrador = async (administradorEntity, idCooperativa) => {
+const register = async (RegisterRequest) => {
   try {
-    const response = await fetch(
-      `${URL}/administrador/register/${idCooperativa}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(administradorEntity),
-      }
-    );
+    const response = await fetch(`${URL}/auth/register/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(RegisterRequest),
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -624,9 +622,9 @@ const getViviendaPorSocio = async (cedulaSocio) => {
 };
 
 // cooperativas
-const getCooperativaPorAdmin = async (idMiembro) => {
+const getCooperativaPorAdmin = async (username) => {
   try {
-    const response = await fetch(`${URL}/cooperativa/Admin/${idMiembro}`, {
+    const response = await fetch(`${URL}/cooperativa/Admin/${username}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -1421,8 +1419,7 @@ const getAllEgresos = async (idCooperativa) => {
 };
 
 export {
-  loginAdministrador,
-  loginUsuario,
+  Login,
   getSocio,
   postSocio,
   getAllSocios,
@@ -1475,5 +1472,4 @@ export {
   postCooperativa,
   updateCooperativa,
   updateAdministrador,
-  postAdministrador,
 };
