@@ -49,6 +49,7 @@ const ModificarCooperativa = ({ cooperativa , setIdentificadorComponente }) => {
       cuposLibre: parseInt(cuposLibre),
       estadoCooperativa,
       listaSocios: cooperativa.listaSocios,
+      listaCapitalInteres: cooperativa.listaCapitalInteres,
       tesorero : cooperativa.tesorero,
     };
 

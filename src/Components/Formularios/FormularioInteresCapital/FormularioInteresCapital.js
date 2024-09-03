@@ -6,6 +6,7 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
   const [data, setData] = useState([]);
   const [capital, setCapital] = useState(0);
   const [interes, setInteres] = useState(0);
+  const [capitalInteresEntities , setCapitalInteresEntities] = useState([]);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -25,11 +26,10 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
       const capitalInteresEntities = jsonData.map(row => ({
         interes: row[9] || 0,
         capital: row[8] || 0,
-        fecha: new Date((row[0] - 25567) * 86400 * 1000).toISOString()  // Convertir el número a fecha
+        fecha: new Date((row[0] - 25567) * 86400 * 1000).toISOString() 
       }));
   
-      console.log("Datos capital interes" , capitalInteresEntities)
-      handleCpitalInteres(capitalInteresEntities);
+      setCapitalInteresEntities(capitalInteresEntities);
 
       const today = new Date();
       const currentMonth = today.getMonth() + 1; 
@@ -54,8 +54,12 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
     reader.readAsBinaryString(file);
   };
 
-  const handleCpitalInteres = async (jsonData) => {
-    const response = await postCapitalInteres(jsonData, cooperativa.idCooperativa);
+  const handleCpitalInteres = async () => {
+    if(cooperativa.listaCapitalInteres !== null){
+      alert("Esa cooperativa ya tiene datos de interes y capital, si desea ingresar nuevos elimine los anteriores");
+      return
+    }
+    const response = await postCapitalInteres(capitalInteresEntities, cooperativa.idCooperativa);
     console.log(response);
   }
   return (
@@ -65,6 +69,7 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
         <h2>Datos del archivo:</h2> 
         {capital !== null && interes !== null ? (
           <div>
+            <button onClick={handleCpitalInteres}>Dar de alta Interes Capital</button>
             <p><strong>Capital del mes actual:</strong> {capital}</p>
             <p><strong>Interés del mes actual:</strong> {interes}</p>
           </div>
