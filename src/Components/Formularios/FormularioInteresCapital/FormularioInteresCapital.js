@@ -17,17 +17,20 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
 
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); 
+      let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }); 
     
-      setData(jsonData.slice(2));
+      jsonData = jsonData.slice(2)
+      setData(jsonData);
 
-      console.log(jsonData.slice[0])
-      const capitalInteresEntities = jsonData.slice(2).map(row => ({
-        interes: row[9] || 0,  // Reemplaza con el índice correcto
-        capital: row[8] || 0,  // Reemplaza con el índice correcto
+      const capitalInteresEntities = jsonData.map(row => ({
+        interes: row[9] || 0,
+        capital: row[8] || 0,
         fecha: new Date((row[0] - 25567) * 86400 * 1000).toISOString()  // Convertir el número a fecha
-    }));
+      }));
+  
+      console.log("Datos capital interes" , capitalInteresEntities)
       handleCpitalInteres(capitalInteresEntities);
+
       const today = new Date();
       const currentMonth = today.getMonth() + 1; 
       const currentYear = today.getFullYear();
