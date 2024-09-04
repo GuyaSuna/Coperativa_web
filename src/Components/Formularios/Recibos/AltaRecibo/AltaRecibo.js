@@ -11,7 +11,7 @@ import {
   getUltimoConvenioSocio,
   getUltimoSubsidioSocio,
   postIngreso,
-  updateSocio
+  updateSocio,
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
@@ -26,8 +26,8 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
   const [convenio, setConvenio] = useState(null); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
-  const [subsidio , setSubsidio] = useState(null);
-  const [cuotaMensualBase , setCuotaMensualBase] = useState(0);
+  const [subsidio, setSubsidio] = useState(null);
+  const [cuotaMensualBase, setCuotaMensualBase] = useState(0);
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
   const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
   const [fechaPago, setFechaPago] = useState();
@@ -35,7 +35,7 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
   const [valorVivienda, setValorVivienda] = useState(0);
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
-  const [ingreso , setIngreso] = useState(null);
+  const [ingreso, setIngreso] = useState(null);
 
   //Nahuel- va en altaRecibo la peticion de ur
 
@@ -48,7 +48,7 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
   // }
 
   useEffect(() => {
-    console.log(interesParm , capitalParm)
+    console.log(interesParm, capitalParm);
     fetchReajusteAnual();
   }, [Socio]);
 
@@ -58,7 +58,7 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
   }, [reajuste]);
 
   useEffect(() => {
-    if(convenio == null) return;
+    if (convenio == null) return;
     fetchCalculos();
     setCuotaSocial(400);
     console.log(Socio, "SOCIO");
@@ -106,18 +106,16 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
 
   useEffect(() => {
     let valorDormitorios;
-    console.log(vivienda)
+    console.log(vivienda);
     if (vivienda.cantidadDormitorios == 2) {
       valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
     } else if (vivienda.cantidadDormitorios == 3) {
       valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
     }
 
-    console.log("Valor dormitorios",valorDormitorios)
+    console.log("Valor dormitorios", valorDormitorios);
     setInteres(interesParm * (valorDormitorios / ur.buy));
     setCapital(capitalParm * (valorDormitorios / ur.buy));
-  
-
 
     let ValorViviendaModificar = valorVivienda;
 
@@ -211,15 +209,15 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
       console.log(response);
 
       const ingreso = {
-        subRubro : "Amortizacion",
-        denominacion :`Recibo dado de alta el ${fechaEmision}`,
-        ingreso : cuotaMensual,
-        cooperativaEntity : cooperativa,
-        tipoMoneda : "UR"
-      }
-      const IngresoResponse = await postIngreso(ingreso)
+        subRubro: "Amortizacion",
+        denominacion: `Recibo dado de alta el ${fechaEmision}`,
+        ingreso: cuotaMensual,
+        cooperativaEntity: cooperativa,
+        tipoMoneda: "UR",
+      };
+      const IngresoResponse = await postIngreso(ingreso);
       setIngreso(IngresoResponse);
-      console.log("Ingreso Response", IngresoResponse)
+      console.log("Ingreso Response", IngresoResponse);
       alert("Dado de alta correctamente");
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
@@ -228,18 +226,16 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
 
   useEffect(() => {
     automaticUpdate();
-  },[ingreso])
-
+  }, [ingreso]);
 
   const automaticUpdate = async () => {
     let socioActualizar = Socio;
-    socioActualizar.capitalSocio +=  capital;
-    if(ingreso != null){
-    const socioUpdate = await updateSocio(socioActualizar);
-    console.log("Socio Update", socioUpdate);
+    socioActualizar.capitalSocio += capital;
+    if (ingreso != null) {
+      const socioUpdate = await updateSocio(socioActualizar);
+      console.log("Socio Update", socioUpdate);
     }
-    
-  }
+  };
   //      ruta dinamica
   //      router.push(`/UserInfo/${NroSocio}`);
   return (
@@ -308,8 +304,8 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
             </label>
             <input
               type="text"
-              id="telefonoSocio"
-              name="telefonoSocio"
+              id="nombreSocio"
+              name="nombreSocio"
               readOnly
               value={miembro.socio.nombreSocio}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"

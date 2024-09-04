@@ -2,11 +2,10 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { getAllCooperativas, deleteIngreso } from "../../../Api/api";
+import { getAllCooperativas, deleteCooperativa } from "../../../Api/api";
 import VerCooperativa from "@/Components/VerDetalles/VerCooperativa/VerCooperativa";
 import { handler } from "flowbite/plugin";
 import { MiembroContext } from "@/Provider/provider";
-
 
 const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
   const [allCooperativas, setAllCooperativas] = useState([]);
@@ -40,30 +39,31 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
   const handleAdministrador = (cooperativa) => {
     setCooperativa(cooperativa);
     setIdentificadorComponente(30);
-  }
+  };
   const handleReajuste = (cooperativa) => {
     setCooperativa(cooperativa);
     setIdentificadorComponente(31);
-  }
+  };
   const handleVivienda = (cooperativa) => {
-    setIdentificadorComponente(2)
-    loginMiembro(null , cooperativa)
-  }
+    setIdentificadorComponente(2);
+    loginMiembro(null, cooperativa);
+  };
 
   const handleSocio = (cooperativa) => {
-    setIdentificadorComponente(3)
-    loginMiembro(null , cooperativa)
-  }
+    setIdentificadorComponente(3);
+    loginMiembro(null, cooperativa);
+  };
 
-//   const handleEliminar = async (idIngreso) => {
-//     try {
-//       const data = await deleteIngreso(idIngreso);
-//       console.log("Ingreso eliminado:", data);
-//       fetchDatosDeLaLista();
-//     } catch (e) {
-//       console.error("Fallo al eliminar el ingreso:", e);
-//     }
-//   };
+  const handleEliminar = async (idCooperativa) => {
+    try {
+      console.log(" IdCooperativa ", idCooperativa);
+      const data = await deleteCooperativa(idCooperativa);
+      console.log("Ingreso eliminado:", data);
+      fetchDatosDeLaLista();
+    } catch (e) {
+      console.error("Fallo al eliminar el ingreso:", e);
+    }
+  };
 
   return (
     <div className="sm:p-7 p-4">
@@ -87,13 +87,13 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
         <thead>
           <tr className="text-gray-400">
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                id Cooperativa
+              id Cooperativa
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
               Nombre
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Tesorero 
+              Tesorero
             </th>
             <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
           </tr>
@@ -112,14 +112,18 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                 </div>
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                {cooperativa.tesorero !== null && <div className="flex items-center">
-                   
-                  {cooperativa.tesorero.socio.nombreSocio} {cooperativa.tesorero.socio.apellidoSocio} 
-                  
-                </div>}
+                {cooperativa.tesorero !== null && (
+                  <div className="flex items-center">
+                    {cooperativa.tesorero.socio.nombreSocio}{" "}
+                    {cooperativa.tesorero.socio.apellidoSocio}
+                  </div>
+                )}
               </td>
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                <Menu as="div" className="relative inline-block text-left justify-end">
+                <Menu
+                  as="div"
+                  className="relative inline-block text-left justify-end"
+                >
                   <div>
                     <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
                       <svg
@@ -153,7 +157,9 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                       </MenuItem>
                       <MenuItem>
                         <button
-                          onClick={() => handleEliminar(cooperativa.idCooeprativa)}
+                          onClick={() =>
+                            handleEliminar(cooperativa.idCooperativa)
+                          }
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                         >
                           Eliminar

@@ -2,7 +2,7 @@
 
 import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { postCooperativa } from "../../../../Api/api";
+import { postCooperativa, getAllCooperativas } from "../../../../Api/api";
 
 const AltaCooperativa = () => {
   const [nombre, setNombre] = useState("");
@@ -17,24 +17,75 @@ const AltaCooperativa = () => {
   const [estadoCooperativa, setEstadoCooperativa] = useState("Activa");
   const [mensaje, setMensaje] = useState("");
 
+  const [errores, setErrores] = useState({});
+
   const router = useRouter();
+
+  const validarFormulario = () => {
+    const errores = {};
+
+    if (!nombre) {
+      errores.nombre = "El nombre de la cooperativa es obligatoria.";
+    }
+    if (!direccion) {
+      errores.direccion = "La direccion de la cooperativa es obligatoria.";
+    }
+    if (!localidad) {
+      errores.localidad = "La localidad de la cooperativa es obligatoria";
+    }
+    if (!departamento) {
+      errores.departamento =
+        "El departamento de la cooperativa es obligatoria.";
+    }
+    if (!telefono) {
+      errores.telefono = "El telefono de la cooperativa es obligatoria";
+    }
+
+    if (!cantidadViviendas) {
+      errores.cantidadViviendas =
+        "La cantida de viviendas de la cooperativa es obligatoria.";
+    }
+
+    if (!estadoCooperativa) {
+      errores.estadoCooperativa = "El estado de la cooperativa es obligatorio.";
+    }
+
+    setErrores(errores);
+    return Object.keys(errores).length === 0;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
-      nombre,
-      direccion,
-      localidad,
-      departamento,
-      telefono,
-      nombrePresidente,
-      nombreVicePresidente,
-      cantidadViviendas: parseInt(cantidadViviendas),
-      cuposLibre: parseInt(cuposLibre),
-      estadoCooperativa,
-    };
 
     try {
+      const cooperativas = await getAllCooperativas();
+
+      const nombreExiste = cooperativas.some(
+        (cooperativa) => cooperativa.nombre === nombre
+      );
+
+      if (nombreExiste) {
+        setMensaje(
+          "El nombre de la cooperativa ya está en uso, por favor elige otro."
+        );
+        return;
+      }
+
+      if (!validarFormulario()) return;
+
+      const data = {
+        nombre,
+        direccion,
+        localidad,
+        departamento,
+        telefono,
+        nombrePresidente,
+        nombreVicePresidente,
+        cantidadViviendas: parseInt(cantidadViviendas),
+        cuposLibre: parseInt(cuposLibre),
+        estadoCooperativa,
+      };
+
       const response = await postCooperativa(data);
       console.log(response);
       setMensaje("Cooperativa creada con éxito");
@@ -62,6 +113,7 @@ const AltaCooperativa = () => {
             onChange={(e) => setNombre(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.nombre && <span className="error">{errores.nombre}</span>}
         </div>
 
         <div className="mb-4">
@@ -76,6 +128,9 @@ const AltaCooperativa = () => {
             onChange={(e) => setDireccion(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.direccion && (
+            <span className="error">{errores.direccion}</span>
+          )}
         </div>
 
         <div className="mb-4">
@@ -90,6 +145,9 @@ const AltaCooperativa = () => {
             onChange={(e) => setLocalidad(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.localidad && (
+            <span className="error">{errores.localidad}</span>
+          )}
         </div>
 
         <div className="mb-4">
@@ -104,6 +162,9 @@ const AltaCooperativa = () => {
             onChange={(e) => setDepartamento(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.departamento && (
+            <span className="error">{errores.departamento}</span>
+          )}
         </div>
 
         <div className="mb-4">
@@ -118,6 +179,9 @@ const AltaCooperativa = () => {
             onChange={(e) => setTelefono(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.telefono && (
+            <span className="error">{errores.telefono}</span>
+          )}
         </div>
 
         <div className="mb-4">
@@ -169,6 +233,9 @@ const AltaCooperativa = () => {
             onChange={(e) => setCantidadViviendas(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.cantidadViviendas && (
+            <span className="error">{errores.cantidadViviendas}</span>
+          )}
         </div>
 
         <div className="mb-4">
