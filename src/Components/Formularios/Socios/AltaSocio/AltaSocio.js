@@ -198,6 +198,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       capitalSocio: CapitalSocio,
       fechaIngresoCooeprativa: FechaIngresoCooperativa,
       fechaIngreso: today,
+      archivado: false,
     };
     const SuplenteData = {
       cedulaSuplente: CedulaSuplente,
