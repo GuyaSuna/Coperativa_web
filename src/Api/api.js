@@ -1420,6 +1420,30 @@ const getAllEgresos = async (idCooperativa) => {
   }
 };
 
+const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
+  try {
+    const response = await fetch(`${URL}/CapitalInteres/${idCooperativa}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(CapitalInteresList),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postCapitalInteres:", error);
+    throw new Error("Error al enviar los datos del CapitalInteres");
+  }
+};
+
+
 export {
   loginAdministrador,
   loginUsuario,
@@ -1476,4 +1500,5 @@ export {
   updateCooperativa,
   updateAdministrador,
   postAdministrador,
+  postCapitalInteres,
 };

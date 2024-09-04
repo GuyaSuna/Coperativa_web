@@ -8,7 +8,6 @@ import { MiembroContext } from "../../../../Provider/provider";
 const AltaUsuario = () => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
-
   const [contraseña, setContraseña] = useState("");
   const [email, setEmail] = useState("");
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);

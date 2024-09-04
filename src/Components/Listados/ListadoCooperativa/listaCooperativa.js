@@ -54,16 +54,20 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     loginMiembro(null, cooperativa);
   };
 
-  const handleEliminar = async (idCooperativa) => {
-    try {
-      console.log(" IdCooperativa ", idCooperativa);
-      const data = await deleteCooperativa(idCooperativa);
-      console.log("Ingreso eliminado:", data);
-      fetchDatosDeLaLista();
-    } catch (e) {
-      console.error("Fallo al eliminar el ingreso:", e);
-    }
+  const handleCapitalInteres = (cooperativa) => {
+    setCooperativa(cooperativa);
+    setIdentificadorComponente(14);
   };
+
+  //   const handleEliminar = async (idIngreso) => {
+  //     try {
+  //       const data = await deleteIngreso(idIngreso);
+  //       console.log("Ingreso eliminado:", data);
+  //       fetchDatosDeLaLista();
+  //     } catch (e) {
+  //       console.error("Fallo al eliminar el ingreso:", e);
+  //     }
+  //   };
 
   return (
     <div className="sm:p-7 p-4">
@@ -203,6 +207,22 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                         >
                           Agregar Socio
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleCapitalInteres(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Agregar Capital-Interes
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleCapitalInteres(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Eliminar Capital-Interes
                         </button>
                       </MenuItem>
                     </div>

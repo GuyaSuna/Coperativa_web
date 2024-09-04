@@ -134,7 +134,7 @@ const ComponentesOrganizados = ({
     }
     case 14: {
       return (
-        <MuestraCalculos setInteres={setInteres} setCapital={setCapital} />
+        <MuestraCalculos setInteres={setInteres} setCapital={setCapital} cooperativa={cooperativa}/>
       );
     }
     case 15: {
