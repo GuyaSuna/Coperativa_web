@@ -1,6 +1,5 @@
-import { Password } from "@mui/icons-material";
-
 const URL = "http://localhost:5000";
+const getToken = localStorage.getItem("token");
 
 //logins
 const Login = async (username, password) => {
@@ -24,11 +23,20 @@ const Login = async (username, password) => {
         throw new Error("Error en la solicitud de inicio de sesión.");
       }
     }
+
     const data = await response.json();
+
+    // Guardar el token en localStorage
+    if (data.token) {
+      localStorage.setItem("token", data.token);
+    } else {
+      throw new Error("No se recibió el token en la respuesta.");
+    }
+
     return data;
   } catch (error) {
     console.error("Error en LogIn:", error);
-    throw new Error("Error al obtener los datos del socio");
+    throw new Error("Error al intentar iniciar sesión.");
   }
 };
 
@@ -82,10 +90,15 @@ const updateAdministrador = async (administradorEntity) => {
 
 const getAllCooperativas = async () => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
+
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -104,9 +117,11 @@ const postCooperativa = async (cooperativaEntity) => {
   try {
     console.log(cooperativaEntity);
     console.log("ESTE ES LA API", cooperativaEntity);
+    const token = getToken;
     const response = await fetch(`${URL}/cooperativa`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(cooperativaEntity),
@@ -127,9 +142,11 @@ const postCooperativa = async (cooperativaEntity) => {
 
 const updateCooperativa = async (cooperativaEntity) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/cooperativa`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(cooperativaEntity),
@@ -150,36 +167,9 @@ const updateCooperativa = async (cooperativaEntity) => {
   }
 };
 
-const loginUsuario = async (email, contraseña) => {
+const getUser = async (id) => {
   try {
-    const body = {
-      email: email,
-      contraseña: contraseña,
-    };
-    const response = await fetch(`${URL}/usuario/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      throw new Error("Respuesta no es ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
-  }
-};
-
-const getAdministrador = async (idMiembro) => {
-  try {
-    const response = await fetch(`${URL}/administrador/${idMiembro}`, {
+    const response = await fetch(`${URL}/auth/getUser${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -202,9 +192,11 @@ const getAdministrador = async (idMiembro) => {
 //socio
 const getSocio = async (cedulaSocio) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -224,9 +216,11 @@ const getSocio = async (cedulaSocio) => {
 
 const getAllSocios = async (idCooperativa) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -262,11 +256,13 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
   try {
     console.log(socioEntity);
     console.log("ESTE ES LA API", idCooperativa);
+    const token = getToken;
     const response = await fetch(
       `${URL}/socio/${nroVivienda}/${idCooperativa}`,
       {
         method: "POST",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(socioEntity),
@@ -300,9 +296,11 @@ const updateSocio = async (socioEntity) => {
 
   try {
     // const fechaFormateada = formatDateToSQL(FechaIngreso);
+    const token = getToken;
     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(socioEntity),
@@ -325,11 +323,13 @@ const updateSocio = async (socioEntity) => {
 
 const deleteSocio = async (cedulaSocio, idCooperativa) => {
   try {
+    const token = getToken;
     const response = await fetch(
       `${URL}/socio/${cedulaSocio}/${idCooperativa}`,
       {
         method: "DELETE",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -351,9 +351,11 @@ const postSuplente = async (suplenteEntity, CedulaSocio) => {
   try {
     console.log(suplenteEntity);
     console.log("Cedula del socio:", CedulaSocio);
+    const token = getToken;
     const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(suplenteEntity),
@@ -374,9 +376,11 @@ const postSuplente = async (suplenteEntity, CedulaSocio) => {
 
 const getAllSuplentes = async () => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/suplente/allSuplentes`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -397,9 +401,11 @@ const getAllSuplentes = async () => {
 
 const getSuplente = async (cedulaSuplente) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -419,6 +425,7 @@ const getSuplente = async (cedulaSuplente) => {
 
 const deleteSuplente = async (cedulaSuplente) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
       method: "DELETE",
       headers: {
@@ -444,9 +451,11 @@ const updateSuplente = async (
   telefonoSuplente
 ) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/suplente`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -473,9 +482,11 @@ const updateSuplente = async (
 const postVivienda = async (viviendaEntity, idCooperativa) => {
   try {
     console.log(viviendaEntity);
+    const token = getToken;
     const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(viviendaEntity),
@@ -497,9 +508,11 @@ const postVivienda = async (viviendaEntity, idCooperativa) => {
 const getVivienda = async (nroVivienda) => {
   try {
     console.log(nroVivienda, "nro vivienda getAPI");
+    const token = getToken;
     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -520,11 +533,13 @@ const getVivienda = async (nroVivienda) => {
 const getAllViviendas = async (idCooperativa) => {
   console.log("COOPERATIVA", idCooperativa);
   try {
+    const token = getToken;
     const response = await fetch(
       `${URL}/vivienda/allViviendas/${idCooperativa}`,
       {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -552,10 +567,11 @@ const updateVivienda = async (
   try {
     console.log(cooperativaEntity);
     console.log(socioTitular);
-
+    const token = getToken;
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -580,9 +596,11 @@ const updateVivienda = async (
 
 const deleteVivienda = async (nroVivienda) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "DELETE",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -600,9 +618,11 @@ const deleteVivienda = async (nroVivienda) => {
 
 const getViviendaPorSocio = async (cedulaSocio) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/vivienda/socio/${cedulaSocio}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -622,9 +642,9 @@ const getViviendaPorSocio = async (cedulaSocio) => {
 };
 
 // cooperativas
-const getCooperativaPorAdmin = async (username) => {
+const getCooperativaPorAdmin = async (id) => {
   try {
-    const response = await fetch(`${URL}/cooperativa/Admin/${username}`, {
+    const response = await fetch(`${URL}/cooperativa/Admin/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -694,11 +714,13 @@ const getUr = async () => {
 
 const getAllRecibos = async (idCooperativa) => {
   try {
+    const token = getToken;
     const response = await fetch(
       `${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`,
       {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -767,10 +789,11 @@ const postRecibo = async (
       socio,
       tesorero,
     };
-
+    const token = getToken;
     const response = await fetch(`${URL}/recibo`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       // Convertir el objeto a JSON
@@ -791,11 +814,13 @@ const postRecibo = async (
 
 const getAllRecibosPorSocio = async (cedulaSocio) => {
   try {
+    const token = getToken;
     const response = await fetch(
       `${URL}/recibos/getAllRecibosPorSocios/${cedulaSocio}`,
       {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
       }
@@ -818,9 +843,11 @@ const getAllRecibosPorSocio = async (cedulaSocio) => {
 const postAviso = async (aviso, idAdmin, idUsuario) => {
   try {
     console.log(aviso);
+    const token = getToken;
     const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(aviso),
@@ -843,9 +870,11 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 const postUsuario = async (usuarioEntity) => {
   try {
     console.log("UsuarioEntityAPI", usuarioEntity);
+    const token = getToken;
     const response = await fetch(`${URL}/usuario`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(usuarioEntity),
@@ -864,15 +893,14 @@ const postUsuario = async (usuarioEntity) => {
 
 const getAllUsuarios = async (idCooperativa) => {
   try {
-    const response = await fetch(
-      `${URL}/usuario/allUsuarios/${idCooperativa}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const token = getToken;
+    const response = await fetch(`${URL}/auth/getAllUsers/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -889,9 +917,11 @@ const getAllUsuarios = async (idCooperativa) => {
 
 const deleteUsuario = async (idMiembro) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/usuario/${idMiembro}`, {
       method: "DELETE",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -911,9 +941,11 @@ const deleteUsuario = async (idMiembro) => {
 const postSubsidio = async (subsidioEntity) => {
   try {
     console.log(subsidioEntity);
+    const token = getToken;
     const response = await fetch(`${URL}/subsidio`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(subsidioEntity),
@@ -933,9 +965,13 @@ const postSubsidio = async (subsidioEntity) => {
 
 const getAllSubsidios = async () => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/subsidio/allSubsidios`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
     });
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -974,9 +1010,11 @@ const updateSubsidio = async (
       fechaExpira,
       socio
     );
+    const token = getToken;
     const response = await fetch(`${URL}/subsidio`, {
       method: "PUT",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
@@ -1007,9 +1045,11 @@ const updateSubsidio = async (
 
 const deleteSubsidio = async (idSubsidio) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/subsidio/${idSubsidio}`, {
       method: "DELETE",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -1030,9 +1070,11 @@ const deleteSubsidio = async (idSubsidio) => {
 
 const getUltimoSubsidioSocio = async (cedulaSocio) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/subsidio/socio/${cedulaSocio}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -1058,9 +1100,11 @@ const getUltimoSubsidioSocio = async (cedulaSocio) => {
 //Reajuste
 const getReajuste = async (idReajuste) => {
   try {
+    const token = getToken;
     const response = await fetch(`${URL}/reajuste/${idReajuste}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -1081,9 +1125,11 @@ const getReajuste = async (idReajuste) => {
 const postReajuste = async (reajuste, idCooperativa) => {
   try {
     console.log("Pruebaaaa reajuste", reajuste);
+    const token = getToken;
     const response = await fetch(`${URL}/reajuste/${idCooperativa}`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reajuste),
@@ -1445,7 +1491,6 @@ export {
   postUsuario,
   getAllUsuarios,
   deleteUsuario,
-  getAdministrador,
   getReajuste,
   postReajuste,
   getUltimoReajuste,
@@ -1472,4 +1517,5 @@ export {
   postCooperativa,
   updateCooperativa,
   updateAdministrador,
+  getUser,
 };

@@ -5,6 +5,7 @@ import {
   Login,
   getCooperativaPorAdmin,
   getCooperativaPorSocio,
+  getUser,
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
@@ -33,9 +34,9 @@ const Home = () => {
         );
         return;
       }
-      console.log("Respuesta", RequestLogin);
+      console.log("Respuesta", RequestLogin.responseBody);
       const cooperativaLoginRequest = await getCooperativaPorAdmin(
-        RequestLogin.username
+        RequestLogin.responseBody.id
       );
       console.log(`Cooperativa admin: ${cooperativaLoginRequest}`);
       ProviderLoginRequest(RequestLogin, cooperativaLoginRequest);
@@ -51,7 +52,7 @@ const Home = () => {
     const loginRequest = await Login(username, password);
     console.log("Abr", loginRequest);
     const cooperativaMiembro = await getCooperativaPorSocio(
-      loginRequest.socio.cedulaSocio
+      loginRequest.responseBody.socio.cedulaSocio
     );
     if (loginRequest == null) {
       alert("No se ha podido inicia sesion");
