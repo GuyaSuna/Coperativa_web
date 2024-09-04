@@ -118,8 +118,8 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
               <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                 {cooperativa.tesorero !== null && (
                   <div className="flex items-center">
-                    {cooperativa.tesorero.socio.nombreSocio}{" "}
-                    {cooperativa.tesorero.socio.apellidoSocio}
+                    {cooperativa.tesorero?.socio?.nombreSocio || "Sin Tesorero"}{" "}
+                    {cooperativa.tesorero?.socio?.apellidoSocio}
                   </div>
                 )}
               </td>

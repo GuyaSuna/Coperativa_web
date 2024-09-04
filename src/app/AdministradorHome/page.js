@@ -19,7 +19,7 @@ const AdminHome = () => {
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
-  const [isLoading, setIsLoading] = useState(true); 
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
@@ -28,7 +28,7 @@ const AdminHome = () => {
 
   useEffect(() => {
     if (miembro && cooperativa) {
-      setIsLoading(false); 
+      setIsLoading(false);
     } else {
       console.log("Datos del Provider no están disponibles");
       router.push("/");
@@ -154,18 +154,7 @@ const AdminHome = () => {
                     >
                       Usuarios
                     </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(14);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 14
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Calculos
-                    </button>
+
                     <button
                       onClick={() => {
                         handleSelection(17);

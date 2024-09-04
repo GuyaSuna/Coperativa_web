@@ -15,13 +15,15 @@ import {
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
-const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
+const AltaRecibo = ({ Socio, ur }) => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
   const [nombreSocio, setNombreSocio] = useState("");
   const [apellidoSocio, setApellidoSocio] = useState("");
   const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
+  const [capitalExcel, setCapitalExcel] = useState(0);
+  const [interesExcel, setInteresExcel] = useState(0);
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
@@ -48,7 +50,24 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
   // }
 
   useEffect(() => {
-    console.log(interesParm, capitalParm);
+    const FechaActual = new Date();
+    console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
+    console.log("FECHA ACTUAL", FechaActual.getFullYear());
+    cooperativa.listaCapitalInteres.map((data) => {
+      let fechaData = new Date(data.fecha);
+      console.log("FECHA DATA", fechaData.getMonth() + 1);
+      console.log("FECHA DATA", fechaData.getFullYear());
+      if (
+        fechaData.getMonth() == FechaActual.getMonth() &&
+        fechaData.getFullYear() == FechaActual.getFullYear()
+      ) {
+        console.log(data.interes, data.capital);
+        setCapitalExcel(data.capital);
+        setInteresExcel(data.interes);
+      }
+    });
+  }, []);
+  useEffect(() => {
     fetchReajusteAnual();
   }, [Socio]);
 
@@ -114,8 +133,8 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
     }
 
     console.log("Valor dormitorios", valorDormitorios);
-    setInteres(interesParm * (valorDormitorios / ur.buy));
-    setCapital(capitalParm * (valorDormitorios / ur.buy));
+    setInteres(interesExcel * (valorDormitorios / ur.buy));
+    setCapital(capitalExcel * (valorDormitorios / ur.buy));
 
     let ValorViviendaModificar = valorVivienda;
 
@@ -230,7 +249,8 @@ const AltaRecibo = ({ Socio, ur, interesParm, capitalParm }) => {
 
   const automaticUpdate = async () => {
     let socioActualizar = Socio;
-    socioActualizar.capitalSocio += capital;
+    let capitalMenosInteres = capital - interes;
+    socioActualizar.capitalSocio += capitalMenosInteres;
     if (ingreso != null) {
       const socioUpdate = await updateSocio(socioActualizar);
       console.log("Socio Update", socioUpdate);

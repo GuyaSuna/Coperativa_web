@@ -74,7 +74,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
-                    Capital:
+                    Capital Total:
                   </td>
                   <td className="py-1 px-3">${socio.capitalSocio}</td>
                 </tr>

@@ -10,7 +10,7 @@ import {
 import { MiembroContext } from "@/Provider/provider";
 
 const AltaSocio = ({ setIdentificadorComponente }) => {
-  const { cooperativa } = useContext(MiembroContext);
+  const { miembro, cooperativa, loginMiembro } = useContext(MiembroContext);
   const [CedulaSocio, setCedulaSocio] = useState();
   const [NroSocio, setNroSocio] = useState();
   const [NombreSocio, setNombreSocio] = useState("");
@@ -213,6 +213,8 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
         cooperativa.idCooperativa
       );
       console.log(response);
+      cooperativa.listaSocios.push(response);
+      loginMiembro(miembro, cooperativa);
       if (TieneSuplente === true) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
         console.log(responseSuplente);
