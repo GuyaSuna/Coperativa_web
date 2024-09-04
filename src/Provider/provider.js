@@ -1,13 +1,12 @@
 "use client";
 import React, { createContext, useState } from "react";
-
 const MiembroContext = createContext();
 
 const MiembroProvider = ({ children }) => {
   const [miembro, setMiembro] = useState(null);
   const [cooperativa, setCooperativa] = useState(null);
 
-  const loginMiembro = (DatosMiembro, DatosCooperativa) => {
+  const loginMiembro = (DatosMiembro, DatosCooperativa, token) => {
     console.log("Datos administrador", DatosMiembro);
     setMiembro(DatosMiembro);
     setCooperativa(DatosCooperativa);

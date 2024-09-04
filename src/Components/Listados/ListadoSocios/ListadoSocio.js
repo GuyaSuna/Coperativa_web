@@ -33,7 +33,7 @@ const ListadoSocio = ({
 
   useEffect(() => {
     fetchRecibos();
-  }, []);
+  }, [cooperativa.idCooperativa]);
 
   useEffect(() => {
     fetchAllSocios();

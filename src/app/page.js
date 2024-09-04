@@ -1,6 +1,6 @@
 "use client";
 import "./globals.css";
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Login,
   getCooperativaPorAdmin,
