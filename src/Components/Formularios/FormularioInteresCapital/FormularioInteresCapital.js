@@ -55,13 +55,30 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
   };
 
   const handleCpitalInteres = async () => {
-    if(cooperativa.listaCapitalInteres !== null){
-      alert("Esa cooperativa ya tiene datos de interes y capital, si desea ingresar nuevos elimine los anteriores");
-      return
+    try {
+      if (!capitalInteresEntities.length) {
+        alert("No hay datos de capital e interés para enviar.");
+        return;
+      }
+  
+      if (cooperativa.listaCapitalInteres !== null) {
+        const confirmOverwrite = window.confirm(
+          "Esta cooperativa ya tiene datos de interés y capital. Los datos anteriores se eliminarán y se reemplazarán con los nuevos. ¿Deseas continuar?"
+        );
+        if (!confirmOverwrite) {
+          return; 
+        }
+      }
+      const response = await postCapitalInteres(capitalInteresEntities, cooperativa.idCooperativa);
+  
+      alert("Datos de capital e interés actualizados con éxito.");
+      console.log('Respuesta del servidor:', response);
+    } catch (error) {
+      console.error('Error al enviar los datos:', error);
+      alert("Hubo un error al intentar actualizar los datos. Por favor, intenta de nuevo.");
     }
-    const response = await postCapitalInteres(capitalInteresEntities, cooperativa.idCooperativa);
-    console.log(response);
-  }
+  };
+  
   return (
     <div>
       <input type="file" accept=".xlsx, .xls" onChange={handleFileUpload} />
