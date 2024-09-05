@@ -133,6 +133,7 @@ const ListadoSocio = ({
     setCedulaSocio(cedula);
     setIdentificadorComponente(4);
   };
+
   const handleCrearRecibo = (Socio) => {
     setSocioRecibo(Socio);
     setIdentificadorComponente(6);
@@ -143,6 +144,7 @@ const ListadoSocio = ({
     setSocioSeleccionado(socio);
     setIsModalOpen(true);
   };
+
   const handleEliminar = async (cedula) => {
     try {
       const data = await deleteSocio(cedula, cooperativa.idCooperativa);
@@ -273,7 +275,13 @@ const ListadoSocio = ({
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
                   <span className="sm:hidden font-semibold">Estado:</span>
-                  <span className="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
+                  <span
+                    className={`${
+                      socio.estaImpago
+                        ? "bg-red-500 text-white"
+                        : "bg-green-500 text-white"
+                    } text-sm font-semibold mr-2 px-3 py-1 rounded`}
+                  >
                     {socio.estaImpago ? "Impago" : "Pago"}
                   </span>
                 </td>
@@ -316,10 +324,10 @@ const ListadoSocio = ({
                         <div className="py-1">
                           <MenuItem>
                             <button
-                              onClick={() => handleEliminar(socio.cedulaSocio)}
+                              onClick={() => handleArchivar(socio)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
-                              Eliminar
+                              Archivar
                             </button>
                           </MenuItem>
                           <MenuItem>

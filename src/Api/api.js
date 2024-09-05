@@ -93,9 +93,12 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
-    const response = await fetch(`${URL}/cooperativas/allCooperativas`, {
+    const token = getToken();
+    console.log("Token cooperativas", token);
+    const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -740,6 +743,30 @@ const getAllRecibos = async (idCooperativa) => {
   }
 };
 
+const getRecibo = async (nroRecibo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recibo/${nroRecibo}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getRecibo:", error);
+    throw new Error("Error al obtener los datos del recibo");
+  }
+};
+
 const postRecibo = async (
   fechaRecibo,
   fechaPago,
@@ -1225,6 +1252,7 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
     return null;
   }
 };
+
 const postIngreso = async (ingreso) => {
   try {
     const token = getToken();
@@ -1501,9 +1529,11 @@ const getAllEgresos = async (idCooperativa) => {
 
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {
+    const token = getToken();
     const response = await fetch(`${URL}/CapitalInteres/${idCooperativa}`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(CapitalInteresList),
@@ -1521,7 +1551,6 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
     throw new Error("Error al enviar los datos del CapitalInteres");
   }
 };
-
 
 export {
   Login,
@@ -1545,6 +1574,7 @@ export {
   getCooperativaPorSocio,
   getUr,
   getAllRecibos,
+  getRecibo,
   postRecibo,
   postAviso,
   postUsuario,

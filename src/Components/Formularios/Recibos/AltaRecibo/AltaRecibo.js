@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
+import { NumerosALetras } from "numero-a-letras";
 
 import { useRouter } from "next/navigation";
 import {
@@ -53,6 +54,7 @@ const AltaRecibo = ({ Socio, ur }) => {
     const FechaActual = new Date();
     console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
     console.log("FECHA ACTUAL", FechaActual.getFullYear());
+
     cooperativa.listaCapitalInteres.map((data) => {
       let fechaData = new Date(data.fecha);
       console.log("FECHA DATA", fechaData.getMonth() + 1);
@@ -160,6 +162,10 @@ const AltaRecibo = ({ Socio, ur }) => {
     let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
     setCuotaMensualBase(cuenta);
     setCuotaMensual(Math.round(cuenta));
+
+    let valorEnLetras = NumerosALetras(Math.round(cuenta));
+    valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
+    setSumaPesos(valorEnLetras);
   }, [valorVivienda, reajuste, subsidio, convenio]);
 
   const fetchCalculos = async () => {
@@ -258,6 +264,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
   //      ruta dinamica
   //      router.push(`/UserInfo/${NroSocio}`);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
