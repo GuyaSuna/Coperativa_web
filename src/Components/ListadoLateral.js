@@ -97,6 +97,15 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                 <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
                 <a className="text-base">Agregar Subsidio</a>
               </button>
+              <button
+                onClick={() => handleSelection(18)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                  selectedOption === 18 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Convenio</a>
+              </button>
             </div>
           )}
         </div>

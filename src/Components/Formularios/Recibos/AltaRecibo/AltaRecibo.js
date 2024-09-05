@@ -159,7 +159,7 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
     setCuotaMensualBase(cuenta);
-    setCuotaMensual(cuenta);
+    setCuotaMensual(Math.round(cuenta));
   }, [valorVivienda, reajuste, subsidio, convenio]);
 
   const fetchCalculos = async () => {
