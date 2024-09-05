@@ -148,12 +148,13 @@ const ListadoSocio = ({
   const handleArchivar = async (socio) => {
     try {
       socio.archivado = true;
-      console.log(socio);
-      const data = await updateSocio(socio);
-      console.log(data);
-      fetchAllSocios();
+      await updateSocio(socio);
+
+      setAllSocios((prevSocios) =>
+        prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
+      );
     } catch (e) {
-      throw ("Fallo al archivar el socio ", e.error);
+      console.error("Fallo al archivar el socio", e);
     }
   };
 
@@ -167,6 +168,7 @@ const ListadoSocio = ({
       setBuscadorFiltrado(buscadorFiltrado);
     }
   }, [allSocios, buscador]);
+
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
