@@ -93,9 +93,11 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
-    const response = await fetch(`${URL}/cooperativas/allCooperativas`, {
+    const token = getToken();
+    const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -1501,9 +1503,11 @@ const getAllEgresos = async (idCooperativa) => {
 
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {
+    const token = getToken();
     const response = await fetch(`${URL}/CapitalInteres/${idCooperativa}`, {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(CapitalInteresList),

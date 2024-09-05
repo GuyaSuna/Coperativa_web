@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios, getAllRecibos } from "../../../Api/api.js";
+import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -143,10 +143,12 @@ const ListadoSocio = ({
     setSocioSeleccionado(socio);
     setIsModalOpen(true);
   };
-  const handleEliminar = async (cedula) => {
+  const handleArchivar = async (socio) => {
     try {
-      const data = await deleteSocio(cedula, cooperativa.idCooperativa);
-      console.log(data);
+      socio.archivado = true;
+      console.log(socio);
+      // const data = await updateSocio(socio);
+      // console.log(data);
       fetchAllSocios();
     } catch (e) {
       throw ("Fallo al eliminar el socio ", e.error);
@@ -316,10 +318,10 @@ const ListadoSocio = ({
                         <div className="py-1">
                           <MenuItem>
                             <button
-                              onClick={() => handleEliminar(socio.cedulaSocio)}
+                              onClick={() => handleArchivar(socio)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
-                              Eliminar
+                              Archivar
                             </button>
                           </MenuItem>
                           <MenuItem>
