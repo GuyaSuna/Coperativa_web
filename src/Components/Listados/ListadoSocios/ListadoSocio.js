@@ -275,7 +275,13 @@ const ListadoSocio = ({
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
                   <span className="sm:hidden font-semibold">Estado:</span>
-                  <span className="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
+                  <span
+                    className={`${
+                      socio.estaImpago
+                        ? "bg-red-500 text-white"
+                        : "bg-green-500 text-white"
+                    } text-sm font-semibold mr-2 px-3 py-1 rounded`}
+                  >
                     {socio.estaImpago ? "Impago" : "Pago"}
                   </span>
                 </td>

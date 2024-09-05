@@ -93,11 +93,9 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
-    const token = getToken();
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -1525,7 +1523,6 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
     throw new Error("Error al enviar los datos del CapitalInteres");
   }
 };
-
 
 export {
   Login,
