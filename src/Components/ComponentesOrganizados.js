@@ -31,6 +31,7 @@ import AltaCooperativa from "./Formularios/Cooperativas/AltaCooperativa/AltaCoop
 import ModificarCooperativa from "./Formularios/Cooperativas/ModificarCooperativa/ModificarCooperativa";
 import AltaAdministrador from "./Formularios/Administradores/AltaAdministrador/altaAdministrador";
 import AltaReajuste from "./Formularios/Reajustes/AltaReajustes/AltaReajustes";
+import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchivados";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -236,6 +237,14 @@ const ComponentesOrganizados = ({
     case 31:{
       return(
         <AltaReajuste
+          cooperativa={cooperativa}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      )
+    }
+    case 32:{
+      return(
+        <ListadoSociosArchivados
           cooperativa={cooperativa}
           setIdentificadorComponente={setIdentificadorComponente}
         />

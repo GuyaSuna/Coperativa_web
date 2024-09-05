@@ -17,7 +17,7 @@ import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 
-const ListadoSocio = ({
+const ListadoSociosArchivados = ({
   setSocioRecibo,
   setCedulaSocio,
   setIdentificadorComponente,
@@ -107,7 +107,6 @@ const ListadoSocio = ({
       console.log("Cooperativa", cooperativa);
       console.log("Respuesta all socios", response);
       const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngreso);
 
         if (socio.fechaIngreso) {
           const fechaISO = parseISO(socio.fechaIngreso);
@@ -121,23 +120,17 @@ const ListadoSocio = ({
           return socio;
         }
       });
-      const sociosNoArchivados = sociosConFechaFormateada.filter((socio) => {
-        return socio.archivado === false;
+
+      const sociosArchivados = sociosConFechaFormateada.filter((socio) => {
+        return socio.archivado === true;
       });
-      setAllSocios(sociosNoArchivados);
+    
+      console.log("Socios Archivados" , sociosArchivados)
+      setAllSocios(sociosArchivados);
       console.log(sociosConFechaFormateada, "response con fecha formateada");
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
-  };
-
-  const handleModificar = (cedula) => {
-    setCedulaSocio(cedula);
-    setIdentificadorComponente(4);
-  };
-  const handleCrearRecibo = (Socio) => {
-    setSocioRecibo(Socio);
-    setIdentificadorComponente(6);
   };
 
   const handleVerSocio = (socio) => {
@@ -145,17 +138,18 @@ const ListadoSocio = ({
     setSocioSeleccionado(socio);
     setIsModalOpen(true);
   };
-  const handleArchivar = async (socio) => {
-    try {
-      socio.archivado = true;
-      console.log(socio);
-      const data = await updateSocio(socio);
-      console.log(data);
-      fetchAllSocios();
-    } catch (e) {
-      throw ("Fallo al archivar el socio ", e.error);
-    }
-  };
+
+  const handleDesarchivar = async (socio) => {
+        try {
+          socio.archivado = false;
+          console.log(socio);
+          const data = await updateSocio(socio);
+          console.log(data);
+          fetchAllSocios();
+        } catch (e) {
+          throw ("Fallo al desarchivar el socio ", e.error);
+        }
+  }
 
   useEffect(() => {
     if (buscador == "") {
@@ -320,27 +314,11 @@ const ListadoSocio = ({
                         <div className="py-1">
                           <MenuItem>
                             <button
-                              onClick={() => handleArchivar(socio)}
+                              onClick={() => handleDesarchivar(socio)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
-                              Archivar
+                              Desarchivar
                             </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() => handleModificar(socio.cedulaSocio)}
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <a
-                              onClick={() => handleCrearRecibo(socio)}
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Crear Recibo
-                            </a>
                           </MenuItem>
                         </div>
                       </MenuItems>
@@ -363,4 +341,4 @@ const ListadoSocio = ({
   );
 };
 
-export default ListadoSocio;
+export default ListadoSociosArchivados;
