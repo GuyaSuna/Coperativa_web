@@ -327,7 +327,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               id="nombreSocio"
               name="nombreSocio"
               readOnly
-              value={miembro.socio.nombreSocio}
+              value={miembro.responseBody.socio.nombreSocio}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>
@@ -345,7 +345,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               id="capitalSocio"
               name="capitalSocio"
               readOnly
-              value={miembro.socio.apellidoSocio}
+              value={miembro.responseBody.socio.apellidoSocio}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
           </div>

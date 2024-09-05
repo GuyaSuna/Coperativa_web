@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAllSocios, postAdministrador } from "@/Api/api";
+import { getAllSocios, register } from "@/Api/api";
 
-const AltaAdministrador = ({cooperativa , setIdentificadorComponente }) => {
+const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
   const [socios, setSocios] = useState([]);
   const [selectedSocio, setSelectedSocio] = useState("");
   const [nombreMiembro, setNombreMiembro] = useState("");
@@ -30,8 +30,10 @@ const AltaAdministrador = ({cooperativa , setIdentificadorComponente }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let SocioEncontrado = socios.find( socio => socio.cedulaSocio = selectedSocio)
-    console.log("Socio encontrado",SocioEncontrado);
+    let SocioEncontrado = socios.find(
+      (socio) => (socio.cedulaSocio = selectedSocio)
+    );
+    console.log("Socio encontrado", SocioEncontrado);
     const data = {
       socio: SocioEncontrado,
       nombreMiembro,
@@ -41,7 +43,7 @@ const AltaAdministrador = ({cooperativa , setIdentificadorComponente }) => {
     };
 
     try {
-      const response = await postAdministrador(data , cooperativa.idCooperativa);
+      const response = await register(data, cooperativa.idCooperativa);
       console.log(response);
       setMensaje("Administrador creado con éxito");
       setIdentificadorComponente(27);
@@ -78,7 +80,10 @@ const AltaAdministrador = ({cooperativa , setIdentificadorComponente }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nombreMiembro">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="nombreMiembro"
+          >
             Nombre del Miembro:
           </label>
           <input
@@ -92,7 +97,10 @@ const AltaAdministrador = ({cooperativa , setIdentificadorComponente }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="contraseña">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="contraseña"
+          >
             Contraseña:
           </label>
           <input
@@ -120,7 +128,10 @@ const AltaAdministrador = ({cooperativa , setIdentificadorComponente }) => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="tipoAdministrador">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="tipoAdministrador"
+          >
             Tipo de Administrador:
           </label>
           <select
