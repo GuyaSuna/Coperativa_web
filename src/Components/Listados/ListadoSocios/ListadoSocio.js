@@ -2,14 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
-import { deleteSocio } from "../../../Api/api.js";
+import { Button, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
 import { parseISO, format } from "date-fns";
 import Buscador from "@/Components/Buscador.js";
@@ -28,100 +21,52 @@ const ListadoSocio = ({
   const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
-  const [estadoCuota, setEstadoCuota] = useState("");
   const [recibos, setRecibos] = useState([]);
-  const [sociosObtenidos, setSociosObtenidos] = useState([]);
 
   useEffect(() => {
-    fetchRecibos();
-  }, [cooperativa.idCooperativa]);
+    if (cooperativa?.idCooperativa) {
+      fetchAllData();
+    }
+  }, [cooperativa]);
 
-  useEffect(() => {
-    fetchAllSocios();
-  }, [cooperativa.idCooperativa]);
-
-  const fetchRecibos = async () => {
-    const ReciboResponse = await getAllRecibos(cooperativa.idCooperativa);
-    setRecibos(ReciboResponse);
+  const fetchAllData = async () => {
+    await Promise.all([fetchRecibos(), fetchAllSocios()]);
   };
 
-  useEffect(() => {
-    if (recibos.length && sociosObtenidos.length) {
-      const sociosConEstadoCuota = sociosObtenidos.map((socio) => {
-        const recibosDelSocio = recibos
-          .filter((recibo) => recibo.socio.cedulaSocio === socio.cedulaSocio)
-          .sort((a, b) => new Date(a.fechaPago) - new Date(b.fechaPago));
-
-        const today = new Date();
-        const currentMonth = today.getMonth() + 1;
-        const currentYear = today.getFullYear();
-
-        let estaImpago = false;
-        let mesesPagados = new Set();
-        const fechaIngreso = new Date(socio.fechaIngreso);
-
-        recibosDelSocio.forEach((recibo) => {
-          const fechaPago = new Date(recibo.fechaPago);
-          const mesPago = fechaPago.getMonth() + 1;
-          const añoPago = fechaPago.getFullYear();
-          mesesPagados.add(`${añoPago}-${mesPago}`);
-        });
-
-        for (let year = fechaIngreso.getFullYear(); year <= currentYear; year++) {
-          const mesInicio = year === fechaIngreso.getFullYear() ? fechaIngreso.getMonth() + 1 : 1;
-          const mesFinal = year === currentYear ? currentMonth : 12;
-
-          for (let mes = mesInicio; mes <= mesFinal; mes++) {
-            if (!mesesPagados.has(`${year}-${mes}`)) {
-              estaImpago = true;
-              break;
-            }
-          }
-          if (estaImpago) break;
-        }
-
-        return {
-          ...socio,
-          estaImpago,
-        };
-      });
-
-      setAllSocios(sociosConEstadoCuota);
-    }
-  }, [recibos, sociosObtenidos]);
-
-  useEffect(() => {
-    const sociosNoArchivados = sociosObtenidos.filter(socio => !socio.archivado);
-    setAllSocios(sociosNoArchivados);
-  }, [sociosObtenidos]);
+  const fetchRecibos = async () => {
+    const reciboResponse = await getAllRecibos(cooperativa.idCooperativa);
+    setRecibos(reciboResponse);
+  };
 
   const fetchAllSocios = async () => {
     try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConFechaFormateada = response.map(socio => {
-        if (socio.fechaIngreso) {
-          const fechaISO = parseISO(socio.fechaIngreso);
-          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          return { ...socio, fechaIngreso: fechaFormateada };
-        }
-        return socio;
+      const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
+      const sociosConFechaFormateada = sociosResponse.map((socio) => {
+        return socio.fechaIngreso
+          ? { ...socio, fechaIngreso: format(parseISO(socio.fechaIngreso), "yyyy-MM-dd") }
+          : socio;
       });
-
-      setSociosObtenidos(sociosConFechaFormateada);
-      setBuscadorFiltrado(sociosConFechaFormateada); // Initialize filtered search state
+  
+      // Corrección: retorno implícito en la función de filtro
+      const sociosSinArchivar = sociosConFechaFormateada.filter(socio => !socio.archivado);
+      
+      setAllSocios(sociosSinArchivar);
+      setBuscadorFiltrado(sociosSinArchivar);  // Usar sociosSinArchivar en lugar de sociosConFechaFormateada
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
 
-  const handleModificar = (cedula) => {
-    setCedulaSocio(cedula);
-    setIdentificadorComponente(4);
-  };
-
-  const handleCrearRecibo = (Socio) => {
-    setSocioRecibo(Socio);
-    setIdentificadorComponente(6);
+  const handleArchivar = async (socio) => {
+    try {
+      const socioActualizado = { ...socio, archivado: true };
+      await updateSocio(socioActualizado);
+      // Eliminar el socio de ambas listas inmediatamente
+      setAllSocios((prevSocios) => prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio));
+      setBuscadorFiltrado((prevFiltrado) => prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio));
+    } catch (e) {
+      console.error("Fallo al archivar el socio", e);
+    }
   };
 
   const handleVerSocio = (socio) => {
@@ -129,29 +74,17 @@ const ListadoSocio = ({
     setIsModalOpen(true);
   };
 
-  const handleArchivar = async (socio) => {
-    try {
-      socio.archivado = true;
-      await updateSocio(socio);
-      setSociosObtenidos(prev => prev.filter(s => s.cedulaSocio !== socio.cedulaSocio)); // Update the fetched socios state
-    } catch (e) {
-      console.error("Fallo al archivar el socio", e);
-    }
+  const handleChangeBuscador = (event) => {
+    const valor = event.target.value.toLowerCase();
+    setBuscador(valor);
+    setBuscadorFiltrado(
+      allSocios.filter((socio) => socio.nombreSocio.toLowerCase().includes(valor))
+    );
   };
 
-  useEffect(() => {
-    if (buscador === "") {
-      setBuscadorFiltrado(allSocios);
-    } else {
-      const buscadorFiltrado = allSocios.filter(socio =>
-        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
-      );
-      setBuscadorFiltrado(buscadorFiltrado);
-    }
-  }, [allSocios, buscador]);
-
-  const handleChangeBuscador = (event) => {
-    setBuscador(event.target.value);
+  const handleSortChange = (option) => {
+    const sociosOrdenados = [...buscadorFiltrado].sort(option.comparator);
+    setBuscadorFiltrado(sociosOrdenados);
   };
 
   const ordenarOptions = [
@@ -175,11 +108,19 @@ const ListadoSocio = ({
     },
   ];
 
-  const handleSortChange = (option) => {
-    const ordenarSocios = [...allSocios].sort(option.comparator);
-    setAllSocios(ordenarSocios);
+  const handleAgregarSocio = () => {
+    setIdentificadorComponente(3); // Navegar a la vista de agregar socio
   };
 
+  const handleModificarSocio = (socio) => {
+    setCedulaSocio(socio.cedulaSocio);
+    setIdentificadorComponente(2); // Navegar a la vista de modificar socio
+  };
+
+  const handleCrearRecibo = (socio) => {
+    setSocioRecibo(socio);
+    setIdentificadorComponente(1); // Navegar a la vista de crear recibo
+  };
 
   return (
     <div className="sm:p-7 p-4">
@@ -190,6 +131,7 @@ const ListadoSocio = ({
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
             type="button"
+            onClick={handleAgregarSocio}
             className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
             <svg
@@ -220,121 +162,77 @@ const ListadoSocio = ({
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
-                NroSocio
-              </th>
-              <th scope="col" className="px-4 py-3">
-                Nombre
-              </th>
-              <th scope="col" className="px-4 py-3">
-                Fecha Ingreso
-              </th>
-              <th scope="col" className="px-4 py-3">
-                Estado
-              </th>
+              <th scope="col" className="px-4 py-3 text-center">NroSocio</th>
+              <th scope="col" className="px-4 py-3">Nombre</th>
+              <th scope="col" className="px-4 py-3">Fecha Ingreso</th>
+              <th scope="col" className="px-4 py-3">Estado</th>
               <th scope="col" className="px-4 py-3"></th>
-              <th scope="col" className="px-4 py-3">
-                <span className="sr-only">Actions</span>
-              </th>
+              <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
             {buscadorFiltrado?.map((socio) => (
-              <tr
-                className="border-b dark:border-gray-700 sm:table-row"
-                key={socio.cedulaSocio}
-              >
-                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">NroSocio:</span>
-                  {socio.nroSocio}
-                </td>
-                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Nombre:</span>
-                  {socio.nombreSocio} {socio.apellidoSocio}
-                </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">
-                    Fecha Ingreso:
-                  </span>
-                  {socio.fechaIngreso}
-                </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">Estado:</span>
-                  <span className="bg-gradient-to-br from-green-500 to-green-700 text-white text-sm font-semibold mr-2 px-3 py-1 rounded">
-                    {socio.estaImpago ? "Impago" : "Pago"}
+              <tr className="border-b dark:border-gray-700 sm:table-row" key={socio.cedulaSocio}>
+                <td className="px-4 py-3 text-gray-900 dark:text-white">{socio.nroSocio}</td>
+                <td className="px-4 py-3 text-gray-900 dark:text-white">{socio.nombreSocio} {socio.apellidoSocio}</td>
+                <td className="px-4 py-3">{socio.fechaIngreso}</td>
+                <td className="px-4 py-3">
+                  <span className={`bg-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-100 text-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-900 dark:text-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-300`}>
+                    {socio.estadoSocio}
                   </span>
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="px-4 py-3">
                   <button
                     type="button"
                     onClick={() => handleVerSocio(socio)}
-                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    className="font-medium text-primary-600 hover:underline"
                   >
                     Ver
                   </button>
                 </td>
-                <td className="block sm:table-cell px-4 py-3 flex items-center justify-end">
-                  <div className="flex items-center justify-between">
-                    <Menu
-                      as="div"
-                      className="relative inline-block text-left justify-end"
+                <td className="px-4 py-3 text-right">
+                  <Menu as="div" className="relative inline-block text-left">
+                    <MenuButton
+                      className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center"
                     >
-                      <div>
-                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="w-5"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx={12} cy={12} r={1} />
-                            <circle cx={19} cy={12} r={1} />
-                            <circle cx={5} cy={12} r={1} />
-                          </svg>
-                        </MenuButton>
-                      </div>
-                      <MenuItems
-                        transition
-                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
-                      >
-                        <div className="py-1">
-                          <MenuItem>
-                            <button
-                              onClick={() => handleArchivar(socio)}
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Archivar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() => handleModificar(socio.cedulaSocio)}
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <a
-                              onClick={() => handleCrearRecibo(socio)}
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Crear Recibo
-                            </a>
-                          </MenuItem>
-                        </div>
-                      </MenuItems>
-                    </Menu>
-                  </div>
+                      ⋮
+                    </MenuButton>
+                    <MenuItems
+                      className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    >
+                      <MenuItem>
+                        <button
+                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                          onClick={() => handleArchivar(socio)}
+                        >
+                          Archivar
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                          onClick={() => handleModificarSocio(socio)}
+                        >
+                          Modificar
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                          onClick={() => handleCrearRecibo(socio)}
+                        >
+                          Crear Recibo
+                        </button>
+                      </MenuItem>
+                    </MenuItems>
+                  </Menu>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
       {isModalOpen && (
         <VerSocio
           isOpen={isModalOpen}

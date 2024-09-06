@@ -104,7 +104,7 @@ const Home = () => {
                   </div>
                   <input
                     className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                    type="email"
+                    type="text"
                     placeholder="username"
                     value={username}
                     onChange={handleUsernameChange}
