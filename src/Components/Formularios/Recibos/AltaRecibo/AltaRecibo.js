@@ -212,7 +212,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("ENTRA");
+    console.log("ENTRA y este es el miembro", miembro);
     e.preventDefault();
     if (!validarFormulario()) return;
 
@@ -229,7 +229,7 @@ const AltaRecibo = ({ Socio, ur }) => {
         cuotaMensual,
         sumaPesos,
         Socio,
-        miembro
+        miembro.responseBody
       );
       console.log(response);
 
