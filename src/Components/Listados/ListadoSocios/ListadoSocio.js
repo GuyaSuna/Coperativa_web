@@ -107,15 +107,15 @@ const ListadoSocio = ({
       console.log("Cooperativa", cooperativa);
       console.log("Respuesta all socios", response);
       const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngreso);
+        console.log("Fecha ingreso antes: ", socio.fechaIngresoCooeprativa);
 
-        if (socio.fechaIngreso) {
-          const fechaISO = parseISO(socio.fechaIngreso);
+        if (socio.fechaIngresoCooeprativa) {
+          const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
           const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
           console.log("Fecha formateada: ", fechaFormateada);
           return {
             ...socio,
-            fechaIngreso: fechaFormateada,
+            fechaIngresoCooeprativa: fechaFormateada,
           };
         } else {
           return socio;
@@ -180,20 +180,29 @@ const ListadoSocio = ({
       label: "Más Recientes",
       key: "fechaIngreso",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso),
+      comparator: (a, b) =>
+        new Date(b.fechaIngresoCooeprativa) -
+        new Date(a.fechaIngresoCooeprativa),
     },
     {
       label: "Más Antiguos",
       key: "fechaIngreso",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
+      comparator: (a, b) =>
+        new Date(a.fechaIngresoCooeprativa) -
+        new Date(b.fechaIngresoCooeprativa),
     },
   ];
 
   const handleSortChange = (option) => {
     console.log("Orden seleccionado:", option.label);
-    const ordenarSocios = [...allSocios].sort(option.comparator);
-    setAllSocios(ordenarSocios);
+    if (buscador) {
+      const ordenarFiltrado = [...buscadorFiltrado].sort(option.comparator);
+      setBuscadorFiltrado(ordenarFiltrado);
+    } else {
+      const ordenarSocios = [...allSocios].sort(option.comparator);
+      setAllSocios(ordenarSocios);
+    }
   };
 
   return (
@@ -271,7 +280,7 @@ const ListadoSocio = ({
                   <span className="sm:hidden font-semibold">
                     Fecha Ingreso:
                   </span>
-                  {socio.fechaIngreso}
+                  {socio.fechaIngresoCooeprativa}
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
                   <span className="sm:hidden font-semibold">Estado:</span>
