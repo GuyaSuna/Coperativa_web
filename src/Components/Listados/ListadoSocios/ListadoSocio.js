@@ -25,11 +25,12 @@ const ListadoSocio = ({
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
-  const [buscadorFiltrado, setBuscadorFiltrado] = useState(allSocios);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
-  const [socioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
+  const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [estadoCuota, setEstadoCuota] = useState("");
   const [recibos, setRecibos] = useState([]);
+  const [sociosObtenidos, setSociosObtenidos] = useState([]);
 
   useEffect(() => {
     fetchRecibos();
@@ -45,46 +46,34 @@ const ListadoSocio = ({
   };
 
   useEffect(() => {
-    if (recibos.length && allSocios.length) {
-      const sociosConEstadoCuota = allSocios.map((socio) => {
+    if (recibos.length && sociosObtenidos.length) {
+      const sociosConEstadoCuota = sociosObtenidos.map((socio) => {
         const recibosDelSocio = recibos
-          .filter((recibo) => recibo.socio.cedulaSocio === socio.cedulaSocio) // Usamos cedulaSocio como identificador
-          .sort((a, b) => new Date(a.fechaPago) - new Date(b.fechaPago)); // Ordenamos por fechaPago
+          .filter((recibo) => recibo.socio.cedulaSocio === socio.cedulaSocio)
+          .sort((a, b) => new Date(a.fechaPago) - new Date(b.fechaPago));
 
         const today = new Date();
-        const currentMonth = today.getMonth() + 1; // Mes actual (enero es 0)
+        const currentMonth = today.getMonth() + 1;
         const currentYear = today.getFullYear();
 
         let estaImpago = false;
         let mesesPagados = new Set();
-
-        // Convertir fechaIngreso a Date
         const fechaIngreso = new Date(socio.fechaIngreso);
 
         recibosDelSocio.forEach((recibo) => {
           const fechaPago = new Date(recibo.fechaPago);
-          const mesPago = fechaPago.getMonth() + 1; // Obtenemos el mes del recibo pagado
+          const mesPago = fechaPago.getMonth() + 1;
           const añoPago = fechaPago.getFullYear();
-
-          // Guardamos los meses y años pagados
           mesesPagados.add(`${añoPago}-${mesPago}`);
         });
 
-        // Comprobamos si todos los meses hasta el mes actual están pagados
-        for (
-          let year = fechaIngreso.getFullYear();
-          year <= currentYear;
-          year++
-        ) {
-          const mesInicio =
-            year === fechaIngreso.getFullYear()
-              ? fechaIngreso.getMonth() + 1
-              : 1;
+        for (let year = fechaIngreso.getFullYear(); year <= currentYear; year++) {
+          const mesInicio = year === fechaIngreso.getFullYear() ? fechaIngreso.getMonth() + 1 : 1;
           const mesFinal = year === currentYear ? currentMonth : 12;
 
           for (let mes = mesInicio; mes <= mesFinal; mes++) {
             if (!mesesPagados.has(`${year}-${mes}`)) {
-              estaImpago = true; // Si falta algún mes, está en deuda
+              estaImpago = true;
               break;
             }
           }
@@ -99,33 +88,27 @@ const ListadoSocio = ({
 
       setAllSocios(sociosConEstadoCuota);
     }
-  }, [recibos]);
+  }, [recibos, sociosObtenidos]);
+
+  useEffect(() => {
+    const sociosNoArchivados = sociosObtenidos.filter(socio => !socio.archivado);
+    setAllSocios(sociosNoArchivados);
+  }, [sociosObtenidos]);
 
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
-      console.log("Cooperativa", cooperativa);
-      console.log("Respuesta all socios", response);
-      const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngreso);
-
+      const sociosConFechaFormateada = response.map(socio => {
         if (socio.fechaIngreso) {
           const fechaISO = parseISO(socio.fechaIngreso);
           const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          console.log("Fecha formateada: ", fechaFormateada);
-          return {
-            ...socio,
-            fechaIngreso: fechaFormateada,
-          };
-        } else {
-          return socio;
+          return { ...socio, fechaIngreso: fechaFormateada };
         }
+        return socio;
       });
-      const sociosNoArchivados = sociosConFechaFormateada.filter((socio) => {
-        return socio.archivado === false;
-      });
-      setAllSocios(sociosNoArchivados);
-      console.log(sociosConFechaFormateada, "response con fecha formateada");
+
+      setSociosObtenidos(sociosConFechaFormateada);
+      setBuscadorFiltrado(sociosConFechaFormateada); // Initialize filtered search state
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -135,34 +118,32 @@ const ListadoSocio = ({
     setCedulaSocio(cedula);
     setIdentificadorComponente(4);
   };
+
   const handleCrearRecibo = (Socio) => {
     setSocioRecibo(Socio);
     setIdentificadorComponente(6);
   };
 
   const handleVerSocio = (socio) => {
-    console.log(socio);
     setSocioSeleccionado(socio);
     setIsModalOpen(true);
   };
+
   const handleArchivar = async (socio) => {
     try {
       socio.archivado = true;
       await updateSocio(socio);
-
-      setAllSocios((prevSocios) =>
-        prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
+      setSociosObtenidos(prev => prev.filter(s => s.cedulaSocio !== socio.cedulaSocio)); // Update the fetched socios state
     } catch (e) {
       console.error("Fallo al archivar el socio", e);
     }
   };
 
   useEffect(() => {
-    if (buscador == "") {
+    if (buscador === "") {
       setBuscadorFiltrado(allSocios);
     } else {
-      const buscadorFiltrado = allSocios.filter((socio) =>
+      const buscadorFiltrado = allSocios.filter(socio =>
         socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
       );
       setBuscadorFiltrado(buscadorFiltrado);
@@ -195,10 +176,10 @@ const ListadoSocio = ({
   ];
 
   const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
     const ordenarSocios = [...allSocios].sort(option.comparator);
     setAllSocios(ordenarSocios);
   };
+
 
   return (
     <div className="sm:p-7 p-4">
