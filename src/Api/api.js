@@ -799,7 +799,6 @@ const postRecibo = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      // Convertir el objeto a JSON
       body: JSON.stringify(reciboData),
     });
 

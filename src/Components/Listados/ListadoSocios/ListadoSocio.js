@@ -109,17 +109,17 @@ const ListadoSocio = ({
   ];
 
   const handleAgregarSocio = () => {
-    setIdentificadorComponente(3); // Navegar a la vista de agregar socio
+    setIdentificadorComponente(3); 
   };
 
   const handleModificarSocio = (socio) => {
     setCedulaSocio(socio.cedulaSocio);
-    setIdentificadorComponente(2); // Navegar a la vista de modificar socio
+    setIdentificadorComponente(4); 
   };
 
   const handleCrearRecibo = (socio) => {
     setSocioRecibo(socio);
-    setIdentificadorComponente(1); // Navegar a la vista de crear recibo
+    setIdentificadorComponente(6); 
   };
 
   return (

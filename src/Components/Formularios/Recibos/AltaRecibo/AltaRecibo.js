@@ -210,6 +210,7 @@ const AltaRecibo = ({ Socio, ur }) => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
+    console.log("Admin", miembro.responseBody    );
     try {
       const response = await postRecibo(
         fechaEmision,
@@ -223,7 +224,7 @@ const AltaRecibo = ({ Socio, ur }) => {
         cuotaMensual,
         sumaPesos,
         Socio,
-        miembro
+        miembro.responseBody
       );
       console.log(response);
 
