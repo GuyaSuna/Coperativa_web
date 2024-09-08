@@ -235,10 +235,17 @@ const AltaRecibo = ({ Socio, ur }) => {
         cooperativaEntity: cooperativa,
         tipoMoneda: "UR",
       };
-      const IngresoResponse = await postIngreso(ingreso);
-      setIngreso(IngresoResponse);
-      console.log("Ingreso Response", IngresoResponse);
-      alert("Dado de alta correctamente");
+      try {
+        const IngresoResponse = await postIngreso(ingreso);
+        console.log("Ingreso exitoso:", IngresoResponse);      
+        setIngreso(IngresoResponse);
+        console.log("Ingreso Response", IngresoResponse);
+        alert("Dado de alta correctamente");
+      } catch (error) {
+        console.error("Error en el ingreso:", error.message);
+      }
+      
+
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
     }
