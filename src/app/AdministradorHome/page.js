@@ -203,6 +203,18 @@ const AdminHome = () => {
                     >
                       Convenios
                     </button>
+                    <button
+                      onClick={() => {
+                        handleSelection(32);
+                      }}
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                        selectedOption === 32
+                          ? "border-b-2 border-blue-500 text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Socios Archivados
+                    </button>
                   </div>
                 </div>
                 <ComponentesOrganizados

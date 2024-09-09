@@ -26,6 +26,7 @@ const Login = async (username, password) => {
 
     const data = await response.json();
 
+    console.log("Data", data);
     if (data.token) {
       // Guardar el token en la cookie
       document.cookie = `token=${data.token}; path=/; max-age=${
@@ -93,8 +94,6 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
-    const token = getToken();
-    console.log("Token cooperativas", token);
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
@@ -824,7 +823,6 @@ const postRecibo = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      // Convertir el objeto a JSON
       body: JSON.stringify(reciboData),
     });
 
@@ -1256,7 +1254,7 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
 const postIngreso = async (ingreso) => {
   try {
     const token = getToken();
-    console.log("Pruebaaaa", ingreso);
+    console.log("Pruebaaaa", token);
     const response = await fetch(`${URL}/ingresos`, {
       method: "POST",
       headers: {
