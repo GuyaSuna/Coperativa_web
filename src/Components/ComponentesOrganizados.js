@@ -250,14 +250,6 @@ const ComponentesOrganizados = ({
         />
       )
     }
-    case 33:{
-      return(
-        <EstadoContable
-          cooperativa={cooperativa}
-          setIdentificadorComponente={setIdentificadorComponente}
-        />
-      )
-    }
   }
 };
 
