@@ -217,14 +217,6 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                           Agregar Capital-Interes
                         </button>
                       </MenuItem>
-                      <MenuItem>
-                        <button
-                          onClick={() => handleCapitalInteres(cooperativa)}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                        >
-                          Eliminar Capital-Interes
-                        </button>
-                      </MenuItem>
                     </div>
                   </MenuItems>
                 </Menu>

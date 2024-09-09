@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
+import { Button, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
 import { parseISO, format } from "date-fns";
 import Buscador from "@/Components/Buscador.js";
@@ -16,7 +10,7 @@ import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 
-const ListadoSocio = ({
+const ListadoSocioArchivados = ({
   setSocioRecibo,
   setCedulaSocio,
   setIdentificadorComponente,
@@ -46,48 +40,30 @@ const ListadoSocio = ({
 
   const fetchAllSocios = async () => {
     try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      console.log("Cooperativa", cooperativa);
-      console.log("Respuesta all socios", response);
-      const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngresoCooeprativa);
-
-        if (socio.fechaIngresoCooeprativa) {
-          const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
-          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          console.log("Fecha formateada: ", fechaFormateada);
-          return {
-            ...socio,
-            fechaIngresoCooeprativa: fechaFormateada,
-          };
-        } else {
-          return socio;
-        }
+      const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
+      const sociosConFechaFormateada = sociosResponse.map((socio) => {
+        return socio.fechaIngreso
+          ? { ...socio, fechaIngreso: format(parseISO(socio.fechaIngreso), "yyyy-MM-dd") }
+          : socio;
       });
-
+  
       // Corrección: retorno implícito en la función de filtro
-      const sociosSinArchivar = sociosConFechaFormateada.filter(
-        (socio) => !socio.archivado
-      );
-
+      const sociosSinArchivar = sociosConFechaFormateada.filter(socio => socio.archivado);
+      
       setAllSocios(sociosSinArchivar);
-      setBuscadorFiltrado(sociosSinArchivar); // Usar sociosSinArchivar en lugar de sociosConFechaFormateada
+      setBuscadorFiltrado(sociosSinArchivar);  // Usar sociosSinArchivar en lugar de sociosConFechaFormateada
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
 
-  const handleArchivar = async (socio) => {
+  const handleDesarchivar = async (socio) => {
     try {
-      const socioActualizado = { ...socio, archivado: true };
+      const socioActualizado = { ...socio, archivado: false };
       await updateSocio(socioActualizado);
       // Eliminar el socio de ambas listas inmediatamente
-      setAllSocios((prevSocios) =>
-        prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
-      setBuscadorFiltrado((prevFiltrado) =>
-        prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
+      setAllSocios((prevSocios) => prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio));
+      setBuscadorFiltrado((prevFiltrado) => prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio));
     } catch (e) {
       console.error("Fallo al archivar el socio", e);
     }
@@ -102,10 +78,13 @@ const ListadoSocio = ({
     const valor = event.target.value.toLowerCase();
     setBuscador(valor);
     setBuscadorFiltrado(
-      allSocios.filter((socio) =>
-        socio.nombreSocio.toLowerCase().includes(valor)
-      )
+      allSocios.filter((socio) => socio.nombreSocio.toLowerCase().includes(valor))
     );
+  };
+
+  const handleSortChange = (option) => {
+    const sociosOrdenados = [...buscadorFiltrado].sort(option.comparator);
+    setBuscadorFiltrado(sociosOrdenados);
   };
 
   const ordenarOptions = [
@@ -119,29 +98,28 @@ const ListadoSocio = ({
       label: "Más Recientes",
       key: "fechaIngreso",
       icon: <SortIcon />,
-      comparator: (a, b) =>
-        new Date(b.fechaIngresoCooeprativa) -
-        new Date(a.fechaIngresoCooeprativa),
+      comparator: (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso),
     },
     {
       label: "Más Antiguos",
       key: "fechaIngreso",
       icon: <SortIcon />,
-      comparator: (a, b) =>
-        new Date(a.fechaIngresoCooeprativa) -
-        new Date(b.fechaIngresoCooeprativa),
+      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
     },
   ];
 
-  const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
-    if (buscador) {
-      const ordenarFiltrado = [...buscadorFiltrado].sort(option.comparator);
-      setBuscadorFiltrado(ordenarFiltrado);
-    } else {
-      const ordenarSocios = [...allSocios].sort(option.comparator);
-      setAllSocios(ordenarSocios);
-    }
+  const handleAgregarSocio = () => {
+    setIdentificadorComponente(3); // Navegar a la vista de agregar socio
+  };
+
+  const handleModificarSocio = (socio) => {
+    setCedulaSocio(socio.cedulaSocio);
+    setIdentificadorComponente(2); // Navegar a la vista de modificar socio
+  };
+
+  const handleCrearRecibo = (socio) => {
+    setSocioRecibo(socio);
+    setIdentificadorComponente(1); // Navegar a la vista de crear recibo
   };
 
   return (
@@ -184,49 +162,22 @@ const ListadoSocio = ({
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
-                NroSocio
-              </th>
-              <th scope="col" className="px-4 py-3">
-                Nombre
-              </th>
-              <th scope="col" className="px-4 py-3">
-                Fecha Ingreso
-              </th>
-              <th scope="col" className="px-4 py-3">
-                Estado
-              </th>
+              <th scope="col" className="px-4 py-3 text-center">NroSocio</th>
+              <th scope="col" className="px-4 py-3">Nombre</th>
+              <th scope="col" className="px-4 py-3">Fecha Ingreso</th>
+              <th scope="col" className="px-4 py-3">Estado</th>
               <th scope="col" className="px-4 py-3"></th>
-              <th scope="col" className="px-4 py-3">
-                <span className="sr-only">Actions</span>
-              </th>
+              <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
             </tr>
           </thead>
           <tbody>
             {buscadorFiltrado?.map((socio) => (
-              <tr
-                className="border-b dark:border-gray-700 sm:table-row"
-                key={socio.cedulaSocio}
-              >
-                <td className="px-4 py-3 text-gray-900 dark:text-white">
-                  {socio.nroSocio}
-                </td>
-                <td className="px-4 py-3 text-gray-900 dark:text-white">
-                  {socio.nombreSocio} {socio.apellidoSocio}
-                </td>
+              <tr className="border-b dark:border-gray-700 sm:table-row" key={socio.cedulaSocio}>
+                <td className="px-4 py-3 text-gray-900 dark:text-white">{socio.nroSocio}</td>
+                <td className="px-4 py-3 text-gray-900 dark:text-white">{socio.nombreSocio} {socio.apellidoSocio}</td>
                 <td className="px-4 py-3">{socio.fechaIngreso}</td>
                 <td className="px-4 py-3">
-                  <span
-                    className={`bg-${
-                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-100 text-${
-                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${
-                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-900 dark:text-${
-                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-300`}
-                  >
+                  <span className={`bg-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-100 text-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-900 dark:text-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-300`}>
                     {socio.estadoSocio}
                   </span>
                 </td>
@@ -241,32 +192,20 @@ const ListadoSocio = ({
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Menu as="div" className="relative inline-block text-left">
-                    <MenuButton className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                    <MenuButton
+                      className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center"
+                    >
                       ⋮
                     </MenuButton>
-                    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <MenuItems
+                      className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    >
                       <MenuItem>
                         <button
                           className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleArchivar(socio)}
+                          onClick={() => handleDesarchivar(socio)}
                         >
-                          Archivar
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleModificarSocio(socio)}
-                        >
-                          Modificar
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleCrearRecibo(socio)}
-                        >
-                          Crear Recibo
+                          Desarchivar
                         </button>
                       </MenuItem>
                     </MenuItems>
@@ -289,4 +228,4 @@ const ListadoSocio = ({
   );
 };
 
-export default ListadoSocio;
+export default ListadoSocioArchivados;

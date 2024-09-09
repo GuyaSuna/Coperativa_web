@@ -48,6 +48,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
     console.log("Modificar subsidio", subsidio);
   };
 
+  // agregar boton para archivar subsidio o cancelar subsidio
   return (
     <div className="sm:p-7 p-4">
       {allSubsidios.length === 0 ? (

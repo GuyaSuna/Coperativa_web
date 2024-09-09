@@ -15,7 +15,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   useEffect(() => {
     fetchAllRecibos();
   }, []);
