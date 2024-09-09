@@ -3,6 +3,9 @@ import "./globals.css";
 import Header from "../Components/header";
 import Footer from "../Components/footer";
 import { MiembroProvider } from "@/Provider/provider";
+import { SessionProvider } from "@/Provider/loginProvider";
+import SessionManager from "@/Components/session/sessionManager";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -12,10 +15,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <MiembroProvider>
-      <html lang="en">
-        <body className={inter.className}> {children}</body>
-      </html>
-    </MiembroProvider>
+    <html lang="en">
+      <body className={inter.className}>
+        <MiembroProvider>
+          <SessionProvider>
+            <SessionManager />
+            {children}
+          </SessionProvider>
+        </MiembroProvider>
+      </body>
+    </html>
   );
 }
