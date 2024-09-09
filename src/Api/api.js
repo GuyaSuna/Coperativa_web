@@ -26,7 +26,7 @@ const Login = async (username, password) => {
 
     const data = await response.json();
 
-    console.log("Data",data)
+    console.log("Data", data);
     if (data.token) {
       // Guardar el token en la cookie
       document.cookie = `token=${data.token}; path=/; max-age=${
@@ -42,7 +42,46 @@ const Login = async (username, password) => {
     throw new Error("Error al intentar iniciar sesión.");
   }
 };
+const LoginMaster = async (username, password) => {
+  try {
+    const body = {
+      username: username,
+      password: password,
+    };
+    const response = await fetch(`${URL}/auth/loginMaster`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
 
+    if (!response.ok) {
+      if (response.status === 400) {
+        return "Usuario o contraseña incorrectos.";
+      } else {
+        throw new Error("Error en la solicitud de inicio de sesión.");
+      }
+    }
+
+    const data = await response.json();
+
+    console.log("Data", data);
+    if (data.token) {
+      // Guardar el token en la cookie
+      document.cookie = `token=${data.token}; path=/; max-age=${
+        7 * 24 * 60 * 60
+      }`;
+    } else {
+      throw new Error("No se recibió el token en la respuesta.");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en LogIn:", error);
+    throw new Error("Error al intentar iniciar sesión.");
+  }
+};
 const register = async (RegisterRequest) => {
   try {
     const response = await fetch(`${URL}/auth/register/`, {
@@ -1580,4 +1619,5 @@ export {
   postCapitalInteres,
   register,
   getUser,
+  LoginMaster,
 };

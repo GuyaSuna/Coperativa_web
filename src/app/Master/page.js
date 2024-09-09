@@ -1,6 +1,30 @@
-import React from "react";
-
+"use client";
+import { LoginMaster } from "@/Api/api";
+import { Login } from "@mui/icons-material";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 const Master = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const loginRequest = await LoginMaster(username, password);
+    console.log("Abr", loginRequest);
+    if (loginRequest == null) {
+      alert("No se ha podido iniciar sesion");
+    } else {
+      router.push("./MasterHome");
+    }
+  };
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
   return (
     <div className="bg-black h-screen w-screen">
       <div className="flex flex-col items-center flex-1 h-full justify-center px-4 sm:px-0">
@@ -21,12 +45,14 @@ const Master = () => {
                 >
                   <div className="flex flex-col mt-4">
                     <input
-                      id="email"
+                      id="username"
                       type="text"
                       className="flex-grow h-8 px-2 border rounded border-grey-400"
-                      name="email"
-                      defaultValue
-                      placeholder="Email"
+                      name="username"
+                      value={username}
+                      onChange={handleUsernameChange}
+                      placeholder="Nombre de usuario"
+                      required
                     />
                   </div>
                   <div className="flex flex-col mt-4">
@@ -36,40 +62,22 @@ const Master = () => {
                       className="flex-grow h-8 px-2 rounded border border-grey-400"
                       name="password"
                       required
-                      placeholder="Password"
+                      placeholder="Contraseña"
+                      value={password}
+                      onChange={handlePasswordChange}
                     />
                   </div>
-                  <div className="flex items-center mt-4">
-                    <input
-                      type="checkbox"
-                      name="remember"
-                      id="remember"
-                      className="mr-2"
-                    />{" "}
-                    <label
-                      htmlFor="remember"
-                      className="text-sm text-grey-dark"
-                    >
-                      Remember Me
-                    </label>
-                  </div>
+
                   <div className="flex flex-col mt-8">
                     <button
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded"
+                      onClick={handleSubmit}
                     >
-                      Login
+                      Iniciar Sesion
                     </button>
                   </div>
                 </form>
-                <div className="text-center mt-4">
-                  <a
-                    className="no-underline hover:underline text-blue-dark text-xs"
-                    href="#"
-                  >
-                    Forgot Your Password?
-                  </a>
-                </div>
               </div>
             </div>
           </div>
