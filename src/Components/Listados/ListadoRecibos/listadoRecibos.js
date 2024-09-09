@@ -231,14 +231,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                               Modificar
                             </button>
                           </MenuItem>
-                          <MenuItem>
-                            <a
-                              onClick={() => handleCrearRecibo(recibo.socio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            >
-                              Crear Recibo
-                            </a>
-                          </MenuItem>
                         </div>
                       </MenuItems>
                     </Menu>

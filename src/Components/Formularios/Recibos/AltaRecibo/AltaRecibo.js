@@ -89,6 +89,9 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   useEffect(() => {
     setCuotaMensual(cuotaMensualBase + recargo);
+    let valorEnLetras = NumerosALetras(Math.round(cuotaMensualBase + recargo));
+    valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
+    setSumaPesos(valorEnLetras);
   }, [recargo]);
 
   const fetchReajusteAnual = async () => {
@@ -271,6 +274,12 @@ const AltaRecibo = ({ Socio, ur }) => {
         onSubmit={handleSubmit}
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
+        <label className="block text-sm font-medium mb-2 text-right">
+          {/* Valor UR Reajuste: {reajuste} */}
+        </label>
+        <label className="block text-sm font-medium mb-2 text-right">
+          Valor UR del Mes: {ur?.buy || 0}
+        </label>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="mb-4">
             <label
@@ -493,13 +502,13 @@ const AltaRecibo = ({ Socio, ur }) => {
             )}
           </div>
         </div>
-        <div className="grid md:grid-cols-3 md:gap-6">
+        <div className="grid md:grid-cols-4 md:gap-6">
           <div className="mb-4">
             <label
               className="block text-sm font-medium mb-2"
               htmlFor="cuotaSocial"
             >
-              cuotaSocial:
+              Cuota Social:
             </label>
             <input
               type="number"
@@ -520,7 +529,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               className="block text-sm font-medium mb-2"
               htmlFor="cuotaMensual"
             >
-              cuotaMensual:
+              Cuota Mensual:
             </label>
             <input
               type="number"
@@ -537,7 +546,7 @@ const AltaRecibo = ({ Socio, ur }) => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 col-span-2">
             <label
               className="block text-sm font-medium mb-2"
               htmlFor="sumaPesos"

@@ -9,14 +9,12 @@ import {
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
-import Image from "next/image";
 
 const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errores, setErrores] = useState({});
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
@@ -104,7 +102,7 @@ const Home = () => {
                   </div>
                   <input
                     className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                    type="email"
+                    type="text"
                     placeholder="username"
                     value={username}
                     onChange={handleUsernameChange}
