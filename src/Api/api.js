@@ -26,6 +26,7 @@ const Login = async (username, password) => {
 
     const data = await response.json();
 
+    console.log("Data",data)
     if (data.token) {
       // Guardar el token en la cookie
       document.cookie = `token=${data.token}; path=/; max-age=${
