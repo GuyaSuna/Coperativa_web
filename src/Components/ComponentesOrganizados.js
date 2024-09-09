@@ -135,7 +135,11 @@ const ComponentesOrganizados = ({
     }
     case 14: {
       return (
-        <MuestraCalculos setInteres={setInteres} setCapital={setCapital} cooperativa={cooperativa}/>
+        <MuestraCalculos
+          setInteres={setInteres}
+          setCapital={setCapital}
+          cooperativa={cooperativa}
+        />
       );
     }
     case 15: {
@@ -218,45 +222,45 @@ const ComponentesOrganizados = ({
         />
       );
     }
-    case 29:{
-      return(
+    case 29: {
+      return (
         <ModificarCooperativa
-        cooperativa={cooperativa}
-        setIdentificadorComponente={setIdentificadorComponente}
+          cooperativa={cooperativa}
+          setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
-    case 30:{
-      return(
+    case 30: {
+      return (
         <AltaAdministrador
-        cooperativa={cooperativa}
-        setIdentificadorComponente={setIdentificadorComponente}
+          cooperativa={cooperativa}
+          setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
-    case 31:{
-      return(
+    case 31: {
+      return (
         <AltaReajuste
           cooperativa={cooperativa}
           setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
-    case 32:{
-      return(
+    case 32: {
+      return (
         <ListadoSociosArchivados
           cooperativa={cooperativa}
           setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
-    case 33:{
-      return(
+    case 33: {
+      return (
         <EstadoContable
           cooperativa={cooperativa}
           setIdentificadorComponente={setIdentificadorComponente}
         />
-      )
+      );
     }
   }
 };

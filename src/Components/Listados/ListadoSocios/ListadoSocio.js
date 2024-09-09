@@ -98,16 +98,19 @@ const ListadoSocio = ({
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    if (buscador == "") {
+      setBuscadorFiltrado(allSocios);
+    } else {
+      const buscadorFiltrado = allSocios.filter((socio) =>
+        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allSocios, buscador]);
   const handleChangeBuscador = (event) => {
-    const valor = event.target.value.toLowerCase();
-    setBuscador(valor);
-    setBuscadorFiltrado(
-      allSocios.filter((socio) =>
-        socio.nombreSocio.toLowerCase().includes(valor)
-      )
-    );
+    setBuscador(event.target.value);
   };
-
   const ordenarOptions = [
     {
       label: "Número socio",
@@ -144,6 +147,9 @@ const ListadoSocio = ({
     }
   };
 
+  const handleAgregarSocio = () => {
+    setIdentificadorComponente(3);
+  };
   return (
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -214,7 +220,7 @@ const ListadoSocio = ({
                 <td className="px-4 py-3 text-gray-900 dark:text-white">
                   {socio.nombreSocio} {socio.apellidoSocio}
                 </td>
-                <td className="px-4 py-3">{socio.fechaIngreso}</td>
+                <td className="px-4 py-3">{socio.fechaIngresoCooeprativa}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`bg-${
@@ -234,14 +240,14 @@ const ListadoSocio = ({
                   <button
                     type="button"
                     onClick={() => handleVerSocio(socio)}
-                    className="font-medium text-primary-600 hover:underline"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Menu as="div" className="relative inline-block text-left">
-                    <MenuButton className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                    <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
                       ⋮
                     </MenuButton>
                     <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
