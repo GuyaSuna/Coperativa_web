@@ -24,30 +24,21 @@ const AltaEstadoContable = () => {
   }, []);
 
   useEffect(() => {
-    if (mesSeleccionado) {
-      const fetchDatos = async () => {
-        try {
-          const egresos = await getAllEgresos(
-            cooperativa.idCooperativa,
-            mesSeleccionado
-          );
-          const ingresos = await getAllIngresos(
-            cooperativa.idCooperativa,
-            mesSeleccionado
-          );
+    const fetchDatos = async () => {
+      try {
+        const egresos = await getAllEgresos(cooperativa.idCooperativa);
+        const ingresos = await getAllIngresos(cooperativa.idCooperativa);
 
-          setListaEgresos(egresos);
-          setListaIngresos(ingresos);
+        setListaEgresos(egresos);
+        setListaIngresos(ingresos);
 
-          calcularTotales(egresos, ingresos);
-        } catch (error) {
-          console.error("Error al obtener los datos:", error);
-        }
-      };
-
+        calcularTotales(egresos, ingresos);
+      } catch (error) {
+        console.error("Error al obtener los datos:", error);
+      }
       fetchDatos();
-    }
-  }, [cooperativa.idCooperativa, mesSeleccionado]);
+    };
+  }, [cooperativa.idCooperativa]);
 
   const calcularTotales = (egresos, ingresos) => {
     const sumaEgresos = egresos.reduce(
