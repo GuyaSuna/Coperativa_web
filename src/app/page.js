@@ -9,13 +9,13 @@ import {
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
-import { SessionContext } from "../Provider/loginProvider"
+import { useSession } from './../Provider/loginProvider';
 import Image from "next/image";
 
 const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
-  const { login } = useContext(SessionContext);
+  const { login } = useSession();
 
   if (!login) {
     console.error("El contexto de sesión no está disponible.");

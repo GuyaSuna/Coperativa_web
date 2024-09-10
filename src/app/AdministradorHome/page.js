@@ -20,34 +20,11 @@ const AdminHome = () => {
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [tiempoRestante, setTiempoRestante] = useState(23 * 60); // Tiempo inicial en segundos
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
   };
-
-  useEffect(() => {
-    const actualizarContador = () => {
-      setTiempoRestante(prevTiempo => {
-        if (prevTiempo <= 0) {
-          clearInterval(intervalo);
-
-          alert('¿Aún estás ahí?');
-
-          return 0;
-        }
-        return prevTiempo - 1;
-      }) 
-    };
-
-    const intervalo = setInterval(actualizarContador, 1000);
-
-    return () => clearInterval(intervalo);
-  }, []);
-
-  const minutos = Math.floor(tiempoRestante / 60);
-  const segundos = tiempoRestante % 60;
 
   useEffect(() => {
     if (miembro && cooperativa) {
@@ -80,9 +57,6 @@ const AdminHome = () => {
     <>
       {cooperativa && (
         <div className="bg-gray-100 dark:bg-dark dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
-          <p>
-        {minutos} : {segundos < 10 ? `0${segundos}` : segundos}
-      </p>
           <div className="flex-grow overflow-hidden flex flex-col">
             <Header setIdentificadorComponente={setIdentificadorComponente} />
             <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">

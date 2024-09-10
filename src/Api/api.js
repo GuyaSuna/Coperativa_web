@@ -4,10 +4,7 @@ const URL = "http://localhost:5000";
 //logins
 const Login = async (username, password) => {
   try {
-    const body = {
-      username: username,
-      password: password,
-    };
+    const body = { username, password };
     const response = await fetch(`${URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -25,13 +22,10 @@ const Login = async (username, password) => {
     }
 
     const data = await response.json();
+    console.log("Data", data);
 
-    console.log("Data",data)
     if (data.token) {
-      // Guardar el token en la cookie
-      document.cookie = `token=${data.token}; path=/; max-age=${
-        7 * 24 * 60 * 60
-      }`;
+      document.cookie = `token=${data.token}; path=/; max-age=${1440}; Secure; HttpOnly`;
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
@@ -1431,7 +1425,7 @@ const postEgreso = async (egreso) => {
 
 const deleteEgreso = async (idEgreso) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos/${idEgreso}`, {
       method: "DELETE",
       headers: {
@@ -1452,7 +1446,7 @@ const deleteEgreso = async (idEgreso) => {
 
 const updateEgreso = async (subRubro, denominacion, egreso) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos`, {
       method: "PUT",
       headers: {
@@ -1479,7 +1473,7 @@ const updateEgreso = async (subRubro, denominacion, egreso) => {
 
 const getAllEgresos = async (idCooperativa) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos/allEgresos/${idCooperativa}`, {
       method: "GET",
       headers: {
