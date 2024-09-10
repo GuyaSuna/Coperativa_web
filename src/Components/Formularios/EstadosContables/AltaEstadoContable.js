@@ -29,6 +29,9 @@ const AltaEstadoContable = () => {
         const egresos = await getAllEgresos(cooperativa.idCooperativa);
         const ingresos = await getAllIngresos(cooperativa.idCooperativa);
 
+        console.log("Egresos", egresos);
+        console.log("Ingresos", ingresos);
+
         setListaEgresos(egresos);
         setListaIngresos(ingresos);
 
@@ -87,9 +90,14 @@ const AltaEstadoContable = () => {
 
   const validarFormulario = () => {
     const errores = {};
+    const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!mesSeleccionado) {
-      errores.mesSeleccionado = "Debes seleccionar un mes";
+    if (!fechaEstadoContable) {
+      errores.fechaEstadoContable =
+        "La fecha del Estado Contable es obligatoria";
+    } else if (fechaEstadoContable > fechaHoy) {
+      errores.fechaEstadoContable =
+        "La fecha del Estado Contable no puede ser mayor a la fecha actual";
     }
 
     setErrores(errores);
@@ -97,16 +105,20 @@ const AltaEstadoContable = () => {
   };
 
   return (
-    <div>
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Fecha:</label>
+          <label className="block text-sm font-medium mb-2">Fecha:</label>
           <input
             type="date"
+            name="fechaEstadoContable"
             value={fechaEstadoContable}
             onChange={(e) => setFechaEstadoContable(e.target.value)}
             required
           />
+          {errores.fechaEstadoContable && (
+            <span className="error">{errores.fechaEstadoContable}</span>
+          )}
         </div>
 
         <div>
@@ -118,21 +130,6 @@ const AltaEstadoContable = () => {
               </li>
             ))}
           </ul>
-        </div>
-
-        <div>
-          <h3>Total Ingresos: {totalIngresos}</h3>
-          <ul>
-            {listaIngresos.map((ingreso) => (
-              <li key={ingreso.id}>
-                {ingreso.denominacion} - {ingreso.ingreso} {ingreso.tipoMoneda}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div>
-          <h3>Saldo Final (Ingresos - Egresos): {saldoFinal}</h3>
         </div>
 
         <button type="submit">Agregar Estado Contable</button>

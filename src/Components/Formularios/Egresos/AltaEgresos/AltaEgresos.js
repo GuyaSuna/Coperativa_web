@@ -23,6 +23,7 @@ const AltaEgreso = () => {
   const handleChangeTipoMoneda = (e) => setTipoMoneda(e.target.value);
   const handleChangeFechaDatosContables = (e) =>
     setFechaDatosContables(e.target.value);
+
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
