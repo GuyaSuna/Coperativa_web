@@ -4,7 +4,10 @@ const URL = "http://localhost:5000";
 //logins
 const Login = async (username, password) => {
   try {
-    const body = { username, password };
+    const body = {
+      username: username,
+      password: password,
+    };
     const response = await fetch(`${URL}/auth/login`, {
       method: "POST",
       headers: {
@@ -22,10 +25,11 @@ const Login = async (username, password) => {
     }
 
     const data = await response.json();
-    console.log("Data", data);
 
+    console.log("Data",data)
     if (data.token) {
-      document.cookie = `token=${data.token}; path=/; max-age=${1440}; Secure; HttpOnly`;
+      document.cookie = `token=${data.token}; path=/; max-age=1440`;
+
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useSession } from '@/Provider/loginProvider';
 import { useRouter } from 'next/navigation';
@@ -19,30 +19,29 @@ const SessionManager = () => {
     setTiempoRestante(tiempoInicial);
 
     const actualizarContador = () => {
-      setTiempoRestante((prevTiempo) => {
-        if (prevTiempo <= 0) {
-          clearInterval(intervalo);
-          alert('Tu sesión ha expirado.');
+      const tiempoActualizado = (tokenExpiracion - Date.now()) / 1000; // Recalcular tiempo restante
+      setTiempoRestante(tiempoActualizado);
+
+      if (tiempoActualizado <= 0) {
+        clearInterval(intervalo);
+        alert('Tu sesión ha expirado.');
+        logout();
+        router.push('/'); // Redirigir al login
+      }
+
+      if (tiempoActualizado <= 30) {
+        alert('¿Aún estás ahí?');
+        const tiempoRespuesta = setTimeout(() => {
           logout();
-          router.push('/login'); // Redirigir al login
-          return 0;
-        }
-        if (prevTiempo <= 30) {
-          alert('¿Aún estás ahí?');
-
-          const tiempoRespuesta = setTimeout(() => {
-            logout();
-            router.push('/login'); // Redirigir al login si no responde en 30 segundos
-          }, 30000); // 30 segundos para esperar la respuesta
-
-          return prevTiempo - 1;
-        }
-        return prevTiempo - 1;
-      });
+          router.push('/'); // Redirigir al login si no responde en 30 segundos
+        }, 30000); // 30 segundos para esperar la respuesta
+      }
     };
 
+    // Actualizar el contador cada segundo
     const intervalo = setInterval(actualizarContador, 1000);
 
+    // Limpiar el intervalo cuando el componente se desmonte
     return () => {
       clearInterval(intervalo);
     };
@@ -69,7 +68,7 @@ const SessionManager = () => {
   };
 
   const minutos = Math.floor(tiempoRestante / 60);
-  const segundos = tiempoRestante % 60;
+  const segundos = Math.floor(tiempoRestante % 60);
 
   return (
     <div>
