@@ -27,6 +27,10 @@ const AltaSubsidio = () => {
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
+    setFechaOtorgado(obtenerFechaHoy());
+  }, []);
+
+  useEffect(() => {
     fetchSociosDisponibles();
   }, []);
 
@@ -103,6 +107,14 @@ const AltaSubsidio = () => {
         console.error("Error al obtener la vivienda del socio:", error);
       }
     }
+  };
+
+  const obtenerFechaHoy = () => {
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    const año = hoy.getFullYear();
+    return `${año}-${mes}-${dia}`;
   };
 
   const validarFormulario = () => {

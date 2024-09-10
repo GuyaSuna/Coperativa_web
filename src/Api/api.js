@@ -1455,7 +1455,7 @@ const postEgreso = async (egreso) => {
 
 const deleteEgreso = async (idEgreso) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos/${idEgreso}`, {
       method: "DELETE",
       headers: {
@@ -1476,7 +1476,7 @@ const deleteEgreso = async (idEgreso) => {
 
 const updateEgreso = async (subRubro, denominacion, egreso) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos`, {
       method: "PUT",
       headers: {
@@ -1503,7 +1503,7 @@ const updateEgreso = async (subRubro, denominacion, egreso) => {
 
 const getAllEgresos = async (idCooperativa) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos/allEgresos/${idCooperativa}`, {
       method: "GET",
       headers: {
@@ -1547,6 +1547,32 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   } catch (error) {
     console.error("Error en postCapitalInteres:", error);
     throw new Error("Error al enviar los datos del CapitalInteres");
+  }
+};
+
+// Estados Contables
+
+const postEstadoContable = async (estadoContable) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/estadoContable`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(estadoContable),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postIngreso:", error);
+    throw new Error("Error al enviar los datos del estadoContable");
   }
 };
 
@@ -1607,4 +1633,5 @@ export {
   postCapitalInteres,
   register,
   getUser,
+  postEstadoContable,
 };
