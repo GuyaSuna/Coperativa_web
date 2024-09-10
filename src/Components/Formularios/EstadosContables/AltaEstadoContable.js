@@ -24,25 +24,25 @@ const AltaEstadoContable = () => {
   }, []);
 
   useEffect(() => {
-    const fetchDatos = async () => {
-      try {
-        const egresos = await getAllEgresos(cooperativa.idCooperativa);
-        const ingresos = await getAllIngresos(cooperativa.idCooperativa);
-
-        console.log("Egresos", egresos);
-        console.log("Ingresos", ingresos);
-
-        setListaEgresos(egresos);
-        setListaIngresos(ingresos);
-
-        calcularTotales(egresos, ingresos);
-      } catch (error) {
-        console.error("Error al obtener los datos:", error);
-      }
-      fetchDatos();
-    };
+    fetchDatos();
   }, [cooperativa.idCooperativa]);
 
+  const fetchDatos = async () => {
+    try {
+      const egresos = await getAllEgresos(cooperativa.idCooperativa);
+      const ingresos = await getAllIngresos(cooperativa.idCooperativa);
+
+      console.log("Egresos", egresos);
+      console.log("Ingresos", ingresos);
+
+      setListaEgresos(egresos);
+      setListaIngresos(ingresos);
+
+      calcularTotales(egresos, ingresos);
+    } catch (error) {
+      console.error("Error al obtener los datos:", error);
+    }
+  };
   const calcularTotales = (egresos, ingresos) => {
     const sumaEgresos = egresos.reduce(
       (total, egreso) => total + egreso.egreso,
@@ -72,7 +72,7 @@ const AltaEstadoContable = () => {
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
-      fechaEstadoContable,
+      fecha: fechaEstadoContable,
       saldoFinal,
       cooperativaEntity: cooperativa,
       listaEgresos,
@@ -132,6 +132,7 @@ const AltaEstadoContable = () => {
           </ul>
         </div>
 
+        <button type="submit">Agregar Estado Contable</button>
         <button type="submit">Agregar Estado Contable</button>
       </form>
     </div>
