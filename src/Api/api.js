@@ -584,14 +584,17 @@ const getAllViviendas = async (idCooperativa) => {
 };
 
 const updateVivienda = async (
+  idVivienda,
   nroVivienda,
+  listaAntiguosTitulares,
   cantidadDormitorios,
   cooperativaEntity,
-  socioTitular
+  valorVivienda,
+  socio
 ) => {
   try {
+    console.log("ACAAAAAA" ,idVivienda ,nroVivienda , listaAntiguosTitulares ,cantidadDormitorios , valorVivienda)
     console.log(cooperativaEntity);
-    console.log(socioTitular);
     const token = getToken();
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
@@ -600,10 +603,13 @@ const updateVivienda = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        idVivienda,
         nroVivienda,
-        socioTitular,
+        socio,
+        listaAntiguosTitulares,
         cantidadDormitorios,
         cooperativaEntity,
+        valorVivienda
       }),
     });
     const data = await response.json();
@@ -1546,6 +1552,8 @@ const getAllEgresos = async (idCooperativa) => {
   }
 };
 
+
+
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {
     const token = getToken();
@@ -1581,7 +1589,7 @@ const postEstadoContable = async (estadoContableEntity) => {
     const response = await fetch(`${URL}/estadoContable`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(estadoContableEntity),
@@ -1598,6 +1606,8 @@ const postEstadoContable = async (estadoContableEntity) => {
     throw new Error("Error al enviar los datos del estadoContable");
   }
 };
+
+//Utilizar Libreria B)
 
 export {
   Login,

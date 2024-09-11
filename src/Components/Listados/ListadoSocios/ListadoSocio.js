@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
+import { getAllSocios, getAllRecibos, updateSocio, getViviendaPorSocio,updateVivienda , getUltimoConvenioSocio} from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -74,13 +74,30 @@ const ListadoSocio = ({
 
   const handleArchivar = async (socio) => {
     const confirmacion = window.confirm(
-      `¿Estás seguro de que deseas archivar al socio ${socio.nombreSocio} ${socio.apellidoSocio}?`
+      `¿Estás seguro de que deseas archivar al socio ${socio.nombreSocio} ${socio.apellidoSocio}? No podra ser desarchivado luego`
     );
   
     if (confirmacion) {
       try {
-        const socioActualizado = { ...socio, archivado: true };
+        let socioActualizado = { ...socio, archivado: true };
+
+        const responseConvenio = await getUltimoConvenioSocio(socio.cedulaSocio)
+
+        if(responseConvenio != null){
+          socioActualizado = {...socioActualizado, capitalSocio: socio.capitalSocio - responseConvenio.deudaRestante}
+        }
+        
         await updateSocio(socioActualizado);
+
+        const viviedaResponse = await getViviendaPorSocio(socio.cedulaSocio)
+
+        viviedaResponse.socio = null;
+        console.log(viviedaResponse);
+        await updateVivienda(viviedaResponse.idVivienda,viviedaResponse.nroVivienda , viviedaResponse.listaAntiguosTitulares, viviedaResponse.cantidadDormitorios, viviedaResponse.cooperativaEntity,viviedaResponse.valorVivienda, viviedaResponse.socio);
+
+       
+
+       
         setAllSocios((prevSocios) =>
           prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
         );

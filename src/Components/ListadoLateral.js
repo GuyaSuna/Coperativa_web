@@ -152,19 +152,23 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 18 ? "bg-blue-500 text-white" : ""
           }`}
-        >
-          </button>
-          <button>
-          <FaUser className="mr-2 text-2xl" />{" "}
+        > 
+        <FaUser className="mr-2 text-2xl" />{" "}
           <a className="text-base">Agregar Convenio</a>
+          </button>
+
+          <button
           onClick={() => handleSelection(33)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 33 ? "bg-blue-500 text-white" : ""
           }`}
-        
-          <FaUser className="mr-2 text-2xl" />{" "}
-          <a className="text-base">Estado Contable</a>
-        </button>
+        > 
+        <FaUser className="mr-2 text-2xl" />{" "}
+          <a className="text-base">Agregar EstadosCont.</a>
+          </button>
+
+
+      
       </div>
     </div>
   );

@@ -240,14 +240,7 @@ const ListadoSocioArchivados = ({
                       ⋮
                     </MenuButton>
                     <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleDesarchivar(socio)}
-                        >
-                          Desarchivar
-                        </button>
-                      </MenuItem>
+                     
                     </MenuItems>
                   </Menu>
                 </td>

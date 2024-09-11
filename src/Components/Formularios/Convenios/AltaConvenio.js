@@ -63,6 +63,7 @@ const AltaConvenio = () => {
 
     const ConvenioData = {
       deudaEnUrOriginal: deudaEnUrOriginal,
+      deudaRestante : deudaEnUrOriginal,
       urPorMes: urPorMes,
       fechaInicioConvenio: fechaInicioConvenio,
     };

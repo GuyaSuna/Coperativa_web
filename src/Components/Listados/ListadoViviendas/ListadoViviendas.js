@@ -248,7 +248,7 @@ const ListadoViviendas = ({
         <VerVivienda
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          socio={viviendaSeleccionada}
+          vivienda={viviendaSeleccionada}
         />
       )}
     </div>
