@@ -28,10 +28,8 @@ const Login = async (username, password) => {
 
     console.log("Data", data);
     if (data.token) {
-      // Guardar el token en la cookie
-      document.cookie = `token=${data.token}; path=/; max-age=${
-        7 * 24 * 60 * 60
-      }`;
+      document.cookie = `token=${data.token}; path=/; max-age=1440`;
+
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
@@ -213,6 +211,31 @@ const getSocio = async (cedulaSocio) => {
     return data;
   } catch (error) {
     console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
+  }
+};
+
+const getRecibosImpagosSocio = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    console.log("Token", token)
+    const response = await fetch(`${URL}/socio/reciboImpago/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getRecibosImpagosSocio:", error);
     throw new Error("Error al obtener los datos del socio");
   }
 };
@@ -1578,6 +1601,7 @@ const postEstadoContable = async (estadoContableEntity) => {
 export {
   Login,
   getSocio,
+  getRecibosImpagosSocio,
   postSocio,
   getAllSocios,
   updateSocio,

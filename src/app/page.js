@@ -9,10 +9,17 @@ import {
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
+import { useSession } from "./../Provider/loginProvider";
 
 const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
+  const { login } = useSession();
+
+  if (!login) {
+    console.error("El contexto de sesión no está disponible.");
+    return null; // O algún manejo de error adicional
+  }
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -32,12 +39,17 @@ const Home = () => {
         );
         return;
       }
+
       console.log("Respuesta", RequestLogin.responseBody);
       const cooperativaLoginRequest = await getCooperativaPorAdmin(
         RequestLogin.responseBody.id
       );
       console.log(`Cooperativa admin: ${cooperativaLoginRequest}`);
-      ProviderLoginRequest(RequestLogin, cooperativaLoginRequest);
+      ProviderLoginRequest(
+        RequestLogin,
+        cooperativaLoginRequest,
+        RequestLogin.token
+      );
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
@@ -55,13 +67,22 @@ const Home = () => {
     if (loginRequest == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      ProviderLoginRequest(loginRequest, cooperativaMiembro);
+      ProviderLoginRequest(
+        loginRequest,
+        cooperativaMiembro,
+        loginRequest.token
+      );
       router.push("./UsuarioHome");
     }
   };
 
-  const ProviderLoginRequest = (RequestLogin, cooperativaLoginRequest) => {
+  const ProviderLoginRequest = (
+    RequestLogin,
+    cooperativaLoginRequest,
+    token
+  ) => {
     loginMiembro(RequestLogin, cooperativaLoginRequest);
+    login(token);
   };
   //checkbox
 
