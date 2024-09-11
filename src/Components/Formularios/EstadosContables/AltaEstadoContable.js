@@ -12,8 +12,8 @@ const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
 
   const [fechaEstadoContable, setFechaEstadoContable] = useState("");
-  const [saldoFinalPesos, setSaldoFinalPesos] = useState(0);
-  const [saldoFinalDolares, setSaldoFinalDolares] = useState(0);
+  const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
+  const [saldoFinalEnDolares, setSaldoFinalDolares] = useState(0);
 
   // Totales para ingresos y egresos en pesos y dólares
   const [totalIngresosPesos, setTotalIngresosPesos] = useState(0);
@@ -93,18 +93,20 @@ const AltaEstadoContable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    console.log("Entra al guardar");
     if (!validarFormulario()) return;
-
+    console.log("Paso el validar");
     const nuevoEstadoContable = {
       fecha: fechaEstadoContable,
-      saldoFinalPesos,
-      saldoFinalDolares,
+      saldoFinalEnPesos,
+      saldoFinalEnDolares,
       cooperativaEntity: cooperativa,
       listaEgresos,
       listaIngresos,
     };
 
     try {
+      console.log("Nuevo EstadoContable", nuevoEstadoContable);
       await postEstadoContable(nuevoEstadoContable);
       alert("Estado contable agregado correctamente");
       // Navegar o limpiar formulario si es necesario

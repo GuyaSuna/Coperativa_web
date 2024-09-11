@@ -1254,7 +1254,6 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
 const postIngreso = async (ingreso) => {
   try {
     const token = getToken();
-    console.log("Pruebaaaa", token);
     const response = await fetch(`${URL}/ingresos`, {
       method: "POST",
       headers: {
