@@ -29,7 +29,6 @@ const Login = async (username, password) => {
     console.log("Data", data);
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
-
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
@@ -218,7 +217,7 @@ const getSocio = async (cedulaSocio) => {
 const getRecibosImpagosSocio = async (cedulaSocio) => {
   try {
     const token = getToken();
-    console.log("Token", token)
+    console.log("Token", token);
     const response = await fetch(`${URL}/socio/reciboImpago/${cedulaSocio}`, {
       method: "GET",
       headers: {
@@ -1577,6 +1576,8 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 const postEstadoContable = async (estadoContableEntity) => {
   try {
     const token = getToken();
+    console.log("token Api Post EStCOnt", token);
+    console.log("Post EStCOnt", estadoContableEntity);
     const response = await fetch(`${URL}/estadoContable`, {
       method: "POST",
       headers: {
@@ -1593,7 +1594,7 @@ const postEstadoContable = async (estadoContableEntity) => {
 
     return data;
   } catch (error) {
-    console.error("Error en postIngreso:", error);
+    console.error("Error en postEstadoContable:", error);
     throw new Error("Error al enviar los datos del estadoContable");
   }
 };
