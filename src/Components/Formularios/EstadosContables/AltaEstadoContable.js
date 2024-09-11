@@ -50,22 +50,25 @@ const AltaEstadoContable = () => {
     }
   };
 
+  const handleChangeFechaEstadoContable = (e) =>
+    handleChangeFechaEstadoContable(e.target.value);
+
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
     const sumaIngresosPesos = ingresos
-      .filter((ingreso) => ingreso.tipoMoneda === "Pesos")
+      .filter((ingreso) => ingreso.tipoMoneda === "UR")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaIngresosDolares = ingresos
-      .filter((ingreso) => ingreso.tipoMoneda === "Dólares")
+      .filter((ingreso) => ingreso.tipoMoneda === "USD")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaEgresosPesos = egresos
-      .filter((egreso) => egreso.tipoMoneda === "Pesos")
+      .filter((egreso) => egreso.tipoMoneda === "UR")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
     const sumaEgresosDolares = egresos
-      .filter((egreso) => egreso.tipoMoneda === "Dólares")
+      .filter((egreso) => egreso.tipoMoneda === "USD")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
     // Establecer los totales
@@ -128,28 +131,31 @@ const AltaEstadoContable = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-sm font-medium mb-2">Fecha:</label>
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
+        <label className="block text-sm font-medium mb-2">
+          Fecha:
           <input
             type="date"
             name="fechaEstadoContable"
             value={fechaEstadoContable}
-            onChange={(e) => setFechaEstadoContable(e.target.value)}
+            onChange={handleChangeFechaEstadoContable}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
           {errores.fechaEstadoContable && (
             <span className="error">{errores.fechaEstadoContable}</span>
           )}
-        </div>
-
+        </label>
         <div className="flex space-x-8 mt-4">
           {/* Columnas de Ingresos */}
           <div>
             <h3 className="font-bold mb-2">Ingresos en Pesos</h3>
             <ul>
               {listaIngresos
-                .filter((ingreso) => ingreso.tipoMoneda === "Pesos")
+                .filter((ingreso) => ingreso.tipoMoneda === "UR")
                 .map((ingreso) => (
                   <li key={ingreso.id}>
                     {ingreso.denominacion} - {ingreso.ingreso}{" "}
@@ -166,7 +172,7 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold mb-2">Ingresos en Dólares</h3>
             <ul>
               {listaIngresos
-                .filter((ingreso) => ingreso.tipoMoneda === "Dólares")
+                .filter((ingreso) => ingreso.tipoMoneda === "USD")
                 .map((ingreso) => (
                   <li key={ingreso.id}>
                     {ingreso.denominacion} - {ingreso.ingreso}{" "}
@@ -184,7 +190,7 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold mb-2">Egresos en Pesos</h3>
             <ul>
               {listaEgresos
-                .filter((egreso) => egreso.tipoMoneda === "Pesos")
+                .filter((egreso) => egreso.tipoMoneda === "UR")
                 .map((egreso) => (
                   <li key={egreso.id}>
                     {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
@@ -200,7 +206,7 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold mb-2">Egresos en Dólares</h3>
             <ul>
               {listaEgresos
-                .filter((egreso) => egreso.tipoMoneda === "Dólares")
+                .filter((egreso) => egreso.tipoMoneda === "USD")
                 .map((egreso) => (
                   <li key={egreso.id}>
                     {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
