@@ -218,7 +218,7 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
-                <span>Denominación</span>
+                <span>Denom.</span>
                 <span>Egreso</span>
                 <span>Moneda</span>
                 <span>SubRubro</span>
@@ -248,7 +248,7 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold text-lg mb-4">Egresos en Dólares</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
-                <span>Denominación</span>
+                <span>Denom.</span>
                 <span>Egreso</span>
                 <span>Moneda</span>
                 <span>SubRubro</span>
