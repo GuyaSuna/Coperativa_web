@@ -133,7 +133,7 @@ const AltaEstadoContable = () => {
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
-        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+        className="w-full min-h-screen min-w-lg bg-gray-200 dark:bg-gray-700 p-8 rounded-lg shadow-md"
       >
         <label className="block text-sm font-medium mb-2">
           Fecha:
@@ -149,17 +149,19 @@ const AltaEstadoContable = () => {
             <span className="error">{errores.fechaEstadoContable}</span>
           )}
         </label>
+
         <div className="flex space-x-8 mt-4">
           {/* Columnas de Ingresos */}
-          <div>
+          <div className="w-1/4 overflow-auto max-h-64">
             <h3 className="font-bold mb-2">Ingresos en Pesos</h3>
-            <ul>
+            <ul className="text-black dark:text-white">
               {listaIngresos
                 .filter((ingreso) => ingreso.tipoMoneda === "UR")
                 .map((ingreso) => (
                   <li key={ingreso.id}>
-                    {ingreso.denominacion} - {ingreso.ingreso}{" "}
-                    {ingreso.tipoMoneda}
+                    <strong>Denominación:</strong> {ingreso.denominacion} -
+                    <strong>Ingreso:</strong> {ingreso.ingreso}
+                    <strong>Moneda:</strong> {ingreso.tipoMoneda}
                   </li>
                 ))}
             </ul>
@@ -168,15 +170,16 @@ const AltaEstadoContable = () => {
             </h3>
           </div>
 
-          <div>
+          <div className="w-1/4 overflow-auto max-h-64">
             <h3 className="font-bold mb-2">Ingresos en Dólares</h3>
-            <ul>
+            <ul className="text-black dark:text-white">
               {listaIngresos
                 .filter((ingreso) => ingreso.tipoMoneda === "USD")
                 .map((ingreso) => (
                   <li key={ingreso.id}>
-                    {ingreso.denominacion} - {ingreso.ingreso}{" "}
-                    {ingreso.tipoMoneda}
+                    <strong>Denominación:</strong> {ingreso.denominacion} -
+                    <strong>Ingreso:</strong> {ingreso.ingreso}
+                    <strong>Moneda:</strong> {ingreso.tipoMoneda}
                   </li>
                 ))}
             </ul>
@@ -186,14 +189,16 @@ const AltaEstadoContable = () => {
           </div>
 
           {/* Columnas de Egresos */}
-          <div>
+          <div className="w-1/4 overflow-auto max-h-64">
             <h3 className="font-bold mb-2">Egresos en Pesos</h3>
-            <ul>
+            <ul className="text-black dark:text-white">
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "UR")
                 .map((egreso) => (
                   <li key={egreso.id}>
-                    {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
+                    <strong>Denominación:</strong> {egreso.denominacion} -
+                    <strong>Egreso:</strong> {egreso.egreso}
+                    <strong>Moneda:</strong> {egreso.tipoMoneda}
                   </li>
                 ))}
             </ul>
@@ -202,14 +207,16 @@ const AltaEstadoContable = () => {
             </h3>
           </div>
 
-          <div>
+          <div className="w-1/4 overflow-auto max-h-64">
             <h3 className="font-bold mb-2">Egresos en Dólares</h3>
-            <ul>
+            <ul className="text-black dark:text-white">
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "USD")
                 .map((egreso) => (
                   <li key={egreso.id}>
-                    {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
+                    <strong>Denominación:</strong> {egreso.denominacion} -
+                    <strong>Egreso:</strong> {egreso.egreso}
+                    <strong>Moneda:</strong> {egreso.tipoMoneda}
                   </li>
                 ))}
             </ul>
