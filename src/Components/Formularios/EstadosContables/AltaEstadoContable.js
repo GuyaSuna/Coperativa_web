@@ -120,29 +120,37 @@ const AltaEstadoContable = () => {
             <span className="error">{errores.fechaEstadoContable}</span>
           )}
         </div>
-        <div>
-          <ul>
-            {listaIngresos.map((ingreso) => (
-              <li key={ingreso.id}>
-                {ingreso.denominacion} - {ingreso.ingreso} {ingreso.tipoMoneda}
-              </li>
-            ))}
-          </ul>
-          <h3>Total Egresos: {totalEgresos}</h3>
+
+        <div className="flex space-x-8 mt-4">
+          <div>
+            <h3 className="font-bold mb-2">Ingresos</h3>
+            <ul>
+              {listaIngresos.map((ingreso) => (
+                <li key={ingreso.id}>
+                  {ingreso.denominacion} - {ingreso.ingreso}{" "}
+                  {ingreso.tipoMoneda}
+                </li>
+              ))}
+            </ul>
+            <h3 className="mt-4">Total Ingresos: {totalIngresos}</h3>
+          </div>
+
+          <div>
+            <h3 className="font-bold mb-2">Egresos</h3>
+            <ul>
+              {listaEgresos.map((egreso) => (
+                <li key={egreso.id}>
+                  {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
+                </li>
+              ))}
+            </ul>
+            <h3 className="mt-4">Total Egresos: {totalEgresos}</h3>
+          </div>
         </div>
 
-        <div>
-          <ul>
-            {listaEgresos.map((egreso) => (
-              <li key={egreso.id}>
-                {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
-              </li>
-            ))}
-          </ul>
-          <h3>Total Egresos: {totalEgresos}</h3>
-        </div>
-
-        <button type="submit">Agregar Estado Contable</button>
+        <button type="submit" className="mt-6">
+          Agregar Estado Contable
+        </button>
       </form>
     </div>
   );
