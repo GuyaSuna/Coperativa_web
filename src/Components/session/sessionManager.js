@@ -1,45 +1,42 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useSession } from '@/Provider/loginProvider';
 import { useRouter } from 'next/navigation';
 
 const SessionManager = () => {
   const { isAuthenticated, logout, authToken } = useSession();
-  const [tiempoRestante, setTiempoRestante] = useState(0); // Tiempo restante del token en segundos
+  const [tiempoRestante, setTiempoRestante] = useState(0); 
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
 
-    // Decodificar el token JWT y obtener el tiempo de expiración (exp)
-    const tokenExpiracion = parseJwt(authToken)?.exp * 1000; // Convertir a milisegundos
+    const tokenExpiracion = parseJwt(authToken)?.exp * 1000; 
     const tiempoActual = Date.now();
-    const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000; // Tiempo restante en segundos
+    const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000; 
 
     setTiempoRestante(tiempoInicial);
 
     const actualizarContador = () => {
-      setTiempoRestante((prevTiempo) => {
-        if (prevTiempo <= 0) {
-          clearInterval(intervalo);
-          alert('Tu sesión ha expirado.');
+      const tiempoActualizado = (tokenExpiracion - Date.now()) / 1000;
+      setTiempoRestante(tiempoActualizado);
+
+      if (tiempoActualizado <= 0) {
+        clearInterval(intervalo);
+        alert('Tu sesión ha expirado.');
+        logout();
+        router.push('/');
+      }
+
+      if (tiempoActualizado <= 30) {
+        alert('¿Aún estás ahí?');
+        const tiempoRespuesta = setTimeout(() => {
           logout();
-          router.push('/login'); // Redirigir al login
-          return 0;
-        }
-        if (prevTiempo <= 30) {
-          alert('¿Aún estás ahí?');
-
-          const tiempoRespuesta = setTimeout(() => {
-            logout();
-            router.push('/login'); // Redirigir al login si no responde en 30 segundos
-          }, 30000); // 30 segundos para esperar la respuesta
-
-          return prevTiempo - 1;
-        }
-        return prevTiempo - 1;
-      });
+          router.push('/'); 
+        }, 30000);
+      }
     };
+
 
     const intervalo = setInterval(actualizarContador, 1000);
 
@@ -48,7 +45,6 @@ const SessionManager = () => {
     };
   }, [isAuthenticated, authToken]);
 
-  // Función para parsear el token JWT
   const parseJwt = (token) => {
     try {
       const base64Url = token.split('.')[1];
@@ -69,7 +65,7 @@ const SessionManager = () => {
   };
 
   const minutos = Math.floor(tiempoRestante / 60);
-  const segundos = tiempoRestante % 60;
+  const segundos = Math.floor(tiempoRestante % 60);
 
   return (
     <div>

@@ -28,10 +28,7 @@ const Login = async (username, password) => {
 
     console.log("Data", data);
     if (data.token) {
-      // Guardar el token en la cookie
-      document.cookie = `token=${data.token}; path=/; max-age=${
-        7 * 24 * 60 * 60
-      }`;
+      document.cookie = `token=${data.token}; path=/; max-age=1440`;
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
@@ -136,6 +133,7 @@ const getAllCooperativas = async () => {
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -251,6 +249,31 @@ const getSocio = async (cedulaSocio) => {
     return data;
   } catch (error) {
     console.error("Error en getSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
+  }
+};
+
+const getRecibosImpagosSocio = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    console.log("Token", token);
+    const response = await fetch(`${URL}/socio/reciboImpago/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getRecibosImpagosSocio:", error);
     throw new Error("Error al obtener los datos del socio");
   }
 };
@@ -600,14 +623,24 @@ const getAllViviendas = async (idCooperativa) => {
 };
 
 const updateVivienda = async (
+  idVivienda,
   nroVivienda,
+  listaAntiguosTitulares,
   cantidadDormitorios,
   cooperativaEntity,
-  socioTitular
+  valorVivienda,
+  socio
 ) => {
   try {
+    console.log(
+      "ACAAAAAA",
+      idVivienda,
+      nroVivienda,
+      listaAntiguosTitulares,
+      cantidadDormitorios,
+      valorVivienda
+    );
     console.log(cooperativaEntity);
-    console.log(socioTitular);
     const token = getToken();
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
@@ -616,10 +649,13 @@ const updateVivienda = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        idVivienda,
         nroVivienda,
-        socioTitular,
+        socio,
+        listaAntiguosTitulares,
         cantidadDormitorios,
         cooperativaEntity,
+        valorVivienda,
       }),
     });
     const data = await response.json();
@@ -777,6 +813,30 @@ const getAllRecibos = async (idCooperativa) => {
   } catch (error) {
     console.error("Error en getAllRecibos:", error);
     throw new Error("Error al obtener los datos de los Recibos.");
+  }
+};
+
+const getRecibo = async (nroRecibo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recibo/${nroRecibo}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getRecibo:", error);
+    throw new Error("Error al obtener los datos del recibo");
   }
 };
 
@@ -1264,10 +1324,10 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
     return null;
   }
 };
+
 const postIngreso = async (ingreso) => {
   try {
     const token = getToken();
-    console.log("Pruebaaaa", token);
     const response = await fetch(`${URL}/ingresos`, {
       method: "POST",
       headers: {
@@ -1468,7 +1528,7 @@ const postEgreso = async (egreso) => {
 
 const deleteEgreso = async (idEgreso) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos/${idEgreso}`, {
       method: "DELETE",
       headers: {
@@ -1489,7 +1549,7 @@ const deleteEgreso = async (idEgreso) => {
 
 const updateEgreso = async (subRubro, denominacion, egreso) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos`, {
       method: "PUT",
       headers: {
@@ -1516,7 +1576,7 @@ const updateEgreso = async (subRubro, denominacion, egreso) => {
 
 const getAllEgresos = async (idCooperativa) => {
   try {
-    const token = getToken;
+    const token = getToken();
     const response = await fetch(`${URL}/egresos/allEgresos/${idCooperativa}`, {
       method: "GET",
       headers: {
@@ -1563,9 +1623,40 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   }
 };
 
+// Estados Contables
+
+const postEstadoContable = async (estadoContableEntity) => {
+  try {
+    const token = getToken();
+    console.log("token Api Post EStCOnt", token);
+    console.log("Post EStCOnt", estadoContableEntity);
+    const response = await fetch(`${URL}/estadoContable`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(estadoContableEntity),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postEstadoContable:", error);
+    throw new Error("Error al enviar los datos del estadoContable");
+  }
+};
+
+//Utilizar Libreria B)
+
 export {
   Login,
   getSocio,
+  getRecibosImpagosSocio,
   postSocio,
   getAllSocios,
   updateSocio,
@@ -1585,6 +1676,7 @@ export {
   getCooperativaPorSocio,
   getUr,
   getAllRecibos,
+  getRecibo,
   postRecibo,
   postAviso,
   postUsuario,
@@ -1620,4 +1712,5 @@ export {
   register,
   getUser,
   LoginMaster,
+  postEstadoContable,
 };

@@ -48,9 +48,9 @@ const VerVivienda = ({ vivienda, isOpen, onClose }) => {
                   Socio Titular:
                 </span>
                 <span className="text-white-600">
-                  {vivienda?.socioTitular?.nombreSocio &&
-                  vivienda?.socioTitular?.apellidoSocio
-                    ? `${vivienda.socioTitular.nombreSocio} ${vivienda.socioTitular.apellidoSocio}`
+                  {vivienda?.socio?.nombreSocio &&
+                  vivienda?.socio?.apellidoSocio
+                    ? `${vivienda.socio.nombreSocio} ${vivienda.socio.apellidoSocio}`
                     : "Sin socio"}
                 </span>
               </div>

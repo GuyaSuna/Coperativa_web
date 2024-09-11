@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { postEgreso } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
+
 const AltaEgreso = () => {
   const [subRubro, setSubRubro] = useState("");
   const [denominacion, setDenominacion] = useState("");
@@ -10,21 +11,44 @@ const AltaEgreso = () => {
   const [errores, setErrores] = useState({});
   const [tipoMoneda, setTipoMoneda] = useState("UR");
   const { cooperativa } = useContext(MiembroContext);
+  const [fechaDatosContables, setFechaDatosContables] = useState("");
+
+  useEffect(() => {
+    setFechaDatosContables(obtenerFechaHoy());
+  }, []);
 
   const handleChangeDenominacion = (e) => setDenominacion(e.target.value);
   const handleChangeEgreso = (e) => setEgreso(e.target.value);
   const handleChangeSeleccionSubRubro = (e) => setSubRubro(e.target.value);
   const handleChangeTipoMoneda = (e) => setTipoMoneda(e.target.value);
+  const handleChangeFechaDatosContables = (e) =>
+    setFechaDatosContables(e.target.value);
+
   const validarFormulario = () => {
     const errores = {};
+    const fechaHoy = new Date().toISOString().split("T")[0];
 
     if (!subRubro) errores.subRubro = "El subrubro es obligatorio";
     if (!denominacion) errores.denominacion = "La denominación es obligatoria";
     if (!egreso) errores.egreso = "El egreso es obligatorio";
+    if (!fechaDatosContables) {
+      errores.fechaDatosContables = "La fecha del Egreso es obligatoria";
+    } else if (fechaDatosContables > fechaHoy) {
+      errores.fechaDatosContables =
+        "La fecha de Egreso no puede ser mayor a la fecha actual";
+    }
 
     setErrores(errores);
 
     return Object.keys(errores).length === 0;
+  };
+
+  const obtenerFechaHoy = () => {
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    const año = hoy.getFullYear();
+    return `${año}-${mes}-${dia}`;
   };
 
   const handleSubmit = async (e) => {
@@ -35,8 +59,9 @@ const AltaEgreso = () => {
       subRubro,
       denominacion,
       egreso,
-      tipoMoneda,
       cooperativaEntity: cooperativa,
+      tipoMoneda,
+      fechaDatosContables,
     };
 
     try {
@@ -59,11 +84,24 @@ const AltaEgreso = () => {
         className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
       >
         <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">
+            Fecha del Egreso:
+            <input
+              type="date"
+              name="fechaDatosContables"
+              value={fechaDatosContables}
+              onChange={handleChangeFechaDatosContables}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {errores.fechaDatosContables && (
+              <span className="error">{errores.fechaDatosContables}</span>
+            )}
+          </label>
           <label
             className="block text-sm font-medium mb-2"
             htmlFor="seleccionSubVivienda"
           >
-            Seleccione un subRubro:
+            Seleccione el Sub Rubro:
           </label>
           <select
             id="seleccionSubRubro"
@@ -72,7 +110,7 @@ const AltaEgreso = () => {
             onChange={handleChangeSeleccionSubRubro}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
-            <option value="">Seleccione un subRubro</option>
+            <option value="">Seleccione el Sub Rubro</option>
             <option value="Gastos Extras en Dolares">
               Gastos Extras en Dolares
             </option>

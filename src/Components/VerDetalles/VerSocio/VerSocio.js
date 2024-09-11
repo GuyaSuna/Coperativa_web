@@ -1,12 +1,14 @@
 "use client";
 
-import { getUltimoSubsidioSocio } from "@/Api/api";
+import { getUltimoSubsidioSocio, getRecibosImpagosSocio } from "../../../Api/api";
 import React, { useState, useEffect } from "react";
 
 const VerSocio = ({ isOpen, onClose, socio }) => {
   const [ultimoSubsidio, setUltimoSubsidio] = useState(null);
+  const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [isSuplenteExpanded, setIsSuplenteExpanded] = useState(false);
   const [isSubsidioExpanded, setIsSubsidioExpanded] = useState(false);
+  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] = useState(false);
 
   useEffect(() => {
     if (socio && socio.cedulaSocio) {
@@ -19,9 +21,21 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
           setUltimoSubsidio(null);
         }
       };
+
+      const fetchRecibosImpagos = async () => {
+        try {
+          const recibos = await getRecibosImpagosSocio(socio.cedulaSocio);
+          setRecibosImpagos(recibos);
+        } catch (error) {
+          console.error("Error al obtener los recibos impagos:", error);
+          setRecibosImpagos([]);
+        }
+      };
+
+      fetchRecibosImpagos();
       fetchUltimoSubsidio();
     }
-  }, [socio]);
+  }, [socio?.cedulaSocio]);
 
   if (!isOpen) return null;
 
@@ -52,6 +66,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
             </h3>
             <table className="w-full text-left">
               <tbody className="text-gray-600 dark:text-gray-100">
+                {/* Información del Socio */}
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Nombre:
@@ -192,6 +207,41 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                       </tr>
                     )}
                   </>
+                )}
+
+                {/* Sección de Recibos Impagos */}
+                <tr>
+                  <td
+                    colSpan="2"
+                    className="font-semibold text-black-900 py-4 cursor-pointer"
+                    onClick={() => setIsRecibosImpagosExpanded(!isRecibosImpagosExpanded)}
+                  >
+                    {isRecibosImpagosExpanded
+                      ? "▼ Recibos Impagos"
+                      : "► Recibos Impagos"}
+                  </td>
+                </tr>
+                {isRecibosImpagosExpanded && (
+                  <tr>
+                    <td colSpan="2" className="py-1 px-3">
+                      <div className="max-h-60 overflow-y-auto">
+                        {recibosImpagos.length > 0 ? (
+                          recibosImpagos.map((fecha) => (
+                            <div key={fecha} className="border-b border-gray-200 dark:border-gray-800 py-2">
+                              <div className="font-normal px-3">
+                                Falta pagar recibo en fecha:
+                              </div>
+                              <div className="py-1 px-3">{fecha}</div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="py-1 px-3 text-center">
+                            No tiene recibos impagos.
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
