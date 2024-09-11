@@ -51,7 +51,7 @@ const AltaEstadoContable = () => {
   };
 
   const handleChangeFechaEstadoContable = (e) =>
-    handleChangeFechaEstadoContable(e.target.value);
+    setFechaEstadoContable(e.target.value);
 
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
@@ -157,21 +157,24 @@ const AltaEstadoContable = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Ingresos en Pesos</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
-              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+              <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denominación</span>
                 <span>Ingreso</span>
                 <span>Moneda</span>
+                <span>SubRubro</span>
               </li>
               {listaIngresos
                 .filter((ingreso) => ingreso.tipoMoneda === "UR")
                 .map((ingreso) => (
                   <li
                     key={ingreso.id}
-                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700 text-black dark:text-white"
+                    className="grid grid-cols-4 py-2 border-b dark:border-gray-700 text-black dark:text-white"
                   >
                     <span>{ingreso.denominacion}</span>
                     <span>{ingreso.ingreso}</span>
                     <span>{ingreso.tipoMoneda}</span>
+                    <span>{ingreso.subRubro}</span>{" "}
+                    {/* Nuevo atributo SubRubro */}
                   </li>
                 ))}
             </ul>
@@ -184,21 +187,24 @@ const AltaEstadoContable = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Ingresos en Dólares</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
-              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+              <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denominación</span>
                 <span>Ingreso</span>
                 <span>Moneda</span>
+                <span>SubRubro</span>
               </li>
               {listaIngresos
                 .filter((ingreso) => ingreso.tipoMoneda === "USD")
                 .map((ingreso) => (
                   <li
                     key={ingreso.id}
-                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700 text-black dark:text-white"
+                    className="grid grid-cols-4 py-2 border-b dark:border-gray-700 text-black dark:text-white"
                   >
                     <span>{ingreso.denominacion}</span>
                     <span>{ingreso.ingreso}</span>
                     <span>{ingreso.tipoMoneda}</span>
+                    <span>{ingreso.subRubro}</span>{" "}
+                    {/* Nuevo atributo SubRubro */}
                   </li>
                 ))}
             </ul>
@@ -211,21 +217,24 @@ const AltaEstadoContable = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
-              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+              <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denominación</span>
                 <span>Egreso</span>
                 <span>Moneda</span>
+                <span>SubRubro</span>
               </li>
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "UR")
                 .map((egreso) => (
                   <li
                     key={egreso.id}
-                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700"
+                    className="grid grid-cols-4 py-2 border-b dark:border-gray-700"
                   >
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
+                    <span>{egreso.subRubro}</span>{" "}
+                    {/* Nuevo atributo SubRubro */}
                   </li>
                 ))}
             </ul>
@@ -238,21 +247,24 @@ const AltaEstadoContable = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Egresos en Dólares</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
-              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+              <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denominación</span>
                 <span>Egreso</span>
                 <span>Moneda</span>
+                <span>SubRubro</span>
               </li>
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "USD")
                 .map((egreso) => (
                   <li
                     key={egreso.id}
-                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700"
+                    className="grid grid-cols-4 py-2 border-b dark:border-gray-700"
                   >
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
+                    <span>{egreso.subRubro}</span>{" "}
+                    {/* Nuevo atributo SubRubro */}
                   </li>
                 ))}
             </ul>
