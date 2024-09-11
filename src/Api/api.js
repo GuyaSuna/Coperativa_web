@@ -26,10 +26,9 @@ const Login = async (username, password) => {
 
     const data = await response.json();
 
-    console.log("Data",data)
+    console.log("Data", data);
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
-
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
@@ -92,7 +91,6 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
-    const token = getToken();
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
@@ -219,7 +217,7 @@ const getSocio = async (cedulaSocio) => {
 const getRecibosImpagosSocio = async (cedulaSocio) => {
   try {
     const token = getToken();
-    console.log("Token", token)
+    console.log("Token", token);
     const response = await fetch(`${URL}/socio/reciboImpago/${cedulaSocio}`, {
       method: "GET",
       headers: {
@@ -766,6 +764,30 @@ const getAllRecibos = async (idCooperativa) => {
   }
 };
 
+const getRecibo = async (nroRecibo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recibo/${nroRecibo}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getRecibo:", error);
+    throw new Error("Error al obtener los datos del recibo");
+  }
+};
+
 const postRecibo = async (
   fechaRecibo,
   fechaPago,
@@ -1250,10 +1272,10 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
     return null;
   }
 };
+
 const postIngreso = async (ingreso) => {
   try {
     const token = getToken();
-    console.log("Pruebaaaa", token);
     const response = await fetch(`${URL}/ingresos`, {
       method: "POST",
       headers: {
@@ -1549,6 +1571,33 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   }
 };
 
+// Estados Contables
+
+const postEstadoContable = async (estadoContableEntity) => {
+  try {
+    const token = getToken();
+    console.log("token Api Post EStCOnt", token);
+    console.log("Post EStCOnt", estadoContableEntity);
+    const response = await fetch(`${URL}/estadoContable`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(estadoContableEntity),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postEstadoContable:", error);
+    throw new Error("Error al enviar los datos del estadoContable");
+  }
+};
 
 export {
   Login,
@@ -1573,6 +1622,7 @@ export {
   getCooperativaPorSocio,
   getUr,
   getAllRecibos,
+  getRecibo,
   postRecibo,
   postAviso,
   postUsuario,
@@ -1607,4 +1657,5 @@ export {
   postCapitalInteres,
   register,
   getUser,
+  postEstadoContable,
 };

@@ -2,7 +2,13 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
-import { Button, Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
 import { parseISO, format } from "date-fns";
 import Buscador from "@/Components/Buscador.js";
@@ -40,11 +46,23 @@ const ListadoSocio = ({
 
   const fetchAllSocios = async () => {
     try {
-      const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConFechaFormateada = sociosResponse.map((socio) => {
-        return socio.fechaIngreso
-          ? { ...socio, fechaIngreso: format(parseISO(socio.fechaIngreso), "yyyy-MM-dd") }
-          : socio;
+      const response = await getAllSocios(cooperativa.idCooperativa);
+      console.log("Cooperativa", cooperativa);
+      console.log("Respuesta all socios", response);
+      const sociosConFechaFormateada = response.map((socio) => {
+        console.log("Fecha ingreso antes: ", socio.fechaIngresoCooeprativa);
+
+        if (socio.fechaIngresoCooeprativa) {
+          const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
+          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
+          console.log("Fecha formateada: ", fechaFormateada);
+          return {
+            ...socio,
+            fechaIngresoCooeprativa: fechaFormateada,
+          };
+        } else {
+          return socio;
+        }
       });
       const sociosSinArchivar = sociosConFechaFormateada.filter(socio => !socio.archivado);  
       setAllSocios(sociosSinArchivar);
@@ -83,19 +101,19 @@ const ListadoSocio = ({
     setIsModalOpen(true);
   };
 
+  useEffect(() => {
+    if (buscador == "") {
+      setBuscadorFiltrado(allSocios);
+    } else {
+      const buscadorFiltrado = allSocios.filter((socio) =>
+        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allSocios, buscador]);
   const handleChangeBuscador = (event) => {
-    const valor = event.target.value.toLowerCase();
-    setBuscador(valor);
-    setBuscadorFiltrado(
-      allSocios.filter((socio) => socio.nombreSocio.toLowerCase().includes(valor))
-    );
+    setBuscador(event.target.value);
   };
-
-  const handleSortChange = (option) => {
-    const sociosOrdenados = [...buscadorFiltrado].sort(option.comparator);
-    setBuscadorFiltrado(sociosOrdenados);
-  };
-
   const ordenarOptions = [
     {
       label: "Número socio",
@@ -107,30 +125,34 @@ const ListadoSocio = ({
       label: "Más Recientes",
       key: "fechaIngreso",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso),
+      comparator: (a, b) =>
+        new Date(b.fechaIngresoCooeprativa) -
+        new Date(a.fechaIngresoCooeprativa),
     },
     {
       label: "Más Antiguos",
       key: "fechaIngreso",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
+      comparator: (a, b) =>
+        new Date(a.fechaIngresoCooeprativa) -
+        new Date(b.fechaIngresoCooeprativa),
     },
   ];
 
+  const handleSortChange = (option) => {
+    console.log("Orden seleccionado:", option.label);
+    if (buscador) {
+      const ordenarFiltrado = [...buscadorFiltrado].sort(option.comparator);
+      setBuscadorFiltrado(ordenarFiltrado);
+    } else {
+      const ordenarSocios = [...allSocios].sort(option.comparator);
+      setAllSocios(ordenarSocios);
+    }
+  };
+
   const handleAgregarSocio = () => {
-    setIdentificadorComponente(3); 
+    setIdentificadorComponente(3);
   };
-
-  const handleModificarSocio = (socio) => {
-    setCedulaSocio(socio.cedulaSocio);
-    setIdentificadorComponente(4); 
-  };
-
-  const handleCrearRecibo = (socio) => {
-    setSocioRecibo(socio);
-    setIdentificadorComponente(6); 
-  };
-
   return (
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -171,22 +193,49 @@ const ListadoSocio = ({
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">NroSocio</th>
-              <th scope="col" className="px-4 py-3">Nombre</th>
-              <th scope="col" className="px-4 py-3">Fecha Ingreso</th>
-              <th scope="col" className="px-4 py-3">Estado</th>
+              <th scope="col" className="px-4 py-3 text-center">
+                NroSocio
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Nombre
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Fecha Ingreso
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Estado
+              </th>
               <th scope="col" className="px-4 py-3"></th>
-              <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
+              <th scope="col" className="px-4 py-3">
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody>
             {buscadorFiltrado?.map((socio) => (
-              <tr className="border-b dark:border-gray-700 sm:table-row" key={socio.cedulaSocio}>
-                <td className="px-4 py-3 text-gray-900 dark:text-white">{socio.nroSocio}</td>
-                <td className="px-4 py-3 text-gray-900 dark:text-white">{socio.nombreSocio} {socio.apellidoSocio}</td>
-                <td className="px-4 py-3">{socio.fechaIngreso}</td>
+              <tr
+                className="border-b dark:border-gray-700 sm:table-row"
+                key={socio.cedulaSocio}
+              >
+                <td className="px-4 py-3 text-gray-900 dark:text-white">
+                  {socio.nroSocio}
+                </td>
+                <td className="px-4 py-3 text-gray-900 dark:text-white">
+                  {socio.nombreSocio} {socio.apellidoSocio}
+                </td>
+                <td className="px-4 py-3">{socio.fechaIngresoCooeprativa}</td>
                 <td className="px-4 py-3">
-                  <span className={`bg-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-100 text-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-900 dark:text-${socio.estadoSocio === "ACTIVO" ? "green" : "red"}-300`}>
+                  <span
+                    className={`bg-${
+                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
+                    }-100 text-${
+                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
+                    }-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${
+                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
+                    }-900 dark:text-${
+                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
+                    }-300`}
+                  >
                     {socio.estadoSocio}
                   </span>
                 </td>
@@ -194,21 +243,17 @@ const ListadoSocio = ({
                   <button
                     type="button"
                     onClick={() => handleVerSocio(socio)}
-                    className="font-medium text-primary-600 hover:underline"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <Menu as="div" className="relative inline-block text-left">
-                    <MenuButton
-                      className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center"
-                    >
+                    <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
                       ⋮
                     </MenuButton>
-                    <MenuItems
-                      className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                    >
+                    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <MenuItem>
                         <button
                           className="group flex rounded-md items-center w-full px-2 py-2 text-sm"

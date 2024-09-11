@@ -97,6 +97,15 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                 <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
                 <a className="text-base">Agregar Subsidio</a>
               </button>
+              <button
+                onClick={() => handleSelection(18)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                  selectedOption === 18 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Convenio</a>
+              </button>
             </div>
           )}
         </div>
@@ -132,7 +141,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
         <button
           onClick={() => handleSelection(13)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-            selectedOption === 7 ? "bg-blue-500 text-white" : ""
+            selectedOption === 13 ? "bg-blue-500 text-white" : ""
           }`}
         >
           <FaUser className="mr-2 text-2xl" />{" "}
@@ -144,8 +153,17 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             selectedOption === 18 ? "bg-blue-500 text-white" : ""
           }`}
         >
+          </button>
+          <button>
           <FaUser className="mr-2 text-2xl" />{" "}
           <a className="text-base">Agregar Convenio</a>
+          onClick={() => handleSelection(33)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 33 ? "bg-blue-500 text-white" : ""
+          }`}
+        
+          <FaUser className="mr-2 text-2xl" />{" "}
+          <a className="text-base">Estado Contable</a>
         </button>
       </div>
     </div>

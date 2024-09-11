@@ -9,8 +9,7 @@ import {
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
-import { useSession } from './../Provider/loginProvider';
-import Image from "next/image";
+import { useSession } from "./../Provider/loginProvider";
 
 const Home = () => {
   const router = useRouter();
@@ -23,7 +22,6 @@ const Home = () => {
   }
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errores, setErrores] = useState({});
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
@@ -47,7 +45,11 @@ const Home = () => {
         RequestLogin.responseBody.id
       );
       console.log(`Cooperativa admin: ${cooperativaLoginRequest}`);
-      ProviderLoginRequest(RequestLogin, cooperativaLoginRequest, RequestLogin.token);
+      ProviderLoginRequest(
+        RequestLogin,
+        cooperativaLoginRequest,
+        RequestLogin.token
+      );
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
@@ -65,12 +67,20 @@ const Home = () => {
     if (loginRequest == null) {
       alert("No se ha podido inicia sesion");
     } else {
-      ProviderLoginRequest(loginRequest, cooperativaMiembro, loginRequest.token);
+      ProviderLoginRequest(
+        loginRequest,
+        cooperativaMiembro,
+        loginRequest.token
+      );
       router.push("./UsuarioHome");
     }
   };
 
-  const ProviderLoginRequest = (RequestLogin, cooperativaLoginRequest, token) => {
+  const ProviderLoginRequest = (
+    RequestLogin,
+    cooperativaLoginRequest,
+    token
+  ) => {
     loginMiembro(RequestLogin, cooperativaLoginRequest);
     login(token);
   };

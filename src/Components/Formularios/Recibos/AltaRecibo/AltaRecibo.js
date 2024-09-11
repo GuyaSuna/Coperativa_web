@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
+import { NumerosALetras } from "numero-a-letras";
 
 import { useRouter } from "next/navigation";
 import {
@@ -53,6 +54,7 @@ const AltaRecibo = ({ Socio, ur }) => {
     const FechaActual = new Date();
     console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
     console.log("FECHA ACTUAL", FechaActual.getFullYear());
+
     cooperativa.listaCapitalInteres.map((data) => {
       let fechaData = new Date(data.fecha);
       console.log("FECHA DATA", fechaData.getMonth() + 1);
@@ -87,6 +89,9 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   useEffect(() => {
     setCuotaMensual(cuotaMensualBase + recargo);
+    let valorEnLetras = NumerosALetras(Math.round(cuotaMensualBase + recargo));
+    valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
+    setSumaPesos(valorEnLetras);
   }, [recargo]);
 
   const fetchReajusteAnual = async () => {
@@ -159,7 +164,11 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
     setCuotaMensualBase(cuenta);
-    setCuotaMensual(cuenta);
+    setCuotaMensual(Math.round(cuenta));
+
+    let valorEnLetras = NumerosALetras(Math.round(cuenta));
+    valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
+    setSumaPesos(valorEnLetras);
   }, [valorVivienda, reajuste, subsidio, convenio]);
 
   const fetchCalculos = async () => {
@@ -206,7 +215,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("ENTRA");
+    console.log("ENTRA y este es el miembro", miembro);
     e.preventDefault();
     if (!validarFormulario()) return;
 
@@ -266,12 +275,19 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
   //      ruta dinamica
   //      router.push(`/UserInfo/${NroSocio}`);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
+        <label className="block text-sm font-medium mb-2 text-right">
+          {/* Valor UR Reajuste: {reajuste} */}
+        </label>
+        <label className="block text-sm font-medium mb-2 text-right">
+          Valor UR del Mes: {ur?.buy || 0}
+        </label>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="mb-4">
             <label
@@ -494,13 +510,13 @@ const AltaRecibo = ({ Socio, ur }) => {
             )}
           </div>
         </div>
-        <div className="grid md:grid-cols-3 md:gap-6">
+        <div className="grid md:grid-cols-4 md:gap-6">
           <div className="mb-4">
             <label
               className="block text-sm font-medium mb-2"
               htmlFor="cuotaSocial"
             >
-              cuotaSocial:
+              Cuota Social:
             </label>
             <input
               type="number"
@@ -521,7 +537,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               className="block text-sm font-medium mb-2"
               htmlFor="cuotaMensual"
             >
-              cuotaMensual:
+              Cuota Mensual:
             </label>
             <input
               type="number"
@@ -538,7 +554,7 @@ const AltaRecibo = ({ Socio, ur }) => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 col-span-2">
             <label
               className="block text-sm font-medium mb-2"
               htmlFor="sumaPesos"
