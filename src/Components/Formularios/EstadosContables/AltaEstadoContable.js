@@ -12,7 +12,8 @@ const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
 
   const [fechaEstadoContable, setFechaEstadoContable] = useState("");
-  const [saldoFinal, setSaldoFinal] = useState(0);
+  const [saldoFinalPesos, setSaldoFinalPesos] = useState(0);
+  const [saldoFinalDolares, setSaldoFinalDolares] = useState(0);
 
   // Totales para ingresos y egresos en pesos y dólares
   const [totalIngresosPesos, setTotalIngresosPesos] = useState(0);
@@ -52,19 +53,19 @@ const AltaEstadoContable = () => {
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
     const sumaIngresosPesos = ingresos
-      .filter((ingreso) => ingreso.tipoMoneda === "UR")
+      .filter((ingreso) => ingreso.tipoMoneda === "Pesos")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaIngresosDolares = ingresos
-      .filter((ingreso) => ingreso.tipoMoneda === "USD")
+      .filter((ingreso) => ingreso.tipoMoneda === "Dólares")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaEgresosPesos = egresos
-      .filter((egreso) => egreso.tipoMoneda === "UR")
+      .filter((egreso) => egreso.tipoMoneda === "Pesos")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
     const sumaEgresosDolares = egresos
-      .filter((egreso) => egreso.tipoMoneda === "USD")
+      .filter((egreso) => egreso.tipoMoneda === "Dólares")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
     // Establecer los totales
@@ -73,12 +74,9 @@ const AltaEstadoContable = () => {
     setTotalEgresosPesos(sumaEgresosPesos);
     setTotalEgresosDolares(sumaEgresosDolares);
 
-    // Calcular saldo final combinando ambos tipos de moneda
-    setSaldoFinal(
-      sumaIngresosPesos +
-        sumaIngresosDolares -
-        (sumaEgresosPesos + sumaEgresosDolares)
-    );
+    // Calcular saldo final por separado para cada moneda
+    setSaldoFinalPesos(sumaIngresosPesos - sumaEgresosPesos);
+    setSaldoFinalDolares(sumaIngresosDolares - sumaEgresosDolares);
   };
 
   const obtenerFechaHoy = () => {
@@ -96,7 +94,8 @@ const AltaEstadoContable = () => {
 
     const nuevoEstadoContable = {
       fecha: fechaEstadoContable,
-      saldoFinal,
+      saldoFinalPesos,
+      saldoFinalDolares,
       cooperativaEntity: cooperativa,
       listaEgresos,
       listaIngresos,
@@ -214,9 +213,13 @@ const AltaEstadoContable = () => {
           </div>
         </div>
 
-        <h3 className="mt-6">Saldo Final: {saldoFinal}</h3>
+        <h3 className="mt-6">Saldo Final en Pesos: {saldoFinalPesos}</h3>
+        <h3 className="mt-2">Saldo Final en Dólares: {saldoFinalDolares}</h3>
 
-        <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4">
+        <button
+          type="submit"
+          className="mt-4 py-2 px-4 bg-blue-500 text-white rounded"
+        >
           Guardar Estado Contable
         </button>
       </form>
