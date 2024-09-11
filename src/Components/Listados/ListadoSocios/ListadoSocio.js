@@ -46,28 +46,37 @@ const ListadoSocio = ({
           ? { ...socio, fechaIngreso: format(parseISO(socio.fechaIngreso), "yyyy-MM-dd") }
           : socio;
       });
-  
-      // Corrección: retorno implícito en la función de filtro
-      const sociosSinArchivar = sociosConFechaFormateada.filter(socio => !socio.archivado);
-      
+      const sociosSinArchivar = sociosConFechaFormateada.filter(socio => !socio.archivado);  
       setAllSocios(sociosSinArchivar);
-      setBuscadorFiltrado(sociosSinArchivar);  // Usar sociosSinArchivar en lugar de sociosConFechaFormateada
+      setBuscadorFiltrado(sociosSinArchivar); 
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
 
   const handleArchivar = async (socio) => {
-    try {
-      const socioActualizado = { ...socio, archivado: true };
-      await updateSocio(socioActualizado);
-      // Eliminar el socio de ambas listas inmediatamente
-      setAllSocios((prevSocios) => prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio));
-      setBuscadorFiltrado((prevFiltrado) => prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio));
-    } catch (e) {
-      console.error("Fallo al archivar el socio", e);
+    const confirmacion = window.confirm(
+      `¿Estás seguro de que deseas archivar al socio ${socio.nombreSocio} ${socio.apellidoSocio}?`
+    );
+  
+    if (confirmacion) {
+      try {
+        const socioActualizado = { ...socio, archivado: true };
+        await updateSocio(socioActualizado);
+        setAllSocios((prevSocios) =>
+          prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
+        );
+        setBuscadorFiltrado((prevFiltrado) =>
+          prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
+        );
+      } catch (e) {
+        console.error("Fallo al archivar el socio", e);
+      }
+    } else {
+      console.log("Archivo cancelado");
     }
   };
+  
 
   const handleVerSocio = (socio) => {
     setSocioSeleccionado(socio);

@@ -9,6 +9,7 @@ import VerVivienda from "@/Components/VerDetalles/VerVivienda/VerVivienda.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
@@ -16,6 +17,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
   const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
   useEffect(() => {
     fetchAllRecibos();
   }, []);
@@ -83,6 +85,12 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     const ordenarRecibos = [...allRecibos].sort(option.comparator);
     setAllRecibos(ordenarRecibos);
   };
+
+  const handleVerRecibo = (recibo) => {
+    setReciboSeleccionado(recibo);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="sm:p-7 p-4 ">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -174,7 +182,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                 <td className="px-4 py-3 block md:table-cell">
                   <button
                     type="button"
-                    onClick={() => handleVerSocio(recibo.socio)}
+                    onClick={() => handleVerRecibo(recibo)}
                     className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
@@ -243,10 +251,10 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         </table>
       </div>
       {isModalOpen && (
-        <VerVivienda
+        <VerRecibo
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          socio={socioSeleccionado}
+          recibo={reciboSeleccionado} 
         />
       )}
     </div>
