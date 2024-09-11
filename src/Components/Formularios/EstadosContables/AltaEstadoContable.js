@@ -133,9 +133,9 @@ const AltaEstadoContable = () => {
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
-        className="w-full min-h-screen min-w-lg bg-gray-200 dark:bg-gray-700 p-8 rounded-lg shadow-md"
+        className="w-full max-w-4xl bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
-        <label className="block text-sm font-medium mb-2">
+        <label className="block text-sm font-medium mb-4">
           Fecha:
           <input
             type="date"
@@ -146,92 +146,133 @@ const AltaEstadoContable = () => {
             required
           />
           {errores.fechaEstadoContable && (
-            <span className="error">{errores.fechaEstadoContable}</span>
+            <span className="error text-red-500">
+              {errores.fechaEstadoContable}
+            </span>
           )}
         </label>
 
-        <div className="flex space-x-8 mt-4">
-          {/* Columnas de Ingresos */}
-          <div className="w-1/4 overflow-auto max-h-64">
-            <h3 className="font-bold mb-2">Ingresos en Pesos</h3>
-            <ul className="text-black dark:text-white">
+        <div className="grid grid-cols-2 gap-8 mt-6">
+          {/* Ingresos en Pesos */}
+          <div>
+            <h3 className="font-bold text-lg mb-4">Ingresos en Pesos</h3>
+            <ul className="bg-gray-200 p-4 rounded-lg">
+              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+                <span>Denominación</span>
+                <span>Ingreso</span>
+                <span>Moneda</span>
+              </li>
               {listaIngresos
                 .filter((ingreso) => ingreso.tipoMoneda === "UR")
                 .map((ingreso) => (
-                  <li key={ingreso.id}>
-                    <strong>Denominación:</strong> {ingreso.denominacion} -
-                    <strong>Ingreso:</strong> {ingreso.ingreso}
-                    <strong>Moneda:</strong> {ingreso.tipoMoneda}
+                  <li
+                    key={ingreso.id}
+                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700 text-black dark:text-white"
+                  >
+                    <span>{ingreso.denominacion}</span>
+                    <span>{ingreso.ingreso}</span>
+                    <span>{ingreso.tipoMoneda}</span>
                   </li>
                 ))}
             </ul>
-            <h3 className="mt-4">
+            <h3 className="mt-4 text-gray-800 dark:text-gray-400">
               Total Ingresos en Pesos: {totalIngresosPesos}
             </h3>
           </div>
 
-          <div className="w-1/4 overflow-auto max-h-64">
-            <h3 className="font-bold mb-2">Ingresos en Dólares</h3>
-            <ul className="text-black dark:text-white">
+          {/* Ingresos en Dólares */}
+          <div>
+            <h3 className="font-bold text-lg mb-4">Ingresos en Dólares</h3>
+            <ul className="bg-gray-200 p-4 rounded-lg">
+              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+                <span>Denominación</span>
+                <span>Ingreso</span>
+                <span>Moneda</span>
+              </li>
               {listaIngresos
                 .filter((ingreso) => ingreso.tipoMoneda === "USD")
                 .map((ingreso) => (
-                  <li key={ingreso.id}>
-                    <strong>Denominación:</strong> {ingreso.denominacion} -
-                    <strong>Ingreso:</strong> {ingreso.ingreso}
-                    <strong>Moneda:</strong> {ingreso.tipoMoneda}
+                  <li
+                    key={ingreso.id}
+                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700 text-black dark:text-white"
+                  >
+                    <span>{ingreso.denominacion}</span>
+                    <span>{ingreso.ingreso}</span>
+                    <span>{ingreso.tipoMoneda}</span>
                   </li>
                 ))}
             </ul>
-            <h3 className="mt-4">
+            <h3 className="mt-4 text-gray-800 dark:text-gray-400">
               Total Ingresos en Dólares: {totalIngresosDolares}
             </h3>
           </div>
 
-          {/* Columnas de Egresos */}
-          <div className="w-1/4 overflow-auto max-h-64">
-            <h3 className="font-bold mb-2">Egresos en Pesos</h3>
-            <ul className="text-black dark:text-white">
+          {/* Egresos en Pesos */}
+          <div>
+            <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
+            <ul className="bg-gray-200 p-4 rounded-lg">
+              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+                <span>Denominación</span>
+                <span>Egreso</span>
+                <span>Moneda</span>
+              </li>
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "UR")
                 .map((egreso) => (
-                  <li key={egreso.id}>
-                    <strong>Denominación:</strong> {egreso.denominacion} -
-                    <strong>Egreso:</strong> {egreso.egreso}
-                    <strong>Moneda:</strong> {egreso.tipoMoneda}
+                  <li
+                    key={egreso.id}
+                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700"
+                  >
+                    <span>{egreso.denominacion}</span>
+                    <span>{egreso.egreso}</span>
+                    <span>{egreso.tipoMoneda}</span>
                   </li>
                 ))}
             </ul>
-            <h3 className="mt-4">
+            <h3 className="mt-4 text-gray-800 dark:text-gray-400">
               Total Egresos en Pesos: {totalEgresosPesos}
             </h3>
           </div>
 
-          <div className="w-1/4 overflow-auto max-h-64">
-            <h3 className="font-bold mb-2">Egresos en Dólares</h3>
-            <ul className="text-black dark:text-white">
+          {/* Egresos en Dólares */}
+          <div>
+            <h3 className="font-bold text-lg mb-4">Egresos en Dólares</h3>
+            <ul className="bg-gray-200 p-4 rounded-lg">
+              <li className="grid grid-cols-3 font-medium text-gray-600 mb-2">
+                <span>Denominación</span>
+                <span>Egreso</span>
+                <span>Moneda</span>
+              </li>
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "USD")
                 .map((egreso) => (
-                  <li key={egreso.id}>
-                    <strong>Denominación:</strong> {egreso.denominacion} -
-                    <strong>Egreso:</strong> {egreso.egreso}
-                    <strong>Moneda:</strong> {egreso.tipoMoneda}
+                  <li
+                    key={egreso.id}
+                    className="grid grid-cols-3 py-2 border-b dark:border-gray-700"
+                  >
+                    <span>{egreso.denominacion}</span>
+                    <span>{egreso.egreso}</span>
+                    <span>{egreso.tipoMoneda}</span>
                   </li>
                 ))}
             </ul>
-            <h3 className="mt-4">
+            <h3 className="mt-4 text-gray-800 dark:text-gray-400">
               Total Egresos en Dólares: {totalEgresosDolares}
             </h3>
           </div>
         </div>
 
-        <h3 className="mt-6">Saldo Final en Pesos: {saldoFinalPesos}</h3>
-        <h3 className="mt-2">Saldo Final en Dólares: {saldoFinalDolares}</h3>
+        {/* Saldos finales */}
+        <h3 className="mt-6 text-lg font-bold">
+          Saldo Final en Pesos: {saldoFinalPesos}
+        </h3>
+        <h3 className="mt-2 text-lg font-bold">
+          Saldo Final en Dólares: {saldoFinalDolares}
+        </h3>
 
         <button
           type="submit"
-          className="mt-4 py-2 px-4 bg-blue-500 text-white rounded"
+          className="mt-6 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded"
         >
           Guardar Estado Contable
         </button>
