@@ -93,9 +93,7 @@ const AltaEstadoContable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Entra al guardar");
     if (!validarFormulario()) return;
-    console.log("Paso el validar");
     const nuevoEstadoContable = {
       fecha: fechaEstadoContable,
       saldoFinalEnPesos,
@@ -106,7 +104,6 @@ const AltaEstadoContable = () => {
     };
 
     try {
-      console.log("Nuevo EstadoContable", nuevoEstadoContable);
       await postEstadoContable(nuevoEstadoContable);
       alert("Estado contable agregado correctamente");
       // Navegar o limpiar formulario si es necesario

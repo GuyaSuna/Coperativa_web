@@ -1576,12 +1576,10 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 const postEstadoContable = async (estadoContableEntity) => {
   try {
     const token = getToken();
-    console.log("token Api Post EStCOnt", token);
-    console.log("Post EStCOnt", estadoContableEntity);
     const response = await fetch(`${URL}/estadoContable`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer${token}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(estadoContableEntity),
