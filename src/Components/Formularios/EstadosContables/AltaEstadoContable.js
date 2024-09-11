@@ -120,9 +120,18 @@ const AltaEstadoContable = () => {
             <span className="error">{errores.fechaEstadoContable}</span>
           )}
         </div>
+        <div>
+          <ul>
+            {listaIngresos.map((ingreso) => (
+              <li key={ingreso.id}>
+                {ingreso.denominacion} - {ingreso.ingreso} {ingreso.tipoMoneda}
+              </li>
+            ))}
+          </ul>
+          <h3>Total Egresos: {totalEgresos}</h3>
+        </div>
 
         <div>
-          <h3>Total Egresos: {totalEgresos}</h3>
           <ul>
             {listaEgresos.map((egreso) => (
               <li key={egreso.id}>
@@ -130,9 +139,9 @@ const AltaEstadoContable = () => {
               </li>
             ))}
           </ul>
+          <h3>Total Egresos: {totalEgresos}</h3>
         </div>
 
-        <button type="submit">Agregar Estado Contable</button>
         <button type="submit">Agregar Estado Contable</button>
       </form>
     </div>
