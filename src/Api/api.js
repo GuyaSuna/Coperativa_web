@@ -216,6 +216,31 @@ const getSocio = async (cedulaSocio) => {
   }
 };
 
+const getRecibosImpagosSocio = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    console.log("Token", token)
+    const response = await fetch(`${URL}/socio/reciboImpago/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getRecibosImpagosSocio:", error);
+    throw new Error("Error al obtener los datos del socio");
+  }
+};
+
 const getAllSocios = async (idCooperativa) => {
   try {
     const token = getToken();
@@ -1528,6 +1553,7 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 export {
   Login,
   getSocio,
+  getRecibosImpagosSocio,
   postSocio,
   getAllSocios,
   updateSocio,
