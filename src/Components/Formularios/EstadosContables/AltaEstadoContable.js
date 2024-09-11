@@ -13,8 +13,13 @@ const AltaEstadoContable = () => {
 
   const [fechaEstadoContable, setFechaEstadoContable] = useState("");
   const [saldoFinal, setSaldoFinal] = useState(0);
-  const [totalEgresos, setTotalEgresos] = useState(0);
-  const [totalIngresos, setTotalIngresos] = useState(0);
+
+  // Totales para ingresos y egresos en pesos y dólares
+  const [totalIngresosPesos, setTotalIngresosPesos] = useState(0);
+  const [totalIngresosDolares, setTotalIngresosDolares] = useState(0);
+  const [totalEgresosPesos, setTotalEgresosPesos] = useState(0);
+  const [totalEgresosDolares, setTotalEgresosDolares] = useState(0);
+
   const [listaEgresos, setListaEgresos] = useState([]);
   const [listaIngresos, setListaIngresos] = useState([]);
   const [errores, setErrores] = useState({});
@@ -43,19 +48,37 @@ const AltaEstadoContable = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
-  const calcularTotales = (egresos, ingresos) => {
-    const sumaEgresos = egresos.reduce(
-      (total, egreso) => total + egreso.egreso,
-      0
-    );
-    const sumaIngresos = ingresos.reduce(
-      (total, ingreso) => total + ingreso.ingreso,
-      0
-    );
 
-    setTotalEgresos(sumaEgresos);
-    setTotalIngresos(sumaIngresos);
-    setSaldoFinal(sumaIngresos - sumaEgresos);
+  const calcularTotales = (egresos, ingresos) => {
+    // Filtrar y sumar los ingresos y egresos por tipo de moneda
+    const sumaIngresosPesos = ingresos
+      .filter((ingreso) => ingreso.tipoMoneda === "UR")
+      .reduce((total, ingreso) => total + ingreso.ingreso, 0);
+
+    const sumaIngresosDolares = ingresos
+      .filter((ingreso) => ingreso.tipoMoneda === "USD")
+      .reduce((total, ingreso) => total + ingreso.ingreso, 0);
+
+    const sumaEgresosPesos = egresos
+      .filter((egreso) => egreso.tipoMoneda === "UR")
+      .reduce((total, egreso) => total + egreso.egreso, 0);
+
+    const sumaEgresosDolares = egresos
+      .filter((egreso) => egreso.tipoMoneda === "USD")
+      .reduce((total, egreso) => total + egreso.egreso, 0);
+
+    // Establecer los totales
+    setTotalIngresosPesos(sumaIngresosPesos);
+    setTotalIngresosDolares(sumaIngresosDolares);
+    setTotalEgresosPesos(sumaEgresosPesos);
+    setTotalEgresosDolares(sumaEgresosDolares);
+
+    // Calcular saldo final combinando ambos tipos de moneda
+    setSaldoFinal(
+      sumaIngresosPesos +
+        sumaIngresosDolares -
+        (sumaEgresosPesos + sumaEgresosDolares)
+    );
   };
 
   const obtenerFechaHoy = () => {
@@ -122,34 +145,79 @@ const AltaEstadoContable = () => {
         </div>
 
         <div className="flex space-x-8 mt-4">
+          {/* Columnas de Ingresos */}
           <div>
-            <h3 className="font-bold mb-2">Ingresos</h3>
+            <h3 className="font-bold mb-2">Ingresos en Pesos</h3>
             <ul>
-              {listaIngresos.map((ingreso) => (
-                <li key={ingreso.id}>
-                  {ingreso.denominacion} - {ingreso.ingreso}{" "}
-                  {ingreso.tipoMoneda}
-                </li>
-              ))}
+              {listaIngresos
+                .filter((ingreso) => ingreso.tipoMoneda === "Pesos")
+                .map((ingreso) => (
+                  <li key={ingreso.id}>
+                    {ingreso.denominacion} - {ingreso.ingreso}{" "}
+                    {ingreso.tipoMoneda}
+                  </li>
+                ))}
             </ul>
-            <h3 className="mt-4">Total Ingresos: {totalIngresos}</h3>
+            <h3 className="mt-4">
+              Total Ingresos en Pesos: {totalIngresosPesos}
+            </h3>
           </div>
 
           <div>
-            <h3 className="font-bold mb-2">Egresos</h3>
+            <h3 className="font-bold mb-2">Ingresos en Dólares</h3>
             <ul>
-              {listaEgresos.map((egreso) => (
-                <li key={egreso.id}>
-                  {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
-                </li>
-              ))}
+              {listaIngresos
+                .filter((ingreso) => ingreso.tipoMoneda === "Dólares")
+                .map((ingreso) => (
+                  <li key={ingreso.id}>
+                    {ingreso.denominacion} - {ingreso.ingreso}{" "}
+                    {ingreso.tipoMoneda}
+                  </li>
+                ))}
             </ul>
-            <h3 className="mt-4">Total Egresos: {totalEgresos}</h3>
+            <h3 className="mt-4">
+              Total Ingresos en Dólares: {totalIngresosDolares}
+            </h3>
+          </div>
+
+          {/* Columnas de Egresos */}
+          <div>
+            <h3 className="font-bold mb-2">Egresos en Pesos</h3>
+            <ul>
+              {listaEgresos
+                .filter((egreso) => egreso.tipoMoneda === "Pesos")
+                .map((egreso) => (
+                  <li key={egreso.id}>
+                    {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
+                  </li>
+                ))}
+            </ul>
+            <h3 className="mt-4">
+              Total Egresos en Pesos: {totalEgresosPesos}
+            </h3>
+          </div>
+
+          <div>
+            <h3 className="font-bold mb-2">Egresos en Dólares</h3>
+            <ul>
+              {listaEgresos
+                .filter((egreso) => egreso.tipoMoneda === "Dólares")
+                .map((egreso) => (
+                  <li key={egreso.id}>
+                    {egreso.denominacion} - {egreso.egreso} {egreso.tipoMoneda}
+                  </li>
+                ))}
+            </ul>
+            <h3 className="mt-4">
+              Total Egresos en Dólares: {totalEgresosDolares}
+            </h3>
           </div>
         </div>
 
-        <button type="submit" className="mt-6">
-          Agregar Estado Contable
+        <h3 className="mt-6">Saldo Final: {saldoFinal}</h3>
+
+        <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4">
+          Guardar Estado Contable
         </button>
       </form>
     </div>
