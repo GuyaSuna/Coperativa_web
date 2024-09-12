@@ -29,22 +29,22 @@ const DatosUsuario = () => {
       try {
         const data = await getSocio(miembro.responseBody.socio.cedulaSocio);
         console.log("Datos getSocio", data);
-        const sociosConFechaFormateada = data.map((socio) => {
-          console.log("Fecha ingreso antes: ", socio.fechaIngresoCooeprativa);
+        // const sociosConFechaFormateada = data.map((socio) => {
+        //   console.log("Fecha ingreso antes: ", socio.fechaIngresoCooeprativa);
 
-          if (socio.fechaIngresoCooeprativa) {
-            const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
-            const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-            console.log("Fecha formateada: ", fechaFormateada);
-            return {
-              ...socio,
-              fechaIngresoCooeprativa: fechaFormateada,
-            };
-          } else {
-            return socio;
-          }
-        });
-        setDatosUsuario(sociosConFechaFormateada);
+        //   if (socio.fechaIngresoCooeprativa) {
+        //     const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
+        //     const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
+        //     console.log("Fecha formateada: ", fechaFormateada);
+        //     return {
+        //       ...socio,
+        //       fechaIngresoCooeprativa: fechaFormateada,
+        //     };
+        //   } else {
+        //     return socio;
+        //   }
+        // });
+        setDatosUsuario(data);
       } catch (error) {
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
@@ -65,7 +65,7 @@ const DatosUsuario = () => {
         width: { xs: "100%", sm: "100%" }, // Full width on all screen sizes
         maxWidth: "auto", // Set a max-width if needed
         margin: "0 auto", // Center the card horizontally
-        height: 250,
+        height: "auto"
       }}
     >
       <CardContent

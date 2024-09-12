@@ -10,13 +10,12 @@ import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
 
-
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
   useEffect(() => {
     fetchAllRecibos();
@@ -247,7 +246,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         <VerRecibo
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          recibo={reciboSeleccionado} 
+          recibo={reciboSeleccionado}
         />
       )}
     </div>

@@ -918,8 +918,9 @@ const postRecibo = async (
 const getAllRecibosPorSocio = async (cedulaSocio) => {
   try {
     const token = getToken();
+
     const response = await fetch(
-      `${URL}/recibos/getAllRecibosPorSocios/${cedulaSocio}`,
+      `${URL}/recibo/getAllRecibosPorSocios/${cedulaSocio}`,
       {
         method: "GET",
         headers: {

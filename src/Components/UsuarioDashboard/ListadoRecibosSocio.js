@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Typography,
   Box,
@@ -7,17 +7,22 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Chip,
-  Select,
-  MenuItem,
 } from "@mui/material";
+import {
+  Button,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DashboardCard from "./DashboardCard";
 import { getAllRecibosPorSocio } from "@/Api/api";
+import { MiembroContext } from "@/Provider/provider";
 
 const ListadoRecibosSocios = () => {
+  const { miembro, cooperativa } = useContext(MiembroContext);
   const [anchorEl, setAnchorEl] = useState("");
   const open = Boolean(anchorEl);
   const [allRecibos, setAllRecibos] = useState([]);
@@ -37,7 +42,7 @@ const ListadoRecibosSocios = () => {
       console.error("Error al obtener los socios:", error);
     }
   };
-  console.log("Los recuibos del socio", allRecibos);
+  console.log("Los recibos del socio", allRecibos);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -111,7 +116,7 @@ const ListadoRecibosSocios = () => {
           </TableHead>
           <TableBody>
             {allRecibos.map((recibos) => (
-              <TableRow key={allRecibos.name}>
+              <TableRow>
                 <TableCell>
                   <Typography
                     sx={{
@@ -119,7 +124,7 @@ const ListadoRecibosSocios = () => {
                       fontWeight: "500",
                     }}
                   >
-                    {allRecibos.nroRecibo}
+                    {recibos.nroRecibo}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -129,7 +134,7 @@ const ListadoRecibosSocios = () => {
                       alignItems: "center",
                     }}
                   >
-                    {allRecibos.fechaRecibo}
+                    {recibos.fechaRecibo}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -138,7 +143,7 @@ const ListadoRecibosSocios = () => {
                     variant="subtitle2"
                     fontWeight={400}
                   >
-                    {allRecibos.fechaPago}
+                    {recibos.fechaPago}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -147,26 +152,16 @@ const ListadoRecibosSocios = () => {
                     variant="subtitle2"
                     fontWeight={400}
                   >
-                    {allRecibos.cuotaMensual}
+                    ${recibos.cuotaMensual}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? "long-menu" : undefined}
-                    aria-expanded={open ? "true" : undefined}
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
                   <Menu
                     as="div"
                     className="relative inline-block text-left justify-end"
                   >
                     <div>
-                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm">
                         <svg
                           viewBox="0 0 24 24"
                           className="w-5"
@@ -189,7 +184,7 @@ const ListadoRecibosSocios = () => {
                       <div className="py-1">
                         <MenuItem>
                           <button
-                            onClick={() => handleEliminar(recibo?.idRecibo)}
+                            onClick={() => handleEliminar(recibos?.idRecibo)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Imprimir
@@ -197,7 +192,7 @@ const ListadoRecibosSocios = () => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            onClick={() => handleModificar(recibo?.idRecibo)}
+                            onClick={() => handleModificar(recibos?.idRecibo)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Ver Recibo
