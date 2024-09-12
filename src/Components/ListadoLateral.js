@@ -167,6 +167,15 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
           <a className="text-base">Agregar EstadosCont.</a>
           </button>
 
+          <button
+          onClick={() => handleSelection(34)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+            selectedOption === 34 ? "bg-blue-500 text-white" : ""
+          }`}
+        > 
+        <FaUser className="mr-2 text-2xl" />{" "}
+          <a className="text-base">Informe Interes Anual.</a>
+          </button>
 
       
       </div>
