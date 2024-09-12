@@ -26,7 +26,7 @@ const AltaEstadoContable = () => {
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
-    setFechaEstadoContable(obtenerFechaHoy());
+    setFechaEstadoContable(new Date().toISOString());
   }, []);
 
   useEffect(() => {
@@ -82,14 +82,6 @@ const AltaEstadoContable = () => {
     setSaldoFinalDolares(sumaIngresosDolares - sumaEgresosDolares);
   };
 
-  const obtenerFechaHoy = () => {
-    const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
-    const año = hoy.getFullYear();
-    return `${año}-${mes}-${dia}`;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -137,7 +129,7 @@ const AltaEstadoContable = () => {
         <label className="block text-sm font-medium mb-4">
           Fecha:
           <input
-            type="date"
+            type="datetime-local"
             name="fechaEstadoContable"
             value={fechaEstadoContable}
             onChange={handleChangeFechaEstadoContable}

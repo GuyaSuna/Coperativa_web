@@ -1575,6 +1575,7 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 
 const postEstadoContable = async (estadoContableEntity) => {
   try {
+    console.log("postEstadoContable", estadoContableEntity);
     const token = getToken();
     const response = await fetch(`${URL}/estadoContable`, {
       method: "POST",
