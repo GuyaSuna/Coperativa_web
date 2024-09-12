@@ -792,6 +792,9 @@ const getUr = async () => {
 const getAllRecibos = async (idCooperativa) => {
   try {
     const token = getToken();
+    console.log("Token:", token);
+    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`);
+
     const response = await fetch(
       `${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`,
       {
@@ -802,8 +805,8 @@ const getAllRecibos = async (idCooperativa) => {
         },
       }
     );
-
     if (!response.ok) {
+      console.error("Error response:", response);
       throw new Error("The petition has failed, response isn't ok");
     }
 
@@ -811,7 +814,7 @@ const getAllRecibos = async (idCooperativa) => {
 
     return data;
   } catch (error) {
-    console.error("Error en getAllRecibos:", error);
+    console.error("Error en getAllRecibos:", error.message, error.response);
     throw new Error("Error al obtener los datos de los Recibos.");
   }
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Box,
@@ -15,47 +15,29 @@ import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DashboardCard from "./DashboardCard";
-
-const products = [
-  {
-    id: "1",
-    name: "Sunil Joshi",
-    post: "Web Designer",
-    pname: "Elite Admin",
-    priority: "Vigente",
-    pbg: "success.main",
-  },
-  {
-    id: "2",
-    name: "Andrew McDownland",
-    post: "Project Manager",
-    pname: "Real Homes WP Theme",
-    priority: "Vencido",
-    pbg: "error.main",
-  },
-  {
-    id: "3",
-    name: "Christopher Jamil",
-    post: "Project Manager",
-    pname: "MedicalPro WP Theme",
-    priority: "Vencido",
-    pbg: "error.main",
-  },
-  {
-    id: "4",
-    name: "Nirav Joshi",
-    post: "Frontend Engineer",
-    pname: "Hosting Press HTML",
-    priority: "Vigente",
-    pbg: "success.main",
-  },
-];
-const options = ["Modificar", "Ver Detalle", "Eliminar"];
-const ITEM_HEIGHT = 48;
+import { getAllRecibosPorSocio } from "@/Api/api";
 
 const ListadoRecibosSocios = () => {
   const [anchorEl, setAnchorEl] = useState("");
   const open = Boolean(anchorEl);
+  const [allRecibos, setAllRecibos] = useState([]);
+
+  useEffect(() => {
+    fetchAllRecibosPorSocio();
+  }, []);
+
+  const fetchAllRecibosPorSocio = async () => {
+    try {
+      const response = await getAllRecibosPorSocio(
+        miembro.responseBody.socio.cedulaSocio
+      );
+      setAllRecibos(response);
+      console.log(response, "no anda response");
+    } catch (error) {
+      console.error("Error al obtener los socios:", error);
+    }
+  };
+  console.log("Los recuibos del socio", allRecibos);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -68,6 +50,7 @@ const ListadoRecibosSocios = () => {
         sx={{
           overflowX: "auto", // Allows horizontal scrolling if content overflows
           width: "100%", // Ensure the box takes full width
+          minWidth: "100%",
         }}
       >
         <Table
@@ -77,37 +60,58 @@ const ListadoRecibosSocios = () => {
             mt: 2,
             minWidth: { xs: "500px", sm: "650px" }, // Set a minimum width for the table
           }}
+          className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
         >
           <TableHead>
             <TableRow>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Nro Socio
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={600}
+                  className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+                >
+                  Nro Recibo
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Nombre
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={600}
+                  className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+                >
+                  Fecha Emision
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Name
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={600}
+                  className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+                >
+                  Fecha del Pago
                 </Typography>
               </TableCell>
               <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Priority
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={600}
+                  className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+                >
+                  Valor Cuota
                 </Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="subtitle2" fontWeight={600}></Typography>
+                <Typography
+                  variant="subtitle2"
+                  fontWeight={600}
+                  className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+                ></Typography>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product.name}>
+            {allRecibos.map((recibos) => (
+              <TableRow key={allRecibos.name}>
                 <TableCell>
                   <Typography
                     sx={{
@@ -115,30 +119,18 @@ const ListadoRecibosSocios = () => {
                       fontWeight: "500",
                     }}
                   >
-                    {product.id}
+                    {allRecibos.nroRecibo}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Box
+                  <Typography
                     sx={{
                       display: "flex",
                       alignItems: "center",
                     }}
                   >
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        color="textSecondary"
-                        sx={{
-                          fontSize: "13px",
-                        }}
-                      >
-                        {product.post}
-                      </Typography>
-                    </Box>
-                  </Box>
+                    {allRecibos.fechaRecibo}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
@@ -146,19 +138,17 @@ const ListadoRecibosSocios = () => {
                     variant="subtitle2"
                     fontWeight={400}
                   >
-                    {product.pname}
+                    {allRecibos.fechaPago}
                   </Typography>
                 </TableCell>
                 <TableCell>
-                  <Chip
-                    sx={{
-                      px: "4px",
-                      backgroundColor: product.pbg,
-                      color: "#fff",
-                    }}
-                    size="small"
-                    label={product.priority}
-                  ></Chip>
+                  <Typography
+                    color="textSecondary"
+                    variant="subtitle2"
+                    fontWeight={400}
+                  >
+                    {allRecibos.cuotaMensual}
+                  </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
@@ -172,29 +162,49 @@ const ListadoRecibosSocios = () => {
                     <MoreVertIcon />
                   </IconButton>
                   <Menu
-                    id="long-menu"
-                    MenuListProps={{
-                      "aria-labelledby": "long-button",
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    PaperProps={{
-                      style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        width: "20ch",
-                      },
-                    }}
+                    as="div"
+                    className="relative inline-block text-left justify-end"
                   >
-                    {options.map((option) => (
-                      <MenuItem
-                        key={option}
-                        selected={option === "Pyxis"}
-                        onClick={handleClose}
-                      >
-                        {option}
-                      </MenuItem>
-                    ))}
+                    <div>
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+                    </div>
+                    <MenuItems
+                      transition
+                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+                    >
+                      <div className="py-1">
+                        <MenuItem>
+                          <button
+                            onClick={() => handleEliminar(recibo?.idRecibo)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Imprimir
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
+                            onClick={() => handleModificar(recibo?.idRecibo)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Ver Recibo
+                          </button>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
                   </Menu>
                 </TableCell>
               </TableRow>
