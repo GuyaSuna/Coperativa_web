@@ -10,8 +10,8 @@ import { MiembroContext } from "../../../Provider/provider";
 
 const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
-
-  const [fechaEstadoContable, setFechaEstadoContable] = useState("");
+  const [id, setId] = useState(0);
+  const [fecha, setFecha] = useState("");
   const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
   const [saldoFinalEnDolares, setSaldoFinalDolares] = useState(0);
 
@@ -24,10 +24,6 @@ const AltaEstadoContable = () => {
   const [listaEgresos, setListaEgresos] = useState([]);
   const [listaIngresos, setListaIngresos] = useState([]);
   const [errores, setErrores] = useState({});
-
-  useEffect(() => {
-    setFechaEstadoContable(new Date().toISOString());
-  }, []);
 
   useEffect(() => {
     fetchDatos();
@@ -49,9 +45,8 @@ const AltaEstadoContable = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
-
-  const handleChangeFechaEstadoContable = (e) =>
-    setFechaEstadoContable(e.target.value);
+  // const handleId = (e) => setId(e.target.value);
+  const handleChangeFecha = (e) => setFecha(e.target.value);
 
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
@@ -87,7 +82,7 @@ const AltaEstadoContable = () => {
 
     if (!validarFormulario()) return;
     const nuevoEstadoContable = {
-      fecha: fechaEstadoContable,
+      fecha,
       saldoFinalEnPesos,
       saldoFinalEnDolares,
       cooperativaEntity: cooperativa,
@@ -107,11 +102,10 @@ const AltaEstadoContable = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!fechaEstadoContable) {
-      errores.fechaEstadoContable =
-        "La fecha del Estado Contable es obligatoria";
-    } else if (fechaEstadoContable > fechaHoy) {
-      errores.fechaEstadoContable =
+    if (!fecha) {
+      errores.fecha = "La fecha del Estado Contable es obligatoria";
+    } else if (fecha > fechaHoy) {
+      errores.fecha =
         "La fecha del Estado Contable no puede ser mayor a la fecha actual";
     }
 
@@ -126,22 +120,19 @@ const AltaEstadoContable = () => {
         className="w-full max-w-4xl bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
         <label className="block text-sm font-medium mb-4">
-          Fecha:
+          FECHA:
           <input
             type="date"
-            name="fechaEstadoContable"
-            value={fechaEstadoContable}
-            onChange={handleChangeFechaEstadoContable}
+            name="fecha"
+            value={fecha}
+            onChange={handleChangeFecha}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
-          {errores.fechaEstadoContable && (
-            <span className="error text-red-500">
-              {errores.fechaEstadoContable}
-            </span>
+          {errores.fecha && (
+            <span className="error text-red-500">{errores.fecha}</span>
           )}
         </label>
-
         <div className="grid grid-cols-2 gap-8 mt-6">
           {/* Ingresos en Pesos */}
           <div>
