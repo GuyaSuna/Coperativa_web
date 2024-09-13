@@ -61,7 +61,7 @@ const InteresAnual = ( setIdentificadorComponente) => {
           <ul className="list-disc pl-5">
             {resultados.listaInteresAnual.map((dato) => (
               <li key={dato.socio.cedulaSocio}>
-                <strong>{dato.socio.nombreSocio}:</strong> {dato.interes} €
+                <strong>{dato.socio.nombreSocio}:</strong> {dato.interes} Ur
               </li>
             ))}
           </ul>
