@@ -1581,10 +1581,10 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 
 // Estados Contables
 
-const postEstadoContable = async (estadoContableEntity) => {
+const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
   try {
     const token = getToken();
-    const response = await fetch(`${URL}/estadoContable`, {
+    const response = await fetch(`${URL}/estadoContable/${idCooperativa}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -1616,7 +1616,7 @@ const getInteresAnual = async (fecha, idCooperativa) => {
         "Content-Type": "application/json",
       },
     });
-
+  
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
