@@ -1575,7 +1575,6 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 
 const postEstadoContable = async (estadoContableEntity) => {
   try {
-    console.log("postEstadoContable", estadoContableEntity);
     const token = getToken();
     const response = await fetch(`${URL}/estadoContable`, {
       method: "POST",
@@ -1588,7 +1587,6 @@ const postEstadoContable = async (estadoContableEntity) => {
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
-
     const data = await response.json();
 
     return data;

@@ -94,11 +94,10 @@ const AltaEstadoContable = () => {
       listaEgresos,
       listaIngresos,
     };
-
     try {
+      console.log("postEstado en Submit", nuevoEstadoContable);
       await postEstadoContable(nuevoEstadoContable);
       alert("Estado contable agregado correctamente");
-      // Navegar o limpiar formulario si es necesario
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
     }
@@ -129,7 +128,7 @@ const AltaEstadoContable = () => {
         <label className="block text-sm font-medium mb-4">
           Fecha:
           <input
-            type="datetime-local"
+            type="date"
             name="fechaEstadoContable"
             value={fechaEstadoContable}
             onChange={handleChangeFechaEstadoContable}
