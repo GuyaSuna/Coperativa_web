@@ -10,14 +10,14 @@ import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
 
+
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
+  const [isModalOpen, setIsModalOpen] = useState(false); 
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
-
   useEffect(() => {
     fetchAllRecibos();
   }, []);
@@ -47,10 +47,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     }
   };
 
-  const handleVerRecibo = async (recibo) => {
-    setReciboSeleccionado(recibo);
-    setIsModalOpen(true);
-  };
   useEffect(() => {
     if (buscador === "") {
       setBuscadorFiltrado(allRecibos);
@@ -90,6 +86,12 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     const ordenarRecibos = [...allRecibos].sort(option.comparator);
     setAllRecibos(ordenarRecibos);
   };
+
+  const handleVerRecibo = (recibo) => {
+    setReciboSeleccionado(recibo);
+    setIsModalOpen(true);
+  };
+
   return (
     <div className="sm:p-7 p-4 ">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -245,7 +247,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         <VerRecibo
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          recibo={reciboSeleccionado}
+          recibo={reciboSeleccionado} 
         />
       )}
     </div>

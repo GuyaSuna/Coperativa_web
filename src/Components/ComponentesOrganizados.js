@@ -32,7 +32,8 @@ import ModificarCooperativa from "./Formularios/Cooperativas/ModificarCooperativ
 import AltaAdministrador from "./Formularios/Administradores/AltaAdministrador/altaAdministrador";
 import AltaReajuste from "./Formularios/Reajustes/AltaReajustes/AltaReajustes";
 import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchivados";
-import AltaEstadoContable from "./Formularios/EstadosContables/altaEstadoContable";
+import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
+import InteresAnual from "./Informes/InteresAnual";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -54,6 +55,9 @@ const ComponentesOrganizados = ({
   const [convenio, setConvenio] = useState({});
   const [cooperativa, setCooperativa] = useState({});
 
+  //Cambiar a futuro esto jaja
+  //utilizar diferentes rutas
+  
   switch (identificador) {
     case 0: {
       return (
@@ -264,7 +268,14 @@ const ComponentesOrganizados = ({
         />
       );
     }
-  }
+    case 34: {
+      return (
+        <InteresAnual
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+  } 
 };
 
 export default ComponentesOrganizados;

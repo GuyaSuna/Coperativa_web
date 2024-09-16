@@ -79,20 +79,20 @@ const AltaEstadoContable = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
       fecha,
       saldoFinalEnPesos,
       saldoFinalEnDolares,
-      cooperativaEntity: cooperativa,
       listaEgresos,
       listaIngresos,
     };
     try {
       console.log("postEstado en Submit", nuevoEstadoContable);
-      await postEstadoContable(nuevoEstadoContable);
+       const response = await postEstadoContable(nuevoEstadoContable , cooperativa.idCooperativa);
+       console.log( "ESTADO CONTABLE " ,response);
       alert("Estado contable agregado correctamente");
     } catch (error) {
       console.error("Error al agregar estado contable:", error);

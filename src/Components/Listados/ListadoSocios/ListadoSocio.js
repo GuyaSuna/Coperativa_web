@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
+import { getAllSocios, getAllRecibos, updateSocio, getViviendaPorSocio,updateVivienda , getUltimoConvenioSocio} from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -64,34 +64,54 @@ const ListadoSocio = ({
           return socio;
         }
       });
-
-      // Corrección: retorno implícito en la función de filtro
-      const sociosSinArchivar = sociosConFechaFormateada.filter(
-        (socio) => !socio.archivado
-      );
-
+      const sociosSinArchivar = sociosConFechaFormateada.filter(socio => !socio.archivado);  
       setAllSocios(sociosSinArchivar);
-      setBuscadorFiltrado(sociosSinArchivar); // Usar sociosSinArchivar en lugar de sociosConFechaFormateada
+      setBuscadorFiltrado(sociosSinArchivar); 
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
 
   const handleArchivar = async (socio) => {
-    try {
-      const socioActualizado = { ...socio, archivado: true };
-      await updateSocio(socioActualizado);
-      // Eliminar el socio de ambas listas inmediatamente
-      setAllSocios((prevSocios) =>
-        prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
-      setBuscadorFiltrado((prevFiltrado) =>
-        prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
-    } catch (e) {
-      console.error("Fallo al archivar el socio", e);
+    const confirmacion = window.confirm(
+      `¿Estás seguro de que deseas archivar al socio ${socio.nombreSocio} ${socio.apellidoSocio}? No podra ser desarchivado luego`
+    );
+  
+    if (confirmacion) {
+      try {
+        let socioActualizado = { ...socio, archivado: true };
+
+        const responseConvenio = await getUltimoConvenioSocio(socio.cedulaSocio)
+
+        if(responseConvenio != null){
+          socioActualizado = {...socioActualizado, capitalSocio: socio.capitalSocio - responseConvenio.deudaRestante}
+        }
+        
+        await updateSocio(socioActualizado);
+
+        const viviedaResponse = await getViviendaPorSocio(socio.cedulaSocio)
+
+        viviedaResponse.socio = null;
+        console.log(viviedaResponse);
+        await updateVivienda(viviedaResponse.idVivienda,viviedaResponse.nroVivienda , viviedaResponse.listaAntiguosTitulares, viviedaResponse.cantidadDormitorios, viviedaResponse.cooperativaEntity,viviedaResponse.valorVivienda, viviedaResponse.socio);
+
+       
+
+       
+        setAllSocios((prevSocios) =>
+          prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
+        );
+        setBuscadorFiltrado((prevFiltrado) =>
+          prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
+        );
+      } catch (e) {
+        console.error("Fallo al archivar el socio", e);
+      }
+    } else {
+      console.log("Archivo cancelado");
     }
   };
+  
 
   const handleVerSocio = (socio) => {
     setSocioSeleccionado(socio);
@@ -135,6 +155,11 @@ const ListadoSocio = ({
         new Date(b.fechaIngresoCooeprativa),
     },
   ];
+
+  const handleCrearRecibo = (socio) =>{
+    setSocioRecibo(socio) 
+    setIdentificadorComponente(6)
+  }
 
   const handleSortChange = (option) => {
     console.log("Orden seleccionado:", option.label);
