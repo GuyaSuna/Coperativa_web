@@ -130,6 +130,7 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
+    const token = getToken();
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
@@ -1629,12 +1630,10 @@ const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
 
 // Estados Contables
 
-const postEstadoContable = async (estadoContableEntity) => {
+const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
   try {
     const token = getToken();
-    console.log("token Api Post EStCOnt", token);
-    console.log("Post EStCOnt", estadoContableEntity);
-    const response = await fetch(`${URL}/estadoContable`, {
+    const response = await fetch(`${URL}/estadoContable/${idCooperativa}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -1645,7 +1644,6 @@ const postEstadoContable = async (estadoContableEntity) => {
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
-
     const data = await response.json();
 
     return data;
@@ -1655,7 +1653,64 @@ const postEstadoContable = async (estadoContableEntity) => {
   }
 };
 
+const getInteresAnual = async (fecha, idCooperativa) => {
+  try {
+    console.log("Llega aca")
+    const token = getToken();
+    console.log(token)
+    const response = await fetch(`${URL}/interesAnual/${fecha}/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+  
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getInteresAnual:", error);
+    throw new Error("Error al enviar los datos del InteresAnual");
+  }
+};
+
+
 //Utilizar Libreria B)
+
+const loginMaster = async (MasterData) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/auth/loginMaster`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(MasterData),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+    const data = await response.json();
+
+    if (data.token) {
+      document.cookie = `token=${data.token}; path=/; max-age=1440`;
+    } else {
+      throw new Error("No se recibió el token en la respuesta.");
+    }
+
+
+    return data;
+  } catch (error) {
+    console.error("Error en Login Master:", error);
+    throw new Error("Error al enviar los datos Master");
+  }
+};
 
 export {
   Login,
@@ -1717,4 +1772,6 @@ export {
   getUser,
   LoginMaster,
   postEstadoContable,
+  getInteresAnual,
+  loginMaster,
 };

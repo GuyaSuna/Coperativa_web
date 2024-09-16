@@ -10,8 +10,8 @@ import { MiembroContext } from "../../../Provider/provider";
 
 const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
-
-  const [fechaEstadoContable, setFechaEstadoContable] = useState("");
+  const [id, setId] = useState(0);
+  const [fecha, setFecha] = useState("");
   const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
   const [saldoFinalEnDolares, setSaldoFinalDolares] = useState(0);
 
@@ -24,10 +24,6 @@ const AltaEstadoContable = () => {
   const [listaEgresos, setListaEgresos] = useState([]);
   const [listaIngresos, setListaIngresos] = useState([]);
   const [errores, setErrores] = useState({});
-
-  useEffect(() => {
-    setFechaEstadoContable(obtenerFechaHoy());
-  }, []);
 
   useEffect(() => {
     fetchDatos();
@@ -49,9 +45,8 @@ const AltaEstadoContable = () => {
       console.error("Error al obtener los datos:", error);
     }
   };
-
-  const handleChangeFechaEstadoContable = (e) =>
-    setFechaEstadoContable(e.target.value);
+  // const handleId = (e) => setId(e.target.value);
+  const handleChangeFecha = (e) => setFecha(e.target.value);
 
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
@@ -82,34 +77,22 @@ const AltaEstadoContable = () => {
     setSaldoFinalDolares(sumaIngresosDolares - sumaEgresosDolares);
   };
 
-  const obtenerFechaHoy = () => {
-    const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
-    const año = hoy.getFullYear();
-    return `${año}-${mes}-${dia}`;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Entra al guardar");
+    
     if (!validarFormulario()) return;
-    console.log("Paso el validar");
     const nuevoEstadoContable = {
-      fecha: fechaEstadoContable,
+      fecha,
       saldoFinalEnPesos,
       saldoFinalEnDolares,
-      cooperativaEntity: cooperativa,
       listaEgresos,
       listaIngresos,
     };
-
     try {
-      console.log("Nuevo EstadoContable", nuevoEstadoContable);
-      await postEstadoContable(nuevoEstadoContable);
+      console.log("postEstado en Submit", nuevoEstadoContable);
+       const response = await postEstadoContable(nuevoEstadoContable , cooperativa.idCooperativa);
+       console.log( "ESTADO CONTABLE " ,response);
       alert("Estado contable agregado correctamente");
-      // Navegar o limpiar formulario si es necesario
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
     }
@@ -119,11 +102,10 @@ const AltaEstadoContable = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!fechaEstadoContable) {
-      errores.fechaEstadoContable =
-        "La fecha del Estado Contable es obligatoria";
-    } else if (fechaEstadoContable > fechaHoy) {
-      errores.fechaEstadoContable =
+    if (!fecha) {
+      errores.fecha = "La fecha del Estado Contable es obligatoria";
+    } else if (fecha > fechaHoy) {
+      errores.fecha =
         "La fecha del Estado Contable no puede ser mayor a la fecha actual";
     }
 
@@ -138,22 +120,19 @@ const AltaEstadoContable = () => {
         className="w-full max-w-4xl bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
         <label className="block text-sm font-medium mb-4">
-          Fecha:
+          FECHA:
           <input
             type="date"
-            name="fechaEstadoContable"
-            value={fechaEstadoContable}
-            onChange={handleChangeFechaEstadoContable}
+            name="fecha"
+            value={fecha}
+            onChange={handleChangeFecha}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
-          {errores.fechaEstadoContable && (
-            <span className="error text-red-500">
-              {errores.fechaEstadoContable}
-            </span>
+          {errores.fecha && (
+            <span className="error text-red-500">{errores.fecha}</span>
           )}
         </label>
-
         <div className="grid grid-cols-2 gap-8 mt-6">
           {/* Ingresos en Pesos */}
           <div>
@@ -190,7 +169,7 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold text-lg mb-4">Ingresos en Dólares</h3>
             <ul className="bg-gray-200 p-4 rounded-lg">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
-                <span>Denominación</span>
+                <span>Denom.</span>
                 <span>Ingreso</span>
                 <span>Moneda</span>
                 <span>SubRubro</span>

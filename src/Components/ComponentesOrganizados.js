@@ -33,6 +33,7 @@ import AltaAdministrador from "./Formularios/Administradores/AltaAdministrador/a
 import AltaReajuste from "./Formularios/Reajustes/AltaReajustes/AltaReajustes";
 import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchivados";
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
+import InteresAnual from "./Informes/InteresAnual";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -267,7 +268,14 @@ const ComponentesOrganizados = ({
         />
       );
     }
-  }
+    case 34: {
+      return (
+        <InteresAnual
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+  } 
 };
 
 export default ComponentesOrganizados;

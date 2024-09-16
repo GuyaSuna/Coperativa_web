@@ -174,6 +174,11 @@ const ListadoSocio = ({
     },
   ];
 
+  const handleCrearRecibo = (socio) =>{
+    setSocioRecibo(socio) 
+    setIdentificadorComponente(6)
+  }
+
   const handleSortChange = (option) => {
     console.log("Orden seleccionado:", option.label);
     if (buscador) {
