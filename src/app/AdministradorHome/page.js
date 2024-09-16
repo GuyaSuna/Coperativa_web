@@ -215,6 +215,18 @@ const AdminHome = () => {
                     >
                       Socios Archivados
                     </button>
+                    <button
+                      onClick={() => {
+                        handleSelection(35);
+                      }}
+                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                        selectedOption === 35
+                          ? "border-b-2 border-blue-500 text-blue-500"
+                          : ""
+                      }`}
+                    >
+                      Estados Contables
+                    </button>
                   </div>
                 </div>
                 <ComponentesOrganizados

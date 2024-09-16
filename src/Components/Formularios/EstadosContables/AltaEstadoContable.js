@@ -79,7 +79,7 @@ const AltaEstadoContable = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
@@ -91,8 +91,11 @@ const AltaEstadoContable = () => {
     };
     try {
       console.log("postEstado en Submit", nuevoEstadoContable);
-       const response = await postEstadoContable(nuevoEstadoContable , cooperativa.idCooperativa);
-       console.log( "ESTADO CONTABLE " ,response);
+      const response = await postEstadoContable(
+        nuevoEstadoContable,
+        cooperativa.idCooperativa
+      );
+      console.log("ESTADO CONTABLE ", response);
       alert("Estado contable agregado correctamente");
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
@@ -246,7 +249,6 @@ const AltaEstadoContable = () => {
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
                     <span>{egreso.subRubro}</span>{" "}
-                    {/* Nuevo atributo SubRubro */}
                   </li>
                 ))}
             </ul>
