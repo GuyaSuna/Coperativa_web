@@ -91,6 +91,7 @@ const updateAdministrador = async (administradorEntity) => {
 // api.js (frontend)
 const getAllCooperativas = async () => {
   try {
+    const token = getToken();
     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
       method: "GET",
       headers: {
@@ -1630,7 +1631,38 @@ const getInteresAnual = async (fecha, idCooperativa) => {
   }
 };
 
+
 //Utilizar Libreria B)
+
+const loginMaster = async (MasterData) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/auth/loginMaster`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(MasterData),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+    const data = await response.json();
+
+    if (data.token) {
+      document.cookie = `token=${data.token}; path=/; max-age=1440`;
+    } else {
+      throw new Error("No se recibió el token en la respuesta.");
+    }
+
+
+    return data;
+  } catch (error) {
+    console.error("Error en Login Master:", error);
+    throw new Error("Error al enviar los datos Master");
+  }
+};
 
 export {
   Login,
@@ -1692,4 +1724,5 @@ export {
   getUser,
   postEstadoContable,
   getInteresAnual,
+  loginMaster,
 };
