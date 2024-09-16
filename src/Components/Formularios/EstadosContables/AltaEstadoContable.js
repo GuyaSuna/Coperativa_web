@@ -81,6 +81,7 @@ const AltaEstadoContable = () => {
     e.preventDefault();
 
     if (!validarFormulario()) return;
+
     const nuevoEstadoContable = {
       fecha,
       saldoFinalEnPesos,
