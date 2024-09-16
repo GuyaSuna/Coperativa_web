@@ -100,6 +100,9 @@ const ListadoViviendas = ({
     const ordenarViviendas = [...viviendas].sort(option.comparator);
     setAllViviendas(ordenarViviendas);
   };
+  const handleAgregarVivienda = () => {
+    setIdentificadorComponente(2);
+  };
   return (
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -108,6 +111,7 @@ const ListadoViviendas = ({
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
+            onClick={handleAgregarVivienda}
             type="button"
             className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >

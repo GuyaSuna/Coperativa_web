@@ -79,7 +79,7 @@ const AltaEstadoContable = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
@@ -91,8 +91,11 @@ const AltaEstadoContable = () => {
     };
     try {
       console.log("postEstado en Submit", nuevoEstadoContable);
-       const response = await postEstadoContable(nuevoEstadoContable , cooperativa.idCooperativa);
-       console.log( "ESTADO CONTABLE " ,response);
+      const response = await postEstadoContable(
+        nuevoEstadoContable,
+        cooperativa.idCooperativa
+      );
+      console.log("ESTADO CONTABLE ", response);
       alert("Estado contable agregado correctamente");
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
@@ -115,10 +118,10 @@ const AltaEstadoContable = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white px-4 sm:px-6 lg:px-8">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-4xl bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+        className="w-full max-w-lg md:max-w-4xl bg-gray-100 dark:bg-gray-900 p-6 md:p-8 rounded-lg shadow-md"
       >
         <label className="block text-sm font-medium mb-4">
           FECHA:
@@ -134,11 +137,12 @@ const AltaEstadoContable = () => {
             <span className="error text-red-500">{errores.fecha}</span>
           )}
         </label>
-        <div className="grid grid-cols-2 gap-8 mt-6">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 bg-gray-100 dark:bg-gray-900">
           {/* Ingresos en Pesos */}
           <div>
             <h3 className="font-bold text-lg mb-4">Ingresos en Pesos</h3>
-            <ul className="bg-gray-200 p-4 rounded-lg">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border ">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Ingreso</span>
@@ -155,8 +159,7 @@ const AltaEstadoContable = () => {
                     <span>{ingreso.denominacion}</span>
                     <span>{ingreso.ingreso}</span>
                     <span>{ingreso.tipoMoneda}</span>
-                    <span>{ingreso.subRubro}</span>{" "}
-                    {/* Nuevo atributo SubRubro */}
+                    <span>{ingreso.subRubro}</span>
                   </li>
                 ))}
             </ul>
@@ -168,7 +171,7 @@ const AltaEstadoContable = () => {
           {/* Ingresos en Dólares */}
           <div>
             <h3 className="font-bold text-lg mb-4">Ingresos en Dólares</h3>
-            <ul className="bg-gray-200 p-4 rounded-lg">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border ">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Ingreso</span>
@@ -185,8 +188,7 @@ const AltaEstadoContable = () => {
                     <span>{ingreso.denominacion}</span>
                     <span>{ingreso.ingreso}</span>
                     <span>{ingreso.tipoMoneda}</span>
-                    <span>{ingreso.subRubro}</span>{" "}
-                    {/* Nuevo atributo SubRubro */}
+                    <span>{ingreso.subRubro}</span>
                   </li>
                 ))}
             </ul>
@@ -198,7 +200,7 @@ const AltaEstadoContable = () => {
           {/* Egresos en Pesos */}
           <div>
             <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
-            <ul className="bg-gray-200 p-4 rounded-lg">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Egreso</span>
@@ -215,8 +217,7 @@ const AltaEstadoContable = () => {
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
-                    <span>{egreso.subRubro}</span>{" "}
-                    {/* Nuevo atributo SubRubro */}
+                    <span>{egreso.subRubro}</span>
                   </li>
                 ))}
             </ul>
@@ -228,7 +229,7 @@ const AltaEstadoContable = () => {
           {/* Egresos en Dólares */}
           <div>
             <h3 className="font-bold text-lg mb-4">Egresos en Dólares</h3>
-            <ul className="bg-gray-200 p-4 rounded-lg">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Egreso</span>
@@ -245,8 +246,7 @@ const AltaEstadoContable = () => {
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
-                    <span>{egreso.subRubro}</span>{" "}
-                    {/* Nuevo atributo SubRubro */}
+                    <span>{egreso.subRubro}</span>
                   </li>
                 ))}
             </ul>

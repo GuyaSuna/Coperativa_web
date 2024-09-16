@@ -79,142 +79,31 @@ const AdminHome = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="flex-initial items-center space-x-3 md:space-x-6 sm:space-x-6 sm:mt-7 mt-4">
-                    <button
-                      onClick={() => {
-                        setIdentificadorComponente(0);
-                        handleSelection(0);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 0
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Socios
-                    </button>
-                    <button
-                      onClick={() => {
-                        setIdentificadorComponente(1, setCedulaSocio);
-                        handleSelection(1);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 1
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Viviendas
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(11);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 11
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Recibos
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(9);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 9
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Suplentes
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(15);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 15
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Informes
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(12);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 12
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Usuarios
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        handleSelection(17);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 17
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Subsidios
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(20);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 20
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Ingresos
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(21);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 21
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Egresos
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(26);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 26
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Convenios
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleSelection(32);
-                      }}
-                      className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                        selectedOption === 32
-                          ? "border-b-2 border-blue-500 text-blue-500"
-                          : ""
-                      }`}
-                    >
-                      Socios Archivados
-                    </button>
+                  <div className="w-full flex flex-wrap items-center justify-center md:justify-start space-x-3 md:space-x-6 mt-4 sm:mt-7">
+                    {[
+                      { label: "Socios", id: 0 },
+                      { label: "Viviendas", id: 1 },
+                      { label: "Recibos", id: 11 },
+                      { label: "Suplentes", id: 9 },
+                      { label: "Subsidios", id: 17 },
+                      { label: "Convenios", id: 26 },
+                      { label: "Socios Archivados", id: 32 },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setIdentificadorComponente(item.id);
+                          handleSelection(item.id);
+                        }}
+                        className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                          selectedOption === item.id
+                            ? "border-b-2 border-blue-500 text-blue-500"
+                            : ""
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
                 <ComponentesOrganizados
