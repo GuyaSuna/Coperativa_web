@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllEstadosContables } from "@/Api/api";
+import { getAllEstadosContables, deleteEstadoContable } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContable/VerEstadoContable";
+import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContablePDF/VerEstadoContablePDF";
 
 const ListadoEstadoContables = ({}) => {
   const [allEstadosContables, setAllEstadosContables] = useState([]);
@@ -31,6 +31,7 @@ const ListadoEstadoContables = ({}) => {
     setEstadoContableSeleccionado(estadoContable);
     setIsModalOpen(true);
   };
+
   return (
     <div className="sm:p-7 p-4">
       {allEstadosContables.length === 0 ? (
@@ -145,24 +146,6 @@ const ListadoEstadoContables = ({}) => {
                               Ver Detalle
                             </button>
                           </MenuItem>
-                          {/* <MenuItem>
-                            <button
-                              onClick={() =>
-                                handleEliminarSubsidio(subsidio.idSubsidio)
-                              }
-                              className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            >
-                              Eliminar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() => handleModificarSubsidio(subsidio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem> */}
                         </div>
                       </MenuItems>
                     </Menu>

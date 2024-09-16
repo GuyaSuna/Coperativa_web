@@ -80,6 +80,11 @@ const AltaEstadoContable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const confirmacion = window.confirm(
+      `¿Está seguro de que quiere dar de alta un Estado Contable?`
+    );
+    if (!confirmacion) return;
+
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
