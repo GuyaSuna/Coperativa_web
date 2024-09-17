@@ -55,16 +55,13 @@ const AltaRecibo = ({ Socio, ur }) => {
     const FechaActual = new Date();
     console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
     console.log("FECHA ACTUAL", FechaActual.getFullYear());
-    console.log("COOPERATIVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",cooperativa)
+    console.log("COOPERATIVA",cooperativa)
     cooperativa.listaCapitalInteres.map((data) => {
       let fechaData = new Date(data.fecha);
-      console.log("FECHA DATA", fechaData.getMonth() + 1);
-      console.log("FECHA DATA", fechaData.getFullYear());
       if (
         fechaData.getMonth() == FechaActual.getMonth() &&
         fechaData.getFullYear() == FechaActual.getFullYear()
       ) {
-        console.log("DATOS EXCEL",data.interes, data.capital);
         setCapitalExcel(data.capital);
         setInteresExcel(data.interes);
       }
@@ -122,7 +119,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
   //Corregir fecha a mas de un mes
   useEffect(() => {
-    Recargo(fechaPago, setRecargo, ur);
+    Recargo(fechaEmision,fechaPago, setRecargo, ur);
   }, [fechaPago]);
 
   useEffect(() => {
@@ -386,7 +383,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               type="date"
               id="fechaIngreso"
               name="fechaIngreso"
-              value={fechaEmision}
+              value={fechaEmision || ''}
               onChange={handleChangefechaRecibo}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />

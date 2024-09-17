@@ -25,13 +25,14 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
 
   useEffect(() => {
     fetchAllConvenios();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAllConvenios = async () => {
     try {
       const response = await getAllConvenios(cooperativa.idCooperativa);
-      setAllConvenios(response);
+      const dataFiltrada = response.filter(convenio => convenio.socio && convenio.socio.archivado === false);
+
+      setAllConvenios(dataFiltrada);
       console.log("Convenios ", response);
     } catch (error) {
       console.error("Error al obtener los convenios:", error);
@@ -177,7 +178,6 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           </thead>
           <tbody>
             {allConvenios?.map((convenio) => (
-              // eslint-disable-next-line react/jsx-key
               <tr className="border-b dark:border-gray-700">
                 <th
                   scope="row"
