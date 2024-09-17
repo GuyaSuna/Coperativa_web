@@ -80,6 +80,11 @@ const AltaEstadoContable = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const confirmacion = window.confirm(
+      `¿Está seguro de que quiere dar de alta un Estado Contable?`
+    );
+    if (!confirmacion) return;
+
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
@@ -246,7 +251,7 @@ const AltaEstadoContable = () => {
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
-                    <span>{egreso.subRubro}</span>
+                    <span>{egreso.subRubro}</span>{" "}
                   </li>
                 ))}
             </ul>

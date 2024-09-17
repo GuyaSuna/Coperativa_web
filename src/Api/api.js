@@ -727,9 +727,11 @@ const getViviendaPorSocio = async (cedulaSocio) => {
 // cooperativas
 const getCooperativaPorAdmin = async (id) => {
   try {
+    const token = getToken();
     const response = await fetch(`${URL}/cooperativa/Admin/${id}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -1694,6 +1696,33 @@ const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
   }
 };
 
+const getAllEstadosContables = async () => {
+  try {
+    console.log("Llega aca");
+    const token = getToken();
+    const response = await fetch(`${URL}/estadoContable/allEstadosContables`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getEstadosContables:", error);
+    throw new Error("Error al obtener los datos de los Estados contables.");
+  }
+};
+
+//Interes
+
 const getInteresAnual = async (fecha, idCooperativa) => {
   try {
     console.log("Llega aca");
@@ -1812,6 +1841,7 @@ export {
   getUser,
   LoginMaster,
   postEstadoContable,
+  getAllEstadosContables,
   getInteresAnual,
   loginMaster,
 };

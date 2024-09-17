@@ -34,6 +34,7 @@ import AltaReajuste from "./Formularios/Reajustes/AltaReajustes/AltaReajustes";
 import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchivados";
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
+import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -57,7 +58,7 @@ const ComponentesOrganizados = ({
 
   //Cambiar a futuro esto jaja
   //utilizar diferentes rutas
-  
+
   switch (identificador) {
     case 0: {
       return (
@@ -270,12 +271,18 @@ const ComponentesOrganizados = ({
     }
     case 34: {
       return (
-        <InteresAnual
+        <InteresAnual setIdentificadorComponente={setIdentificadorComponente} />
+      );
+    }
+    case 35: {
+      return (
+        <ListadoEstadoContables
+          cooperativa={cooperativa}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
     }
-  } 
+  }
 };
 
 export default ComponentesOrganizados;

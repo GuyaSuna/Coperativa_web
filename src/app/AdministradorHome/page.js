@@ -43,27 +43,36 @@ const AdminHome = () => {
     try {
       const response = await getUr();
       console.log("RESPUESTA FRONT", response);
-  
 
       const FechaActual = new Date();
-      const mesActual = FechaActual.getMonth(); 
-  
+      const mesActual = FechaActual.getMonth();
+
       const meses = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-        'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Setiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
       ];
-  
+
       const mesActualNombre = meses[mesActual];
       console.log(`Mes actual: ${mesActualNombre}`);
       let valorUr = 0;
-      response.forEach(dato => {
-        if(dato.month == mesActualNombre){
-           valorUr = dato.value;
+      response.forEach((dato) => {
+        if (dato.month == mesActualNombre) {
+          valorUr = dato.value;
         }
       });
-      
+
       console.log("Valor UR encontrado:", valorUr);
-  
+
       // Verificar si se encontró el valor para el mes actual
       if (valorUr) {
         setUr(valorUr);
@@ -75,8 +84,6 @@ const AdminHome = () => {
       console.error("Error al obtener las unidades reajustables:", error);
     }
   };
-  
-  
 
   if (isLoading) {
     return <Cargando />;
