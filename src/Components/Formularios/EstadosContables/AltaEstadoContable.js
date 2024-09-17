@@ -118,7 +118,7 @@ const AltaEstadoContable = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white px-4 sm:px-6 lg:px-8">
+    <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-lg md:max-w-4xl bg-gray-100 dark:bg-gray-900 p-6 md:p-8 rounded-lg shadow-md"

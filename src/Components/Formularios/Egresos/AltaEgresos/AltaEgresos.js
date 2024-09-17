@@ -78,109 +78,117 @@ const AltaEgreso = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
-            Fecha del Egreso:
-            <input
-              type="date"
-              name="fechaDatosContables"
-              value={fechaDatosContables}
-              onChange={handleChangeFechaDatosContables}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Fecha del Egreso:
+              <input
+                type="date"
+                name="fechaDatosContables"
+                value={fechaDatosContables}
+                onChange={handleChangeFechaDatosContables}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.fechaDatosContables && (
+                <span className="error">{errores.fechaDatosContables}</span>
+              )}
+            </label>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium "
+              htmlFor="seleccionSubVivienda"
+            >
+              Seleccione el Sub Rubro:
+            </label>
+            <select
+              id="seleccionSubRubro"
+              name="seleccionSubRubro"
+              value={subRubro}
+              onChange={handleChangeSeleccionSubRubro}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {errores.fechaDatosContables && (
-              <span className="error">{errores.fechaDatosContables}</span>
+            >
+              <option value="">Seleccione el Sub Rubro</option>
+              <option value="Gastos Extras en Dolares">
+                Gastos Extras en Dolares
+              </option>
+              <option value="Cuota Social">ANV</option>
+              <option value="F.U.C.V.A.M">F.U.C.V.A.M</option>
+              <option value="Limpieza">Limpieza</option>
+              <option value="Barraca">Barraca</option>
+              <option value="Libreria">Libreria</option>
+              <option value="Gastos Fijos">Gastos fijos</option>
+              <option value="INACOOP">INACOOP</option>
+              <option value="Tramites">Tramites</option>
+              <option value="Otros">Otros</option>
+            </select>
+            {errores.seleccionSubRubro && (
+              <span className="text-red-500 text-sm">
+                {errores.seleccionSubRubro}
+              </span>
             )}
-          </label>
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="seleccionSubVivienda"
-          >
-            Seleccione el Sub Rubro:
-          </label>
-          <select
-            id="seleccionSubRubro"
-            name="seleccionSubRubro"
-            value={subRubro}
-            onChange={handleChangeSeleccionSubRubro}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="">Seleccione el Sub Rubro</option>
-            <option value="Gastos Extras en Dolares">
-              Gastos Extras en Dolares
-            </option>
-            <option value="Cuota Social">ANV</option>
-            <option value="F.U.C.V.A.M">F.U.C.V.A.M</option>
-            <option value="Limpieza">Limpieza</option>
-            <option value="Barraca">Barraca</option>
-            <option value="Libreria">Libreria</option>
-            <option value="Gastos Fijos">Gastos fijos</option>
-            <option value="INACOOP">INACOOP</option>
-            <option value="Tramites">Tramites</option>
-            <option value="Otros">Otros</option>
-          </select>
-          {errores.seleccionSubRubro && (
-            <span className="text-red-500 text-sm">
-              {errores.seleccionSubRubro}
-            </span>
-          )}
+          </div>
         </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="denominacion"
-          >
-            Denominación:
-          </label>
-          <input
-            type="text"
-            id="denominacion"
-            value={denominacion}
-            onChange={handleChangeDenominacion}
-            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
-          />
-          {errores.denominacion && (
-            <span className="text-red-500 text-sm">{errores.denominacion}</span>
-          )}
-        </div>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="denominacion"
+            >
+              Denominación:
+            </label>
+            <input
+              type="text"
+              id="denominacion"
+              value={denominacion}
+              onChange={handleChangeDenominacion}
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
+            />
+            {errores.denominacion && (
+              <span className="text-red-500 text-sm">
+                {errores.denominacion}
+              </span>
+            )}
+          </div>
 
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="seleccionSubVivienda"
-          >
-            Seleccione un tipo de moneda:
-          </label>
-          <select
-            id="tipoMoneda"
-            name="tipoMoneda"
-            value={tipoMoneda}
-            onChange={handleChangeTipoMoneda}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="UR">Pesos Uruguayos</option>
-            <option value="USD">Dolares</option>
-          </select>
-          {errores.tipoMoneda && (
-            <span className="text-red-500 text-sm">{errores.tipoMoneda}</span>
-          )}
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="seleccionSubVivienda"
+            >
+              Seleccione un tipo de moneda:
+            </label>
+            <select
+              id="tipoMoneda"
+              name="tipoMoneda"
+              value={tipoMoneda}
+              onChange={handleChangeTipoMoneda}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="UR">Pesos Uruguayos</option>
+              <option value="USD">Dolares</option>
+            </select>
+            {errores.tipoMoneda && (
+              <span className="text-red-500 text-sm">{errores.tipoMoneda}</span>
+            )}
+          </div>
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="egreso">
-            Egreso:
+            Monto Egreso:
           </label>
           <input
+            placeholder="$"
             type="text"
             id="egreso"
             value={egreso}
             onChange={handleChangeEgreso}
-            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
+            className="w-auto p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
           />
           {errores.egreso && (
             <span className="text-red-500 text-sm">{errores.egreso}</span>
@@ -189,7 +197,7 @@ const AltaEgreso = () => {
 
         <button
           type="submit"
-          className="w-full py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Registrar Egreso
         </button>

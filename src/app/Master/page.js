@@ -70,8 +70,6 @@ const Master = () => {
                       onChange={(e) => setPassword(e.target.value)} // Actualizar el estado de password
                       required
                       placeholder="Contraseña"
-                      value={password}
-                      onChange={handlePasswordChange}
                     />
                   </div>
 

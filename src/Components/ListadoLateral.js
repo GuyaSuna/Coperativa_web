@@ -12,7 +12,7 @@ import {
   FaMoneyBillWave,
   FaMoneyBill,
 } from "react-icons/fa";
-import logo from "../../public/logovisoft.png";
+import logo from "../../public/logoVisoftDark.png";
 import Image from "next/image";
 const ListadoLateral = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -28,12 +28,12 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark">
+    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark text-center">
       <Image
         className="logo-Img hover:scale-90 transform duration-700"
         src={logo}
         alt="Coviamuro Logo"
-        width={65}
+        width={185}
         height={65}
       />
       <div className="space-y-4 mt-3">

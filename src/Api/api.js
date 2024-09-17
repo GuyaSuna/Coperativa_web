@@ -1655,17 +1655,20 @@ const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
 
 const getInteresAnual = async (fecha, idCooperativa) => {
   try {
-    console.log("Llega aca")
+    console.log("Llega aca");
     const token = getToken();
-    console.log(token)
-    const response = await fetch(`${URL}/interesAnual/${fecha}/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-  
+    console.log(token);
+    const response = await fetch(
+      `${URL}/interesAnual/${fecha}/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -1678,7 +1681,6 @@ const getInteresAnual = async (fecha, idCooperativa) => {
     throw new Error("Error al enviar los datos del InteresAnual");
   }
 };
-
 
 //Utilizar Libreria B)
 
@@ -1703,7 +1705,6 @@ const loginMaster = async (MasterData) => {
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
-
 
     return data;
   } catch (error) {
