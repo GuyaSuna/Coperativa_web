@@ -15,7 +15,7 @@ import Sidebar from "@/Components/Sidebar";
 const AdminHome = () => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
-  const [ur, setUr] = useState([]);
+  const [ur, setUr] = useState(0);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(0);
@@ -42,12 +42,41 @@ const AdminHome = () => {
   const fetchUr = async () => {
     try {
       const response = await getUr();
-      setUr(response);
-      console.log("Unidades Reajustables", response);
+      console.log("RESPUESTA FRONT", response);
+  
+
+      const FechaActual = new Date();
+      const mesActual = FechaActual.getMonth(); 
+  
+      const meses = [
+        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+        'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'
+      ];
+  
+      const mesActualNombre = meses[mesActual];
+      console.log(`Mes actual: ${mesActualNombre}`);
+      let valorUr = 0;
+      response.forEach(dato => {
+        if(dato.month == mesActualNombre){
+           valorUr = dato.value;
+        }
+      });
+      
+      console.log("Valor UR encontrado:", valorUr);
+  
+      // Verificar si se encontró el valor para el mes actual
+      if (valorUr) {
+        setUr(valorUr);
+        console.log("Unidades Reajustables para el mes actual", valorUr);
+      } else {
+        console.log(`No se encontró valor para el mes ${mesActualNombre}`);
+      }
     } catch (error) {
       console.error("Error al obtener las unidades reajustables:", error);
     }
   };
+  
+  
 
   if (isLoading) {
     return <Cargando />;
