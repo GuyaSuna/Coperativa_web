@@ -20,7 +20,8 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const fetchAllSubsidios = async () => {
     try {
       const response = await getAllSubsidios(cooperativa.idCooperativa);
-      setAllSubsidios(response);
+      const subsidioDataFilter = response.filter(subsidio => subsidio.socio && subsidio.socio.archivado == false)
+      setAllSubsidios(subsidioDataFilter);
       console.log(response);
     } catch (error) {
       console.error("Error al obtener los subsidios:", error);

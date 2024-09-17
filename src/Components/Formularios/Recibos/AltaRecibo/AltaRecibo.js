@@ -233,6 +233,10 @@ const AltaRecibo = ({ Socio, ur }) => {
         Socio,
         miembro.responseBody
       );
+      if(response == null){
+        alert("No se puede realizar un recibo a una misma persona para un mismo mes")
+        return
+      }
       console.log(response);
 
       const ingreso = {
