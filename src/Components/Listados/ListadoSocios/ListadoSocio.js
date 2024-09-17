@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios, getAllRecibos, updateSocio, getViviendaPorSocio,updateVivienda , getUltimoConvenioSocio} from "../../../Api/api.js";
+import {
+  getAllSocios,
+  getAllRecibos,
+  updateSocio,
+  getViviendaPorSocio,
+  updateVivienda,
+  getUltimoConvenioSocio,
+} from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -64,9 +71,11 @@ const ListadoSocio = ({
           return socio;
         }
       });
-      const sociosSinArchivar = sociosConFechaFormateada.filter(socio => !socio.archivado);  
+      const sociosSinArchivar = sociosConFechaFormateada.filter(
+        (socio) => !socio.archivado
+      );
       setAllSocios(sociosSinArchivar);
-      setBuscadorFiltrado(sociosSinArchivar); 
+      setBuscadorFiltrado(sociosSinArchivar);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -76,28 +85,38 @@ const ListadoSocio = ({
     const confirmacion = window.confirm(
       `¿Estás seguro de que deseas archivar al socio ${socio.nombreSocio} ${socio.apellidoSocio}? No podra ser desarchivado luego`
     );
-  
+
     if (confirmacion) {
       try {
         let socioActualizado = { ...socio, archivado: true };
 
-        const responseConvenio = await getUltimoConvenioSocio(socio.cedulaSocio)
+        const responseConvenio = await getUltimoConvenioSocio(
+          socio.cedulaSocio
+        );
 
-        if(responseConvenio != null){
-          socioActualizado = {...socioActualizado, capitalSocio: socio.capitalSocio - responseConvenio.deudaRestante}
+        if (responseConvenio != null) {
+          socioActualizado = {
+            ...socioActualizado,
+            capitalSocio: socio.capitalSocio - responseConvenio.deudaRestante,
+          };
         }
-        
+
         await updateSocio(socioActualizado);
 
-        const viviedaResponse = await getViviendaPorSocio(socio.cedulaSocio)
+        const viviedaResponse = await getViviendaPorSocio(socio.cedulaSocio);
 
         viviedaResponse.socio = null;
         console.log(viviedaResponse);
-        await updateVivienda(viviedaResponse.idVivienda,viviedaResponse.nroVivienda , viviedaResponse.listaAntiguosTitulares, viviedaResponse.cantidadDormitorios, viviedaResponse.cooperativaEntity,viviedaResponse.valorVivienda, viviedaResponse.socio);
+        await updateVivienda(
+          viviedaResponse.idVivienda,
+          viviedaResponse.nroVivienda,
+          viviedaResponse.listaAntiguosTitulares,
+          viviedaResponse.cantidadDormitorios,
+          viviedaResponse.cooperativaEntity,
+          viviedaResponse.valorVivienda,
+          viviedaResponse.socio
+        );
 
-       
-
-       
         setAllSocios((prevSocios) =>
           prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
         );
@@ -111,7 +130,6 @@ const ListadoSocio = ({
       console.log("Archivo cancelado");
     }
   };
-  
 
   const handleVerSocio = (socio) => {
     setSocioSeleccionado(socio);
@@ -156,11 +174,6 @@ const ListadoSocio = ({
     },
   ];
 
-  const handleCrearRecibo = (socio) =>{
-    setSocioRecibo(socio) 
-    setIdentificadorComponente(6)
-  }
-
   const handleSortChange = (option) => {
     console.log("Orden seleccionado:", option.label);
     if (buscador) {
@@ -174,6 +187,10 @@ const ListadoSocio = ({
 
   const handleAgregarSocio = () => {
     setIdentificadorComponente(3);
+  };
+  const handleCrearRecibo = (Socio) => {
+    setSocioRecibo(Socio);
+    setIdentificadorComponente(6);
   };
   return (
     <div className="sm:p-7 p-4">

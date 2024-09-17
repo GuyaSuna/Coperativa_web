@@ -39,17 +39,60 @@ const Login = async (username, password) => {
     throw new Error("Error al intentar iniciar sesión.");
   }
 };
-
-const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
+const LoginMaster = async (username, password) => {
   try {
-    console.log("Id cooperativa",idCooperativa)
-    const response = await fetch(`${URL}/auth/register/${cedulaSocio}/${idCooperativa}`, {
+    const body = {
+      username: username,
+      password: password,
+    };
+    const response = await fetch(`${URL}/auth/loginMaster`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(RegisterRequest),
+      body: JSON.stringify(body),
     });
+
+    if (!response.ok) {
+      if (response.status === 400) {
+        return "Usuario o contraseña incorrectos.";
+      } else {
+        throw new Error("Error en la solicitud de inicio de sesión.");
+      }
+    }
+
+    const data = await response.json();
+
+    console.log("Data", data);
+    if (data.token) {
+      // Guardar el token en la cookie
+      document.cookie = `token=${data.token}; path=/; max-age=${
+        7 * 24 * 60 * 60
+      }`;
+    } else {
+      throw new Error("No se recibió el token en la respuesta.");
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error en LogIn:", error);
+    throw new Error("Error al intentar iniciar sesión.");
+  }
+};
+
+const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
+  try {
+    console.log("Id cooperativa", idCooperativa);
+    const response = await fetch(
+      `${URL}/auth/register/${cedulaSocio}/${idCooperativa}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(RegisterRequest),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -595,7 +638,14 @@ const updateVivienda = async (
   socio
 ) => {
   try {
-    console.log("ACAAAAAA" ,idVivienda ,nroVivienda , listaAntiguosTitulares ,cantidadDormitorios , valorVivienda)
+    console.log(
+      "ACAAAAAA",
+      idVivienda,
+      nroVivienda,
+      listaAntiguosTitulares,
+      cantidadDormitorios,
+      valorVivienda
+    );
     console.log(cooperativaEntity);
     const token = getToken();
     const response = await fetch(`${URL}/vivienda`, {
@@ -611,7 +661,7 @@ const updateVivienda = async (
         listaAntiguosTitulares,
         cantidadDormitorios,
         cooperativaEntity,
-        valorVivienda
+        valorVivienda,
       }),
     });
     const data = await response.json();
@@ -677,9 +727,11 @@ const getViviendaPorSocio = async (cedulaSocio) => {
 // cooperativas
 const getCooperativaPorAdmin = async (id) => {
   try {
+    const token = getToken();
     const response = await fetch(`${URL}/cooperativa/Admin/${id}`, {
       method: "GET",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -745,35 +797,48 @@ const getUr = async () => {
     while ((match = regex.exec(textData)) !== null) {
       const month = match[1].trim(); // Nombre del mes
       const valueString = match[2].trim(); // Valor como string
-      const value = valueString ? parseFloat(valueString.replace('.', '').replace(',', '.')) : null; // Convertir a número, o null si no hay valor
+      const value = valueString
+        ? parseFloat(valueString.replace(".", "").replace(",", "."))
+        : null; // Convertir a número, o null si no hay valor
 
       data.push({ month, value }); // Añadir al array
     }
 
     // Añadir los meses sin valores a la lista con valor null
-    const allMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
-    allMonths.forEach(month => {
-      if (!data.some(entry => entry.month === month)) {
+    const allMonths = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Setiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
+    ];
+    allMonths.forEach((month) => {
+      if (!data.some((entry) => entry.month === month)) {
         data.push({ month, value: null });
       }
     });
 
     console.log("Datos procesados:", data);
     return data;
-
   } catch (error) {
     console.error("Error en getUr:", error);
     throw new Error("Error al obtener los datos de las UR");
   }
 };
 
-
-
-
-
 const getAllRecibos = async (idCooperativa) => {
   try {
     const token = getToken();
+    console.log("Token:", token);
+    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`);
+
     const response = await fetch(
       `${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`,
       {
@@ -784,8 +849,8 @@ const getAllRecibos = async (idCooperativa) => {
         },
       }
     );
-
     if (!response.ok) {
+      console.error("Error response:", response);
       throw new Error("The petition has failed, response isn't ok");
     }
 
@@ -793,7 +858,7 @@ const getAllRecibos = async (idCooperativa) => {
 
     return data;
   } catch (error) {
-    console.error("Error en getAllRecibos:", error);
+    console.error("Error en getAllRecibos:", error.message, error.response);
     throw new Error("Error al obtener los datos de los Recibos.");
   }
 };
@@ -897,8 +962,9 @@ const postRecibo = async (
 const getAllRecibosPorSocio = async (cedulaSocio) => {
   try {
     const token = getToken();
+
     const response = await fetch(
-      `${URL}/recibos/getAllRecibosPorSocios/${cedulaSocio}`,
+      `${URL}/recibo/getAllRecibosPorSocios/${cedulaSocio}`,
       {
         method: "GET",
         headers: {
@@ -1580,8 +1646,6 @@ const getAllEgresos = async (idCooperativa) => {
   }
 };
 
-
-
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {
     const token = getToken();
@@ -1632,19 +1696,49 @@ const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
   }
 };
 
-const getInteresAnual = async (fecha, idCooperativa) => {
+const getAllEstadosContables = async () => {
   try {
-    console.log("Llega aca")
+    console.log("Llega aca");
     const token = getToken();
-    console.log(token)
-    const response = await fetch(`${URL}/interesAnual/${fecha}/${idCooperativa}`, {
+    const response = await fetch(`${URL}/estadoContable/allEstadosContables`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
-  
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getEstadosContables:", error);
+    throw new Error("Error al obtener los datos de los Estados contables.");
+  }
+};
+
+//Interes
+
+const getInteresAnual = async (fecha, idCooperativa) => {
+  try {
+    console.log("Llega aca");
+    const token = getToken();
+    console.log(token);
+    const response = await fetch(
+      `${URL}/interesAnual/${fecha}/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -1657,7 +1751,6 @@ const getInteresAnual = async (fecha, idCooperativa) => {
     throw new Error("Error al enviar los datos del InteresAnual");
   }
 };
-
 
 //Utilizar Libreria B)
 
@@ -1680,7 +1773,6 @@ const loginMaster = async (MasterData) => {
     } else {
       throw new Error("No se recibió el token en la respuesta.");
     }
-
 
     return data;
   } catch (error) {
@@ -1747,7 +1839,9 @@ export {
   postCapitalInteres,
   register,
   getUser,
+  LoginMaster,
   postEstadoContable,
+  getAllEstadosContables,
   getInteresAnual,
   loginMaster,
 };

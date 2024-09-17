@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import { loginMaster } from "@/Api/api"; // Tu función que hace el llamado a la API
 import { useRouter } from "next/navigation";
@@ -21,10 +21,10 @@ const Master = () => {
       if (response && response.token) {
         console.log("Token recibido en el frontend:", response.token);
         login(response.token); // Continuar con el proceso de login
-        router.push("/MasterHome")
-    } else {
+        router.push("/MasterHome");
+      } else {
         console.error("Error: No se recibió un token válido.");
-    }
+      }
     } catch (error) {
       console.error("Error en el login:", error);
       // Manejar el error, por ejemplo mostrando un mensaje en la UI
@@ -40,7 +40,9 @@ const Master = () => {
         >
           <div className="flex flex-col w-full md:w-1/2 p-4">
             <div className="flex flex-col flex-1 justify-center mb-8">
-              <h1 className="text-4xl text-center font-thin">¿QUE HACES ACA?</h1>
+              <h1 className="text-4xl text-center font-thin">
+                ¿QUE HACES ACA?
+              </h1>
               <div className="w-full mt-4">
                 <form
                   className="form-horizontal w-3/4 mx-auto"
@@ -67,40 +69,20 @@ const Master = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)} // Actualizar el estado de password
                       required
-                      placeholder="Password"
+                      placeholder="Contraseña"
                     />
                   </div>
-                  <div className="flex items-center mt-4">
-                    <input
-                      type="checkbox"
-                      name="remember"
-                      id="remember"
-                      className="mr-2"
-                    />{" "}
-                    <label
-                      htmlFor="remember"
-                      className="text-sm text-grey-dark"
-                    >
-                      Remember Me
-                    </label>
-                  </div>
+
                   <div className="flex flex-col mt-8">
                     <button
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-semibold py-2 px-4 rounded"
+                      onClick={handleSubmit}
                     >
-                      Login
+                      Iniciar Sesion
                     </button>
                   </div>
                 </form>
-                <div className="text-center mt-4">
-                  <a
-                    className="no-underline hover:underline text-blue-dark text-xs"
-                    href="#"
-                  >
-                    Forgot Your Password?
-                  </a>
-                </div>
               </div>
             </div>
           </div>

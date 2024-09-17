@@ -1,19 +1,19 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import { useSession } from '@/Provider/loginProvider';
-import { useRouter } from 'next/navigation';
+"use client";
+import React, { useEffect, useState } from "react";
+import { useSession } from "@/Provider/loginProvider";
+import { useRouter } from "next/navigation";
 
 const SessionManager = () => {
   const { isAuthenticated, logout, authToken } = useSession();
-  const [tiempoRestante, setTiempoRestante] = useState(0); 
+  const [tiempoRestante, setTiempoRestante] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
 
-    const tokenExpiracion = parseJwt(authToken)?.exp * 1000; 
+    const tokenExpiracion = parseJwt(authToken)?.exp * 1000;
     const tiempoActual = Date.now();
-    const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000; 
+    const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000;
 
     setTiempoRestante(tiempoInicial);
 
@@ -23,20 +23,19 @@ const SessionManager = () => {
 
       if (tiempoActualizado <= 0) {
         clearInterval(intervalo);
-        alert('Tu sesión ha expirado.');
+        alert("Tu sesión ha expirado.");
         logout();
-        router.push('/');
+        router.push("/");
       }
 
       if (tiempoActualizado <= 30) {
-        alert('¿Aún estás ahí?');
+        alert("¿Aún estás ahí?");
         const tiempoRespuesta = setTimeout(() => {
           logout();
-          router.push('/'); 
+          router.push("/");
         }, 30000);
       }
     };
-
 
     const intervalo = setInterval(actualizarContador, 1000);
 
@@ -47,19 +46,19 @@ const SessionManager = () => {
 
   const parseJwt = (token) => {
     try {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayload = decodeURIComponent(
         atob(base64)
-          .split('')
+          .split("")
           .map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
           })
-          .join('')
+          .join("")
       );
       return JSON.parse(jsonPayload);
     } catch (error) {
-      console.error('Error al parsear el token:', error);
+      console.error("Error al parsear el token:", error);
       return null;
     }
   };
@@ -68,7 +67,7 @@ const SessionManager = () => {
   const segundos = Math.floor(tiempoRestante % 60);
 
   return (
-    <div>
+    <div className="bg-slate-100">
       Tiempo restante: {minutos}:{segundos < 10 ? `0${segundos}` : segundos}
     </div>
   );

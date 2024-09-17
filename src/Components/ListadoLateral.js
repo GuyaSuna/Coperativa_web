@@ -12,7 +12,7 @@ import {
   FaMoneyBillWave,
   FaMoneyBill,
 } from "react-icons/fa";
-import logo from "../../public/logovisoft.png";
+import logo from "../../public/logoVisoftDark.png";
 import Image from "next/image";
 const ListadoLateral = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -28,12 +28,12 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark">
+    <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark text-center">
       <Image
         className="logo-Img hover:scale-90 transform duration-700"
         src={logo}
         alt="Coviamuro Logo"
-        width={65}
+        width={185}
         height={65}
       />
       <div className="space-y-4 mt-3">
@@ -152,32 +152,30 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 18 ? "bg-blue-500 text-white" : ""
           }`}
-        > 
-        <FaUser className="mr-2 text-2xl" />{" "}
+        >
+          <FaUser className="mr-2 text-2xl" />{" "}
           <a className="text-base">Agregar Convenio</a>
-          </button>
+        </button>
 
-          <button
+        <button
           onClick={() => handleSelection(33)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 33 ? "bg-blue-500 text-white" : ""
           }`}
-        > 
-        <FaUser className="mr-2 text-2xl" />{" "}
+        >
+          <FaUser className="mr-2 text-2xl" />{" "}
           <a className="text-base">Agregar EstadosCont.</a>
-          </button>
+        </button>
 
-          <button
+        <button
           onClick={() => handleSelection(34)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
             selectedOption === 34 ? "bg-blue-500 text-white" : ""
           }`}
-        > 
-        <FaUser className="mr-2 text-2xl" />{" "}
+        >
+          <FaUser className="mr-2 text-2xl" />{" "}
           <a className="text-base">Informe Interes Anual.</a>
-          </button>
-
-      
+        </button>
       </div>
     </div>
   );

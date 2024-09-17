@@ -5,18 +5,17 @@ import { getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
-
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
   useEffect(() => {
     fetchAllRecibos();
@@ -91,7 +90,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     setReciboSeleccionado(recibo);
     setIsModalOpen(true);
   };
-
+  const handleAgregarRecibo = () => {
+    setIdentificadorComponente(6);
+  };
   return (
     <div className="sm:p-7 p-4 ">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -100,6 +101,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
+            onClick={handleAgregarRecibo}
             type="button"
             className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
@@ -247,7 +249,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         <VerRecibo
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          recibo={reciboSeleccionado} 
+          recibo={reciboSeleccionado}
         />
       )}
     </div>

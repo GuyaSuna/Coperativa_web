@@ -1,60 +1,43 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { deleteSubsidio, getAllSubsidios } from "../../../Api/api.js";
+import { getAllEstadosContables, deleteEstadoContable } from "@/Api/api";
+import { MiembroContext } from "@/Provider/provider";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { MiembroContext } from "@/Provider/provider.js";
-import VerSubsidio from "@/Components/VerDetalles/VerSubsidio/VerSubsidio.js";
+import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContablePDF/VerEstadoContablePDF";
 
-const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
-  const [allSubsidios, setAllSubsidios] = useState([]);
-  const [subsidioSeleccionado, setSubsidioSeleccionado] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const ListadoEstadoContables = ({}) => {
+  const [allEstadosContables, setAllEstadosContables] = useState([]);
+  const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
+    useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(null);
 
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
-    fetchAllSubsidios();
+    fetchAllEstadosContables();
   }, []);
 
-  const fetchAllSubsidios = async () => {
+  const fetchAllEstadosContables = async () => {
     try {
-      const response = await getAllSubsidios(cooperativa.idCooperativa);
-      setAllSubsidios(response);
-      console.log(response);
+      const response = await getAllEstadosContables(cooperativa.idCooperativa);
+      setAllEstadosContables(response);
     } catch (error) {
-      console.error("Error al obtener los subsidios:", error);
+      console.error("Error al obtener los Estados Contables:", error);
     }
   };
 
-  const handleVerSubsidio = (subsidio) => {
-    setSubsidioSeleccionado(subsidio);
+  const handleVerEstadoContable = (estadoContable) => {
+    setEstadoContableSeleccionado(estadoContable);
     setIsModalOpen(true);
-    console.log("Ver subsidio", subsidio);
   };
 
-  const handleEliminarSubsidio = async (idSubsidio) => {
-    try {
-      const data = await deleteSubsidio(idSubsidio);
-      fetchAllSubsidios();
-    } catch (e) {
-      throw ("Fallo al eliminar el subsidio", e.error);
-    }
-  };
-
-  const handleModificarSubsidio = (subsidio) => {
-    setSubsidio(subsidio);
-    setIdentificadorComponente(19);
-    console.log("Modificar subsidio", subsidio);
-  };
-
-  // agregar boton para archivar subsidio o cancelar subsidio
   return (
     <div className="sm:p-7 p-4">
-      {allSubsidios.length === 0 ? (
+      {allEstadosContables.length === 0 ? (
         <div className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center ml-4">
-            Todavía no existen Subsidios
+            Todavía no existen Estados Contables.
           </div>
         </div>
       ) : (
@@ -93,7 +76,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                           active ? "bg-gray-100 text-gray-900" : "text-gray-700"
                         }`}
                       >
-                        Fecha de Ingreso
+                        Fecha del Estado Contable
                       </button>
                     )}
                   </MenuItem>
@@ -105,56 +88,28 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
             <thead>
               <tr className="text-gray-400">
                 <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Nombre Socio
+                  Fecha Estado Contable
                 </th>
                 <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Cuota Total UR
+                  Saldo Final en Pesos Uruguayos
                 </th>
                 <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Subsidio UR
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Porcentaje
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Vigencia
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Fecha Otorgado
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Fecha Expira
-                </th>
-                <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-                  Acciones
+                  Saldo Final en Dólares USD
                 </th>
               </tr>
             </thead>
 
             <tbody className="text-gray-600 dark:text-gray-100">
-              {allSubsidios?.map((subsidio) => (
-                <tr key={subsidio.idSubsidio}>
+              {allEstadosContables?.map((estadoContable) => (
+                <tr key={estadoContable.id}>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.socio?.nombreSocio}{" "}
-                    {subsidio.socio?.apellidoSocio}
+                    {new Date(estadoContable.fecha).toLocaleDateString()}
                   </td>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.cuotaTotalUr}
+                    {estadoContable.saldoFinalEnPesos}
                   </td>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.subsidioUr}
-                  </td>
-                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.porcentaje}
-                  </td>
-                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {subsidio.vigenciaEnMeses} meses
-                  </td>
-                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {new Date(subsidio.fechaOtorgado).toLocaleDateString()}
-                  </td>
-                  <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                    {new Date(subsidio.fechaExpira).toLocaleDateString()}
+                    {estadoContable.saldoFinalEnDolares}
                   </td>
                   <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
                     <Menu as="div" className="relative inline-block text-left">
@@ -183,28 +138,12 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                         <div className="py-1">
                           <MenuItem>
                             <button
-                              onClick={() => handleVerSubsidio(subsidio)}
+                              onClick={() =>
+                                handleVerEstadoContable(estadoContable)
+                              }
                               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                             >
                               Ver Detalle
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() =>
-                                handleEliminarSubsidio(subsidio.idSubsidio)
-                              }
-                              className="block px-4 py-2 text-sm text-gray-700  data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            >
-                              Eliminar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() => handleModificarSubsidio(subsidio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            >
-                              Modificar
                             </button>
                           </MenuItem>
                         </div>
@@ -216,10 +155,10 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
             </tbody>
           </table>
           {isModalOpen && (
-            <VerSubsidio
+            <VerEstadoContable
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
-              subsidio={subsidioSeleccionado}
+              estadoContable={estadoContableSeleccionado}
             />
           )}
         </>
@@ -228,4 +167,4 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   );
 };
 
-export default ListadoSubsidios;
+export default ListadoEstadoContables;

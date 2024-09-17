@@ -22,7 +22,10 @@ const DashboardCard = ({
           </Typography>
         </CardContent>
       ) : (
-        <CardContent sx={{ p: "30px" }}>
+        <CardContent
+          sx={{ p: "10px" }}
+          className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+        >
           {title ? (
             <Stack
               direction="row"
@@ -35,9 +38,7 @@ const DashboardCard = ({
                 {title ? <Typography variant="h5">{title}</Typography> : ""}
 
                 {subtitle ? (
-                  <Typography variant="subtitle2" color="textSecondary">
-                    {subtitle}
-                  </Typography>
+                  <Typography variant="subtitle2">{subtitle}</Typography>
                 ) : (
                   ""
                 )}
