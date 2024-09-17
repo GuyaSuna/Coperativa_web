@@ -51,10 +51,11 @@ const AltaRecibo = ({ Socio, ur }) => {
   // }
 
   useEffect(() => {
+    console.log("UNIDAD REAJUSTABLE MENSUAL",ur)
     const FechaActual = new Date();
     console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
     console.log("FECHA ACTUAL", FechaActual.getFullYear());
-
+    console.log("COOPERATIVAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",cooperativa)
     cooperativa.listaCapitalInteres.map((data) => {
       let fechaData = new Date(data.fecha);
       console.log("FECHA DATA", fechaData.getMonth() + 1);
@@ -63,7 +64,7 @@ const AltaRecibo = ({ Socio, ur }) => {
         fechaData.getMonth() == FechaActual.getMonth() &&
         fechaData.getFullYear() == FechaActual.getFullYear()
       ) {
-        console.log(data.interes, data.capital);
+        console.log("DATOS EXCEL",data.interes, data.capital);
         setCapitalExcel(data.capital);
         setInteresExcel(data.interes);
       }
@@ -138,8 +139,8 @@ const AltaRecibo = ({ Socio, ur }) => {
     }
 
     console.log("Valor dormitorios", valorDormitorios);
-    setInteres(interesExcel * (valorDormitorios / ur.buy));
-    setCapital(capitalExcel * (valorDormitorios / ur.buy));
+    setInteres(interesExcel * (valorDormitorios / ur));
+    setCapital(capitalExcel * (valorDormitorios / ur));
 
     let ValorViviendaModificar = valorVivienda;
 
@@ -154,7 +155,7 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     let valorConConvenioPesos = 0;
     if (convenio && convenio.urPorMes) {
-      valorConConvenioPesos += convenio.urPorMes * ur.buy;
+      valorConConvenioPesos += convenio.urPorMes * ur;
     }
 
     let valorCuotaTotalEnPesos =
@@ -286,7 +287,7 @@ const AltaRecibo = ({ Socio, ur }) => {
           {/* Valor UR Reajuste: {reajuste} */}
         </label>
         <label className="block text-sm font-medium mb-2 text-right">
-          Valor UR del Mes: {ur?.buy || 0}
+          Valor UR del Mes: {ur || 0}
         </label>
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="mb-4">

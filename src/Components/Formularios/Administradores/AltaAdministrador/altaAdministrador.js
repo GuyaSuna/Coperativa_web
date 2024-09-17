@@ -10,7 +10,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
   const [nombreMiembro, setNombreMiembro] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [email, setEmail] = useState("");
-  const [tipoAdministrador, setTipoAdministrador] = useState("Tesorero");
+  const [tipoAdministrador, setTipoAdministrador] = useState("ADMIN");
   const [mensaje, setMensaje] = useState("");
 
   const router = useRouter();
@@ -35,15 +35,17 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
     );
     console.log("Socio encontrado", SocioEncontrado);
     const data = {
-      socio: SocioEncontrado,
-      nombreMiembro,
-      contraseña,
+      firstname: SocioEncontrado.nombreSocio,
+      lastname : SocioEncontrado.apellidoSocio,
+      username : nombreMiembro,
+      password : contraseña,
       email,
-      tipoAdministrador,
+      role : tipoAdministrador,
     };
 
     try {
-      const response = await register(data, cooperativa.idCooperativa);
+      console.log("ANTES DE API" , cooperativa.idCooperativa)
+      const response = await register(data, SocioEncontrado.cedulaSocio, cooperativa.idCooperativa);
       console.log(response);
       setMensaje("Administrador creado con éxito");
       setIdentificadorComponente(27);
@@ -141,8 +143,8 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             onChange={(e) => setTipoAdministrador(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
-            <option value="Tesorero">Tesorero</option>
-            <option value="Otro">Otro</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="OTRO">OTRO</option>
           </select>
         </div>
 

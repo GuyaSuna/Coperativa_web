@@ -40,9 +40,10 @@ const Login = async (username, password) => {
   }
 };
 
-const register = async (RegisterRequest) => {
+const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
   try {
-    const response = await fetch(`${URL}/auth/register/`, {
+    console.log("Id cooperativa",idCooperativa)
+    const response = await fetch(`${URL}/auth/register/${cedulaSocio}/${idCooperativa}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -718,31 +719,57 @@ const getCooperativaPorSocio = async (cedulaSocio) => {
   }
 };
 
-//Recibos
 const getUr = async () => {
   try {
-    const response = await fetch(
-      "https://api.cambio-uruguay.com/exchange/BCU/UR",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const token = getToken();
+    const response = await fetch(`${URL}/scraping`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
 
-    const data = await response.json();
+    const textData = await response.text();
+    console.log("Datos crudos recibidos:", textData);
 
+    // Procesar los datos crudos para extraer los meses y valores
+    const regex = /(\w+)\s+([\d.,]*)/g; // Expresión regular ajustada
+    const data = [];
+
+    let match;
+    while ((match = regex.exec(textData)) !== null) {
+      const month = match[1].trim(); // Nombre del mes
+      const valueString = match[2].trim(); // Valor como string
+      const value = valueString ? parseFloat(valueString.replace('.', '').replace(',', '.')) : null; // Convertir a número, o null si no hay valor
+
+      data.push({ month, value }); // Añadir al array
+    }
+
+    // Añadir los meses sin valores a la lista con valor null
+    const allMonths = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"];
+    allMonths.forEach(month => {
+      if (!data.some(entry => entry.month === month)) {
+        data.push({ month, value: null });
+      }
+    });
+
+    console.log("Datos procesados:", data);
     return data;
+
   } catch (error) {
     console.error("Error en getUr:", error);
     throw new Error("Error al obtener los datos de las UR");
   }
 };
+
+
+
+
 
 const getAllRecibos = async (idCooperativa) => {
   try {
@@ -1636,11 +1663,9 @@ const getInteresAnual = async (fecha, idCooperativa) => {
 
 const loginMaster = async (MasterData) => {
   try {
-    const token = getToken();
     const response = await fetch(`${URL}/auth/loginMaster`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(MasterData),
