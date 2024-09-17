@@ -12,12 +12,15 @@ import {
   FaMoneyBillWave,
   FaMoneyBill,
 } from "react-icons/fa";
-import logo from "../../public/logoVisoftDark.png";
 import Image from "next/image";
+import { useTheme } from "../Provider/ThemeProvider";
+import logoDark from "../../public/logoVisoftDark.png";
+import logoLight from "../../public/logoVisoftLigth.png";
+
 const ListadoLateral = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
-
+  const { darkMode } = useTheme();
   const handleSelection = (option) => {
     setSelectedOption(option);
     setIdentificadorComponente(option);
@@ -31,9 +34,9 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
     <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark text-center">
       <Image
         className="logo-Img hover:scale-90 transform duration-700"
-        src={logo}
+        src={darkMode ? logoLight : logoDark}
         alt="Coviamuro Logo"
-        width={185}
+        width={195}
         height={65}
       />
       <div className="space-y-4 mt-3">

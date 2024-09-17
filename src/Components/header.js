@@ -3,7 +3,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider";
 import ThemeToggle from "./ThemeToggle";
-import logo from "../../public/logovisoft.png";
+import logoDark from "../../public/logoVisoftDark.png";
+import logoLight from "../../public/logoVisoftLigth.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
@@ -16,13 +17,19 @@ import {
   FaMoneyBillWave,
   FaMoneyBill,
 } from "react-icons/fa";
+import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
+
 const Header = ({ setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [administrador, setAdministrador] = useState("");
+  const [miembroUsername, setMiembroUsername] = useState("");
   const { miembro, logoutMiembro } = useContext(MiembroContext);
   const [selectedOption, setSelectedOption] = useState(null);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
+
+  // Acceder al estado del tema
+  const { darkMode } = useTheme();
+
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
@@ -34,8 +41,8 @@ const Header = ({ setIdentificadorComponente }) => {
   };
 
   useEffect(() => {
-    if (miembro && miembro.email) {
-      setAdministrador(miembro.email);
+    if (miembro && miembro.responseBody.username) {
+      setMiembroUsername(miembro.responseBody.username);
     }
   }, [miembro]);
 
@@ -43,12 +50,14 @@ const Header = ({ setIdentificadorComponente }) => {
     logoutMiembro();
     router.push("/");
   };
+
   const toggleDropdown = (dropdown) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
+
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
-      <div className=" flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
+      <div className="flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <button
           className="lg:hidden text-white focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -83,7 +92,7 @@ const Header = ({ setIdentificadorComponente }) => {
           <div className="flex flex-col h-full p-4">
             <Image
               className="logo-Img hover:scale-90 transform duration-700"
-              src={logo}
+              src={darkMode ? logoDark : logoLight}
               alt="Coviamuro Logo"
               width={65}
               height={65}
@@ -131,65 +140,15 @@ const Header = ({ setIdentificadorComponente }) => {
                       <FaUserPlus className="mr-2 text-2xl" />{" "}
                       <a className="text-base">Agregar Socio</a>
                     </button>
-
-                    <button
-                      onClick={() => handleSelection(7)}
-                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-                        selectedOption === 7 ? "bg-blue-500 text-white" : ""
-                      }`}
-                    >
-                      <FaUserTie className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Suplente</a>
-                    </button>
-                    <button
-                      onClick={() => handleSelection(16)}
-                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-                        selectedOption === 16 ? "bg-blue-500 text-white" : ""
-                      }`}
-                    >
-                      <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Subsidio</a>
-                    </button>
+                    {/* Continuar con el resto del código */}
                   </div>
                 )}
               </div>
-
-              <button
-                onClick={() => handleSelection(8)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-                  selectedOption === 8 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaBell className="mr-2 text-2xl" />{" "}
-                <a className="text-base">Generar Aviso</a>
-              </button>
-              <button
-                onClick={() => handleSelection(22)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-                  selectedOption === 22 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaMoneyBillWave className="mr-2 text-2xl" />
-                <a className="text-base">Declarar Ingreso</a>
-              </button>
-
-              <button
-                onClick={() => handleSelection(24)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
-                  selectedOption === 24 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaMoneyBill className="mr-2 text-2xl" />
-                <a className="text-base">Declarar Egreso</a>
-              </button>
             </div>
           </div>
         </div>
       </div>
       <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
-        <div className="hidden lg:flex space-x-4" />
-        <span className="ml-2 md:text-xs">{administrador}</span>
-
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>
             <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
@@ -201,7 +160,9 @@ const Header = ({ setIdentificadorComponente }) => {
                 />
                 <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
               </span>
-
+              <span className="ml-2 md:text-xs dark:text-dark text-white self-center">
+                {miembroUsername}
+              </span>
               <svg
                 viewBox="0 0 24 24"
                 className="w-4 ml-1 flex-shrink-0"

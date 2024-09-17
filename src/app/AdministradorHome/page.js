@@ -124,6 +124,7 @@ const AdminHome = () => {
                       { label: "Subsidios", id: 17 },
                       { label: "Convenios", id: 26 },
                       { label: "Socios Archivados", id: 32 },
+                      { label: "Estados Contables", id: 35 },
                     ].map((item) => (
                       <button
                         key={item.id}

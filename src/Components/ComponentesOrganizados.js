@@ -35,6 +35,8 @@ import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchi
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
+import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
+import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -278,6 +280,20 @@ const ComponentesOrganizados = ({
       return (
         <ListadoEstadoContables
           cooperativa={cooperativa}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 36: {
+      return (
+        <UsuarioDashboard
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 37: {
+      return (
+        <InformesUsuario
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
