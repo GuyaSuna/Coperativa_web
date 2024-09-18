@@ -902,7 +902,8 @@ const postRecibo = async (
   tesorero
 ) => {
   console.log(
-    "datos del recibo en api: " + fechaRecibo,
+    "datos del recibo en api:",
+    fechaRecibo,
     fechaPago,
     recargo,
     interes,
@@ -917,12 +918,14 @@ const postRecibo = async (
   );
 
   try {
-    if (subsidio == 0) {
+    // Asegúrate de que 'subsidio' y 'convenio' se envían como null si son 0
+    if (subsidio === 0) {
       subsidio = null;
     }
-    if (convenio == 0) {
+    if (convenio === 0) {
       convenio = null;
     }
+
     const reciboData = {
       fechaRecibo,
       fechaPago,
@@ -937,7 +940,8 @@ const postRecibo = async (
       socio,
       tesorero,
     };
-    const token = getToken();
+
+    const token = getToken(); 
     const response = await fetch(`${URL}/recibo`, {
       method: "POST",
       headers: {
@@ -948,14 +952,20 @@ const postRecibo = async (
     });
 
     if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+      throw new Error("La solicitud ha fallado, la respuesta no es válida");
+    }
+
+    const contentType = response.headers.get("Content-Type");
+    if (response.status === 204 || !contentType || !contentType.includes("application/json")) {
+      console.log("No hay contenido en la respuesta o el contenido no es JSON.");
+      return null;
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     console.error("Error en postRecibo:", error);
-    throw new Error("Error al enviar los datos de el recibo");
+    throw new Error("Error al enviar los datos del recibo");
   }
 };
 

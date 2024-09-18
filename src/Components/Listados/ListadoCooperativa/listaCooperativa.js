@@ -41,7 +41,7 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     setIdentificadorComponente(30);
   };
   const handleReajuste = (cooperativa) => {
-    setCooperativa(cooperativa);
+    loginMiembro(null, cooperativa);
     setIdentificadorComponente(31);
   };
   const handleVivienda = (cooperativa) => {

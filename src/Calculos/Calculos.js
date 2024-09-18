@@ -20,36 +20,47 @@ const valorCuotaEnPesos = (ur) => {
 
 
 // 1/4 * UR -> pesos  = recargoPesos 
-const Recargo = (fechaPago, setRecargo, ur) => {
-    if (!fechaPago || !ur) {
+const Recargo = (fechaEmision, fechaPago, setRecargo, ur) => {
+    // Verifica que fechaPago y ur existan y que ur.buy sea un número
+    if (!fechaPago || !ur || isNaN(ur)) {
+        console.log("retorno fallo");
+        console.log("fechaPago:", fechaPago);
+        console.log("ur:", ur);
         return;
     }
+ 
+    const fechaActual = new Date();
+    const fechaPagoParsed = new Date(fechaPago + 'T00:00:00');
+    const fechaEmisionParsed = new Date(fechaEmision + 'T00:00:00');
+    
+    const diaPago = fechaPagoParsed.getUTCDate();
+    const mesPago = fechaPagoParsed.getUTCMonth();
+    const mesActual = fechaActual.getUTCMonth();
+    const mesEmision = fechaEmisionParsed.getUTCMonth();
 
-    const fechaActual = new Date(); 
-    const fecha = new Date(fechaPago + 'T00:00:00'); 
-
-    const dia = fecha.getUTCDate();
-    const mesPago = fecha.getUTCMonth(); 
-    const mesActual = fechaActual.getUTCMonth(); 
-
-    console.log("Fecha de pago:", fecha);
+    console.log("Fecha de pago:", fechaPagoParsed);
     console.log("Fecha actual:", fechaActual);
+    console.log("Mes de emisión:", mesEmision);
     console.log("Mes de pago:", mesPago);
     console.log("Mes actual:", mesActual);
+    console.log("entro");
 
-    if (mesPago < mesActual) {
-        setRecargo(Math.round(ur.buy * (1 / 2)));
-    } 
-    else if (mesPago === mesActual) {
-        if (dia <= 15) {
-            setRecargo(0);
-        } else if (dia > 15) {
-            setRecargo(Math.round(ur.buy * (1 / 4)));
+    // Comparar el mes de pago con el mes de emisión
+    if (mesPago > mesEmision) {
+        // Si el pago fue en un mes posterior, aplicar recargo de 1/2 UR
+        setRecargo(Math.round(ur * (1 / 2)));
+    } else if (mesPago === mesEmision) {
+        // Si el pago fue en el mismo mes, verificar el día del pago
+        if (diaPago <= 15) {
+            setRecargo(0); // No hay recargo si se paga antes o el día 15
+        } else {
+            setRecargo(Math.round(ur * (1 / 4))); // Recargo de 1/4 UR si se paga después del día 15
         }
+    } else {
+        // Si el pago fue en un mes anterior, no debería haber recargo
+        setRecargo(0);
     }
-}
-  
-
+};
 
 
 

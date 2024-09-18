@@ -30,20 +30,25 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const fetchDatosDeLaLista = async () => {
     try {
       const suplentesResponse = await getAllSuplentes();
-      setAllSuplentes(suplentesResponse);
       console.log("Suplentes recibidos:", suplentesResponse);
-
+  
       const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConSuplentes = sociosResponse.filter(
-        (socio) => socio.suplenteEntity !== null
-      );
-      setAllSocios(sociosConSuplentes);
-
+  
+      // Filtrar socios archivados que tengan suplentes
+      const suplentesArchivados = sociosResponse.filter(
+        (socio) => socio.archivado === false && socio.suplenteEntity !== null
+      ).map(socio => socio.suplenteEntity);
+  
+      setAllSocios(sociosResponse);
+      setAllSuplentes(suplentesArchivados);
+  
       console.log("Socios recibidos:", sociosResponse);
+      console.log("Suplentes de socios archivados:", suplentesArchivados);
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
+  
 
   const handleModificar = (suplente) => {
     setSuplente(suplente);
@@ -71,7 +76,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const getSocioPorSuplente = (cedulaSuplente) => {
     console.log("Suplentes recibidos:", allSuplentes);
     const socio = allSocios.find(
-      (socio) => socio.suplenteEntity.cedulaSuplente === cedulaSuplente
+      (socio) => socio.suplenteEntity?.cedulaSuplente === cedulaSuplente
     );
     console.log("socio del suplente", socio);
     return socio;

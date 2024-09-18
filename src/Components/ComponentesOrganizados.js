@@ -250,7 +250,6 @@ const ComponentesOrganizados = ({
     case 31: {
       return (
         <AltaReajuste
-          cooperativa={cooperativa}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

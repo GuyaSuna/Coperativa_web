@@ -25,13 +25,14 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
 
   useEffect(() => {
     fetchAllConvenios();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchAllConvenios = async () => {
     try {
       const response = await getAllConvenios(cooperativa.idCooperativa);
-      setAllConvenios(response);
+      const dataFiltrada = response.filter(convenio => convenio.socio && convenio.socio.archivado === false);
+
+      setAllConvenios(dataFiltrada);
       console.log("Convenios ", response);
     } catch (error) {
       console.error("Error al obtener los convenios:", error);
@@ -177,7 +178,6 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           </thead>
           <tbody>
             {allConvenios?.map((convenio) => (
-              // eslint-disable-next-line react/jsx-key
               <tr className="border-b dark:border-gray-700">
                 <th
                   scope="row"
@@ -205,7 +205,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                   <button
                     type="button"
                     onClick={() => handleVerConvenio(convenio)}
-                    class="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
