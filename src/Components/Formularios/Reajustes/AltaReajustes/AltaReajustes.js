@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { postReajuste } from "@/Api/api";
-
-const AltaReajuste = ({ cooperativa ,setIdentificadorComponente }) => {
+import { MiembroContext } from "@/Provider/provider";
+const AltaReajuste = ({ setIdentificadorComponente }) => {
   const [valorUr, setValorUr] = useState("");
   const [fechaReajuste, setFechaReajuste] = useState("");
   const [cuotaMensualDosHabitacionesEnPesos, setCuotaMensualDosHabitacionesEnPesos] = useState("");
   const [cuotaMensualTresHabitacionesEnPesos, setCuotaMensualTresHabitacionesEnPesos] = useState("");
   const [mensaje, setMensaje] = useState("");
-
+  const {cooperativa} = useContext(MiembroContext);
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -27,8 +27,7 @@ const AltaReajuste = ({ cooperativa ,setIdentificadorComponente }) => {
         
       const response = await postReajuste(data, cooperativa.idCooperativa);
       console.log(response);
-      setMensaje("Reajuste creado con éxito");
-      setIdentificadorComponente(28);  
+      setMensaje("Reajuste creado con éxito"); 
     } catch (error) {
       console.error("Error al crear el reajuste:", error);
       setMensaje("Error al crear el reajuste");
