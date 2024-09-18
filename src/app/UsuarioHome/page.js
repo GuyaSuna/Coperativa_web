@@ -18,7 +18,7 @@ const UsuarioHome = () => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [ur, setUr] = useState([]);
-  const [identificadorComponente, setIdentificadorComponente] = useState(0);
+  const [identificadorComponente, setIdentificadorComponente] = useState(36);
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
 

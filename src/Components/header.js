@@ -94,7 +94,7 @@ const Header = ({ setIdentificadorComponente }) => {
               className="logo-Img hover:scale-90 transform duration-700"
               src={darkMode ? logoDark : logoLight}
               alt="Coviamuro Logo"
-              width={65}
+              width={195}
               height={65}
             />
             <div className="space-y-4 mt-3">

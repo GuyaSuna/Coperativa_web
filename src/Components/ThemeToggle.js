@@ -35,25 +35,6 @@ const ThemeToggle = () => {
         ></div>
         <BsSunFill className="ml-auto text-yellow-400" size={18} />
       </div>
-
-      {/* Conditionally rendering logo */}
-      {darkMode ? (
-        <Image
-          className="logo-Img hover:scale-90 transform duration-700"
-          src={logoDark}
-          alt="Dark Logo"
-          width={65}
-          height={65}
-        />
-      ) : (
-        <Image
-          className="logo-Img hover:scale-90 transform duration-700"
-          src={logoLight}
-          alt="Light Logo"
-          width={65}
-          height={65}
-        />
-      )}
     </div>
   );
 };
