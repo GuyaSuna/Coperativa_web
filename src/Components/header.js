@@ -151,7 +151,7 @@ const Header = ({ setIdentificadorComponente }) => {
       <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>
-            <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
+            <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:text-gray-300 text-gray-900 shadow-sm border dark:border-gray-600 border-gray-200">
               <span className="relative flex-shrink-0">
                 <img
                   className="w-7 h-7 rounded-full"
@@ -160,7 +160,7 @@ const Header = ({ setIdentificadorComponente }) => {
                 />
                 <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
               </span>
-              <span className="ml-2 md:text-xs dark:text-dark text-white self-center">
+              <span className="ml-2 md:text-xs text-dark dark:text-white self-center">
                 {miembroUsername}
               </span>
               <svg

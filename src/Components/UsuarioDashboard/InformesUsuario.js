@@ -26,7 +26,7 @@ const InformesUsuario = () => {
           <p className="text-xl text-center font-bold text-blue-600">Informe</p>
           <p className="text-center py-8">
             <span className="text-4xl font-bold text-gray-700">
-              <span x-text="basicPrice">Blance Anual</span>
+              <span x-text="basicPrice">Balance Anual</span>
             </span>
           </p>
           <div className="flex items-center justify-center mt-6">

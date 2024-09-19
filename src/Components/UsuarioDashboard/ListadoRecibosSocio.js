@@ -50,7 +50,7 @@ const ListadoRecibosSocios = () => {
     setAnchorEl(null);
   };
   return (
-    <DashboardCard>
+    <DashboardCard title={"Historial de Recibos"}>
       <Box
         sx={{
           overflowX: "auto", // Allows horizontal scrolling if content overflows

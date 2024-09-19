@@ -107,7 +107,7 @@ const AdminHome = () => {
                     <div className="flex items-center text-xl sm:text-2xl text-gray-900 dark:text-white">
                       <img
                         src="./LogoApp.jpg"
-                        className="w-10 sm:w-12 md:w-16 lg:w-20 mr-4 rounded-full"
+                        className="w-10 sm:w-12 md:w-16 lg:w-20 mr-4 rounded-full border-2 dark:bg-gray-500"
                         alt="profile"
                       />
                       <a className="text-sm sm:text-base md:text-lg lg:text-xl">
