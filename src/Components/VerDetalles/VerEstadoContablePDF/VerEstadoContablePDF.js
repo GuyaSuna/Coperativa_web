@@ -9,7 +9,6 @@ import {
   PDFDownloadLink,
   StyleSheet,
 } from "@react-pdf/renderer";
-import "./pdfStyles.css";
 
 // Estilos para el PDF
 const styles = StyleSheet.create({
