@@ -54,6 +54,23 @@ const VerVivienda = ({ vivienda, isOpen, onClose }) => {
                     : "Sin socio"}
                 </span>
               </div>
+              {/* Agregando la lista de antiguos titulares */}
+              <div className="space-y-2">
+                <span className="font-medium text-white-800">
+                  Antiguos Socios Titulares:
+                </span>
+                {vivienda?.listaAntiguosTitulares?.length > 0 ? (
+                  <ul className="list-disc pl-5 text-white-600">
+                    {vivienda.listaAntiguosTitulares.map((titular, index) => (
+                      <li key={index}>
+                        {titular.nombreSocio} {titular.apellidoSocio}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <span className="text-white-600">No hay antiguos titulares</span>
+                )}
+              </div>
             </div>
             <div className="mt-8 flex justify-center">
               <button

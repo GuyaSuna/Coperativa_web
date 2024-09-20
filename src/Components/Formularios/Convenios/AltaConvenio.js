@@ -2,7 +2,7 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getAllSocios, postConvenio } from "../../../Api/api.js";
+import {postConvenio, getAllSociosImpagos } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
 const AltaConvenio = () => {
@@ -22,8 +22,10 @@ const AltaConvenio = () => {
 
   const fetchSociosDisponibles = async () => {
     try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      setSociosDisponibles(response);
+      const response = await getAllSociosImpagos(cooperativa.idCooperativa);
+
+      const sociosSinArchivar = response.filter( socio => socio.archivado == false)
+      setSociosDisponibles(sociosSinArchivar);
       console.log("Socios disponibles", response);
     } catch (error) {
       console.error("Error al obtener los socios", error);

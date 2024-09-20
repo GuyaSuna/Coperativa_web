@@ -322,6 +322,30 @@ const getAllSocios = async (idCooperativa) => {
   }
 };
 
+const getAllSociosImpagos = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/socio/SociosImpagos/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllSociosImpagos:", error);
+    throw new Error("Error al obtener los datos de los Socios.");
+  }
+};
+
 const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
   try {
     console.log(socioEntity);
@@ -782,56 +806,31 @@ const getUr = async () => {
       },
     });
 
+    // Verifica si la respuesta tiene contenido
+    const responseText = await response.text();
+    console.log("Contenido de la respuesta:", responseText);
+
+    // Si la respuesta está vacía, maneja el caso
+    if (!responseText) {
+      throw new Error("La respuesta está vacía.");
+    }
+
+    // Si la respuesta no es un JSON válido, lanza un error
+    const data = JSON.parse(responseText);
+    console.log("Datos recibidos:", data);
+
     if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+      throw new Error("La petición ha fallado, el response no es 'ok'");
     }
 
-    const textData = await response.text();
-    console.log("Datos crudos recibidos:", textData);
-
-    // Procesar los datos crudos para extraer los meses y valores
-    const regex = /(\w+)\s+([\d.,]*)/g; // Expresión regular ajustada
-    const data = [];
-
-    let match;
-    while ((match = regex.exec(textData)) !== null) {
-      const month = match[1].trim(); // Nombre del mes
-      const valueString = match[2].trim(); // Valor como string
-      const value = valueString
-        ? parseFloat(valueString.replace(".", "").replace(",", "."))
-        : null; // Convertir a número, o null si no hay valor
-
-      data.push({ month, value }); // Añadir al array
-    }
-
-    // Añadir los meses sin valores a la lista con valor null
-    const allMonths = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Setiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ];
-    allMonths.forEach((month) => {
-      if (!data.some((entry) => entry.month === month)) {
-        data.push({ month, value: null });
-      }
-    });
-
-    console.log("Datos procesados:", data);
-    return data;
+    return data; 
   } catch (error) {
     console.error("Error en getUr:", error);
     throw new Error("Error al obtener los datos de las UR");
   }
 };
+
+
 
 const getAllRecibos = async (idCooperativa) => {
   try {
@@ -1854,4 +1853,5 @@ export {
   getAllEstadosContables,
   getInteresAnual,
   loginMaster,
+  getAllSociosImpagos,
 };
