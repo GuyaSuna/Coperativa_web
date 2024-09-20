@@ -67,7 +67,7 @@ const SessionManager = () => {
   const segundos = Math.floor(tiempoRestante % 60);
 
   return (
-    <div className="bg-slate-100">
+    <div className="dark:bg-dark bg-white dark:text-white text-dark ">
       Tiempo restante: {minutos}:{segundos < 10 ? `0${segundos}` : segundos}
     </div>
   );

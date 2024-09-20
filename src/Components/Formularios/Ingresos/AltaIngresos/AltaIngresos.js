@@ -79,108 +79,116 @@ const AltaIngreso = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">
-            Fecha del Ingreso:
-            <input
-              type="date"
-              name="fechaDatosContables"
-              value={fechaDatosContables}
-              onChange={handleChangeFechaDatosContables}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Fecha del Ingreso:
+              <input
+                type="date"
+                name="fechaDatosContables"
+                value={fechaDatosContables}
+                onChange={handleChangeFechaDatosContables}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.fechaDatosContables && (
+                <span className="error">{errores.fechaDatosContables}</span>
+              )}
+            </label>
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="seleccionSubVivienda"
+            >
+              Seleccione el Sub Rubro:
+            </label>
+            <select
+              id="seleccionSubRubro"
+              name="seleccionSubRubro"
+              value={subRubro}
+              onChange={handleChangeSeleccionSubRubro}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {errores.fechaDatosContables && (
-              <span className="error">{errores.fechaDatosContables}</span>
+            >
+              <option value="">Seleccione el Sub Rubro</option>
+              <option value="Amortización">Amortización</option>
+              <option value="Cuota Social">Cuota Social</option>
+              <option value="Convenios">Convenios</option>
+              <option value="Comision de Fomento">Comision de Fomento</option>
+              <option value="Salon comercial">Salon comercial</option>
+              <option value="Ingresos extraordinarios">
+                Ingresos extraordinarios
+              </option>
+              <option value="Multas">Multas</option>
+              <option value="Cambio de moneda extranjera">
+                Cambio de moneda extranjera
+              </option>
+              <option value="Otros">Otros</option>
+            </select>
+            {errores.subRubro && (
+              <span className="text-red-500 text-sm">{errores.subRubro}</span>
             )}
-          </label>
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="seleccionSubVivienda"
-          >
-            Seleccione el Sub Rubro:
-          </label>
-          <select
-            id="seleccionSubRubro"
-            name="seleccionSubRubro"
-            value={subRubro}
-            onChange={handleChangeSeleccionSubRubro}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="">Seleccione el Sub Rubro</option>
-            <option value="Amortización">Amortización</option>
-            <option value="Cuota Social">Cuota Social</option>
-            <option value="Convenios">Convenios</option>
-            <option value="Comision de Fomento">Comision de Fomento</option>
-            <option value="Salon comercial">Salon comercial</option>
-            <option value="Ingresos extraordinarios">
-              Ingresos extraordinarios
-            </option>
-            <option value="Multas">Multas</option>
-            <option value="Cambio de moneda extranjera">
-              Cambio de moneda extranjera
-            </option>
-            <option value="Otros">Otros</option>
-          </select>
-          {errores.subRubro && (
-            <span className="text-red-500 text-sm">{errores.subRubro}</span>
-          )}
+          </div>
         </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="denominacion"
-          >
-            Denominación:
-          </label>
-          <input
-            type="text"
-            id="denominacion"
-            value={denominacion}
-            onChange={handleChangeDenominacion}
-            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
-          />
-          {errores.denominacion && (
-            <span className="text-red-500 text-sm">{errores.denominacion}</span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="seleccionSubVivienda"
-          >
-            Seleccione un tipo de moneda:
-          </label>
-          <select
-            id="tipoMoneda"
-            name="tipoMoneda"
-            value={tipoMoneda}
-            onChange={handleChangeTipoMoneda}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="UR">Pesos Uruguayos</option>
-            <option value="USD">Dolares</option>
-          </select>
-          {errores.tipoMoneda && (
-            <span className="text-red-500 text-sm">{errores.tipoMoneda}</span>
-          )}
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="denominacion"
+            >
+              Denominación:
+            </label>
+            <input
+              type="text"
+              id="denominacion"
+              value={denominacion}
+              onChange={handleChangeDenominacion}
+              className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
+            />
+            {errores.denominacion && (
+              <span className="text-red-500 text-sm">
+                {errores.denominacion}
+              </span>
+            )}
+          </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="seleccionSubVivienda"
+            >
+              Seleccione un tipo de moneda:
+            </label>
+            <select
+              id="tipoMoneda"
+              name="tipoMoneda"
+              value={tipoMoneda}
+              onChange={handleChangeTipoMoneda}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="UR">Pesos Uruguayos</option>
+              <option value="USD">Dolares</option>
+            </select>
+            {errores.tipoMoneda && (
+              <span className="text-red-500 text-sm">{errores.tipoMoneda}</span>
+            )}
+          </div>
         </div>
 
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="ingreso">
-            Ingreso:
+            Monto Ingreso:
           </label>
           <input
             type="text"
+            placeholder="$"
             id="ingreso"
             value={ingreso}
             onChange={handleChangeIngreso}
-            className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
+            className="w-auto p-2 border border-gray-300 dark:border-gray-700 rounded-md dark:bg-gray-800 dark:text-white"
           />
           {errores.ingreso && (
             <span className="text-red-500 text-sm">{errores.ingreso}</span>
@@ -189,7 +197,7 @@ const AltaIngreso = () => {
 
         <button
           type="submit"
-          className="w-full py-2 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Registrar Ingreso
         </button>

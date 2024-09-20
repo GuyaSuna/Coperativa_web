@@ -102,7 +102,7 @@ const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
 
     return data;
   } catch (error) {
-    console.error("Error en postAdministrador:", error);
+    console.error("Error en register:", error);
     throw new Error("Error al enviar los datos del administrador");
   }
 };

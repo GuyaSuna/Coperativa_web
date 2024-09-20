@@ -50,7 +50,7 @@ const ListadoRecibosSocios = () => {
     setAnchorEl(null);
   };
   return (
-    <DashboardCard>
+    <DashboardCard title={"Historial de Recibos"}>
       <Box
         sx={{
           overflowX: "auto", // Allows horizontal scrolling if content overflows
@@ -123,6 +123,7 @@ const ListadoRecibosSocios = () => {
                       fontSize: "15px",
                       fontWeight: "500",
                     }}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
                     {recibos.nroRecibo}
                   </Typography>
@@ -133,24 +134,25 @@ const ListadoRecibosSocios = () => {
                       display: "flex",
                       alignItems: "center",
                     }}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
                     {recibos.fechaRecibo}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
-                    color="textSecondary"
                     variant="subtitle2"
                     fontWeight={400}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
                     {recibos.fechaPago}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
-                    color="textSecondary"
                     variant="subtitle2"
                     fontWeight={400}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
                     ${recibos.cuotaMensual}
                   </Typography>
@@ -161,7 +163,7 @@ const ListadoRecibosSocios = () => {
                     className="relative inline-block text-left justify-end"
                   >
                     <div>
-                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm">
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:bg-gray-100 bg-dark text-white dark:text-gray-600 shadow-sm">
                         <svg
                           viewBox="0 0 24 24"
                           className="w-5"

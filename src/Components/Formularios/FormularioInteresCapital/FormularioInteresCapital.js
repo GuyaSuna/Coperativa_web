@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import * as XLSX from 'xlsx';
-import { postCapitalInteres } from '@/Api/api';
+import React, { useState } from "react";
+import * as XLSX from "xlsx";
+import { postCapitalInteres } from "@/Api/api";
 
-const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
+const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
   const [data, setData] = useState([]);
   const [capital, setCapital] = useState(0);
   const [interes, setInteres] = useState(0);
-  const [capitalInteresEntities , setCapitalInteresEntities] = useState([]);
+  const [capitalInteresEntities, setCapitalInteresEntities] = useState([]);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -14,19 +14,19 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
 
     reader.onload = (e) => {
       const binaryStr = e.target.result;
-      const workbook = XLSX.read(binaryStr, { type: 'binary' });
+      const workbook = XLSX.read(binaryStr, { type: "binary" });
 
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
       let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      jsonData = jsonData.slice(2)
+      jsonData = jsonData.slice(2);
       setData(jsonData);
 
-      const capitalInteresEntities = jsonData.map(row => ({
+      const capitalInteresEntities = jsonData.map((row) => ({
         interes: row[9] || 0,
         capital: row[8] || 0,
-        fecha: new Date((row[0] - 25567) * 86400 * 1000).toISOString()
+        fecha: new Date((row[0] - 25567) * 86400 * 1000).toISOString(),
       }));
 
       setCapitalInteresEntities(capitalInteresEntities);
@@ -35,16 +35,18 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
       const currentMonth = today.getMonth() + 1;
       const currentYear = today.getFullYear();
 
-      const todayData = jsonData.find(row => {
-
+      const todayData = jsonData.find((row) => {
         const excelDate = new Date((row[0] - 25567) * 86400 * 1000);
-        return excelDate.getMonth() + 1 === currentMonth && excelDate.getFullYear() === currentYear;
+        return (
+          excelDate.getMonth() + 1 === currentMonth &&
+          excelDate.getFullYear() === currentYear
+        );
       });
 
       if (todayData) {
-        setCapital(todayData[8]);  // Capital
-        setInteres(todayData[9]);  // Interés
-        setCapitalParm(todayData[8])
+        setCapital(todayData[8]); // Capital
+        setInteres(todayData[9]); // Interés
+        setCapitalParm(todayData[8]);
         setInteresParm(todayData[9]);
       } else {
         console.log("No se encontró una fila para el mes y año actuales.");
@@ -69,13 +71,18 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
           return;
         }
       }
-      const response = await postCapitalInteres(capitalInteresEntities, cooperativa.idCooperativa);
+      const response = await postCapitalInteres(
+        capitalInteresEntities,
+        cooperativa.idCooperativa
+      );
 
       alert("Datos de capital e interés actualizados con éxito.");
-      console.log('Respuesta del servidor:', response);
+      console.log("Respuesta del servidor:", response);
     } catch (error) {
-      console.error('Error al enviar los datos:', error);
-      alert("Hubo un error al intentar actualizar los datos. Por favor, intenta de nuevo.");
+      console.error("Error al enviar los datos:", error);
+      alert(
+        "Hubo un error al intentar actualizar los datos. Por favor, intenta de nuevo."
+      );
     }
   };
 
@@ -86,9 +93,15 @@ const ExcelReader = ({setInteresParm , setCapitalParm, cooperativa}) => {
         <h2>Datos del archivo:</h2>
         {capital !== null && interes !== null ? (
           <div>
-            <button onClick={handleCpitalInteres}>Dar de alta Interes Capital</button>
-            <p><strong>Capital del mes actual:</strong> {capital}</p>
-            <p><strong>Interés del mes actual:</strong> {interes}</p>
+            <button onClick={handleCpitalInteres}>
+              Dar de alta Interes Capital
+            </button>
+            <p>
+              <strong>Capital del mes actual:</strong> {capital}
+            </p>
+            <p>
+              <strong>Interés del mes actual:</strong> {interes}
+            </p>
           </div>
         ) : (
           <p>No se encontró capital e interés para el mes y año actuales.</p>
