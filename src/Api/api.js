@@ -1790,6 +1790,31 @@ const loginMaster = async (MasterData) => {
   }
 };
 
+
+const postDevolucionCapital = async () => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/estadoContable/${idCooperativa}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(estadoContableEntity),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postEstadoContable:", error);
+    throw new Error("Error al enviar los datos del estadoContable");
+  }
+};
+
+
 export {
   Login,
   getSocio,

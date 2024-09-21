@@ -35,6 +35,7 @@ import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchi
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
+import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/devolucionCapital";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -277,6 +278,14 @@ const ComponentesOrganizados = ({
       return (
         <ListadoEstadoContables
           cooperativa={cooperativa}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 36: {
+      return (
+        <DevolucionCapital
+         cedulaSocio={cedulaSocio}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
