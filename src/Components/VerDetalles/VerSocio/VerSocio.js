@@ -1,7 +1,8 @@
 "use client";
 
 import { getUltimoSubsidioSocio, getRecibosImpagosSocio } from "../../../Api/api";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext } from "react";
+import { MiembroContext } from "@/Provider/provider";
 
 const VerSocio = ({ isOpen, onClose, socio }) => {
   const [ultimoSubsidio, setUltimoSubsidio] = useState(null);
@@ -9,6 +10,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
   const [isSuplenteExpanded, setIsSuplenteExpanded] = useState(false);
   const [isSubsidioExpanded, setIsSubsidioExpanded] = useState(false);
   const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] = useState(false);
+  const {cooperativa} = useContext(MiembroContext);
 
   useEffect(() => {
     if (socio && socio.cedulaSocio) {
@@ -24,7 +26,8 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
 
       const fetchRecibosImpagos = async () => {
         try {
-          const recibos = await getRecibosImpagosSocio(socio.cedulaSocio);
+          const recibos = await getRecibosImpagosSocio(socio.cedulaSocio , cooperativa.idCooperativa);
+          console.log("Recibos Impagos: " , recibos);
           setRecibosImpagos(recibos);
         } catch (error) {
           console.error("Error al obtener los recibos impagos:", error);
@@ -226,12 +229,11 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                     <td colSpan="2" className="py-1 px-3">
                       <div className="max-h-60 overflow-y-auto">
                         {recibosImpagos.length > 0 ? (
-                          recibosImpagos.map((fecha) => (
-                            <div key={fecha} className="border-b border-gray-200 dark:border-gray-800 py-2">
+                          recibosImpagos.map((recibo) => (
+                            <div key={recibo.nroRecibo} className="border-b border-gray-200 dark:border-gray-800 py-2">
                               <div className="font-normal px-3">
-                                Falta pagar recibo en fecha:
+                                Falta pagar recibo en fecha: {recibo?.fecha} el monto de: {recibo?.cuotaMensual} 
                               </div>
-                              <div className="py-1 px-3">{fecha}</div>
                             </div>
                           ))
                         ) : (

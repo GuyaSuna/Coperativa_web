@@ -10,7 +10,7 @@ import {
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
-const AltaSubsidio = () => {
+const AltaSubsidio = ({setIdentificadorComponente}) => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
 
@@ -173,6 +173,7 @@ const AltaSubsidio = () => {
         alert("Error al agregar subsidio");
       } else {
         alert("Subsidio agregado exitosamente");
+        setIdentificadorComponente(17);
       }
     } catch (error) {
       console.error("Error al enviar los datos del subsidio:", error);

@@ -35,7 +35,7 @@ import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchi
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
-import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/devolucionCapital";
+// import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/devolucionCapital";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -154,7 +154,9 @@ const ComponentesOrganizados = ({
       return <ListadoInformes />;
     }
     case 16: {
-      return <AltaSubsidio />;
+      return <AltaSubsidio 
+        setIdentificadorComponente={setIdentificadorComponente}
+      />;
     }
     case 17: {
       return (

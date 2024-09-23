@@ -259,11 +259,11 @@ const getSocio = async (cedulaSocio) => {
   }
 };
 
-const getRecibosImpagosSocio = async (cedulaSocio) => {
+const getRecibosImpagosSocio = async (cedulaSocio , idCooperativa) => {
   try {
     const token = getToken();
     console.log("Token", token);
-    const response = await fetch(`${URL}/socio/reciboImpago/${cedulaSocio}`, {
+    const response = await fetch(`${URL}/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
