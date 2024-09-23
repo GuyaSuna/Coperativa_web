@@ -34,7 +34,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
     <div className="xl:w-72 w-48 flex-shrink-0 border-r border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5 bg-gray-50 dark:bg-dark text-center">
       <Image
         className="logo-Img hover:scale-90 transform duration-700"
-        src={darkMode ? logoLight : logoDark}
+        src={darkMode ? logoDark : logoLight}
         alt="Coviamuro Logo"
         width={195}
         height={65}

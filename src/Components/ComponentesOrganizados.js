@@ -37,7 +37,7 @@ import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
 import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
 import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
-import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/devolucionCapital";
+import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/DevolucionCapital.js";
 
 const ComponentesOrganizados = ({
   identificador,
