@@ -128,17 +128,12 @@ const ListadoSocioArchivados = ({
   const handleAgregarSocio = () => {
     setIdentificadorComponente(3); // Navegar a la vista de agregar socio
   };
-
-  const handleModificarSocio = (socio) => {
+ 
+  const handleDevolucionCapital = (socio) => {
+    //setIdentificadorComponente();
     setCedulaSocio(socio.cedulaSocio);
-    setIdentificadorComponente(2); // Navegar a la vista de modificar socio
   };
-
-  const handleCrearRecibo = (socio) => {
-    setSocioRecibo(socio);
-    setIdentificadorComponente(1); // Navegar a la vista de crear recibo
-  };
-
+  
   return (
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -240,7 +235,14 @@ const ListadoSocioArchivados = ({
                       ⋮
                     </MenuButton>
                     <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                     
+                    <MenuItem>
+                        <button
+                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                          onClick={() => handleDevolucionCapital(socio)}
+                        >
+                          Asignar devolucion de capital
+                        </button>
+                      </MenuItem>
                     </MenuItems>
                   </Menu>
                 </td>
