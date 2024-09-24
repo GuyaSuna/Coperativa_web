@@ -35,7 +35,8 @@ import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchi
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
-// import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/devolucionCapital";
+import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/DevolucionCapital";
+import PagoDevolucionCapitalForm from "./Formularios/Socios/ModificarSocio/PagoDevolucionCapital";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -259,6 +260,7 @@ const ComponentesOrganizados = ({
       return (
         <ListadoSociosArchivados
           cooperativa={cooperativa}
+          setSocio={setSocio}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
@@ -284,10 +286,18 @@ const ComponentesOrganizados = ({
         />
       );
     }
-    case 36: {
+    case 37: {
       return (
         <DevolucionCapital
-         cedulaSocio={cedulaSocio}
+          socio={socio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 38: {
+      return (
+        <PagoDevolucionCapitalForm
+          socio={socio}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

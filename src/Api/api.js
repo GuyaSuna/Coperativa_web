@@ -1791,16 +1791,65 @@ const loginMaster = async (MasterData) => {
 };
 
 
-const postDevolucionCapital = async () => {
+const postDevolucionCapital = async (devolucionCapital) => {
   try {
     const token = getToken();
-    const response = await fetch(`${URL}/estadoContable/${idCooperativa}`, {
+    const response = await fetch(`${URL}/devolucionCapital`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(estadoContableEntity),
+      body: JSON.stringify(devolucionCapital),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    } 
+
+    console.log("llega aca ")
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postDevolucion:", error);
+    throw new Error("Error al enviar los datos de la devolucion");
+  }
+};
+
+const getDevolucionCapital = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/devolucionCapital/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    } 
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getDevolucion:", error);
+    throw new Error("Error al recibir los datos de la devolucion");
+  }
+};
+
+
+const postPagoDevolucionCapital = async (pagoDevolucionCaptial) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/pagoCapital`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pagoDevolucionCaptial),
     });
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -1809,8 +1858,8 @@ const postDevolucionCapital = async () => {
 
     return data;
   } catch (error) {
-    console.error("Error en postEstadoContable:", error);
-    throw new Error("Error al enviar los datos del estadoContable");
+    console.error("Error en postPagoDevolucion:", error);
+    throw new Error("Error al enviar los datos del pago devolucion");
   }
 };
 
@@ -1879,4 +1928,7 @@ export {
   getInteresAnual,
   loginMaster,
   getAllSociosImpagos,
+  postDevolucionCapital,
+  postPagoDevolucionCapital,
+  getDevolucionCapital,
 };

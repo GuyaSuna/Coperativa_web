@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios, getAllRecibos, updateSocio } from "../../../Api/api.js";
+import { getAllSocios, getAllRecibos, updateSocio, getDevolucionCapital } from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -18,7 +18,7 @@ import OrdenarPor from "@/Components/OrdenarPor.js";
 
 const ListadoSocioArchivados = ({
   setSocioRecibo,
-  setCedulaSocio,
+  setSocio,
   setIdentificadorComponente,
 }) => {
   const [allSocios, setAllSocios] = useState([]);
@@ -56,31 +56,14 @@ const ListadoSocioArchivados = ({
           : socio;
       });
 
-      // Corrección: retorno implícito en la función de filtro
       const sociosSinArchivar = sociosConFechaFormateada.filter(
         (socio) => socio.archivado
       );
 
       setAllSocios(sociosSinArchivar);
-      setBuscadorFiltrado(sociosSinArchivar); // Usar sociosSinArchivar en lugar de sociosConFechaFormateada
+      setBuscadorFiltrado(sociosSinArchivar);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
-    }
-  };
-
-  const handleDesarchivar = async (socio) => {
-    try {
-      const socioActualizado = { ...socio, archivado: false };
-      await updateSocio(socioActualizado);
-      // Eliminar el socio de ambas listas inmediatamente
-      setAllSocios((prevSocios) =>
-        prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
-      setBuscadorFiltrado((prevFiltrado) =>
-        prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-      );
-    } catch (e) {
-      console.error("Fallo al archivar el socio", e);
     }
   };
 
@@ -126,13 +109,27 @@ const ListadoSocioArchivados = ({
   ];
 
   const handleAgregarSocio = () => {
-    setIdentificadorComponente(3); // Navegar a la vista de agregar socio
+    setIdentificadorComponente(3); 
   };
  
   const handleDevolucionCapital = (socio) => {
-    //setIdentificadorComponente();
-    setCedulaSocio(socio.cedulaSocio);
+    setIdentificadorComponente(37);
+    setSocio(socio);
   };
+
+  const handlePagoDevolucion = (socio) => {
+    const responseDevolucion = getDevolucionCapital(socio.cedulaSocio);
+    if(responseDevolucion != null){
+      console.log("entra")
+      setSocio(socio);
+      setIdentificadorComponente(38);
+    }else{
+      alert("No se encontro ninguna devolucion para este socio, crea una antes de comenzar un pago");
+    }
+    
+   
+  };
+  
   
   return (
     <div className="sm:p-7 p-4">
@@ -241,6 +238,14 @@ const ListadoSocioArchivados = ({
                           onClick={() => handleDevolucionCapital(socio)}
                         >
                           Asignar devolucion de capital
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                          onClick={() => handlePagoDevolucion(socio)}
+                        >
+                          Pagar deolucion
                         </button>
                       </MenuItem>
                     </MenuItems>

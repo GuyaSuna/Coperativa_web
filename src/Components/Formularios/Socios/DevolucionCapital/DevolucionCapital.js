@@ -3,25 +3,12 @@
 import React, { useState, useEffect } from "react";
 import { postDevolucionCapital, getSocio } from "../../../../Api/api.js";
 
-const DevolucionCapital = ({ cedula, setIdentificadorComponente }) => {
-  const [socio, setSocio] = useState(null);
-  const [capitalDescuento, setCapitalDescuento] = useState("");
+const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
+
+  const [capitalDescuento, setCapitalDescuento] = useState(0);
   const [razonRetiro, setRazonRetiro] = useState("");
   const [tipoRetiro, setTipoRetiro] = useState(""); 
   const [errores, setErrores] = useState({});
-
-  useEffect(() => {
-    const fetchSocio = async () => {
-      try {
-        const socioData = await getSocio(cedula);
-        setSocio(socioData);
-      } catch (error) {
-        console.error("Error al obtener los datos del socio:", error);
-      }
-    };
-
-    fetchSocio();
-  }, [cedula]);
 
   const handleChangeCapitalDescuento = (e) => setCapitalDescuento(e.target.value);
   const handleChangeRazonRetiro = (e) => setRazonRetiro(e.target.value);
@@ -29,34 +16,51 @@ const DevolucionCapital = ({ cedula, setIdentificadorComponente }) => {
 
   const validarFormulario = () => {
     const errores = {};
-
-    if (!capitalDescuento) errores.capitalDescuento = "El descuento de capital es obligatorio";
-    if (!razonRetiro) errores.razonRetiro = "La razón del retiro es obligatoria";
-    if (!tipoRetiro) errores.tipoRetiro = "Debe especificar el tipo de retiro";
-
+  
+    if (!capitalDescuento) {
+      errores.capitalDescuento = "El descuento de capital es obligatorio";
+    } else if (isNaN(capitalDescuento)) {
+      errores.capitalDescuento = "El descuento de capital debe ser un número";
+    } else if (parseFloat(capitalDescuento) < 0) {
+      errores.capitalDescuento = "El descuento de capital debe ser un numero positivo";
+    }
+  
+    if (!razonRetiro) {
+      errores.razonRetiro = "La razón del retiro es obligatoria";
+    } 
+  
+    if (!tipoRetiro) {
+      errores.tipoRetiro = "Debe especificar el tipo de retiro";
+    } else if (tipoRetiro !== "True" && tipoRetiro !== "False") {
+      errores.tipoRetiro = "El tipo de retiro debe ser 'expulsion' o 'decisionPropia'";
+    }
+  
     setErrores(errores);
-
+  
     return Object.keys(errores).length === 0;
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
+    let expulsado;
+    if(tipoRetiro == "True"){
+      expulsado = true;
+    } else{
+      expulsado = false;
+    }
     const devolucionData = {
-      cedula: socio.cedula,
-      capitalDescuento,
-      razonRetiro,
-      tipoRetiro,
+      socio,
+      porcentajeDescuento: capitalDescuento,
+      razon:razonRetiro,
+      expulsado : tipoRetiro,
     };
 
     try {
       const response = await postDevolucionCapital(devolucionData);
-      if (response.status === 201) {
-        alert("Devolución de capital registrada con éxito");
-      } else {
-        alert("Error al registrar la devolución");
-      }
+      console.log(response)
     } catch (error) {
       console.error("Error al enviar los datos de la devolución:", error);
       alert("Error interno del servidor");
@@ -71,22 +75,17 @@ const DevolucionCapital = ({ cedula, setIdentificadorComponente }) => {
           className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
         >
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Nombre:</label>
-            <p>{socio.nombre}</p>
+            <label className="block text-sm font-medium mb-2">Nombre: {socio.nombreSocio}</label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Apellido:</label>
-            <p>{socio.apellido}</p>
+            <label className="block text-sm font-medium mb-2">Apellido: {socio.apellidoSocio}</label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Cédula:</label>
-            <p>{socio.cedula}</p>
+            <label className="block text-sm font-medium mb-2">Cédula: {socio.cedulaSocio}</label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Capital:</label>
-            <p>{socio.capital}</p>
+            <label className="block text-sm font-medium mb-2">Capital: {socio.capitalSocio.toFixed(2)}</label>
           </div>
-
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2" htmlFor="capitalDescuento">
               Porcentaje de Descuento de Capital:
@@ -126,8 +125,8 @@ const DevolucionCapital = ({ cedula, setIdentificadorComponente }) => {
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             >
               <option value="">Seleccione el Tipo de Retiro</option>
-              <option value="Expulsado">Expulsado</option>
-              <option value="Decisión propia">Decisión propia</option>
+              <option value="True">Expulsado</option>
+              <option value="False">Decisión propia</option>
             </select>
             {errores.tipoRetiro && (
               <span className="text-red-500 text-sm">{errores.tipoRetiro}</span>

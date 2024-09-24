@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   postSubsidio,
   getAllSocios,
+  getAllSubsidios,
   getViviendaPorSocio,
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
@@ -22,8 +23,9 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
   const [fechaOtorgado, setFechaOtorgado] = useState("");
   const [fechaExpira, setFechaExpira] = useState("");
   const [socioSeleccionado, setSocioSeleccionado] = useState("");
-
+  const [allSubsidios , setAllSubsidios] = useState([]);
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
+  const [sociosSinSubsidio , setSosciosSinSubsidios] = useState([]);
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -31,8 +33,27 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
   }, []);
 
   useEffect(() => {
+    //
+    
+  },[allSubsidios , sociosDisponibles])
+
+  useEffect(() => {
     fetchSociosDisponibles();
   }, []);
+
+  useEffect(() => {
+    fetchAllSubsidios();
+  },[]);
+
+  const fetchAllSubsidios = async () => {
+    try{
+      const responseSubsidio = await getAllSubsidios();
+      console.log("All subsidios", responseSubsidio);
+      setAllSubsidios(responseSubsidio);
+    }catch{
+      console.log("Error en el gatAllSubsidio")
+    }
+  } 
 
   useEffect(() => {
     if (subsidioUr && valorViviendaUr) {

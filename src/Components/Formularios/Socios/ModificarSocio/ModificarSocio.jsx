@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import "./FormStyle.css";
 import { getSocio, updateSocio } from "../../../../Api/api";
 
 const ModificarSocio = ({ cedulaSocioParam }) => {
