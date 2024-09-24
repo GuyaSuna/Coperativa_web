@@ -833,14 +833,14 @@ const getUr = async () => {
   }
 };
 
-const getAllRecibos = async (idCooperativa) => {
+const getAllRecibos = async (id) => {
   try {
     const token = getToken();
     console.log("Token:", token);
-    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`);
+    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${id}`);
 
     const response = await fetch(
-      `${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`,
+      `${URL}/recibo/getAllRecibosPorCooperativa/${id}`,
       {
         method: "GET",
         headers: {

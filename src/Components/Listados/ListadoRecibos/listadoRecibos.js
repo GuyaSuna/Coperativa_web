@@ -12,7 +12,7 @@ import Buscador from "@/Components/Buscador.js";
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
-  const { cooperativa } = useContext(MiembroContext);
+  const { cooperativa, miembro } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,10 +20,10 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   useEffect(() => {
     fetchAllRecibos();
   }, []);
-
+  console.log("Miembro: ", miembro);
   const fetchAllRecibos = async () => {
     try {
-      const response = await getAllRecibos(cooperativa.idCooperativa);
+      const response = await getAllRecibos(miembro.responseBody.id);
       setAllRecibos(response);
       console.log(response, "no anda response");
     } catch (error) {
@@ -50,12 +50,13 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     if (buscador === "") {
       setBuscadorFiltrado(allRecibos);
     } else {
-      const buscadorFiltrado = allRecibos.filter((recibo) =>
+      const buscadorFiltrado = allRecibos?.filter((recibo) =>
         recibo.socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
       );
       setBuscadorFiltrado(buscadorFiltrado);
     }
   }, [allRecibos, buscador]);
+
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
