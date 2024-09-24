@@ -230,7 +230,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                       <div className="max-h-60 overflow-y-auto">
                         {recibosImpagos.length > 0 ? (
                           recibosImpagos.map((recibo) => (
-                            <div key={recibo.nroRecibo} className="border-b border-gray-200 dark:border-gray-800 py-2">
+                            <div key={recibo?.fecha} className="border-b border-gray-200 dark:border-gray-800 py-2">
                               <div className="font-normal px-3">
                                 Falta pagar recibo en fecha: {recibo?.fecha} el monto de: {recibo?.cuotaMensual} 
                               </div>

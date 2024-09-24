@@ -63,14 +63,7 @@ const SessionManager = () => {
     }
   };
 
-  const minutos = Math.floor(tiempoRestante / 60);
-  const segundos = Math.floor(tiempoRestante % 60);
 
-  return (
-    <div className="bg-slate-100">
-      Tiempo restante: {minutos}:{segundos < 10 ? `0${segundos}` : segundos}
-    </div>
-  );
 };
 
 export default SessionManager;
