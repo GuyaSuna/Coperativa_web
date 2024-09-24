@@ -9,6 +9,7 @@ import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
+import jsPDF from "jspdf";
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
@@ -93,6 +94,25 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   };
   const handleAgregarRecibo = () => {
     setIdentificadorComponente(6);
+  };
+
+  const handleDescargarPDF = (recibo) => {
+    const doc = new jsPDF();
+
+    // Personaliza el contenido del PDF
+    doc.text("Recibo de Pago", 10, 10);
+    doc.text(`Número de Recibo: ${recibo.nroRecibo}`, 10, 20);
+    doc.text(
+      `Socio: ${recibo.socio.nombreSocio} ${recibo.socio.apellidoSocio}`,
+      10,
+      30
+    );
+    doc.text(`Fecha de Pago: ${recibo.fechaPago}`, 10, 40);
+    doc.text(`Monto: ${recibo.monto}`, 10, 50);
+    doc.text(`Estado: ${recibo.estaImpago ? "Impago" : "Pago"}`, 10, 60);
+
+    // Guarda el PDF con un nombre personalizado
+    doc.save(`Recibo_${recibo.nroRecibo}.pdf`);
   };
   return (
     <div className="sm:p-7 p-4 ">
@@ -234,6 +254,14 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                               className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                             >
                               Modificar
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              onClick={() => handleDescargarPDF(recibo)}
+                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                            >
+                              Descargar PDF
                             </button>
                           </MenuItem>
                         </div>
