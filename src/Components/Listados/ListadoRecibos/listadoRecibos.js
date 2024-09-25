@@ -10,6 +10,7 @@ import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
 import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [allRecibos, setAllRecibos] = useState([]);
@@ -21,7 +22,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   useEffect(() => {
     fetchAllRecibos();
   }, []);
-  console.log("Miembro: ", miembro);
+  console.log("El recibo: ", allRecibos);
   const fetchAllRecibos = async () => {
     try {
       const response = await getAllRecibos(miembro.responseBody.id);
@@ -99,20 +100,50 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const handleDescargarPDF = (recibo) => {
     const doc = new jsPDF();
 
-    // Personaliza el contenido del PDF
-    doc.text("Recibo de Pago", 10, 10);
-    doc.text(`Número de Recibo: ${recibo.nroRecibo}`, 10, 20);
-    doc.text(
-      `Socio: ${recibo.socio.nombreSocio} ${recibo.socio.apellidoSocio}`,
-      10,
-      30
-    );
-    doc.text(`Fecha de Pago: ${recibo.fechaPago}`, 10, 40);
-    doc.text(`Monto: ${recibo.monto}`, 10, 50);
-    doc.text(`Estado: ${recibo.estaImpago ? "Impago" : "Pago"}`, 10, 60);
+    // Encabezado principal (COVIAMUROS, cooperativa, etc.)
+    doc.setFontSize(16);
+    doc.text("COVIAMUROS", 20, 20);
+    doc.setFontSize(12);
+    doc.text("COOPERATIVA DE VIVIENDA", 20, 26);
+    doc.text("AYUDA MUTUA ROSARIO", 20, 32);
+    doc.text("ROSARIO - Dpto. de Colonia", 20, 38);
 
+    // Número de recibo y fecha
+    doc.setFontSize(12);
+    doc.text("RECIBO", 160, 20);
+    doc.text(`${recibo.nroRecibo}`, 160, 26);
+    doc.text("DIA  MES  AÑO", 160, 32);
+    doc.text(`${recibo.fechaPago}`, 160, 38);
+
+    // Tabla de conceptos e importes
+    doc.autoTable({
+      startY: 50,
+      head: [["CONCEPTOS", "IMPORTES"]],
+      body: [
+        ["1 - Ahorro/Mes Set 23", `${recibo.cuotaMensual}`],
+        ["2 - Cuota Social", `${recibo.cuotaSocial}`],
+        ["3 - Convenio", `${recibo.convenio}`],
+        ["4 - Recargo", `${recibo.recargo}`],
+      ],
+      theme: "grid",
+      styles: { fontSize: 10 },
+    });
+
+    // Total
+    doc.setFontSize(12);
+    doc.text("TOTAL:  8396", 150, 95);
+
+    // Firmas y detalles finales
+    doc.text("Hemos Recibido de: ", 20, 100);
+    doc.text(`${recibo.socio.nombreSocio}`, 65, 100);
+    doc.text("La suma de $: ", 20, 105);
+    doc.text(`${recibo.sumaEnPesos}`, 60, 105);
+
+    doc.text("TESORERO", 150, 120);
+    doc.text(`${recibo.tesorero.firstname}`, 145, 125);
+    doc.text(`${recibo.tesorero.lastname}`, 165, 125);
     // Guarda el PDF con un nombre personalizado
-    doc.save(`Recibo_${recibo.nroRecibo}.pdf`);
+    doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
   };
   return (
     <div className="sm:p-7 p-4 ">
