@@ -49,6 +49,7 @@ const ListadoSocio = ({
   const fetchRecibos = async () => {
     const reciboResponse = await getAllRecibos(cooperativa.idCooperativa);
     setRecibos(reciboResponse);
+    console.log("Listado recibo: ", reciboResponse);
   };
 
   const fetchAllSocios = async () => {

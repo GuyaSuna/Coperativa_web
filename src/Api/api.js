@@ -102,7 +102,7 @@ const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
 
     return data;
   } catch (error) {
-    console.error("Error en postAdministrador:", error);
+    console.error("Error en register:", error);
     throw new Error("Error al enviar los datos del administrador");
   }
 };
@@ -325,13 +325,16 @@ const getAllSocios = async (idCooperativa) => {
 const getAllSociosImpagos = async (idCooperativa) => {
   try {
     const token = getToken();
-    const response = await fetch(`${URL}/socio/SociosImpagos/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/socio/SociosImpagos/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -823,23 +826,21 @@ const getUr = async () => {
       throw new Error("La petición ha fallado, el response no es 'ok'");
     }
 
-    return data; 
+    return data;
   } catch (error) {
     console.error("Error en getUr:", error);
     throw new Error("Error al obtener los datos de las UR");
   }
 };
 
-
-
-const getAllRecibos = async (idCooperativa) => {
+const getAllRecibos = async (id) => {
   try {
     const token = getToken();
     console.log("Token:", token);
-    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`);
+    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${id}`);
 
     const response = await fetch(
-      `${URL}/recibo/getAllRecibosPorCooperativa/${idCooperativa}`,
+      `${URL}/recibo/getAllRecibosPorCooperativa/${id}`,
       {
         method: "GET",
         headers: {
@@ -940,7 +941,7 @@ const postRecibo = async (
       tesorero,
     };
 
-    const token = getToken(); 
+    const token = getToken();
     const response = await fetch(`${URL}/recibo`, {
       method: "POST",
       headers: {
@@ -955,8 +956,14 @@ const postRecibo = async (
     }
 
     const contentType = response.headers.get("Content-Type");
-    if (response.status === 204 || !contentType || !contentType.includes("application/json")) {
-      console.log("No hay contenido en la respuesta o el contenido no es JSON.");
+    if (
+      response.status === 204 ||
+      !contentType ||
+      !contentType.includes("application/json")
+    ) {
+      console.log(
+        "No hay contenido en la respuesta o el contenido no es JSON."
+      );
       return null;
     }
 
@@ -1862,8 +1869,32 @@ const postPagoDevolucionCapital = async (pagoDevolucionCaptial) => {
     throw new Error("Error al enviar los datos del pago devolucion");
   }
 };
+const getUltimoEstadoContable = async () => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/estadoContable/getUltimoEstadoContable`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
 
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getUltimoReajuste:", error);
+    throw new Error("Error al obtener los datos de el ultimo reajuste");
+  }
+};
 export {
   Login,
   getSocio,
@@ -1931,4 +1962,5 @@ export {
   postDevolucionCapital,
   postPagoDevolucionCapital,
   getDevolucionCapital,
+  getUltimoEstadoContable,
 };

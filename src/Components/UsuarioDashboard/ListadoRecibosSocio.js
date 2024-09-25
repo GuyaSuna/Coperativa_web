@@ -20,6 +20,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DashboardCard from "./DashboardCard";
 import { getAllRecibosPorSocio } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ListadoRecibosSocios = () => {
   const { miembro, cooperativa } = useContext(MiembroContext);
@@ -49,8 +51,56 @@ const ListadoRecibosSocios = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleDescargarPDF = (recibo) => {
+    const doc = new jsPDF();
+
+    // Encabezado principal (COVIAMUROS, cooperativa, etc.)
+    doc.setFontSize(16);
+    doc.text("COVIAMUROS", 20, 20);
+    doc.setFontSize(12);
+    doc.text("COOPERATIVA DE VIVIENDA", 20, 26);
+    doc.text("AYUDA MUTUA ROSARIO", 20, 32);
+    doc.text("ROSARIO - Dpto. de Colonia", 20, 38);
+
+    // Número de recibo y fecha
+    doc.setFontSize(12);
+    doc.text("RECIBO", 160, 20);
+    doc.text(`${recibo.nroRecibo}`, 160, 26);
+    doc.text("DIA  MES  AÑO", 160, 32);
+    doc.text(`${recibo.fechaPago}`, 160, 38);
+
+    // Tabla de conceptos e importes
+    doc.autoTable({
+      startY: 50,
+      head: [["CONCEPTOS", "IMPORTES"]],
+      body: [
+        ["1 - Ahorro/Mes Set 23", `${recibo.cuotaMensual}`],
+        ["2 - Cuota Social", `${recibo.cuotaSocial}`],
+        ["3 - Convenio", `${recibo.convenio}`],
+        ["4 - Recargo", `${recibo.recargo}`],
+      ],
+      theme: "grid",
+      styles: { fontSize: 10 },
+    });
+
+    // Total
+    doc.setFontSize(12);
+    doc.text("TOTAL:  8396", 150, 95);
+
+    // Firmas y detalles finales
+    doc.text("Hemos Recibido de: ", 20, 100);
+    doc.text(`${recibo.socio.nombreSocio}`, 65, 100);
+    doc.text("La suma de $: ", 20, 105);
+    doc.text(`${recibo.sumaEnPesos}`, 60, 105);
+
+    doc.text("TESORERO", 150, 120);
+    doc.text(`${recibo.tesorero.firstname}`, 145, 125);
+    doc.text(`${recibo.tesorero.lastname}`, 165, 125);
+    // Guarda el PDF con un nombre personalizado
+    doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
+  };
   return (
-    <DashboardCard>
+    <DashboardCard title={"Historial de Recibos"}>
       <Box
         sx={{
           overflowX: "auto", // Allows horizontal scrolling if content overflows
@@ -115,7 +165,7 @@ const ListadoRecibosSocios = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {allRecibos.map((recibos) => (
+            {allRecibos.map((recibo) => (
               <TableRow>
                 <TableCell>
                   <Typography
@@ -123,8 +173,9 @@ const ListadoRecibosSocios = () => {
                       fontSize: "15px",
                       fontWeight: "500",
                     }}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
-                    {recibos.nroRecibo}
+                    {recibo.nroRecibo}
                   </Typography>
                 </TableCell>
                 <TableCell>
@@ -133,26 +184,27 @@ const ListadoRecibosSocios = () => {
                       display: "flex",
                       alignItems: "center",
                     }}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
-                    {recibos.fechaRecibo}
+                    {recibo.fechaRecibo}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
-                    color="textSecondary"
                     variant="subtitle2"
                     fontWeight={400}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
-                    {recibos.fechaPago}
+                    {recibo.fechaPago}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography
-                    color="textSecondary"
                     variant="subtitle2"
                     fontWeight={400}
+                    className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
                   >
-                    ${recibos.cuotaMensual}
+                    ${recibo.cuotaMensual}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
@@ -161,7 +213,7 @@ const ListadoRecibosSocios = () => {
                     className="relative inline-block text-left justify-end"
                   >
                     <div>
-                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm">
+                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:bg-gray-100 bg-dark text-white dark:text-gray-600 shadow-sm">
                         <svg
                           viewBox="0 0 24 24"
                           className="w-5"
@@ -184,7 +236,7 @@ const ListadoRecibosSocios = () => {
                       <div className="py-1">
                         <MenuItem>
                           <button
-                            onClick={() => handleEliminar(recibos?.idRecibo)}
+                            onClick={() => handleEliminar(recibo?.idRecibo)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Imprimir
@@ -192,10 +244,18 @@ const ListadoRecibosSocios = () => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            onClick={() => handleModificar(recibos?.idRecibo)}
+                            onClick={() => handleModificar(recibo?.idRecibo)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Ver Recibo
+                          </button>
+                        </MenuItem>
+                        <MenuItem>
+                          <button
+                            onClick={() => handleDescargarPDF(recibo)}
+                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                          >
+                            Descargar PDF
                           </button>
                         </MenuItem>
                       </div>

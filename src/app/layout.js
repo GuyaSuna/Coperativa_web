@@ -5,6 +5,7 @@ import Footer from "../Components/footer";
 import { MiembroProvider } from "@/Provider/provider";
 import { SessionProvider } from "@/Provider/loginProvider";
 import SessionManager from "@/Components/session/sessionManager";
+import { ThemeProvider } from "@/Provider/ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,12 +18,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <MiembroProvider>
-          <SessionProvider>
-            <SessionManager />
-            {children}
-          </SessionProvider>
-        </MiembroProvider>
+        <ThemeProvider>
+          <MiembroProvider>
+            <SessionProvider>
+              <SessionManager />
+              {children}
+            </SessionProvider>
+          </MiembroProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

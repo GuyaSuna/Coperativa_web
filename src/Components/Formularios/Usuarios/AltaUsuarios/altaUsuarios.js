@@ -2,13 +2,21 @@
 
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { postUsuario, getAllSocios, getAllUsuarios } from "../../../../Api/api";
+import {
+  postUsuario,
+  getAllSocios,
+  getAllUsuarios,
+  register,
+} from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const AltaUsuario = () => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
-  const [contraseña, setContraseña] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
@@ -38,7 +46,7 @@ const AltaUsuario = () => {
 
   const validarFormulario = () => {
     const errores = {};
-    if (!contraseña) errores.contraseña = "La contraseña es obligatoria";
+    if (!password) errores.password = "La contraseña es obligatoria";
     if (!email) errores.email = "El email es obligatorio";
     if (!socioSeleccionado)
       errores.socioSeleccionado = "Debe seleccionar un socio";
@@ -59,19 +67,29 @@ const AltaUsuario = () => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
-    const usuarioEntity = {
+    const registerRequest = {
+      firstname,
+      lastname,
+      username,
+      role: "USER",
       socio: socioSeleccionado,
-      contraseña,
+      password,
       email,
     };
-    console.log("UsuarioEtity:", usuarioEntity);
+    console.log("UsuarioEtity:", registerRequest);
+    console.log("Cedula a enviar: ", socioSeleccionado.cedulaSocio);
+    console.log("Cooperativa que enviamos: ", cooperativa.idCooperativa);
     try {
-      const response = await postUsuario(usuarioEntity);
+      const response = await register(
+        registerRequest,
+        socioSeleccionado.cedulaSocio,
+        cooperativa.idCooperativa
+      );
       console.log("response", response);
       if (response.status === 201) {
-        alert("Usuario agregado exitosamente");
-      } else {
         alert("Error al agregar usuario");
+      } else {
+        alert("Usuario agregado exitosamente");
       }
     } catch (error) {
       console.error("Error al enviar los datos del usuario:", error);
@@ -85,54 +103,114 @@ const AltaUsuario = () => {
         onSubmit={handleSubmit}
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
-        <label className="block text-sm font-medium mb-2">
-          Seleccione el Socio:
-          <select
-            name="socioDelusuario"
-            value={socioSeleccionado ? socioSeleccionado.cedulaSocio : ""}
-            onChange={handleSocioChange}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="">Seleccione un socio</option>
-            {sociosDisponibles.map((socio) => (
-              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {`${socio.nombreSocio} ${socio.apellidoSocio}`}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="mb-4">
+          <label className="grid text-sm font-medium mb-2">
+            Seleccione el Socio:
+            <select
+              name="socioDelusuario"
+              value={socioSeleccionado ? socioSeleccionado.cedulaSocio : ""}
+              onChange={handleSocioChange}
+              className="w-auto p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white max-w-64"
+            >
+              <option value="">Seleccione un socio</option>
+              {sociosDisponibles.map((socio) => (
+                <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
+                  {`${socio.nombreSocio} ${socio.apellidoSocio}`}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="mb-4">
+          <label className="grid text-sm font-medium mb-2">
+            Nombre:
+            <input
+              type="text"
+              value={firstname}
+              onChange={(e) => setFirstname(e.target.value)}
+              className="w-auto max-w-64 p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+        </div>
+        <div className="mb-4">
+          <label className="grid text-sm font-medium mb-2">
+            Apellido:
+            <input
+              type="text"
+              value={lastname}
+              onChange={(e) => setLastname(e.target.value)}
+              className="w-auto max-w-64 p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
 
-        <label className="block text-sm font-medium mb-2">
-          Email:
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-        </label>
+          {Object.keys(errores).length > 0 && (
+            <div className="text-red-500">
+              {Object.values(errores).map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="grid text-sm font-medium mb-2">
+            Email:
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-auto max-w-64 p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
 
-        <label className="block text-sm font-medium mb-2">
-          Contraseña:
-          <input
-            type="password"
-            value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-        </label>
+          {Object.keys(errores).length > 0 && (
+            <div className="text-red-500">
+              {Object.values(errores).map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="grid text-sm font-medium mb-2">
+            Nombre de usuario:
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-auto max-w-64 p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
 
-        {Object.keys(errores).length > 0 && (
-          <div className="text-red-500">
-            {Object.values(errores).map((error, index) => (
-              <p key={index}>{error}</p>
-            ))}
-          </div>
-        )}
+          {Object.keys(errores).length > 0 && (
+            <div className="text-red-500">
+              {Object.values(errores).map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="mb-4">
+          <label className="grid text-sm font-medium mb-2">
+            Contraseña:
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-auto max-w-64 p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
 
+          {Object.keys(errores).length > 0 && (
+            <div className="text-red-500">
+              {Object.values(errores).map((error, index) => (
+                <p key={index}>{error}</p>
+              ))}
+            </div>
+          )}
+        </div>
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="w-auto max-w-64 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           Crear Usuario
         </button>

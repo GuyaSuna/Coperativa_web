@@ -12,12 +12,13 @@ import { Grid } from "@mui/material";
 import DatosUsuario from "@/Components/UsuarioDashboard/DatosUsuario";
 import ListadoRecibosSocios from "@/Components/UsuarioDashboard/ListadoRecibosSocio";
 import DatosVivienda from "@/Components/UsuarioDashboard/DatosVivienda";
+import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 
 const UsuarioHome = () => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [ur, setUr] = useState([]);
-  const [identificadorComponente, setIdentificadorComponente] = useState(0);
+  const [identificadorComponente, setIdentificadorComponente] = useState(36);
   const [cedulaSocio, setCedulaSocio] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
 
@@ -58,17 +59,13 @@ const UsuarioHome = () => {
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"
               />
-              <Grid container spacing={1} p={2}>
-                <Grid item xs={12} md={6}>
-                  <DatosUsuario />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <DatosVivienda />
-                </Grid>
-                <Grid item xs={12} sx={{ mt: 1 }}>
-                  <ListadoRecibosSocios />
-                </Grid>
-              </Grid>
+              <ComponentesOrganizados
+                identificador={identificadorComponente}
+                setCedulaSocio={setCedulaSocio}
+                cedulaSocio={cedulaSocio}
+                setIdentificadorComponente={setIdentificadorComponente}
+                ur={ur}
+              />
             </div>
           </div>
           <Footer className="mt-auto" />

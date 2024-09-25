@@ -37,6 +37,8 @@ import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
 import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/DevolucionCapital";
 import PagoDevolucionCapitalForm from "./Formularios/Socios/ModificarSocio/PagoDevolucionCapital";
+import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
+import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -251,9 +253,7 @@ const ComponentesOrganizados = ({
     }
     case 31: {
       return (
-        <AltaReajuste
-          setIdentificadorComponente={setIdentificadorComponente}
-        />
+        <AltaReajuste setIdentificadorComponente={setIdentificadorComponente} />
       );
     }
     case 32: {
@@ -287,6 +287,20 @@ const ComponentesOrganizados = ({
       );
     }
     case 37: {
+      return (
+        <UsuarioDashboard
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 37: {
+      return (
+        <InformesUsuario
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 38: {
       return (
         <DevolucionCapital
           socio={socio}
