@@ -17,6 +17,7 @@ import {
 } from "@headlessui/react";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import VerRecibo from "../VerDetalles/VerRecibo/VerRecibo";
 import DashboardCard from "./DashboardCard";
 import { getAllRecibosPorSocio } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
@@ -28,6 +29,8 @@ const ListadoRecibosSocios = () => {
   const [anchorEl, setAnchorEl] = useState("");
   const open = Boolean(anchorEl);
   const [allRecibos, setAllRecibos] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
 
   useEffect(() => {
     fetchAllRecibosPorSocio();
@@ -51,6 +54,11 @@ const ListadoRecibosSocios = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleVerRecibo = (recibo) => {
+    setReciboSeleccionado(recibo);
+    setIsModalOpen(true);
+  }
   const handleDescargarPDF = (recibo) => {
     const doc = new jsPDF();
 
@@ -100,6 +108,7 @@ const ListadoRecibosSocios = () => {
     doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
   };
   return (
+  <>
     <DashboardCard title={"Historial de Recibos"}>
       <Box
         sx={{
@@ -244,7 +253,7 @@ const ListadoRecibosSocios = () => {
                         </MenuItem>
                         <MenuItem>
                           <button
-                            onClick={() => handleModificar(recibo?.idRecibo)}
+                            onClick={() => handleVerRecibo(recibo)}
                             className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                           >
                             Ver Recibo
@@ -268,6 +277,14 @@ const ListadoRecibosSocios = () => {
         </Table>
       </Box>
     </DashboardCard>
+     {isModalOpen && (
+      <VerRecibo
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        recibo={reciboSeleccionado}
+      />
+    )}
+    </>
   );
 };
 

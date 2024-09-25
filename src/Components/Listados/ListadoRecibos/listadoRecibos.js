@@ -5,7 +5,7 @@ import { getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
