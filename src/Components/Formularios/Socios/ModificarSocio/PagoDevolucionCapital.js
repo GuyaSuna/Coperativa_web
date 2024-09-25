@@ -5,7 +5,7 @@ import { postPagoDevolucionCapital } from "@/Api/api";
 
 const PagoDevolucionCapitalForm = ({ socio }) => {
   const [montoPago, setMontoPago] = useState("");
-  const [tipoMoneda, setTipoMoneda] = useState("");
+  const [tipoMoneda, setTipoMoneda] = useState("UR");
   const [fechaPago, setFechaPago] = useState("");
   const [errores, setErrores] = useState({});
 
@@ -59,21 +59,18 @@ const PagoDevolucionCapitalForm = ({ socio }) => {
         </label>
         <br />
 
-        <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Tipo de Moneda:</label>
-            <select
-              value={tipoRetiro}
-              onChange={handleChangeTipoRetiro}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            >
-              <option value="">Seleccione el Tipo de Retiro</option>
-              <option value="True">Expulsado</option>
-              <option value="False">Decisión propia</option>
-            </select>
-            {errores.tipoRetiro && (
-              <span className="text-red-500 text-sm">{errores.tipoRetiro}</span>
-            )}
-          </div>
+        <label className="label">
+          Moneda de devolucion:
+          <input
+            type="text"
+            name="tipoMoneda"
+            value={tipoMoneda}
+            onChange={(e) => setFechaPago(e.target.value)}
+            className="input"
+            readOnly
+          />
+          {errores.tipoMoneda && <span className="error">{errores.tipoMoneda}</span>}
+        </label>
         <br />
 
         <label className="label">
