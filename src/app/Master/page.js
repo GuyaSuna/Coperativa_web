@@ -41,7 +41,7 @@ const Master = () => {
           <div className="flex flex-col w-full md:w-1/2 p-4">
             <div className="flex flex-col flex-1 justify-center mb-8">
               <h1 className="text-4xl text-center font-thin">
-                ¿QUE HACES ACA?
+                ViSoft-Tricoma
               </h1>
               <div className="w-full mt-4">
                 <form

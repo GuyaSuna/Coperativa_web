@@ -57,7 +57,7 @@ const VerVivienda = ({ vivienda, isOpen, onClose }) => {
               {/* Agregando la lista de antiguos titulares */}
               <div className="space-y-2">
                 <span className="font-medium text-white-800">
-                  Antiguos Socios Titulares:
+                  Registro de Titulares:
                 </span>
                 {vivienda?.listaAntiguosTitulares?.length > 0 ? (
                   <ul className="list-disc pl-5 text-white-600">
@@ -68,7 +68,7 @@ const VerVivienda = ({ vivienda, isOpen, onClose }) => {
                     ))}
                   </ul>
                 ) : (
-                  <span className="text-white-600">No hay antiguos titulares</span>
+                  <span className="text-white-600">No hay titulares</span>
                 )}
               </div>
             </div>
