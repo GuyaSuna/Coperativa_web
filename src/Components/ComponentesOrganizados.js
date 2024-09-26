@@ -170,7 +170,7 @@ const ComponentesOrganizados = ({
       );
     }
     case 18: {
-      return <AltaConvenio />;
+      return <AltaConvenio ur={ur}/>;
     }
     case 19: {
       return (

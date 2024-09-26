@@ -2,58 +2,77 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {postConvenio, getAllSociosImpagos } from "../../../Api/api.js";
+import { postConvenio, getAllSociosImpagos, getRecibosImpagosSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
-const AltaConvenio = () => {
+const AltaConvenio = ({ur}) => {
   const { cooperativa } = useContext(MiembroContext);
   const router = useRouter();
-  const [deudaEnUrOriginal, setdeudaEnUrOriginal] = useState("");
-  const [urPorMes, seturPorMes] = useState("");
+  const [deudaEnUrOriginal, setDeudaEnUrOriginal] = useState("");
+  const [urPorMes, setUrPorMes] = useState("");
   const [fechaInicioConvenio, setFechaInicioConvenio] = useState("");
-  const [socioSeleccionado, setsocioSeleccionado] = useState("");
+  const [socioSeleccionado, setSocioSeleccionado] = useState("");
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
+  const [recibosImpagos, setRecibosImpagos] = useState([]);
+  const [tipoDeuda, setTipoDeuda] = useState("");
   const [errores, setErrores] = useState({});
 
-  console.log(socioSeleccionado, "SOCIO QUE LE CORRESPONDE");
   useEffect(() => {
     fetchSociosDisponibles();
   }, []);
 
+  useEffect(() => {
+    if (tipoDeuda === "recibo" && socioSeleccionado) {
+      fetchRecibosImpagos(socioSeleccionado);
+    }
+  }, [tipoDeuda, socioSeleccionado]);
+
   const fetchSociosDisponibles = async () => {
     try {
       const response = await getAllSociosImpagos(cooperativa.idCooperativa);
-
-      const sociosSinArchivar = response.filter( socio => socio.archivado == false)
+      const sociosSinArchivar = response.filter((socio) => !socio.archivado);
       setSociosDisponibles(sociosSinArchivar);
-      console.log("Socios disponibles", response);
     } catch (error) {
       console.error("Error al obtener los socios", error);
     }
   };
 
-  const handleChangedeudaEnUrOriginal = (e) =>
-    setdeudaEnUrOriginal(e.target.value);
-  const handleChangeurPorMes = (e) => seturPorMes(e.target.value);
+  const fetchRecibosImpagos = async (cedulaSocio) => {
+    try {
+      const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
+      setRecibosImpagos(response);
+      console.log(ur)
+      // Calcular el total de UR de todos los recibos impagos usando el valor de la UR
+      const totalDeudaEnUr = response.reduce((total, recibo) => {
+        const cuotaMensualEnPesos = recibo.cuotaMensual; // Asumiendo que 'cuotaMensual' es el campo que trae el monto en pesos
+        const deudaEnUr = cuotaMensualEnPesos / ur; // Dividir la cuota en pesos por el valor de la UR
+        return total + deudaEnUr; // Sumar el total
+      }, 0);
+      setDeudaEnUrOriginal(totalDeudaEnUr);
+    } catch (error) {
+      console.error("Error al obtener los recibos impagos", error);
+    }
+};
+
+
+  const handleChangeDeudaEnUrOriginal = (e) => setDeudaEnUrOriginal(e.target.value);
+  const handleChangeUrPorMes = (e) => setUrPorMes(e.target.value);
   const handleChangeFechaInicio = (e) => setFechaInicioConvenio(e.target.value);
-  const handleChangesocioSeleccionado = (e) =>
-    setsocioSeleccionado(e.target.value);
+  const handleChangeSocioSeleccionado = (e) => setSocioSeleccionado(e.target.value);
+  const handleChangeTipoDeuda = (e) => setTipoDeuda(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
 
-    if (!deudaEnUrOriginal)
-      errores.deudaEnUrOriginal = "La deuda del convenio es obligatoria";
+    if (!deudaEnUrOriginal) errores.deudaEnUrOriginal = "La deuda del convenio es obligatoria";
     if (!urPorMes) errores.urPorMes = "El valor del convenio es obligatorio";
     if (!fechaInicioConvenio) {
       errores.fechaInicioConvenio = "La fecha de inicio es obligatoria";
     } else if (fechaInicioConvenio > fechaHoy) {
-      errores.fechaOtorgado =
-        "La fecha de inicio no puede ser mayor a la fecha actual";
+      errores.fechaOtorgado = "La fecha de inicio no puede ser mayor a la fecha actual";
     }
-    if (!socioSeleccionado)
-      errores.socioSeleccionado = "Debe seleccionar un socio";
+    if (!socioSeleccionado) errores.socioSeleccionado = "Debe seleccionar un socio";
 
     setErrores(errores);
     return Object.keys(errores).length === 0;
@@ -65,35 +84,58 @@ const AltaConvenio = () => {
 
     const ConvenioData = {
       deudaEnUrOriginal: deudaEnUrOriginal,
-      deudaRestante : deudaEnUrOriginal,
+      deudaRestante: deudaEnUrOriginal,
       urPorMes: urPorMes,
       fechaInicioConvenio: fechaInicioConvenio,
+      tipoDeuda: tipoDeuda,
     };
 
     try {
-      const response = await postConvenio(
-        ConvenioData,
-        socioSeleccionado,
-        cooperativa.idCooperativa
-      );
+      const response = await postConvenio(ConvenioData, socioSeleccionado, cooperativa.idCooperativa);
       console.log(response);
-      alert("Dado de alta correctamente");
+      alert("Convenio dado de alta correctamente");
+      router.push("/convenios");
     } catch (error) {
       console.error("Error al enviar los datos del convenio:", error);
     }
   };
+
   return (
-    <div className="max-h-screen flex items-center justify-center  bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form
-        className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
-        onSubmit={handleSubmit}
-      >
+    <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="tipoDeuda">
+            Tipo de Deuda
+          </label>
+          <select
+            id="tipoDeuda"
+            name="tipoDeuda"
+            value={tipoDeuda}
+            onChange={handleChangeTipoDeuda}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          >
+            <option value="">Seleccione el tipo de deuda</option>
+            <option value="recibo">Recibo</option>
+            <option value="otro">Otro tipo de deuda</option>
+          </select>
+        </div>
+        {tipoDeuda === "recibo" && recibosImpagos.length > 0 && (
+          <div className="relative z-0 w-full mb-5 group">
+            <label className="block text-sm font-medium mb-2" htmlFor="recibosImpagos">
+              Recibos Impagos
+            </label>
+            <ul className="list-disc ml-5">
+              {recibosImpagos.map((recibo, index) => (
+                <li key={index}>
+                  {`Fecha: ${recibo.fecha}, Monto: ${recibo.cuotaMensual}`}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="relative z-0 w-full mb-5 group">
-            <label
-              htmlFor="floating_email"
-              className="block text-sm font-medium mb-2"
-            >
+            <label className="block text-sm font-medium mb-2" htmlFor="deudaUrOriginal">
               Deuda general UR
             </label>
             <input
@@ -101,17 +143,13 @@ const AltaConvenio = () => {
               name="deudaUrOriginal"
               id="deudaUrOriginal"
               value={deudaEnUrOriginal}
-              onChange={handleChangedeudaEnUrOriginal}
+              onChange={handleChangeDeudaEnUrOriginal}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              placeholder=" "
               required
             />
           </div>
           <div className="relative z-0 w-full mb-5 group">
-            <label
-              htmlFor="floating_password"
-              className="block text-sm font-medium mb-2"
-            >
+            <label className="block text-sm font-medium mb-2" htmlFor="urPorMes">
               UR por mes convenidas
             </label>
             <input
@@ -119,71 +157,60 @@ const AltaConvenio = () => {
               name="urPorMes"
               id="urPorMes"
               value={urPorMes}
-              onChange={handleChangeurPorMes}
+              onChange={handleChangeUrPorMes}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              placeholder=" "
               required
             />
           </div>
         </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="fechaIngreso"
-            >
-              Fecha de Incio
-            </label>
-            <input
-              type="date"
-              id="fechaInicio"
-              name="fechaInicio"
-              value={fechaInicioConvenio}
-              onChange={handleChangeFechaInicio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {errores.fechaInicioConvenio && (
-              <span className="text-red-500 text-sm">
-                {errores.fechaInicioConvenio}
-              </span>
-            )}
-          </div>
-          <div className="relative z-0 w-full mb-5 group">
-            <label
-              htmlFor="seleccionSocio"
-              className="block text-sm font-medium mb-2"
-            >
-              Seleccionar un socio
-            </label>
-            <select
-              id="seleccionSocio"
-              name="seleccionSocio"
-              value={socioSeleccionado}
-              onChange={handleChangesocioSeleccionado}
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              <option value="">Seleccione un socio </option>
-              {sociosDisponibles.map((socio) => (
-                <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                  {`Socio: ${socio.nombreSocio}- ${socio.apellidoSocio}`}
-                </option>
-              ))}
-            </select>
-            {errores.socioSeleccionado && (
-              <span className="text-red-500 text-sm">
-                {errores.socioSeleccionado}
-              </span>
-            )}
-          </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaInicioConvenio">
+            Fecha de Inicio del Convenio
+          </label>
+          <input
+            type="date"
+            name="fechaInicioConvenio"
+            id="fechaInicioConvenio"
+            value={fechaInicioConvenio}
+            onChange={handleChangeFechaInicio}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            required
+          />
+        </div>
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="socioSeleccionado">
+            Seleccione Socio
+          </label>
+          <select
+            id="socioSeleccionado"
+            name="socioSeleccionado"
+            value={socioSeleccionado}
+            onChange={handleChangeSocioSeleccionado}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            required
+          >
+            <option value="">Seleccione un socio</option>
+            {sociosDisponibles.map((socio) => (
+              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
+                {`${socio.nombreSocio} ${socio.apellidoSocio} - ${socio.cedulaSocio}`}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="text-red-500 text-sm mb-4">
+          {Object.values(errores).map((error, index) => (
+            <p key={index}>{error}</p>
+          ))}
         </div>
         <button
           type="submit"
-          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300"
         >
-          Agregar Convenio
+          Confirmar convenio
         </button>
       </form>
     </div>
   );
 };
+
 export default AltaConvenio;
