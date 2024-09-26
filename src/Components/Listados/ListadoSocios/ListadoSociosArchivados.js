@@ -113,7 +113,7 @@ const ListadoSocioArchivados = ({
   };
  
   const handleDevolucionCapital = (socio) => {
-    setIdentificadorComponente(37);
+    setIdentificadorComponente(39);
     setSocio(socio);
   };
 
@@ -122,7 +122,7 @@ const ListadoSocioArchivados = ({
     if(responseDevolucion != null){
       console.log("entra")
       setSocio(socio);
-      setIdentificadorComponente(38);
+      setIdentificadorComponente(40);
     }else{
       alert("No se encontro ninguna devolucion para este socio, crea una antes de comenzar un pago");
     }

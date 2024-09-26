@@ -293,14 +293,14 @@ const ComponentesOrganizados = ({
         />
       );
     }
-    case 37: {
+    case 38: {
       return (
         <InformesUsuario
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
     }
-    case 38: {
+    case 39: {
       return (
         <DevolucionCapital
           socio={socio}
@@ -308,7 +308,7 @@ const ComponentesOrganizados = ({
         />
       );
     }
-    case 38: {
+    case 40: {
       return (
         <PagoDevolucionCapitalForm
           socio={socio}
