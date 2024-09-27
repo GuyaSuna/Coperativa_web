@@ -226,7 +226,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                   {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
                 </th>
                 <td className="px-4 py-3 block md:table-cell">
-                  {recibo.monto}
+                 $ {recibo.cuotaMensual}
                 </td>
                 <td className="px-4 py-3 block md:table-cell">
                   {recibo.fechaPago}

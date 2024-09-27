@@ -152,29 +152,29 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-gray-600 dark:text-gray-100 block md:table">
               <thead className="text-xs text-gray-400 uppercase hidden md:table-header-group">
-                <tr>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                <tr className="hidden sm:table-row">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Nombre Socio
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Cuota Total UR
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Subsidio UR
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Porcentaje
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Vigencia
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Fecha Otorgado
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Fecha Expira
                   </th>
-                  <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                  <th scope="col" className="px-4 py-3 text-center">
                     Acciones
                   </th>
                 </tr>
@@ -186,14 +186,14 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                     key={subsidio.idSubsidio}
                     className="border-b border-gray-200 dark:border-gray-800 md:table-row"
                   >
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <span className="sm:hidden font-semibold">
                         Nombre Socio:
                       </span>
                       {subsidio.socio?.nombreSocio}{" "}
                       {subsidio.socio?.apellidoSocio}
                     </td>
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <span className="sm:hidden font-semibold">
                         Cuota Total UR:
                       </span>

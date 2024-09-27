@@ -11,6 +11,12 @@ import {
   FaHandHoldingUsd,
   FaMoneyBillWave,
   FaMoneyBill,
+  FaFileAlt,
+  FaFileInvoice,
+  FaFileSignature,
+  FaRegNewspaper,
+  FaChartLine,
+  FaHouseUser,
 } from "react-icons/fa";
 import Image from "next/image";
 import { useTheme } from "../Provider/ThemeProvider";
@@ -42,6 +48,15 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
       <div className="space-y-4 mt-3">
         <div className="relative">
           <button
+            onClick={() => handleSelection(8)}
+            className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+              selectedOption === 8 ? "bg-blue-500 text-white" : ""
+            }`}
+          >
+            <FaHome className="mr-2 text-2xl" />{" "}
+            <a className="text-base">Inicio</a>
+          </button>
+          <button
             onClick={() => toggleDropdown(1)}
             className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
               openDropdown === 1 ? "bg-blue-500 text-white" : ""
@@ -69,7 +84,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 2 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaHome className="mr-2 text-2xl" />{" "}
+                <FaHouseUser className="mr-2 text-2xl" />{" "}
                 <a className="text-base">Agregar Vivienda</a>
               </button>
               <button
@@ -88,7 +103,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 7 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaUserTie className="mr-2 text-2xl" />{" "}
+                <FaUserPlus className="mr-2 text-2xl" />{" "}
                 <a className="text-base">Agregar Suplente</a>
               </button>
               <button
@@ -106,8 +121,26 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                   selectedOption === 18 ? "bg-blue-500 text-white" : ""
                 }`}
               >
-                <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
+                <FaFileAlt className="mr-2 text-2xl" />{" "}
                 <a className="text-base">Agregar Convenio</a>
+              </button>
+              <button
+                onClick={() => handleSelection(13)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 13 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaUser className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar Usuario</a>
+              </button>
+              <button
+                onClick={() => handleSelection(33)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 33 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaFileInvoice className="mr-2 text-2xl" />{" "}
+                <a className="text-base">Agregar EstadosCont.</a>
               </button>
             </div>
           )}
@@ -141,34 +174,6 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
           <FaMoneyBill className="mr-2 text-2xl" />
           <a className="text-base">Declarar Egreso</a>
         </button>
-        <button
-          onClick={() => handleSelection(13)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-            selectedOption === 13 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaUser className="mr-2 text-2xl" />{" "}
-          <a className="text-base">Agregar Usuario</a>
-        </button>
-        <button
-          onClick={() => handleSelection(18)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-            selectedOption === 18 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaUser className="mr-2 text-2xl" />{" "}
-          <a className="text-base">Agregar Convenio</a>
-        </button>
-
-        <button
-          onClick={() => handleSelection(33)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-            selectedOption === 33 ? "bg-blue-500 text-white" : ""
-          }`}
-        >
-          <FaUser className="mr-2 text-2xl" />{" "}
-          <a className="text-base">Agregar EstadosCont.</a>
-        </button>
 
         <button
           onClick={() => handleSelection(34)}
@@ -176,7 +181,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             selectedOption === 34 ? "bg-blue-500 text-white" : ""
           }`}
         >
-          <FaUser className="mr-2 text-2xl" />{" "}
+          <FaFileSignature className="mr-2 text-2xl" />{" "}
           <a className="text-base">Informe Interes Anual.</a>
         </button>
         <button
@@ -185,7 +190,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             selectedOption === 31 ? "bg-blue-500 text-white" : ""
           }`}
         >
-          <FaUser className="mr-2 text-2xl" />{" "}
+          <FaRegNewspaper className="mr-2 text-2xl" />{" "}
           <a className="text-base">Resjuste Anual.</a>
         </button>
       </div>

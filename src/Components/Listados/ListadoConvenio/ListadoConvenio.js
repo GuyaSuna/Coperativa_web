@@ -30,7 +30,9 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   const fetchAllConvenios = async () => {
     try {
       const response = await getAllConvenios(cooperativa.idCooperativa);
-      const dataFiltrada = response.filter(convenio => convenio.socio && convenio.socio.archivado === false);
+      const dataFiltrada = response.filter(
+        (convenio) => convenio.socio && convenio.socio.archivado === false
+      );
 
       setAllConvenios(dataFiltrada);
       console.log("Convenios ", response);
@@ -107,6 +109,13 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
       comparator: (a, b) =>
         new Date(a.fechaInicioConvenio) - new Date(b.fechaInicioConvenio),
     },
+    {
+      label: "Nombre Socio",
+      key: "nombreSocio",
+      icon: <SortIcon />,
+      comparator: (a, b) =>
+        a.socio.nombreSocio.localeCompare(b.socio.nombreSocio),
+    },
   ];
 
   const handleSortChange = (option) => {
@@ -116,7 +125,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   };
 
   return (
-    <div className="sm:p-7 p-4 ">
+    <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
           <Buscador value={buscador} onChange={handleChangeBuscador} />
@@ -125,7 +134,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           <button
             type="button"
             onClick={handleCrearConvenio}
-            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500  focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
             <svg
               className="h-3.5 w-3.5 mr-2"
@@ -142,23 +151,23 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
             </svg>
             Agregar Convenio
           </button>
-          <div className="flex items-center space-x-3 w-full md:w-auto">
-            <OrdenarPor
-              options={ordenarOptions}
-              buttonText="Ordenar por"
-              onOptionSelect={handleSortChange}
-            />
-          </div>
+
+          <OrdenarPor
+            options={ordenarOptions}
+            buttonText="Ordenar por"
+            onOptionSelect={handleSortChange}
+          />
         </div>
       </div>
+
       <div className="overflow-y-auto">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase  dark:text-white dark:border-gray-700 border-gray-700 border-b">
-            <tr>
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+            <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3 text-center">
                 Nro. Convenio
               </th>
-              <th scope="col" className="pl-8 py-3">
+              <th scope="col" className="px-4 py-3">
                 Deuda en UR
               </th>
               <th scope="col" className="px-4 py-3">
@@ -178,61 +187,54 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           </thead>
           <tbody>
             {allConvenios?.map((convenio) => (
-              <tr className="border-b dark:border-gray-700">
-                <th
-                  scope="row"
-                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+              <tr className="border-b dark:border-gray-700 sm:table-row">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Nro. Convenio:
+                  </span>
                   {convenio.idConvenio}
-                </th>
-                <th
-                  scope="row"
-                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                >
+                </td>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Deuda en UR:</span>
                   {convenio.deudaEnUrOriginal} UR
-                </th>
-                <th
-                  scope="row"
-                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white text-center"
-                >
+                </td>
+                <td className="block sm:table-cell px-4 py-3">
+                  <span className="sm:hidden font-semibold">Paga Por Mes:</span>
                   {convenio.urPorMes} UR
-                </th>
-                <td className="px-4 py-3">
+                </td>
+                <td className="block sm:table-cell px-4 py-3">
                   {formatDate(convenio.fechaInicioConvenio)}
                 </td>
-                <td className="px-4 py-3">{convenio.socio.nombreSocio}</td>
-                <td className="px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3">
+                  {convenio.socio.nombreSocio}
+                </td>
+                <td className="block sm:table-cell px-4 py-3">
                   <button
                     type="button"
                     onClick={() => handleVerConvenio(convenio)}
-                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1   text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
                 </td>
-                <td className="px-4 py-3 flex items-center justify-end">
-                  <div className="flex items-center justify-between">
-                    <Menu
-                      as="div"
-                      className="relative inline-block text-left justify-end"
-                    >
-                      <div>
-                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="w-5"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx={12} cy={12} r={1} />
-                            <circle cx={19} cy={12} r={1} />
-                            <circle cx={5} cy={12} r={1} />
-                          </svg>
-                        </MenuButton>
-                      </div>
+                <td className="px-4 py-3 flex items-center justify-end md:table-cell">
+                  <div className="relative inline-block text-left">
+                    <Menu as="div" className="relative inline-block text-left">
+                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
                       <MenuItems
                         transition
                         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
@@ -243,25 +245,25 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                               onClick={() =>
                                 handleEliminar(convenio.idConvenio)
                               }
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Eliminar
                             </button>
                           </MenuItem>
-
                           <MenuItem>
                             <button
-                              onClick={() => handleModificar(socio.cedulaSocio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                              onClick={() =>
+                                handleModificar(convenio.idConvenio)
+                              }
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Modificar
                             </button>
                           </MenuItem>
-
                           <MenuItem>
                             <a
-                              onClick={() => handleCrearRecibo(socio)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                              onClick={() => handleCrearRecibo(convenio.socio)}
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Crear Recibo
                             </a>
@@ -270,6 +272,20 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                       </MenuItems>
                     </Menu>
                   </div>
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => handleEliminar(convenio.idConvenio)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    onClick={() => handleModificar(convenio.idConvenio)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Modificar
+                  </button>
                 </td>
               </tr>
             ))}

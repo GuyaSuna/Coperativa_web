@@ -8,6 +8,7 @@ import {
   getAllViviendas,
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaSocio = ({ setIdentificadorComponente }) => {
   const { miembro, cooperativa, loginMiembro } = useContext(MiembroContext);
@@ -26,6 +27,9 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
+  const [mostrarModal, setMostrarModal] = useState(false); // Estado para el modal
+  const [isConfirmed, setIsConfirmed] = useState(false); // Confirmación
+
   console.log("Vivienda seleccionada", SeleccionVivienda);
   useEffect(() => {
     fetchViviendasDisponibles();
@@ -184,10 +188,17 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("ID COOPERATIVA ", cooperativa.idCooperativa);
     e.preventDefault();
-    console.log(FechaIngresoCooperativa);
+
     if (!validarFormulario()) return;
+
+    // Mostrar el modal para confirmar
+    setMostrarModal(true);
+  };
+
+  const handleConfirmacion = async () => {
+    setMostrarModal(false);
+
     const today = new Date().toISOString().split("T")[0];
     const SocioData = {
       cedulaSocio: CedulaSocio,
@@ -208,6 +219,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     };
 
     try {
+      console.log("Datos enviados:", SocioData);
       const response = await postSocio(
         SocioData,
         SeleccionVivienda,
@@ -216,11 +228,13 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       console.log(response);
       cooperativa.listaSocios.push(response);
       loginMiembro(miembro, cooperativa);
-      if (TieneSuplente === true) {
+
+      if (TieneSuplente) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
         console.log(responseSuplente);
       }
-      setIdentificadorComponente(0);
+
+      setIdentificadorComponente(0); // Reseteo del componente o vista
     } catch (error) {
       console.error("Error al enviar los datos del socio:", error);
     }
@@ -521,6 +535,13 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
         >
           Agregar
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta este socio?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

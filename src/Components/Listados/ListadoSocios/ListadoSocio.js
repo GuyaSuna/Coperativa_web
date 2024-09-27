@@ -158,6 +158,12 @@ const ListadoSocio = ({
       comparator: (a, b) => a.nroSocio - b.nroSocio,
     },
     {
+      label: "Nombre Socio",
+      key: "nombreSocio",
+      icon: <SortIcon />,
+      comparator: (a, b) => a.nombreSocio.localeCompare(b.nombreSocio),
+    },
+    {
       label: "Más Recientes",
       key: "fechaIngreso",
       icon: <SortIcon />,
@@ -259,29 +265,31 @@ const ListadoSocio = ({
                 key={socio.cedulaSocio}
               >
                 {/* NroSocio */}
-                <td className="block md:table-cell px-4 py-3">
-                  <span className="block md:hidden font-semibold">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="block sm:hidden  md:hidden font-semibold">
                     NroSocio:
                   </span>
                   {socio.nroSocio}
                 </td>
 
                 {/* Nombre */}
-                <td className="block md:table-cell px-4 py-3">
-                  <span className="block md:hidden font-semibold">Nombre:</span>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="block sm:hidden  md:hidden font-semibold">
+                    Nombre:
+                  </span>
                   {socio.nombreSocio} {socio.apellidoSocio}
                 </td>
 
                 {/* Fecha Ingreso */}
-                <td className="block md:table-cell px-4 py-3">
-                  <span className="block md:hidden font-semibold">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="block sm:hidden  md:hidden font-semibold">
                     Fecha Ingreso:
                   </span>
                   {socio.fechaIngresoCooeprativa}
                 </td>
 
                 {/* Estado */}
-                <td className="block md:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="block md:hidden font-semibold">Estado:</span>
                   <span
                     className={`bg-${
@@ -295,7 +303,7 @@ const ListadoSocio = ({
                 </td>
 
                 {/* Actions */}
-                <td className="block md:table-cell px-4 py-3 flex justify-end md:flex-none">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <button
                     onClick={() => handleVerSocio(socio)}
                     className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1"

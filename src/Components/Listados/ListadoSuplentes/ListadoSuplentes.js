@@ -97,22 +97,16 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
   const ordenarOptions = [
     {
-      label: "Número Recibo",
-      key: "nroSocio",
+      label: "Número Cedula",
+      key: "cedulaSuplente",
       icon: <SortIcon />,
-      comparator: (a, b) => a.nroRecibo - b.nroRecibo,
+      comparator: (a, b) => a.cedulaSuplente - b.cedulaSuplente,
     },
     {
-      label: "Más Recientes",
-      key: "fechaIngreso",
+      label: "Nombre",
+      key: "nombreSuplente",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(b.fechaPago) - new Date(a.fechaPago),
-    },
-    {
-      label: "Más Antiguos",
-      key: "fechaIngreso",
-      icon: <SortIcon />,
-      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
+      comparator: (a, b) => a.nombreSuplente.localeCompare(b.nombreSuplente),
     },
   ];
 

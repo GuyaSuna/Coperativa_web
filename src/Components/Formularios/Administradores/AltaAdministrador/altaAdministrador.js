@@ -36,16 +36,20 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
     console.log("Socio encontrado", SocioEncontrado);
     const data = {
       firstname: SocioEncontrado.nombreSocio,
-      lastname : SocioEncontrado.apellidoSocio,
-      username : nombreMiembro,
-      password : contraseña,
+      lastname: SocioEncontrado.apellidoSocio,
+      username: nombreMiembro,
+      password: contraseña,
       email,
-      role : tipoAdministrador,
+      role: tipoAdministrador,
     };
 
     try {
-      console.log("ANTES DE API" , cooperativa.idCooperativa)
-      const response = await register(data, SocioEncontrado.cedulaSocio, cooperativa.idCooperativa);
+      console.log("ANTES DE API", cooperativa.idCooperativa);
+      const response = await register(
+        data,
+        SocioEncontrado.cedulaSocio,
+        cooperativa.idCooperativa
+      );
       console.log(response);
       setMensaje("Administrador creado con éxito");
       setIdentificadorComponente(27);
@@ -86,7 +90,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             className="block text-sm font-medium mb-2"
             htmlFor="nombreMiembro"
           >
-            Nombre del Miembro:
+            Nombre de Usuario:
           </label>
           <input
             type="text"
