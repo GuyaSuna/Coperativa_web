@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { postConvenio, getAllSociosImpagos, getRecibosImpagosSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
-const AltaConvenio = ({ur}) => {
+const AltaConvenio = ({ ur }) => {
   const { cooperativa } = useContext(MiembroContext);
   const router = useRouter();
   const [deudaEnUrOriginal, setDeudaEnUrOriginal] = useState("");
@@ -15,6 +15,7 @@ const AltaConvenio = ({ur}) => {
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
   const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [tipoDeuda, setTipoDeuda] = useState("");
+  const [vigenciaEnMeses, setVigenciaEnMeses] = useState(12); // Estado para la vigencia en meses
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -41,20 +42,25 @@ const AltaConvenio = ({ur}) => {
     try {
       const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
       setRecibosImpagos(response);
-      console.log(ur)
+
       // Calcular el total de UR de todos los recibos impagos usando el valor de la UR
       const totalDeudaEnUr = response.reduce((total, recibo) => {
-        const cuotaMensualEnPesos = recibo.cuotaMensual; // Asumiendo que 'cuotaMensual' es el campo que trae el monto en pesos
-        const deudaEnUr = cuotaMensualEnPesos / ur; // Dividir la cuota en pesos por el valor de la UR
-        return total + deudaEnUr; // Sumar el total
+        const cuotaMensualEnPesos = recibo.cuotaMensual;
+        const deudaEnUr = cuotaMensualEnPesos / ur;
+        return total + deudaEnUr;
       }, 0);
+      
       setDeudaEnUrOriginal(totalDeudaEnUr);
+      
+      // Calcular UR por mes basado en la vigencia
+      const urMensual = totalDeudaEnUr / vigenciaEnMeses;
+      setUrPorMes(urMensual);
     } catch (error) {
       console.error("Error al obtener los recibos impagos", error);
     }
-};
+  };
 
-
+  const handleChangeVigenciaEnMeses = (e) => setVigenciaEnMeses(e.target.value);
   const handleChangeDeudaEnUrOriginal = (e) => setDeudaEnUrOriginal(e.target.value);
   const handleChangeUrPorMes = (e) => setUrPorMes(e.target.value);
   const handleChangeFechaInicio = (e) => setFechaInicioConvenio(e.target.value);
@@ -83,11 +89,12 @@ const AltaConvenio = ({ur}) => {
     if (!validarFormulario()) return;
 
     const ConvenioData = {
-      deudaEnUrOriginal: deudaEnUrOriginal,
+      deudaEnUrOriginal,
       deudaRestante: deudaEnUrOriginal,
-      urPorMes: urPorMes,
-      fechaInicioConvenio: fechaInicioConvenio,
-      tipoDeuda: tipoDeuda,
+      urPorMes,
+      vigenciaEnMeses, // Enviar vigencia en meses
+      fechaInicioConvenio,
+      tipoDeuda,
     };
 
     try {
@@ -103,6 +110,7 @@ const AltaConvenio = ({ur}) => {
   return (
     <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
+        {/* Tipo de Deuda */}
         <div className="relative z-0 w-full mb-5 group">
           <label className="block text-sm font-medium mb-2" htmlFor="tipoDeuda">
             Tipo de Deuda
@@ -114,72 +122,17 @@ const AltaConvenio = ({ur}) => {
             onChange={handleChangeTipoDeuda}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
-            <option value="">Seleccione el tipo de deuda</option>
+            <option value="">Seleccione un tipo de deuda</option>
             <option value="recibo">Recibo</option>
-            <option value="otro">Otro tipo de deuda</option>
+            <option value="otro">Otro</option>
           </select>
+          {errores.tipoDeuda && <span className="text-red-500">{errores.tipoDeuda}</span>}
         </div>
-        {tipoDeuda === "recibo" && recibosImpagos.length > 0 && (
-          <div className="relative z-0 w-full mb-5 group">
-            <label className="block text-sm font-medium mb-2" htmlFor="recibosImpagos">
-              Recibos Impagos
-            </label>
-            <ul className="list-disc ml-5">
-              {recibosImpagos.map((recibo, index) => (
-                <li key={index}>
-                  {`Fecha: ${recibo.fecha}, Monto: ${recibo.cuotaMensual}`}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="relative z-0 w-full mb-5 group">
-            <label className="block text-sm font-medium mb-2" htmlFor="deudaUrOriginal">
-              Deuda general UR
-            </label>
-            <input
-              type="text"
-              name="deudaUrOriginal"
-              id="deudaUrOriginal"
-              value={deudaEnUrOriginal}
-              onChange={handleChangeDeudaEnUrOriginal}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              required
-            />
-          </div>
-          <div className="relative z-0 w-full mb-5 group">
-            <label className="block text-sm font-medium mb-2" htmlFor="urPorMes">
-              UR por mes convenidas
-            </label>
-            <input
-              type="text"
-              name="urPorMes"
-              id="urPorMes"
-              value={urPorMes}
-              onChange={handleChangeUrPorMes}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-              required
-            />
-          </div>
-        </div>
-        <div className="relative z-0 w-full mb-5 group">
-          <label className="block text-sm font-medium mb-2" htmlFor="fechaInicioConvenio">
-            Fecha de Inicio del Convenio
-          </label>
-          <input
-            type="date"
-            name="fechaInicioConvenio"
-            id="fechaInicioConvenio"
-            value={fechaInicioConvenio}
-            onChange={handleChangeFechaInicio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            required
-          />
-        </div>
+
+        {/* Socio Seleccionado */}
         <div className="relative z-0 w-full mb-5 group">
           <label className="block text-sm font-medium mb-2" htmlFor="socioSeleccionado">
-            Seleccione Socio
+            Socio Seleccionado
           </label>
           <select
             id="socioSeleccionado"
@@ -187,26 +140,90 @@ const AltaConvenio = ({ur}) => {
             value={socioSeleccionado}
             onChange={handleChangeSocioSeleccionado}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            required
           >
             <option value="">Seleccione un socio</option>
             {sociosDisponibles.map((socio) => (
               <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {`${socio.nombreSocio} ${socio.apellidoSocio} - ${socio.cedulaSocio}`}
+                {socio.nombreSocio} {socio.apellidoSocio}
               </option>
             ))}
           </select>
+          {errores.socioSeleccionado && <span className="text-red-500">{errores.socioSeleccionado}</span>}
         </div>
-        <div className="text-red-500 text-sm mb-4">
-          {Object.values(errores).map((error, index) => (
-            <p key={index}>{error}</p>
-          ))}
+
+        {/* Fecha de Inicio del Convenio */}
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaInicioConvenio">
+            Fecha de Inicio del Convenio
+          </label>
+          <input
+            type="date"
+            id="fechaInicioConvenio"
+            name="fechaInicioConvenio"
+            value={fechaInicioConvenio}
+            onChange={handleChangeFechaInicio}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            required
+          />
+          {errores.fechaInicioConvenio && <span className="text-red-500">{errores.fechaInicioConvenio}</span>}
         </div>
+
+        {/* Vigencia en Meses */}
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="vigenciaEnMeses">
+            Vigencia en Meses
+          </label>
+          <input
+            type="number"
+            name="vigenciaEnMeses"
+            id="vigenciaEnMeses"
+            value={vigenciaEnMeses}
+            onChange={handleChangeVigenciaEnMeses}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            required
+          />
+        </div>
+
+        {/* Total Deuda en UR */}
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="deudaEnUrOriginal">
+            Total Deuda en UR
+          </label>
+          <input
+            type="text"
+            id="deudaEnUrOriginal"
+            name="deudaEnUrOriginal"
+            value={deudaEnUrOriginal}
+            onChange={handleChangeDeudaEnUrOriginal}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            required
+          />
+          {errores.deudaEnUrOriginal && <span className="text-red-500">{errores.deudaEnUrOriginal}</span>}
+        </div>
+
+        {/* Valor a Pagar Mensual (UR por Mes) */}
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="urPorMes">
+            Valor a Pagar Mensual (UR por Mes)
+          </label>
+          <input
+            type="text"
+            id="urPorMes"
+            name="urPorMes"
+            value={urPorMes}
+            onChange={handleChangeUrPorMes}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            required
+          />
+          {errores.urPorMes && <span className="text-red-500">{errores.urPorMes}</span>}
+        </div>
+
+        {/* Botón para dar de alta */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300"
+          className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
         >
-          Confirmar convenio
+          Dar de Alta Convenio
         </button>
       </form>
     </div>
