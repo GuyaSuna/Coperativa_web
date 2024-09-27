@@ -82,23 +82,29 @@ const ListadoViviendas = ({
       comparator: (a, b) => a.nroVivienda - b.nroVivienda,
     },
     {
-      label: "Más Recientes",
-      key: "fechaIngreso",
+      label: "Nombre Socio",
+      key: "nombreSocio",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(b.fechaIngreso) - new Date(a.fechaIngreso),
+      comparator: (a, b) =>
+        a.socio.nombreSocio.localeCompare(b.socio.nombreSocio),
     },
+
     {
-      label: "Más Antiguos",
-      key: "fechaIngreso",
+      label: "Cant. Dormitorios",
+      key: "cantidadDormitorios",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
+      comparator: (a, b) => a.cantidadDormitorios - b.cantidadDormitorios,
     },
   ];
 
   const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
-    const ordenarViviendas = [...viviendas].sort(option.comparator);
-    setAllViviendas(ordenarViviendas);
+    if (buscador) {
+      const ordenarFiltrado = [...buscadorFiltrado].sort(option.comparator);
+      setBuscadorFiltrado(ordenarFiltrado);
+    } else {
+      const ordenarSocios = [...viviendas].sort(option.comparator);
+      setAllViviendas(ordenarSocios);
+    }
   };
   const handleAgregarVivienda = () => {
     setIdentificadorComponente(2);
@@ -130,15 +136,15 @@ const ListadoViviendas = ({
             </svg>
             AGREGAR VIVIENDA
           </button>
-          <div className="flex items-center space-x-3 w-full md:w-auto">
-            <OrdenarPor
-              options={ordenarOptions}
-              buttonText="Ordenar por"
-              onOptionSelect={handleSortChange}
-            />
-          </div>
+
+          <OrdenarPor
+            options={ordenarOptions}
+            buttonText="Ordenar por"
+            onOptionSelect={handleSortChange}
+          />
         </div>
       </div>
+
       <div className="overflow-y-auto">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
@@ -190,29 +196,25 @@ const ListadoViviendas = ({
                     Ver
                   </button>
                 </td>
-                <td className="block sm:table-cell px-4 py-3 flex items-center justify-end">
-                  <div className="flex items-center justify-between">
-                    <Menu
-                      as="div"
-                      className="relative inline-block text-left justify-end"
-                    >
-                      <div>
-                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="w-5"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx={12} cy={12} r={1} />
-                            <circle cx={19} cy={12} r={1} />
-                            <circle cx={5} cy={12} r={1} />
-                          </svg>
-                        </MenuButton>
-                      </div>
+                <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
+                  <div className="relative inline-block text-left">
+                    <Menu as="div" className="relative inline-block text-left">
+                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+
                       <MenuItems
                         transition
                         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
@@ -242,6 +244,20 @@ const ListadoViviendas = ({
                       </MenuItems>
                     </Menu>
                   </div>
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => handleEliminar(vivienda.nroVivienda)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    onClick={() => handleModificar(vivienda.nroVivienda)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Modificar
+                  </button>
                 </td>
               </tr>
             ))}

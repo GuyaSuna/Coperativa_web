@@ -5,7 +5,6 @@ import {
   Login,
   getCooperativaPorAdmin,
   getCooperativaPorSocio,
-  getUser,
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
@@ -20,31 +19,38 @@ const Home = () => {
     console.error("El contexto de sesión no está disponible.");
     return null; // O algún manejo de error adicional
   }
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // Estado para manejar los mensajes de error
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
     try {
       const RequestLogin = await Login(username, password);
-      if (typeof RequestLogin === "string") {
-        alert(
-          "No se ha podido iniciar sesión: Usuario o contraseña incorrectos."
-        );
+
+      if (typeof RequestLogin === "string" || !RequestLogin) {
+        setErrorMessage("Usuario o contraseña incorrectos.");
         return;
       }
-      if (!RequestLogin) {
-        alert(
-          "No se ha podido iniciar sesión: Usuario o contraseña incorrectos."
+
+      // Verifica si el rol es de administrador
+      if (RequestLogin.responseBody.role !== "ADMIN") {
+        setErrorMessage("Las credenciales no corresponden a un administrador.");
+        return;
+      }
+
+      const cooperativaLoginRequest = await getCooperativaPorAdmin(
+        RequestLogin.responseBody.id
+      );
+
+      if (!cooperativaLoginRequest) {
+        setErrorMessage(
+          "No se ha encontrado la cooperativa para este administrador."
         );
         return;
       }
 
-      console.log("Respuesta", RequestLogin.responseBody);
-      const cooperativaLoginRequest = await getCooperativaPorAdmin(
-        RequestLogin.responseBody.id
-      );
-      console.log(`Cooperativa admin: ${cooperativaLoginRequest}`);
       ProviderLoginRequest(
         RequestLogin,
         cooperativaLoginRequest,
@@ -53,26 +59,46 @@ const Home = () => {
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
-      alert("Ocurrió un error al intentar iniciar sesión.");
+      setErrorMessage("Ocurrió un error al intentar iniciar sesión.");
     }
   };
 
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();
-    const loginRequest = await Login(username, password);
-    console.log("Abr", loginRequest);
-    const cooperativaMiembro = await getCooperativaPorSocio(
-      loginRequest.responseBody.socio.cedulaSocio
-    );
-    if (loginRequest == null) {
-      alert("No se ha podido inicia sesion");
-    } else {
+    try {
+      const loginRequest = await Login(username, password);
+
+      if (!loginRequest) {
+        setErrorMessage("Usuario o contraseña incorrectos.");
+        return;
+      }
+
+      // Verifica si el rol es de usuario
+      if (loginRequest.responseBody.role !== "USER") {
+        setErrorMessage("Las credenciales no corresponden a un usuario.");
+        return;
+      }
+
+      const cooperativaMiembro = await getCooperativaPorSocio(
+        loginRequest.responseBody.socio.cedulaSocio
+      );
+
+      if (!cooperativaMiembro) {
+        setErrorMessage(
+          "No se ha encontrado la cooperativa para este usuario."
+        );
+        return;
+      }
+
       ProviderLoginRequest(
         loginRequest,
         cooperativaMiembro,
         loginRequest.token
       );
       router.push("./UsuarioHome");
+    } catch (error) {
+      console.error(error);
+      setErrorMessage("Ocurrió un error al intentar iniciar sesión.");
     }
   };
 
@@ -84,8 +110,8 @@ const Home = () => {
     loginMiembro(RequestLogin, cooperativaLoginRequest);
     login(token);
   };
-  //checkbox
 
+  // Funciones de manejo de entrada
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -101,7 +127,7 @@ const Home = () => {
           <div className="py-12 bg-indigo-100 lg:bg-white flex justify-center lg:justify-start lg:px-12">
             <div className="cursor-pointer flex items-center">
               <div>
-                <img className="h-16 w-16" src="./techito.png" />
+                <img className="h-16 w-16" src="./techito.png" alt="logo" />
               </div>
               <div className="text-4xl text-[#71675D] tracking-wide ml-2 font-semibold">
                 visoft
@@ -109,13 +135,30 @@ const Home = () => {
             </div>
           </div>
           <div className="mt-10 px-12 sm:px-24 md:px-48 lg:px-12 lg:mt-16 xl:px-24 xl:max-w-2xl">
-            <h2
-              className="text-center text-4xl text-[#71675D] font-display font-semibold lg:text-left xl:text-5xl
-              xl:text-bold"
-            >
-              Iniciar Sesion
+            <h2 className="text-center text-4xl text-[#71675D] font-display font-semibold lg:text-left xl:text-5xl xl:text-bold">
+              Iniciar Sesión
             </h2>
             <div className="mt-12">
+              {/* Mostrar alerta si hay un mensaje de error */}
+              {errorMessage && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                  <span>{errorMessage}</span>
+                  <button
+                    className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                    onClick={() => setErrorMessage("")}
+                  >
+                    <svg
+                      className="fill-current h-6 w-6 text-red-500"
+                      role="button"
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                    >
+                      <title>Close</title>
+                      <path d="M14.348 5.652a1 1 0 00-1.414 0L10 8.586 7.066 5.652a1 1 0 00-1.414 1.414L8.586 10l-2.934 2.934a1 1 0 101.414 1.414L10 11.414l2.934 2.934a1 1 0 101.414-1.414L11.414 10l2.934-2.934a1 1 0 000-1.414z" />
+                    </svg>
+                  </button>
+                </div>
+              )}
               <form>
                 <div>
                   <div className="text-sm font-bold text-gray-700 tracking-wide">
@@ -137,10 +180,7 @@ const Home = () => {
                       Contraseña
                     </div>
                     <div>
-                      <a
-                        className="text-xs font-display font-semibold text-[#71675D] hover:text-black
-                                  cursor-pointer"
-                      >
+                      <a className="text-xs font-display font-semibold text-[#71675D] hover:text-black cursor-pointer">
                         Olvidaste la contraseña?
                       </a>
                     </div>
@@ -157,22 +197,18 @@ const Home = () => {
                 </div>
                 <div className="grid gap-3 mt-10">
                   <button
-                    className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide
-                          font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400
-                          shadow-lg"
+                    className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400 shadow-lg"
                     type="submit"
                     onClick={handleSubmitAdministrador}
                   >
-                    Inicias sesion como Administrador
+                    Inicia sesión como Administrador
                   </button>
                   <button
-                    className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide
-                          font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400
-                          shadow-lg"
+                    className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400 shadow-lg"
                     type="submit"
                     onClick={handleSubmitUsuario}
                   >
-                    Inicias sesion como Usuario
+                    Inicia sesión como Usuario
                   </button>
                 </div>
               </form>
@@ -182,6 +218,7 @@ const Home = () => {
         <div>
           <img
             src="./visoft.png"
+            alt="visoft"
             className="hidden lg:flex items-center justify-center bg-indigo-100 flex-1 h-screen hover:scale-90 transform duration-700"
           />
         </div>

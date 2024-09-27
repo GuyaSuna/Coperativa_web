@@ -1,111 +1,51 @@
-import * as React from "react";
-import { styled, alpha } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "right",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "right",
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  "& .MuiPaper-root": {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === "light"
-        ? "rgb(55, 65, 81)"
-        : theme.palette.grey[300],
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 7px 6px -2px",
-    "& .MuiMenu-list": {
-      padding: "4px 0",
-    },
-    "& .MuiMenuItem-root": {
-      "& .MuiSvgIcon-root": {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      "&:active": {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity
-        ),
-      },
-    },
-  },
-}));
+import React, { useState } from "react";
+import { FaList } from "react-icons/fa";
 
 export default function OrdenarPor({
   options,
   buttonText = "Ordenar por",
   onOptionSelect,
 }) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleToggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
   const handleSelect = (option) => {
     if (onOptionSelect) {
       onOptionSelect(option);
     }
-    handleClose();
+    setIsOpen(false);
   };
 
   return (
-    <div>
-      <Button
-        id="sort-menu-button"
-        aria-controls={open ? "sort-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        variant="contained"
-        disableElevation
-        onClick={handleClick}
-        endIcon={<KeyboardArrowDownIcon />}
-        className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+    <div className="relative inline-block text-left">
+      <button
+        type="button"
+        onClick={handleToggleMenu}
+        className="flex w-full md:w-auto items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
       >
+        <FaList className="mr-2 h-4 w-4 text-white" />
         {buttonText}
-      </Button>
-      <StyledMenu
-        id="sort-menu"
-        MenuListProps={{
-          "aria-labelledby": "sort-menu-button",
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
-        {options.map((option, index) => (
-          <MenuItem
-            key={index}
-            onClick={() => handleSelect(option)}
-            disableRipple
-          >
-            {option.icon && option.icon}
-            {option.label}
-          </MenuItem>
-        ))}
-      </StyledMenu>
+      </button>
+
+      {isOpen && (
+        <div className="absolute  right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <div className="py-1">
+            {options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleSelect(option)}
+                className="group flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                {option.icon && <span className="mr-3">{option.icon}</span>}
+                {option.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

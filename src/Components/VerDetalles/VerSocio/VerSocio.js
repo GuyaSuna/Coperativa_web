@@ -1,7 +1,10 @@
 "use client";
 
-import { getUltimoSubsidioSocio, getRecibosImpagosSocio } from "../../../Api/api";
-import React, { useState, useEffect , useContext } from "react";
+import {
+  getUltimoSubsidioSocio,
+  getRecibosImpagosSocio,
+} from "../../../Api/api";
+import React, { useState, useEffect, useContext } from "react";
 import { MiembroContext } from "@/Provider/provider";
 
 const VerSocio = ({ isOpen, onClose, socio }) => {
@@ -9,8 +12,9 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
   const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [isSuplenteExpanded, setIsSuplenteExpanded] = useState(false);
   const [isSubsidioExpanded, setIsSubsidioExpanded] = useState(false);
-  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] = useState(false);
-  const {cooperativa} = useContext(MiembroContext);
+  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] =
+    useState(false);
+  const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
     if (socio && socio.cedulaSocio) {
@@ -26,8 +30,11 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
 
       const fetchRecibosImpagos = async () => {
         try {
-          const recibos = await getRecibosImpagosSocio(socio.cedulaSocio , cooperativa.idCooperativa);
-          console.log("Recibos Impagos: " , recibos);
+          const recibos = await getRecibosImpagosSocio(
+            socio.cedulaSocio,
+            cooperativa.idCooperativa
+          );
+          console.log("Recibos Impagos: ", recibos);
           setRecibosImpagos(recibos);
         } catch (error) {
           console.error("Error al obtener los recibos impagos:", error);
@@ -94,7 +101,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Capital Total:
                   </td>
-                  <td className="py-1 px-3">${socio.capitalSocio}</td>
+                  <td className="py-1 px-3">UR {socio.capitalSocio}</td>
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
@@ -217,7 +224,9 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                   <td
                     colSpan="2"
                     className="font-semibold text-black-900 py-4 cursor-pointer"
-                    onClick={() => setIsRecibosImpagosExpanded(!isRecibosImpagosExpanded)}
+                    onClick={() =>
+                      setIsRecibosImpagosExpanded(!isRecibosImpagosExpanded)
+                    }
                   >
                     {isRecibosImpagosExpanded
                       ? "▼ Recibos Impagos"
@@ -230,9 +239,13 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                       <div className="max-h-60 overflow-y-auto">
                         {recibosImpagos.length > 0 ? (
                           recibosImpagos.map((recibo) => (
-                            <div key={recibo?.fecha} className="border-b border-gray-200 dark:border-gray-800 py-2">
+                            <div
+                              key={recibo?.fecha}
+                              className="border-b border-gray-200 dark:border-gray-800 py-2"
+                            >
                               <div className="font-normal px-3">
-                                Falta pagar recibo en fecha: {recibo?.fecha} el monto de: {recibo?.cuotaMensual} 
+                                Falta pagar recibo en fecha: {recibo?.fecha} el
+                                monto de: {recibo?.cuotaMensual}
                               </div>
                             </div>
                           ))

@@ -220,20 +220,20 @@ const ListadoSocio = ({
             </svg>
             AGREGAR SOCIO
           </button>
-          <div className="flex items-center space-x-3 w-full md:w-auto">
-            <OrdenarPor
-              options={ordenarOptions}
-              buttonText="Ordenar por"
-              onOptionSelect={handleSortChange}
-            />
-          </div>
+
+          <OrdenarPor
+            options={ordenarOptions}
+            buttonText="Ordenar por"
+            onOptionSelect={handleSortChange}
+          />
         </div>
       </div>
+
       <div className="overflow-y-auto">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
-            <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
+          <thead className="hidden md:table-header-group">
+            <tr className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+              <th scope="col" className="px-4 py-3">
                 NroSocio
               </th>
               <th scope="col" className="px-4 py-3">
@@ -251,75 +251,137 @@ const ListadoSocio = ({
               </th>
             </tr>
           </thead>
-          <tbody>
+
+          <tbody className="block md:table-row-group">
             {buscadorFiltrado?.map((socio) => (
               <tr
-                className="border-b dark:border-gray-700 sm:table-row"
+                className="block md:table-row mb-4 md:mb-0 border-b dark:border-gray-700"
                 key={socio.cedulaSocio}
               >
-                <td className="px-4 py-3 text-gray-900 dark:text-white">
+                {/* NroSocio */}
+                <td className="block md:table-cell px-4 py-3">
+                  <span className="block md:hidden font-semibold">
+                    NroSocio:
+                  </span>
                   {socio.nroSocio}
                 </td>
-                <td className="px-4 py-3 text-gray-900 dark:text-white">
+
+                {/* Nombre */}
+                <td className="block md:table-cell px-4 py-3">
+                  <span className="block md:hidden font-semibold">Nombre:</span>
                   {socio.nombreSocio} {socio.apellidoSocio}
                 </td>
-                <td className="px-4 py-3">{socio.fechaIngresoCooeprativa}</td>
-                <td className="px-4 py-3">
+
+                {/* Fecha Ingreso */}
+                <td className="block md:table-cell px-4 py-3">
+                  <span className="block md:hidden font-semibold">
+                    Fecha Ingreso:
+                  </span>
+                  {socio.fechaIngresoCooeprativa}
+                </td>
+
+                {/* Estado */}
+                <td className="block md:table-cell px-4 py-3">
+                  <span className="block md:hidden font-semibold">Estado:</span>
                   <span
                     className={`bg-${
                       socio.estadoSocio === "ACTIVO" ? "green" : "red"
                     }-100 text-${
                       socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-${
-                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-900 dark:text-${
-                      socio.estadoSocio === "ACTIVO" ? "green" : "red"
-                    }-300`}
+                    }-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded`}
                   >
                     {socio.estadoSocio}
                   </span>
                 </td>
-                <td className="px-4 py-3">
+
+                {/* Actions */}
+                <td className="block md:table-cell px-4 py-3 flex justify-end md:flex-none">
                   <button
-                    type="button"
                     onClick={() => handleVerSocio(socio)}
-                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1"
                   >
                     Ver
                   </button>
                 </td>
-                <td className="px-4 py-3 text-right">
-                  <Menu as="div" className="relative inline-block text-left">
-                    <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
-                      ⋮
-                    </MenuButton>
-                    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleArchivar(socio)}
+
+                {/* Opciones adicionales */}
+                <td className="px-4 py-3 flex justify-end gap-2">
+                  {/* SVG para pantallas grandes */}
+                  <div className="hidden md:block">
+                    <div className="relative inline-block text-left">
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
+                        <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="w-5"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx={12} cy={12} r={1} />
+                            <circle cx={19} cy={12} r={1} />
+                            <circle cx={5} cy={12} r={1} />
+                          </svg>
+                        </MenuButton>
+                        <MenuItems
+                          transition
+                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
                         >
-                          Archivar
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleModificarSocio(socio)}
-                        >
-                          Modificar
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleCrearRecibo(socio)}
-                        >
-                          Crear Recibo
-                        </button>
-                      </MenuItem>
-                    </MenuItems>
-                  </Menu>
+                          <MenuItem>
+                            <button
+                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                              onClick={() => handleArchivar(socio)}
+                            >
+                              Archivar
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                              onClick={() => handleModificarSocio(socio)}
+                            >
+                              Modificar
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                              onClick={() => handleCrearRecibo(socio)}
+                            >
+                              Crear Recibo
+                            </button>
+                          </MenuItem>
+                        </MenuItems>
+                      </Menu>
+                    </div>
+                  </div>
+
+                  {/* Botones para pantallas pequeñas */}
+                  <div className="flex md:hidden gap-2">
+                    <button
+                      onClick={() => handleArchivar(socio)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Archivar
+                    </button>
+                    <button
+                      onClick={() => handleModificarSocio(socio)}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Modificar
+                    </button>
+                    <button
+                      onClick={() => handleCrearRecibo(socio)}
+                      className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Crear Recibo
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

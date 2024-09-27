@@ -31,24 +31,25 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
     try {
       const suplentesResponse = await getAllSuplentes();
       console.log("Suplentes recibidos:", suplentesResponse);
-  
+
       const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
-  
+
       // Filtrar socios archivados que tengan suplentes
-      const suplentesArchivados = sociosResponse.filter(
-        (socio) => socio.archivado === false && socio.suplenteEntity !== null
-      ).map(socio => socio.suplenteEntity);
-  
+      const suplentesArchivados = sociosResponse
+        .filter(
+          (socio) => socio.archivado === false && socio.suplenteEntity !== null
+        )
+        .map((socio) => socio.suplenteEntity);
+
       setAllSocios(sociosResponse);
       setAllSuplentes(suplentesArchivados);
-  
+
       console.log("Socios recibidos:", sociosResponse);
       console.log("Suplentes de socios archivados:", suplentesArchivados);
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
   };
-  
 
   const handleModificar = (suplente) => {
     setSuplente(suplente);
@@ -150,18 +151,18 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
             </svg>
             AGREGAR SUPLENTE
           </button>
-          <div className="flex items-center space-x-3 w-full md:w-auto">
-            <OrdenarPor
-              options={ordenarOptions}
-              buttonText="Ordenar por"
-              onOptionSelect={handleSortChange}
-            />
-          </div>
+
+          <OrdenarPor
+            options={ordenarOptions}
+            buttonText="Ordenar por"
+            onOptionSelect={handleSortChange}
+          />
         </div>
       </div>
+
       <div className="overflow-y-auto">
-        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3 text-center">
                 Cédula
@@ -178,12 +179,13 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
               </th>
             </tr>
           </thead>
-          <tbody>
+
+          <tbody className="block md:table-row-group">
             {buscadorFiltrado.map((suplente) => {
               const socio = getSocioPorSuplente(suplente.cedulaSuplente);
               return (
                 <tr
-                  className="border-b dark:border-gray-700 sm:table-row"
+                  className="border-b dark:border-gray-700 block md:table-row"
                   key={suplente.cedulaSuplente}
                 >
                   <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
@@ -207,33 +209,29 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                       Ver
                     </button>
                   </td>
-                  <td className="block sm:table-cell px-4 py-3 flex items-center justify-end">
-                    <div className="flex items-center justify-between">
+                  <td className="px-4 py-3 flex items-center justify-end md:table-cell">
+                    <div className="relative inline-block text-left">
                       <Menu
                         as="div"
-                        className="relative inline-block text-left justify-end"
+                        className="relative inline-block text-left"
                       >
-                        <div>
-                          <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
-                            <svg
-                              viewBox="0 0 24 24"
-                              className="w-5"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                              fill="none"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <circle cx={12} cy={12} r={1} />
-                              <circle cx={19} cy={12} r={1} />
-                              <circle cx={5} cy={12} r={1} />
-                            </svg>
-                          </MenuButton>
-                        </div>
-                        <MenuItems
-                          transition
-                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
-                        >
+                        <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="w-5"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx={12} cy={12} r={1} />
+                            <circle cx={19} cy={12} r={1} />
+                            <circle cx={5} cy={12} r={1} />
+                          </svg>
+                        </MenuButton>
+
+                        <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                           <div className="py-1">
                             <MenuItem>
                               <button
@@ -260,12 +258,27 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                       </Menu>
                     </div>
                   </td>
+                  <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                    <button
+                      onClick={() => handleEliminar(suplente.cedulaSuplente)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Eliminar
+                    </button>
+                    <button
+                      onClick={() => handleModificar(suplente.cedulaSuplente)}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Modificar
+                    </button>
+                  </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       </div>
+
       {isModalOpen && (
         <VerSuplente
           isOpen={isModalOpen}

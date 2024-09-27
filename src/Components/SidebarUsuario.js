@@ -33,17 +33,17 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
 
       <div className="space-y-4 mt-3">
         <button
-          onClick={() => handleSelection(36)}
+          onClick={() => handleSelection(37)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-black text-white  hover:text-black hover:bg-blue-100  dark:hover:bg-blue-900 dark:hover:text-white ${
-            selectedOption === 36 ? "bg-gray-300 text-white" : ""
+            selectedOption === 37 ? "bg-gray-300 text-white" : ""
           }`}
         >
           <FaHome className="mr-2" /> Inicio
         </button>
         <button
-          onClick={() => handleSelection(37)}
+          onClick={() => handleSelection(38)}
           className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-black text-white  hover:text-black hover:bg-blue-100  dark:hover:bg-blue-900 dark:hover:text-white ${
-            selectedOption === 37 ? "bg-gray-300 text-white" : ""
+            selectedOption === 38 ? "bg-gray-300 text-white" : ""
           }`}
         >
           <FaHome className="mr-2" /> Ver informes
