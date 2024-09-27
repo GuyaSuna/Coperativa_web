@@ -170,7 +170,10 @@ const ComponentesOrganizados = ({
       );
     }
     case 18: {
-      return <AltaConvenio ur={ur}/>;
+      return <AltaConvenio 
+      ur={ur} 
+      setIdentificadorComponente={setIdentificadorComponente}
+      />;
     }
     case 19: {
       return (

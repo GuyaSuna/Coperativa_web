@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { postConvenio, getAllSociosImpagos, getRecibosImpagosSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 
-const AltaConvenio = ({ ur }) => {
+const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
   const router = useRouter();
   const [deudaEnUrOriginal, setDeudaEnUrOriginal] = useState("");
@@ -15,7 +15,7 @@ const AltaConvenio = ({ ur }) => {
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
   const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [tipoDeuda, setTipoDeuda] = useState("");
-  const [vigenciaEnMeses, setVigenciaEnMeses] = useState(12); // Estado para la vigencia en meses
+  const [vigenciaEnRecibos, setVigenciaEnRecibos] = useState(12); // Estado para la vigencia en meses
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -38,6 +38,20 @@ const AltaConvenio = ({ ur }) => {
     }
   };
 
+  useEffect(() => {
+    if (tipoDeuda === "recibo" && socioSeleccionado) {
+      fetchRecibosImpagos(socioSeleccionado);
+    }
+  }, [tipoDeuda, socioSeleccionado]);
+
+  // Recalcular UR por mes cada vez que cambia la vigencia en recibos
+  useEffect(() => {
+    if (deudaEnUrOriginal && vigenciaEnRecibos > 0) {
+      const urMensual = deudaEnUrOriginal / vigenciaEnRecibos;
+      setUrPorMes(urMensual.toFixed(2)); // Redondear a dos decimales
+    }
+  }, [vigenciaEnRecibos, deudaEnUrOriginal]);
+
   const fetchRecibosImpagos = async (cedulaSocio) => {
     try {
       const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
@@ -50,17 +64,17 @@ const AltaConvenio = ({ ur }) => {
         return total + deudaEnUr;
       }, 0);
       
-      setDeudaEnUrOriginal(totalDeudaEnUr);
+      setDeudaEnUrOriginal(totalDeudaEnUr.toFixed(2));
       
       // Calcular UR por mes basado en la vigencia
-      const urMensual = totalDeudaEnUr / vigenciaEnMeses;
-      setUrPorMes(urMensual);
+      const urMensual = totalDeudaEnUr / vigenciaEnRecibos;
+      setUrPorMes(urMensual.toFixed(2));
     } catch (error) {
       console.error("Error al obtener los recibos impagos", error);
     }
   };
 
-  const handleChangeVigenciaEnMeses = (e) => setVigenciaEnMeses(e.target.value);
+  const handleChangeVigenciaEnRecibos = (e) => setVigenciaEnRecibos(e.target.value);
   const handleChangeDeudaEnUrOriginal = (e) => setDeudaEnUrOriginal(e.target.value);
   const handleChangeUrPorMes = (e) => setUrPorMes(e.target.value);
   const handleChangeFechaInicio = (e) => setFechaInicioConvenio(e.target.value);
@@ -70,7 +84,7 @@ const AltaConvenio = ({ ur }) => {
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
-
+    if(tipoDeuda == "") errores.tipoDeuda = "La deuda debe tener un tipo de deuda"
     if (!deudaEnUrOriginal) errores.deudaEnUrOriginal = "La deuda del convenio es obligatoria";
     if (!urPorMes) errores.urPorMes = "El valor del convenio es obligatorio";
     if (!fechaInicioConvenio) {
@@ -88,20 +102,23 @@ const AltaConvenio = ({ ur }) => {
     e.preventDefault();
     if (!validarFormulario()) return;
 
+    const listaFechasRecibos = recibosImpagos.map(recibo => recibo.fechaRecibo);
+
     const ConvenioData = {
       deudaEnUrOriginal,
       deudaRestante: deudaEnUrOriginal,
       urPorMes,
-      vigenciaEnMeses, // Enviar vigencia en meses
+      vigenciaEnRecibos, 
       fechaInicioConvenio,
-      tipoDeuda,
+      tipoConvenio : tipoDeuda,
+      listaFechasRecibos
     };
 
     try {
       const response = await postConvenio(ConvenioData, socioSeleccionado, cooperativa.idCooperativa);
       console.log(response);
       alert("Convenio dado de alta correctamente");
-      router.push("/convenios");
+      setIdentificadorComponente(26);
     } catch (error) {
       console.error("Error al enviar los datos del convenio:", error);
     }
@@ -170,15 +187,15 @@ const AltaConvenio = ({ ur }) => {
 
         {/* Vigencia en Meses */}
         <div className="relative z-0 w-full mb-5 group">
-          <label className="block text-sm font-medium mb-2" htmlFor="vigenciaEnMeses">
-            Vigencia en Meses
+          <label className="block text-sm font-medium mb-2" htmlFor="vigenciaEnRecibos">
+            Vigencia en Recibos
           </label>
           <input
             type="number"
-            name="vigenciaEnMeses"
-            id="vigenciaEnMeses"
-            value={vigenciaEnMeses}
-            onChange={handleChangeVigenciaEnMeses}
+            name="vigenciaEnRecibos"
+            id="vigenciaEnRecibos"
+            value={vigenciaEnRecibos}
+            onChange={handleChangeVigenciaEnRecibos}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
