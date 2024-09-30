@@ -9,8 +9,8 @@ import {
   getUltimoReajuste,
   getUr,
   getAllViviendas,
-  getUltimoConvenioSocio,
-  getUltimoSubsidioSocio,
+  getConveniosVigenteSocio,
+  getSubsidioVigenteSocio,
   postIngreso,
   updateSocio,
 } from "../../../../Api/api.js";
@@ -28,7 +28,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
   const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
   const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
-  const [convenio, setConvenio] = useState(null); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
+  const [convenios, setConvenios] = useState([]); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
   const [subsidio, setSubsidio] = useState(null);
   const [cuotaMensualBase, setCuotaMensualBase] = useState(0);
   const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
@@ -39,6 +39,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [ingreso, setIngreso] = useState(null);
+  const [valorConvenio , setValorCovenio] = useState(0);
 
   //Nahuel- va en altaRecibo la peticion de ur
 
@@ -77,13 +78,13 @@ const AltaRecibo = ({ Socio, ur }) => {
   }, [reajuste]);
 
   useEffect(() => {
-    if (convenio == null) return;
+    if (convenios == null) return;
     fetchCalculos();
     setCuotaSocial(400);
     console.log(Socio, "SOCIO");
     setNombreSocio(Socio.nombreSocio || "");
     setApellidoSocio(Socio.apellidoSocio || "");
-  }, [convenio]);
+  }, [convenios]);
 
   useEffect(() => {
     setCuotaMensual(cuotaMensualBase + recargo);
@@ -99,7 +100,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
 
   const fetchSubsidio = async () => {
-    const subsidioResponse = await getUltimoSubsidioSocio(Socio.cedulaSocio);
+    const subsidioResponse = await getSubsidioVigenteSocio(Socio.cedulaSocio);
     if (subsidioResponse != null) {
       console.log(subsidioResponse);
       setSubsidio(subsidioResponse);
@@ -109,12 +110,18 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
 
   const fetchConvenio = async () => {
-    const convenioResponse = await getUltimoConvenioSocio(Socio.cedulaSocio);
+    const convenioResponse = await getConveniosVigenteSocio(Socio.cedulaSocio);
     if (convenioResponse != null) {
       console.log(convenioResponse);
-      setConvenio(convenioResponse);
+      setConvenios(convenioResponse);
+      if (convenioResponse.length > 0) {
+        const totalConvenio = convenioResponse.reduce((acc, convenio) => acc + convenio.urPorMes, 0);
+        setValorCovenio(totalConvenio); 
+      }
+      
+      
     } else {
-      setConvenio(0);
+      setConvenios(0);
     }
   };
   
@@ -128,37 +135,33 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   useEffect(() => {
     let valorDormitorios;
-    console.log(vivienda);
-    if (vivienda.cantidadDormitorios == 2) {
+    if (vivienda.cantidadDormitorios === 2) {
       valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
-    } else if (vivienda.cantidadDormitorios == 3) {
+    } else if (vivienda.cantidadDormitorios === 3) {
       valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
     }
 
-    console.log("Valor dormitorios", valorDormitorios);
     setInteres(interesExcel * (valorDormitorios / ur));
     setCapital(capitalExcel * (valorDormitorios / ur));
 
     let ValorViviendaModificar = valorVivienda;
 
     if (subsidio && subsidio.subsidioUr) {
-      console.log("Esta entrando al subsidio");
       ValorViviendaModificar -= subsidio.subsidioUr;
-      console.log(
-        "Valor cuotaPesos del mes",
-        ValorViviendaModificar * reajuste.valorUr
-      );
     }
 
-    let valorConConvenioPesos = 0;
-    if (convenio && convenio.urPorMes) {
-      valorConConvenioPesos += convenio.urPorMes * ur;
+    let valorConConveniosPesos = 0;
+    if(convenios.length > 1){
+          convenios.forEach((convenio) => {
+      if (convenio && convenio.urPorMes) {
+        valorConConveniosPesos += convenio.urPorMes * ur;
+      }
+    });
     }
+
 
     let valorCuotaTotalEnPesos =
-      ValorViviendaModificar * reajuste.valorUr + valorConConvenioPesos;
-
-    console.log("Valor Total", valorCuotaTotalEnPesos);
+      ValorViviendaModificar * reajuste.valorUr + valorConConveniosPesos;
 
     let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
     setCuotaMensualBase(cuenta);
@@ -167,7 +170,10 @@ const AltaRecibo = ({ Socio, ur }) => {
     let valorEnLetras = NumerosALetras(Math.round(cuenta));
     valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
     setSumaPesos(valorEnLetras);
-  }, [valorVivienda, reajuste, subsidio, convenio]);
+  }, [valorVivienda, reajuste, subsidio, convenios]);
+
+
+
 
   const fetchCalculos = async () => {
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
@@ -226,7 +232,7 @@ const AltaRecibo = ({ Socio, ur }) => {
         interes,
         capital,
         cuotaSocial,
-        convenio,
+        convenios,
         subsidio,
         cuotaMensual,
         sumaPesos,
@@ -277,6 +283,8 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
   //      ruta dinamica
   //      router.push(`/UserInfo/${NroSocio}`);
+
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
@@ -483,11 +491,11 @@ const AltaRecibo = ({ Socio, ur }) => {
               id="convenio"
               name="convenio"
               readOnly
-              value={convenio?.urPorMes || 0}
+              value={valorConvenio}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
-            {Errores.Convenio && (
-              <span className="text-red-500 text-sm">{Errores.Convenio}</span>
+            {Errores.Convenios && (
+              <span className="text-red-500 text-sm">{Errores.Convenios}</span>
             )}
           </div>
 

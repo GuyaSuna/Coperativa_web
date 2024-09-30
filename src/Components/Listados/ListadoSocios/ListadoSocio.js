@@ -7,7 +7,7 @@ import {
   updateSocio,
   getViviendaPorSocio,
   updateVivienda,
-  getUltimoConvenioSocio,
+  getConveniosVigenteSocio,
 } from "../../../Api/api.js";
 import {
   Button,
@@ -91,7 +91,7 @@ const ListadoSocio = ({
       try {
         let socioActualizado = { ...socio, archivado: true };
 
-        const responseConvenio = await getUltimoConvenioSocio(
+        const responseConvenio = await getConveniosVigenteSocio(
           socio.cedulaSocio
         );
 
