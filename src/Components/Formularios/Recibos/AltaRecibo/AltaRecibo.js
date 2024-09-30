@@ -117,7 +117,7 @@ const AltaRecibo = ({ Socio, ur }) => {
       setConvenio(0);
     }
   };
-  //Corregir fecha a mas de un mes
+  
   useEffect(() => {
     Recargo(fechaEmision,fechaPago, setRecargo, ur);
   }, [fechaPago]);
@@ -285,7 +285,6 @@ const AltaRecibo = ({ Socio, ur }) => {
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
         <label className="block text-sm font-medium mb-2 text-right">
-          {/* Valor UR Reajuste: {reajuste} */}
         </label>
         <label className="block text-sm font-medium mb-2 text-right">
           Valor UR del Mes: {ur || 0}

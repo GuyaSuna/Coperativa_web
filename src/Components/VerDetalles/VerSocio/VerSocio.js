@@ -244,7 +244,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                               className="border-b border-gray-200 dark:border-gray-800 py-2"
                             >
                               <div className="font-normal px-3">
-                                Falta pagar recibo en fecha: {recibo?.fecha} el
+                                Falta recibo en fecha: {recibo?.fechaRecibo} el
                                 monto de: {recibo?.cuotaMensual}
                               </div>
                             </div>
