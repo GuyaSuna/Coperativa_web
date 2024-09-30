@@ -894,7 +894,7 @@ const postRecibo = async (
   interes,
   capital,
   cuotaSocial,
-  convenio,
+  listaConvenio,
   subsidio,
   cuotaMensual,
   sumaEnPesos,
@@ -909,7 +909,7 @@ const postRecibo = async (
     interes,
     capital,
     cuotaSocial,
-    convenio,
+    listaConvenio,
     subsidio,
     cuotaMensual,
     sumaEnPesos,
@@ -933,7 +933,7 @@ const postRecibo = async (
       interes,
       capital,
       cuotaSocial,
-      convenio,
+      listaConvenio,
       subsidio,
       cuotaMensual,
       sumaEnPesos,
@@ -1231,8 +1231,8 @@ const deleteSubsidio = async (idSubsidio) => {
     throw new Error(`Error al eliminar el subsidio: ${error.message}`);
   }
 };
-
-const getUltimoSubsidioSocio = async (cedulaSocio) => {
+// getUltimoSubsidioSocio
+const getSubsidioVigenteSocio = async (cedulaSocio) => {
   try {
     const token = getToken();
     const response = await fetch(`${URL}/subsidio/socio/${cedulaSocio}`, {
@@ -1365,7 +1365,7 @@ const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
   }
 };
 
-const getUltimoConvenioSocio = async (cedulaSocio) => {
+const getConveniosVigenteSocio = async (cedulaSocio) => {
   try {
     const token = getToken();
     const response = await fetch(`${URL}/convenios/socio/${cedulaSocio}`, {
@@ -1376,18 +1376,27 @@ const getUltimoConvenioSocio = async (cedulaSocio) => {
       },
     });
 
+    // Verificar si la respuesta no es exitosa
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
 
+    // Parsear la respuesta en formato JSON
     const data = await response.json();
 
+    // Verificar si no hay convenios o si es null
+    if (!data || data.length === 0) {
+      return null;
+    }
+
+    // Devolver la lista de convenios si existen
     return data;
   } catch (error) {
-    console.error("Error en get Ultimo convenio por socio:", error);
-    return null;
+    console.error("Error al obtener convenios vigentes para el socio:", error);
+    return null; // Devolver null en caso de error
   }
 };
+
 
 const postIngreso = async (ingreso) => {
   try {
@@ -1935,13 +1944,13 @@ export {
   getAllSubsidios,
   updateSubsidio,
   deleteSubsidio,
-  getUltimoSubsidioSocio,
+  getSubsidioVigenteSocio,
   deleteEgreso,
   deleteIngreso,
   getAllIngresos,
   getAllEgresos,
   postConvenio,
-  getUltimoConvenioSocio,
+  getConveniosVigenteSocio,
   getAllConvenios,
   deleteConvenio,
   updateConvenio,

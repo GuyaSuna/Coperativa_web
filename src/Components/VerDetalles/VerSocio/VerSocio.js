@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  getUltimoSubsidioSocio,
+  getSubsidioVigenteSocio,
   getRecibosImpagosSocio,
 } from "../../../Api/api";
 import React, { useState, useEffect, useContext } from "react";
@@ -20,7 +20,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
     if (socio && socio.cedulaSocio) {
       const fetchUltimoSubsidio = async () => {
         try {
-          const subsidio = await getUltimoSubsidioSocio(socio.cedulaSocio);
+          const subsidio = await getSubsidioVigenteSocio(socio.cedulaSocio);
           setUltimoSubsidio(subsidio);
         } catch (error) {
           console.error("Error al obtener el último subsidio:", error);
