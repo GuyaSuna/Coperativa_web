@@ -44,27 +44,50 @@ const AdminHome = () => {
       const response = await getUr(); 
       console.log("RESPUESTA FRONT", response);
   
+      // Fecha actual y nombre del mes
       const fechaActual = new Date();
-      const mesActual = fechaActual.getMonth();
+      let mesActual = fechaActual.getMonth(); // Índice del mes actual (0-11)
   
-
+      // Lista de los meses en español
       const meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
         "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"
       ];
   
-      const mesActualNombre = meses[mesActual]; 
+      let mesActualNombre = meses[mesActual]; // Nombre del mes actual
+      let urEncontrado = false; // Para verificar si encontramos el UR
   
+      // Primero, buscamos el valor del mes actual
       response.forEach(element => {
         if (element.mes === mesActualNombre) {
           setUr(element?.valorUr);
+          urEncontrado = true; // Indicamos que ya encontramos el valor
         }
       });
   
+      // Si no encontramos el valor del mes actual, buscamos el del mes anterior
+      if (!urEncontrado) {
+        let mesAnterior = mesActual - 1; // Mes anterior al actual
+  
+        // Si estamos en enero (mes 0), cambiamos al mes diciembre (mes 11)
+        if (mesAnterior < 0) {
+          mesAnterior = 11;
+        }
+  
+        let mesAnteriorNombre = meses[mesAnterior]; // Nombre del mes anterior
+  
+        // Buscamos el UR del mes anterior
+        response.forEach(element => {
+          if (element.mes === mesAnteriorNombre) {
+            setUr(element?.valorUr);
+          }
+        });
+      }
     } catch (error) {
       console.error("Error al obtener las unidades reajustables:", error);
     }
   };
+  
   
 
   if (isLoading) {
