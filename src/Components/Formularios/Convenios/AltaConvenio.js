@@ -93,7 +93,7 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
       errores.fechaOtorgado = "La fecha de inicio no puede ser mayor a la fecha actual";
     }
     if (!socioSeleccionado) errores.socioSeleccionado = "Debe seleccionar un socio";
-    if (tipoDeuda == "recibo" && recibosImpagos.length() == 0) errores.tipoDeuda = "El socio debe tener al menos un recibo impago para aplicar este convenio"
+    if (tipoDeuda == "recibo" && recibosImpagos.length == 0) errores.tipoDeuda = "El socio debe tener al menos un recibo impago para aplicar este convenio"
 
     setErrores(errores);
     return Object.keys(errores).length === 0;

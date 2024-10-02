@@ -151,13 +151,14 @@ const AltaRecibo = ({ Socio, ur }) => {
     }
 
     let valorConConveniosPesos = 0;
-    if(convenios.length > 1){
-          convenios.forEach((convenio) => {
-      if (convenio && convenio.urPorMes) {
-        valorConConveniosPesos += convenio.urPorMes * ur;
-      }
-    });
+    if (convenios.length > 0) {
+      convenios.forEach((convenio) => {
+        if (convenio && convenio.urPorMes) {
+          valorConConveniosPesos += convenio.urPorMes * ur;
+        }
+      });
     }
+    
 
 
     let valorCuotaTotalEnPesos =
