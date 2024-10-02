@@ -1497,6 +1497,32 @@ const getAllIngresos = async (idCooperativa) => {
     throw new Error("Error al obtener los datos de los Ingresos.");
   }
 };
+const getAllIngresosByMes = async (fecha , idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/ingresos/allIngresosByMes/${fecha}/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllIngresos:", error);
+    throw new Error("Error al obtener los datos de los Ingresos.");
+  }
+};
 
 const deleteConvenio = async (idConvenio) => {
   try {
@@ -1904,6 +1930,41 @@ const getUltimoEstadoContable = async () => {
     throw new Error("Error al obtener los datos de el ultimo reajuste");
   }
 };
+
+const getAllInteresAnual = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/interesAnual/getAll/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Verifica el estado de la respuesta
+    console.log("Response:", response);
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    // Verifica los datos que se han recibido
+    console.log("Data received:", data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllInteresAnual:", error);
+    throw new Error("Error al obtener los intereses anuales");
+  }
+};
+
+
 export {
   Login,
   getSocio,
@@ -1972,4 +2033,6 @@ export {
   postPagoDevolucionCapital,
   getDevolucionCapital,
   getUltimoEstadoContable,
+  getAllInteresAnual,
+  getAllIngresosByMes,
 };

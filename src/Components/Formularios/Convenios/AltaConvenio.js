@@ -54,25 +54,38 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
 
   const fetchRecibosImpagos = async (cedulaSocio) => {
     try {
-      const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
-      setRecibosImpagos(response);
+        const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
+        console.log("RESPUESTA RECIBOS CONVENIOS", response);
 
-      // Calcular el total de UR de todos los recibos impagos usando el valor de la UR
-      const totalDeudaEnUr = response.reduce((total, recibo) => {
-        const cuotaMensualEnPesos = recibo.cuotaMensual;
-        const deudaEnUr = cuotaMensualEnPesos / ur;
-        return total + deudaEnUr;
-      }, 0);
-      
-      setDeudaEnUrOriginal(totalDeudaEnUr.toFixed(2));
-      
-      // Calcular UR por mes basado en la vigencia
-      const urMensual = totalDeudaEnUr / vigenciaEnRecibos;
-      setUrPorMes(urMensual.toFixed(2));
+        const fechaActual = new Date();
+        const mesActual = fechaActual.getMonth() + 1; 
+        const anioActual = fechaActual.getFullYear();
+
+        const recibosFiltrados = response.filter((recibo) => {
+            const fechaRecibo = new Date(recibo.fechaRecibo);
+            const mesRecibo = fechaRecibo.getMonth() + 1;
+            const anioRecibo = fechaRecibo.getFullYear();
+
+            return !(mesRecibo === mesActual && anioRecibo === anioActual);
+        });
+
+        setRecibosImpagos(recibosFiltrados);
+
+        const totalDeudaEnUr = recibosFiltrados.reduce((total, recibo) => {
+            const cuotaMensualEnPesos = recibo.cuotaMensual;
+            const deudaEnUr = cuotaMensualEnPesos / ur;
+            return total + deudaEnUr;
+        }, 0);
+        
+        setDeudaEnUrOriginal(totalDeudaEnUr.toFixed(2));
+        
+        const urMensual = totalDeudaEnUr / vigenciaEnRecibos;
+        setUrPorMes(urMensual.toFixed(2));
+
     } catch (error) {
-      console.error("Error al obtener los recibos impagos", error);
+        console.error("Error al obtener los recibos impagos", error);
     }
-  };
+};
 
   const handleChangeVigenciaEnRecibos = (e) => setVigenciaEnRecibos(e.target.value);
   const handleChangeDeudaEnUrOriginal = (e) => setDeudaEnUrOriginal(e.target.value);

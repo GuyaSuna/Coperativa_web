@@ -39,6 +39,7 @@ import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/Devolucion
 import PagoDevolucionCapitalForm from "./Formularios/Socios/ModificarSocio/PagoDevolucionCapital";
 import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
 import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
+import ListadoInteresAnual from "./Listados/ListadoInteresAnual/listadoInteresAnual";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -315,6 +316,13 @@ const ComponentesOrganizados = ({
       return (
         <PagoDevolucionCapitalForm
           socio={socio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 41: {
+      return (
+        <ListadoInteresAnual
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

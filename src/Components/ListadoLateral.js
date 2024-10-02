@@ -193,6 +193,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
           <FaRegNewspaper className="mr-2 text-2xl" />{" "}
           <a className="text-base">Resjuste Anual.</a>
         </button>
+        
       </div>
     </div>
   );

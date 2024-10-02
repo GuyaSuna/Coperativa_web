@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
   getAllEgresos,
-  getAllIngresos,
+  getAllIngresosByMes,
   postEstadoContable,
 } from "../../../Api/api";
 import { MiembroContext } from "../../../Provider/provider";
@@ -27,12 +27,15 @@ const AltaEstadoContable = () => {
 
   useEffect(() => {
     fetchDatos();
-  }, [cooperativa.idCooperativa]);
+  }, [ fecha]);
 
+  useEffect(() => {
+
+  },[])
   const fetchDatos = async () => {
     try {
       const egresos = await getAllEgresos(cooperativa.idCooperativa);
-      const ingresos = await getAllIngresos(cooperativa.idCooperativa);
+      const ingresos = await getAllIngresosByMes(fecha , cooperativa.idCooperativa);
 
       console.log("Egresos", egresos);
       console.log("Ingresos", ingresos);

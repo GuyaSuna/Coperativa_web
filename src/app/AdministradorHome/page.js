@@ -130,6 +130,7 @@ const AdminHome = () => {
                       { label: "Convenios", id: 26 },
                       { label: "Socios Archivados", id: 32 },
                       { label: "Estados Contables", id: 35 },
+                      { label: "Interes Anual", id: 41 },
                     ].map((item) => (
                       <button
                         key={item.id}

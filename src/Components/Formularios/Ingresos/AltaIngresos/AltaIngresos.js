@@ -62,7 +62,7 @@ const AltaIngreso = () => {
       ingreso,
       cooperativaEntity: cooperativa,
       tipoMoneda,
-      fechaDatosContables,
+      fechaDatosContables :fechaDatosContables,
     };
 
     try {

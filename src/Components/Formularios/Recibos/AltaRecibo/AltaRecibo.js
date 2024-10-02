@@ -124,9 +124,13 @@ const AltaRecibo = ({ Socio, ur }) => {
       setConvenios(0);
     }
   };
+
   
   useEffect(() => {
+
+    fetchConvenio()
     Recargo(fechaEmision,fechaPago, setRecargo, ur);
+
   }, [fechaPago]);
 
   useEffect(() => {
@@ -246,12 +250,15 @@ const AltaRecibo = ({ Socio, ur }) => {
       }
       console.log(response);
 
+      let fechaActual = new Date();
+
       const ingreso = {
         subRubro: "Amortizacion",
         denominacion: `Recibo dado de alta el ${fechaEmision}`,
         ingreso: cuotaMensual,
         cooperativaEntity: cooperativa,
         tipoMoneda: "UR",
+        fechaDatosContables : fechaActual,
       };
       try {
         const IngresoResponse = await postIngreso(ingreso);
@@ -389,7 +396,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               className="block text-sm font-medium mb-2"
               htmlFor="fechaEmision"
             >
-              Fecha de Emision:
+              Fecha de Recibo:
             </label>
             <input
               type="date"
@@ -436,7 +443,6 @@ const AltaRecibo = ({ Socio, ur }) => {
               type="text"
               id="recargo"
               name="recargo"
-              readOnly
               value={recargo}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
