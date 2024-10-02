@@ -1697,6 +1697,30 @@ const getAllEgresos = async (idCooperativa) => {
   }
 };
 
+const getAllEgresosByMes = async (fecha ,idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/egresos/allEgresosByMes/${fecha}/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllEgresos:", error);
+    throw new Error("Error al obtener los datos de los Egresos.");
+  }
+};
+
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {
     const token = getToken();
@@ -2035,4 +2059,5 @@ export {
   getUltimoEstadoContable,
   getAllInteresAnual,
   getAllIngresosByMes,
+  getAllEgresosByMes,
 };

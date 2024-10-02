@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useContext } from "react";
 import {
-  getAllEgresos,
+  getAllEgresosByMes,
   getAllIngresosByMes,
   postEstadoContable,
 } from "../../../Api/api";
@@ -14,8 +14,6 @@ const AltaEstadoContable = () => {
   const [fecha, setFecha] = useState("");
   const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
   const [saldoFinalEnDolares, setSaldoFinalDolares] = useState(0);
-
-  // Totales para ingresos y egresos en pesos y dólares
   const [totalIngresosPesos, setTotalIngresosPesos] = useState(0);
   const [totalIngresosDolares, setTotalIngresosDolares] = useState(0);
   const [totalEgresosPesos, setTotalEgresosPesos] = useState(0);
@@ -27,14 +25,14 @@ const AltaEstadoContable = () => {
 
   useEffect(() => {
     fetchDatos();
-  }, [ fecha]);
+  }, [fecha]);
 
   useEffect(() => {
 
   },[])
   const fetchDatos = async () => {
     try {
-      const egresos = await getAllEgresos(cooperativa.idCooperativa);
+      const egresos = await getAllEgresosByMes(fecha,cooperativa.idCooperativa);
       const ingresos = await getAllIngresosByMes(fecha , cooperativa.idCooperativa);
 
       console.log("Egresos", egresos);
