@@ -48,9 +48,9 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
       <div className="space-y-4 mt-3">
         <div className="relative">
           <button
-            onClick={() => handleSelection(8)}
+            onClick={() => handleSelection(0)}
             className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-              selectedOption === 8 ? "bg-blue-500 text-white" : ""
+              selectedOption === 0 ? "bg-blue-500 text-white" : ""
             }`}
           >
             <FaHome className="mr-2 text-2xl" />{" "}
