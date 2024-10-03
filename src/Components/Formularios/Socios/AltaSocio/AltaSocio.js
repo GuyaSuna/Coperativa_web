@@ -27,8 +27,8 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
-  const [mostrarModal, setMostrarModal] = useState(false); // Estado para el modal
-  const [isConfirmed, setIsConfirmed] = useState(false); // Confirmación
+  const [mostrarModal, setMostrarModal] = useState(false); 
+  const [isConfirmed, setIsConfirmed] = useState(false); 
 
   console.log("Vivienda seleccionada", SeleccionVivienda);
   useEffect(() => {
@@ -192,7 +192,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
 
     if (!validarFormulario()) return;
 
-    // Mostrar el modal para confirmar
+    
     setMostrarModal(true);
   };
 

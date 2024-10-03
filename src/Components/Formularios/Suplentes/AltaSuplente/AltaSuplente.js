@@ -17,13 +17,11 @@ const AltaSuplente = () => {
   const [nombreSuplente, setNombreSuplente] = useState("");
   const [apellidoSuplente, setApellidoSuplente] = useState("");
   const [telefonoSuplente, setTelefonoSuplente] = useState("");
-
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
   const [socioDelSuplente, setSocioDelSuplente] = useState("");
-
   const [allSuplentes, setAllSuplentes] = useState([]);
-
   const [Errores, setErrores] = useState({});
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   useEffect(() => {
     fetchSociosDisponibles();
@@ -97,8 +95,15 @@ const AltaSuplente = () => {
     setErrores(errores);
     return Object.keys(errores).length === 0;
   };
-
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validarFormulario()) return;
+
+    setMostrarModal(true);
+  };
+  const handleConfirmacion = async (e) => {
+    setMostrarModal(false);
     e.preventDefault();
 
     if (!validarFormulario()) return;
@@ -212,6 +217,13 @@ const AltaSuplente = () => {
         >
           Agregar
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta este suplente?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

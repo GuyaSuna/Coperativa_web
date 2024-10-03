@@ -11,7 +11,7 @@ import {
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
-const AltaSubsidio = ({setIdentificadorComponente}) => {
+const AltaSubsidio = ({ setIdentificadorComponente }) => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
 
@@ -23,10 +23,11 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
   const [fechaOtorgado, setFechaOtorgado] = useState("");
   const [fechaExpira, setFechaExpira] = useState("");
   const [socioSeleccionado, setSocioSeleccionado] = useState("");
-  const [allSubsidios , setAllSubsidios] = useState([]);
+  const [allSubsidios, setAllSubsidios] = useState([]);
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
-  const [sociosSinSubsidio , setSosciosSinSubsidios] = useState([]);
+  const [sociosSinSubsidio, setSosciosSinSubsidios] = useState([]);
   const [errores, setErrores] = useState({});
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   useEffect(() => {
     setFechaOtorgado(obtenerFechaHoy());
@@ -34,8 +35,7 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
 
   useEffect(() => {
     //
-    
-  },[allSubsidios , sociosDisponibles])
+  }, [allSubsidios, sociosDisponibles]);
 
   useEffect(() => {
     fetchSociosDisponibles();
@@ -43,17 +43,17 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
 
   useEffect(() => {
     fetchAllSubsidios();
-  },[]);
+  }, []);
 
   const fetchAllSubsidios = async () => {
-    try{
+    try {
       const responseSubsidio = await getAllSubsidios();
       console.log("All subsidios", responseSubsidio);
       setAllSubsidios(responseSubsidio);
-    }catch{
-      console.log("Error en el gatAllSubsidio")
+    } catch {
+      console.log("Error en el gatAllSubsidio");
     }
-  } 
+  };
 
   useEffect(() => {
     if (subsidioUr && valorViviendaUr) {
@@ -170,6 +170,14 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validarFormulario()) return;
+
+    setMostrarModal(true);
+  };
+
+  const handleConfirmacion = async (e) => {
+    e.preventDefault();
+    setMostrarModal(false);
     const confirmacion = window.confirm(
       `¿Está seguro de que quiere seleccionar al socio ${socioSeleccionado.nombreSocio} ${socioSeleccionado.apellidoSocio}?`
     );
@@ -326,6 +334,13 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
         >
           Agregar Subsidio
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta este subsidio?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

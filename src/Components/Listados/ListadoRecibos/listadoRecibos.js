@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllRecibos } from "../../../Api/api.js";
+import { deleteRecibo, getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
@@ -19,6 +19,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
+
   useEffect(() => {
     fetchAllRecibos();
   }, []);
@@ -38,9 +39,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     setIdentificadorComponente(4);
   };
 
-  const handleEliminar = async (idRecibo) => {
+  const handleEliminar = async (nroRecibo) => {
     try {
-      const data = await deleteSocio(idRecibo);
+      const data = await deleteRecibo(nroRecibo);
       console.log(data);
       fetchAllRecibos();
     } catch (e) {
@@ -183,7 +184,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
       </div>
 
       {/* Tabla responsive */}
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto h-screen  ">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr>
@@ -226,7 +227,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                   {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
                 </th>
                 <td className="px-4 py-3 block md:table-cell">
-                 $ {recibo.cuotaMensual}
+                  $ {recibo.cuotaMensual}
                 </td>
                 <td className="px-4 py-3 block md:table-cell">
                   {recibo.fechaPago}
@@ -272,20 +273,13 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                           <div className="py-1">
                             <MenuItem>
                               <button
-                                onClick={() => handleEliminar(recibo.idRecibo)}
+                                onClick={() => handleEliminar(recibo.nroRecibo)}
                                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                               >
                                 Eliminar
                               </button>
                             </MenuItem>
-                            <MenuItem>
-                              <button
-                                onClick={() => handleModificar(recibo.idRecibo)}
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                              >
-                                Modificar
-                              </button>
-                            </MenuItem>
+
                             <MenuItem>
                               <button
                                 onClick={() => handleDescargarPDF(recibo)}

@@ -106,7 +106,7 @@ const ListadoEstadoContables = ({}) => {
               />
             </div>
           </div>
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto h-screen">
             <table className="w-full text-left">
               <thead>
                 <tr className="text-gray-400 hidden sm:table-row">

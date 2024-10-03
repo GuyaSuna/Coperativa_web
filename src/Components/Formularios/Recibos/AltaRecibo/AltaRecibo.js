@@ -16,6 +16,8 @@ import {
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
+
 const AltaRecibo = ({ Socio, ur }) => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
@@ -39,8 +41,8 @@ const AltaRecibo = ({ Socio, ur }) => {
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [ingreso, setIngreso] = useState(null);
-  const [valorConvenio , setValorCovenio] = useState(0);
-
+  const [valorConvenio, setValorCovenio] = useState(0);
+  const [mostrarModal, setMostrarModal] = useState(false);
   //Nahuel- va en altaRecibo la peticion de ur
 
   // useEffect (() => {
@@ -52,11 +54,11 @@ const AltaRecibo = ({ Socio, ur }) => {
   // }
 
   useEffect(() => {
-    console.log("UNIDAD REAJUSTABLE MENSUAL",ur)
+    console.log("UNIDAD REAJUSTABLE MENSUAL", ur);
     const FechaActual = new Date();
     console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
     console.log("FECHA ACTUAL", FechaActual.getFullYear());
-    console.log("COOPERATIVA",cooperativa)
+    console.log("COOPERATIVA", cooperativa);
     cooperativa.listaCapitalInteres.map((data) => {
       let fechaData = new Date(data.fecha);
       if (
@@ -115,18 +117,19 @@ const AltaRecibo = ({ Socio, ur }) => {
       console.log(convenioResponse);
       setConvenios(convenioResponse);
       if (convenioResponse.length > 0) {
-        const totalConvenio = convenioResponse.reduce((acc, convenio) => acc + convenio.urPorMes, 0);
-        setValorCovenio(totalConvenio); 
+        const totalConvenio = convenioResponse.reduce(
+          (acc, convenio) => acc + convenio.urPorMes,
+          0
+        );
+        setValorCovenio(totalConvenio);
       }
-      
-      
     } else {
       setConvenios(0);
     }
   };
-  
+
   useEffect(() => {
-    Recargo(fechaEmision,fechaPago, setRecargo, ur);
+    Recargo(fechaEmision, fechaPago, setRecargo, ur);
   }, [fechaPago]);
 
   useEffect(() => {
@@ -158,8 +161,6 @@ const AltaRecibo = ({ Socio, ur }) => {
         }
       });
     }
-    
-
 
     let valorCuotaTotalEnPesos =
       ValorViviendaModificar * reajuste.valorUr + valorConConveniosPesos;
@@ -172,9 +173,6 @@ const AltaRecibo = ({ Socio, ur }) => {
     valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
     setSumaPesos(valorEnLetras);
   }, [valorVivienda, reajuste, subsidio, convenios]);
-
-
-
 
   const fetchCalculos = async () => {
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
@@ -218,13 +216,21 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     return Object.keys(errores).length === 0;
   };
-
   const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validarFormulario()) return;
+
+    setMostrarModal(true);
+  };
+
+  const handleConfirmacion = async (e) => {
+    setMostrarModal(false);
     console.log("ENTRA y este es el miembro", miembro);
     e.preventDefault();
     if (!validarFormulario()) return;
 
-    console.log("Admin", miembro.responseBody    );
+    console.log("Admin", miembro.responseBody);
     try {
       const response = await postRecibo(
         fechaEmision,
@@ -240,9 +246,11 @@ const AltaRecibo = ({ Socio, ur }) => {
         Socio,
         miembro.responseBody
       );
-      if(response == null){
-        alert("No se puede realizar un recibo a una misma persona para un mismo mes")
-        return
+      if (response == null) {
+        alert(
+          "No se puede realizar un recibo a una misma persona para un mismo mes"
+        );
+        return;
       }
       console.log(response);
 
@@ -255,15 +263,12 @@ const AltaRecibo = ({ Socio, ur }) => {
       };
       try {
         const IngresoResponse = await postIngreso(ingreso);
-        console.log("Ingreso exitoso:", IngresoResponse);      
+        console.log("Ingreso exitoso:", IngresoResponse);
         setIngreso(IngresoResponse);
         console.log("Ingreso Response", IngresoResponse);
-        alert("Dado de alta correctamente");
       } catch (error) {
         console.error("Error en el ingreso:", error.message);
       }
-      
-
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
     }
@@ -285,16 +290,13 @@ const AltaRecibo = ({ Socio, ur }) => {
   //      ruta dinamica
   //      router.push(`/UserInfo/${NroSocio}`);
 
-  
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
         onSubmit={handleSubmit}
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
-        <label className="block text-sm font-medium mb-2 text-right">
-        </label>
+        <label className="block text-sm font-medium mb-2 text-right"></label>
         <label className="block text-sm font-medium mb-2 text-right">
           Valor UR del Mes: {ur || 0}
         </label>
@@ -395,7 +397,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               type="date"
               id="fechaIngreso"
               name="fechaIngreso"
-              value={fechaEmision || ''}
+              value={fechaEmision || ""}
               onChange={handleChangefechaRecibo}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
@@ -590,6 +592,13 @@ const AltaRecibo = ({ Socio, ur }) => {
         >
           Agregar
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta este recibo?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );
