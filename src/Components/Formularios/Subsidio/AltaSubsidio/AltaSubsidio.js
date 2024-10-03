@@ -10,6 +10,7 @@ import {
   getViviendaPorSocio,
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaSubsidio = ({ setIdentificadorComponente }) => {
   const router = useRouter();

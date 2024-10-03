@@ -191,7 +191,9 @@ const ListadoSocio = ({
       setAllSocios(ordenarSocios);
     }
   };
-
+  const handleModificarSocio = (Socio) => {
+    setIdentificadorComponente(4);
+  };
   const handleAgregarSocio = () => {
     setIdentificadorComponente(3);
   };

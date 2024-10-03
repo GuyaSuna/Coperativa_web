@@ -8,6 +8,7 @@ import {
   getRecibosImpagosSocio,
 } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
@@ -150,7 +151,7 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
         cooperativa.idCooperativa
       );
       console.log(response);
-      alert("Convenio dado de alta correctamente");
+
       setIdentificadorComponente(26);
     } catch (error) {
       console.error("Error al enviar los datos del convenio:", error);

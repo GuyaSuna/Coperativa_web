@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllSocios, getAllRecibos, updateSocio, getDevolucionCapital } from "../../../Api/api.js";
+import {
+  getAllSocios,
+  getAllRecibos,
+  updateSocio,
+  getDevolucionCapital,
+} from "../../../Api/api.js";
 import {
   Button,
   Menu,
@@ -109,9 +114,9 @@ const ListadoSocioArchivados = ({
   ];
 
   const handleAgregarSocio = () => {
-    setIdentificadorComponente(3); 
+    setIdentificadorComponente(3);
   };
- 
+
   const handleDevolucionCapital = (socio) => {
     setIdentificadorComponente(39);
     setSocio(socio);
@@ -119,18 +124,17 @@ const ListadoSocioArchivados = ({
 
   const handlePagoDevolucion = (socio) => {
     const responseDevolucion = getDevolucionCapital(socio.cedulaSocio);
-    if(responseDevolucion != null){
-      console.log("entra")
+    if (responseDevolucion != null) {
+      console.log("entra");
       setSocio(socio);
       setIdentificadorComponente(40);
-    }else{
-      alert("No se encontro ninguna devolucion para este socio, crea una antes de comenzar un pago");
+    } else {
+      alert(
+        "No se encontro ninguna devolucion para este socio, crea una antes de comenzar un pago"
+      );
     }
-    
-   
   };
-  
-  
+
   return (
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -138,26 +142,6 @@ const ListadoSocioArchivados = ({
           <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-          <button
-            type="button"
-            onClick={handleAgregarSocio}
-            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-          >
-            <svg
-              className="h-3.5 w-3.5 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                clipRule="evenodd"
-                fillRule="evenodd"
-                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              />
-            </svg>
-            AGREGAR SOCIO
-          </button>
           <div className="flex items-center space-x-3 w-full md:w-auto">
             <OrdenarPor
               options={ordenarOptions}
@@ -232,7 +216,7 @@ const ListadoSocioArchivados = ({
                       ⋮
                     </MenuButton>
                     <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <MenuItem>
+                      <MenuItem>
                         <button
                           className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
                           onClick={() => handleDevolucionCapital(socio)}

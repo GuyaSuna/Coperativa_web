@@ -9,7 +9,7 @@ import Buscador from "@/Components/Buscador.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
 
-const ListadoEstadoContables = ({}) => {
+const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
   const [allEstadosContables, setAllEstadosContables] = useState([]);
   const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
     useState(null);

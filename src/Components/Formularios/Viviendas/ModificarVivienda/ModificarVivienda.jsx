@@ -99,56 +99,40 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
   };
 
   return (
-    <div className="general-container">
-      <form onSubmit={handleSubmit} className="form">
-        <label className="label">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
+        <label className="block text-sm font-medium mb-2">
           Nro. Vivienda:
           <input
             type="text"
             name="nroVivienda"
             value={nroVivienda || ""}
             onChange={(e) => setNroVivienda(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {errores.nroVivienda && (
             <span className="error">{errores.nroVivienda}</span>
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Cantidad de Dormitorios:
           <input
             type="text"
             name="cantidadDormitorios"
             value={cantidadDormitorios || ""}
             onChange={(e) => setCantidadDormitorios(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {errores.cantidadDormitorios && (
             <span className="error">{errores.cantidadDormitorios}</span>
           )}
         </label>
         <br />
-        <label className="label">
-          Socio Titular:
-          <select
-            name="socioTitular"
-            value={socioTitular || ""}
-            onChange={handleSocioChange}
-            className="input"
-          >
-            <option value={socioTitular.nombreSocio}>
-              {socioTitular.nombreSocio || ""}{" "}
-              {socioTitular.apellidoSocio || ""}
-            </option>
-            {socios.map((socio) => (
-              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {socio.nombreSocio} {socio.apellidoSocio}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
+
         <button type="submit" className="button">
           Modificar
         </button>
