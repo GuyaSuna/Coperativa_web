@@ -1697,10 +1697,13 @@ const getAllEgresos = async (idCooperativa) => {
   }
 };
 
-const getAllEgresosByMes = async (fecha ,idCooperativa) => {
+const getAllEgresosByMes = async (fecha, idCooperativa) => {
+  const fullUrl = `${URL}/egresos/allEgresosByMes/${fecha}/${idCooperativa}`;
+  console.log("URL completa:", fullUrl); // Agregar esta línea
+
   try {
     const token = getToken();
-    const response = await fetch(`${URL}/egresos/allEgresosByMes/${fecha}/${idCooperativa}`, {
+    const response = await fetch(fullUrl, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -1720,6 +1723,7 @@ const getAllEgresosByMes = async (fecha ,idCooperativa) => {
     throw new Error("Error al obtener los datos de los Egresos.");
   }
 };
+
 
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {

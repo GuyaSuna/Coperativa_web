@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { getInteresAnual } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 
@@ -10,6 +10,10 @@ const InteresAnual = ({ setIdentificadorComponente }) => {
 
   const { cooperativa } = useContext(MiembroContext);
 
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setFecha(today);
+  },[])
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

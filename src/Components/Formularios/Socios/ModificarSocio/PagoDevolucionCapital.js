@@ -1,17 +1,15 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { postPagoDevolucionCapital } from "@/Api/api";
-
-const PagoDevolucionCapitalForm = ({ socio }) => {
+import React, { useState, useEffect, useContext } from "react";
+import { postPagoDevolucionCapital, postEgreso } from "@/Api/api";
+import { MiembroContext } from "@/Provider/provider";
+const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => {
   const [montoPago, setMontoPago] = useState("");
   const [tipoMoneda, setTipoMoneda] = useState("UR");
   const [fechaPago, setFechaPago] = useState("");
   const [errores, setErrores] = useState({});
-
-
-
-  // Validación del formulario
+  const {cooperativa} = useContext(MiembroContext);
+  
   const validarFormulario = () => {
     const newErrores = {};
 
@@ -25,84 +23,138 @@ const PagoDevolucionCapitalForm = ({ socio }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!validarFormulario()) return;
-
+  
     const pagoDevolucionData = {
-      montoPago,
-      tipoMoneda,
-      fechaPago,
+      montoPago, 
+      tipoMoneda, 
+      fechaPago, 
       socio,
     };
-
+  
     try {
       const result = await postPagoDevolucionCapital(pagoDevolucionData);
       console.log("Pago de devolución creado:", result);
+  
+      if (!result) {
+        alert("No se pudo registrar el pago de devolución");
+        return;
+      }
+      
+      montoEgreso = montoPago * ur;
+  
+      const egreso = {
+        subRubro: "Devolución de Capital",
+        denominacion: `Pago de devolución registrado el ${fechaPago}`,
+        egreso: montoEgreso,
+        cooperativaEntity: cooperativa,
+        tipoMoneda: "UYU",
+        fechaDatosContables: fechaPago,
+      };
+  
+      try {
+        const egresoResponse = await postEgreso(egreso);
+        console.log("Egreso registrado exitosamente:", egresoResponse);
+        alert("Pago de devolución y egreso registrados correctamente");
+      } catch (error) {
+        console.error("Error al registrar el egreso:", error);
+        alert("Error al registrar el egreso contable");
+      }
     } catch (error) {
-      console.error("Error al crear pago de devolución:", error);
+      console.error("Error al registrar el pago de devolución:", error);
+      alert("Error al registrar el pago de devolución");
     }
   };
-
+  
   return (
-    <div className="general-container">
-      <form onSubmit={handleSubmit} className="form">
-        <label className="label">
-          Monto de Pago:
+    <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="montoPago"
+          >
+            Monto de Pago:
+          </label>
           <input
             type="number"
+            id="montoPago"
             name="montoPago"
             value={montoPago}
             onChange={(e) => setMontoPago(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {errores.montoPago && <span className="error">{errores.montoPago}</span>}
-        </label>
-        <br />
+          {errores.montoPago && (
+            <span className="text-red-500 text-sm">{errores.montoPago}</span>
+          )}
+        </div>
 
-        <label className="label">
-          Moneda de devolucion:
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="tipoMoneda"
+          >
+            Moneda de Devolución:
+          </label>
           <input
             type="text"
+            id="tipoMoneda"
             name="tipoMoneda"
             value={tipoMoneda}
-            onChange={(e) => setFechaPago(e.target.value)}
-            className="input"
+            onChange={(e) => setTipoMoneda(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             readOnly
           />
-          {errores.tipoMoneda && <span className="error">{errores.tipoMoneda}</span>}
-        </label>
-        <br />
+          {errores.tipoMoneda && (
+            <span className="text-red-500 text-sm">{errores.tipoMoneda}</span>
+          )}
+        </div>
 
-        <label className="label">
-          Fecha de Pago:
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="fechaPago"
+          >
+            Fecha de Pago:
+          </label>
           <input
             type="date"
+            id="fechaPago"
             name="fechaPago"
             value={fechaPago}
             onChange={(e) => setFechaPago(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
-          {errores.fechaPago && <span className="error">{errores.fechaPago}</span>}
-        </label>
-        <br />
+          {errores.fechaPago && (
+            <span className="text-red-500 text-sm">{errores.fechaPago}</span>
+          )}
+        </div>
 
-        <label className="label">
-          Socio:
+        <div className="mb-4">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="socio"
+          >
+            Socio:
+          </label>
           <input
             type="text"
+            id="socio"
             name="socio"
-            value={socio.nombreSocio + " "+ socio.apellidoSocio}
-            onChange={(e) => setSocio(e.target.value)}
-            className="input"
-            readOnly 
+            value={`${socio.nombreSocio} ${socio.apellidoSocio}`}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            readOnly
           />
-          {errores.socio && <span className="error">{errores.socio}</span>}
-        </label>
-        <br />
+        </div>
 
-        <br />
-
-        <button type="submit" className="button">
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+        >
           Crear Pago de Devolución
         </button>
       </form>

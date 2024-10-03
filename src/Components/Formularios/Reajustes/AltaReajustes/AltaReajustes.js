@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { postReajuste } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
@@ -12,6 +12,11 @@ const AltaReajuste = ({ setIdentificadorComponente }) => {
   const [mensaje, setMensaje] = useState("");
   const {cooperativa} = useContext(MiembroContext);
   const router = useRouter();
+
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setFechaReajuste(today);
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault();

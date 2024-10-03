@@ -32,6 +32,8 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
 
   console.log("Vivienda seleccionada", SeleccionVivienda);
   useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setFechaIngresoCooperativa(today);
     fetchViviendasDisponibles();
   }, []);
 

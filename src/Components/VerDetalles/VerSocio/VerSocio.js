@@ -10,10 +10,10 @@ import { MiembroContext } from "@/Provider/provider";
 const VerSocio = ({ isOpen, onClose, socio }) => {
   const [ultimoSubsidio, setUltimoSubsidio] = useState(null);
   const [recibosImpagos, setRecibosImpagos] = useState([]);
+  const [totalImpagos, setTotalImpagos] = useState(0); // Nuevo estado para total
   const [isSuplenteExpanded, setIsSuplenteExpanded] = useState(false);
   const [isSubsidioExpanded, setIsSubsidioExpanded] = useState(false);
-  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] =
-    useState(false);
+  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] = useState(false);
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
@@ -36,9 +36,14 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
           );
           console.log("Recibos Impagos: ", recibos);
           setRecibosImpagos(recibos);
+
+          // Calcular el total de recibos impagos
+          const total = recibos.reduce((acc, recibo) => acc + Number(recibo.cuotaMensual), 0);
+          setTotalImpagos(total); // Establecer el total en el estado
         } catch (error) {
           console.error("Error al obtener los recibos impagos:", error);
           setRecibosImpagos([]);
+          setTotalImpagos(0); // Reiniciar el total en caso de error
         }
       };
 
@@ -238,17 +243,22 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                     <td colSpan="2" className="py-1 px-3">
                       <div className="max-h-60 overflow-y-auto">
                         {recibosImpagos.length > 0 ? (
-                          recibosImpagos.map((recibo) => (
-                            <div
-                              key={recibo?.fecha}
-                              className="border-b border-gray-200 dark:border-gray-800 py-2"
-                            >
-                              <div className="font-normal px-3">
-                                Falta recibo en fecha: {recibo?.fechaRecibo} el
-                                monto de: {recibo?.cuotaMensual}
+                          <>
+                            {recibosImpagos.map((recibo) => (
+                              <div
+                                key={recibo?.fecha}
+                                className="border-b border-gray-200 dark:border-gray-800 py-2"
+                              >
+                                <div className="font-normal px-3">
+                                  Falta recibo en fecha: {recibo?.fechaRecibo} el
+                                  monto de: {recibo?.cuotaMensual}
+                                </div>
                               </div>
+                            ))}
+                            <div className="font-bold px-3 pt-2">
+                              Total Recibos Impagos: ${totalImpagos} {/* Mostrar el total */}
                             </div>
-                          ))
+                          </>
                         ) : (
                           <div className="py-1 px-3 text-center">
                             No tiene recibos impagos.

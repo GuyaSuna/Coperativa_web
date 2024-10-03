@@ -9,7 +9,7 @@ const AltaEgreso = () => {
   const [denominacion, setDenominacion] = useState("");
   const [egreso, setEgreso] = useState("");
   const [errores, setErrores] = useState({});
-  const [tipoMoneda, setTipoMoneda] = useState("UR");
+  const [tipoMoneda, setTipoMoneda] = useState("UYU");
   const { cooperativa } = useContext(MiembroContext);
   const [fechaDatosContables, setFechaDatosContables] = useState("");
 
@@ -170,7 +170,7 @@ const AltaEgreso = () => {
               onChange={handleChangeTipoMoneda}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             >
-              <option value="UR">Pesos Uruguayos</option>
+              <option value="UYU">Pesos Uruguayos</option>
               <option value="USD">Dolares</option>
             </select>
             {errores.tipoMoneda && (

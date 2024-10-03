@@ -245,7 +245,7 @@ const ListadoSocioArchivados = ({
                           className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
                           onClick={() => handlePagoDevolucion(socio)}
                         >
-                          Pagar deolucion
+                          Pagar devolucion
                         </button>
                       </MenuItem>
                     </MenuItems>

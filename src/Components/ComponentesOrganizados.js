@@ -316,6 +316,7 @@ const ComponentesOrganizados = ({
       return (
         <PagoDevolucionCapitalForm
           socio={socio}
+          ur={ur}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

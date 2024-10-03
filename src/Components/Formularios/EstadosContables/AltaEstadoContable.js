@@ -28,10 +28,14 @@ const AltaEstadoContable = () => {
   }, [fecha]);
 
   useEffect(() => {
-
+    const today = new Date().toISOString().split("T")[0];
+    setFecha(today);
   },[])
   const fetchDatos = async () => {
     try {
+      if(fecha){
+
+      
       const egresos = await getAllEgresosByMes(fecha,cooperativa.idCooperativa);
       const ingresos = await getAllIngresosByMes(fecha , cooperativa.idCooperativa);
 
@@ -42,6 +46,7 @@ const AltaEstadoContable = () => {
       setListaIngresos(ingresos);
 
       calcularTotales(egresos, ingresos);
+    }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
@@ -156,7 +161,7 @@ const AltaEstadoContable = () => {
                 <span>SubRubro</span>
               </li>
               {listaIngresos
-                .filter((ingreso) => ingreso.tipoMoneda === "UR")
+                .filter((ingreso) => ingreso.tipoMoneda === "UYU")
                 .map((ingreso) => (
                   <li
                     key={ingreso.id}

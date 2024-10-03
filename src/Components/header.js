@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useContext, useEffect } from "react";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider";
 import ThemeToggle from "./ThemeToggle";
 import logoDark from "../../public/logoVisoftDark.png";
@@ -11,11 +10,18 @@ import {
   FaHome,
   FaUserPlus,
   FaUserTie,
+  FaUser,
   FaUserShield,
   FaBell,
   FaHandHoldingUsd,
   FaMoneyBillWave,
   FaMoneyBill,
+  FaFileAlt,
+  FaFileInvoice,
+  FaFileSignature,
+  FaRegNewspaper,
+  FaChartLine,
+  FaHouseUser,
 } from "react-icons/fa";
 import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
 
@@ -26,6 +32,7 @@ const Header = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [openSecondDropdown, setOpenSecondDropdown] = useState(null); // Estado para el segundo dropdown
 
   // Acceder al estado del tema
   const { darkMode } = useTheme();
@@ -53,6 +60,10 @@ const Header = ({ setIdentificadorComponente }) => {
 
   const toggleDropdown = (dropdown) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
+  };
+
+  const toggleSecondDropdown = () => {
+    setOpenSecondDropdown(!openSecondDropdown); // Alterna el estado del segundo dropdown
   };
 
   return (
@@ -98,6 +109,7 @@ const Header = ({ setIdentificadorComponente }) => {
               height={65}
             />
             <div className="space-y-4 mt-3">
+              {/* Sección de botones del sidebar */}
               <div className="relative">
                 <button
                   onClick={() => toggleDropdown(1)}
@@ -106,14 +118,13 @@ const Header = ({ setIdentificadorComponente }) => {
                   }`}
                 >
                   <div className="flex items-center">
-                    <FaUserShield className="mr-2 text-2xl" />{" "}
-                    <a className="text-base">Agregar Entidades</a>
+                    <FaUserShield className="mr-2 text-2xl" />
+                    <span className="text-base">Agregar Entidades</span>
                   </div>
                   <span
                     className="transform transition-transform duration-200 text-1xl"
                     style={{
-                      transform:
-                        openDropdown === 1 ? "rotate(180deg)" : "rotate(0)",
+                      transform: openDropdown === 1 ? "rotate(180deg)" : "rotate(0)",
                     }}
                   >
                     ▼
@@ -128,8 +139,8 @@ const Header = ({ setIdentificadorComponente }) => {
                         selectedOption === 2 ? "bg-blue-500 text-white" : ""
                       }`}
                     >
-                      <FaHome className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Vivienda</a>
+                      <FaHouseUser className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Vivienda</span>
                     </button>
                     <button
                       onClick={() => handleSelection(3)}
@@ -137,71 +148,136 @@ const Header = ({ setIdentificadorComponente }) => {
                         selectedOption === 3 ? "bg-blue-500 text-white" : ""
                       }`}
                     >
-                      <FaUserPlus className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Socio</a>
+                      <FaUserPlus className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Socio</span>
                     </button>
-                    {/* Continuar con el resto del código */}
+                    <button
+                      onClick={() => handleSelection(7)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                        selectedOption === 7 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaUserPlus className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Suplente</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(16)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                        selectedOption === 16 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaHandHoldingUsd className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Subsidio</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(18)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                        selectedOption === 18 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileAlt className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Convenio</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(13)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                        selectedOption === 13 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaUser className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Usuario</span>
+                    </button>
+                    
                   </div>
                 )}
               </div>
+
+              <div className="relative">
+                <button
+                  onClick={toggleSecondDropdown}
+                  className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                    openSecondDropdown ? "bg-blue-500 text-white" : ""
+                  }`}
+                >
+                  <div className="flex items-center">
+                  <FaChartLine className="mr-2 text-2xl" />{" "}
+                    <span className="text-base">Opciones Adicionales</span>
+                  </div>
+                  <span
+                    className="transform transition-transform duration-200 text-1xl"
+                    style={{
+                      transform: openSecondDropdown ? "rotate(180deg)" : "rotate(0)",
+                    }}
+                  >
+                    ▼
+                  </span>
+                </button>
+
+                {openSecondDropdown && (
+                  <div className="mt-2 space-y-2 ml-4">
+                    <button
+                      onClick={() => handleSelection(33)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                        selectedOption === 33 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileInvoice className="mr-2 text-2xl" />
+                      <span className="text-base">Agregar Estados Contables</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(8)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-100 dark:hover:bg-blue-900 ${
+                        selectedOption === 8 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaBell className="mr-2 text-2xl" />
+                      <span className="text-base">Generar Aviso</span>
+                    </button>
+                    <button
+                    onClick={() => handleSelection(22)}
+                    className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                      selectedOption === 22 ? "bg-blue-500 text-white" : ""
+                    }`}
+                  >
+                    <FaMoneyBillWave className="mr-2 text-2xl" />
+                    <span className="text-base">Declarar Ingreso</span>
+                  </button>
+                  <button
+          onClick={() => handleSelection(24)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+            selectedOption === 24 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          <FaMoneyBill className="mr-2 text-2xl" />
+          <span className="text-base">Declarar Egreso</span>
+        </button>
+
+        <button
+          onClick={() => handleSelection(34)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+            selectedOption === 34 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          <FaFileSignature className="mr-2 text-2xl" />{" "}
+          <span className="text-base">Informe Interes Anual</span>
+        </button>
+
+        <button
+          onClick={() => handleSelection(31)}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+            selectedOption === 31 ? "bg-blue-500 text-white" : ""
+          }`}
+        >
+          <FaRegNewspaper className="mr-2 text-2xl" />{" "}
+          <span className="text-base">Reajuste Anual</span>
+        </button>
+                  </div>
+                )}
+              </div>
+
             </div>
           </div>
         </div>
-      </div>
-      <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
-        <Menu as="div" className="relative inline-block text-left justify-end">
-          <div>
-            <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:text-gray-300 text-gray-900 shadow-sm border dark:border-gray-600 border-gray-200">
-              <span className="relative flex-shrink-0">
-                <img
-                  className="w-7 h-7 rounded-full"
-                  src="https://images.unsplash.com/photo-1521587765099-8835e7201186?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                  alt="profile"
-                />
-                <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
-              </span>
-              <span className="ml-2 md:text-xs text-dark dark:text-white self-center">
-                {miembroUsername}
-              </span>
-              <svg
-                viewBox="0 0 24 24"
-                className="w-4 ml-1 flex-shrink-0"
-                stroke="currentColor"
-                strokeWidth={2}
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </MenuButton>
-          </div>
-          <MenuItems
-            transition
-            className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
-          >
-            <div className="py-1">
-              <MenuItem>
-                <button
-                  onClick={() => handleModificar(socios.cedulaSocio)}
-                  className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                >
-                  Modificar
-                </button>
-              </MenuItem>
-              <MenuItem>
-                <button
-                  href={"/"}
-                  onClick={() => handlePressCerrarSesion()}
-                  className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                >
-                  Cerrar Sesion
-                </button>
-              </MenuItem>
-            </div>
-          </MenuItems>
-        </Menu>
-        <ThemeToggle />
       </div>
     </header>
   );

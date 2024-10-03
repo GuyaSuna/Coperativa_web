@@ -19,6 +19,8 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setFechaInicioConvenio(today);
     fetchSociosDisponibles();
   }, []);
 

@@ -5,7 +5,7 @@ import { getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
@@ -197,7 +197,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                 Monto
               </th>
               <th scope="col" className="px-4 py-3">
-                Fecha de Pago
+                Fecha de Recibo
               </th>
               <th scope="col" className="px-4 py-3">
                 Estado
@@ -229,7 +229,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                  $ {recibo.cuotaMensual}
                 </td>
                 <td className="px-4 py-3 block md:table-cell">
-                  {recibo.fechaPago}
+                  {recibo.fechaRecibo}
                 </td>
                 <td className="px-4 py-3 block md:table-cell">
                   <span

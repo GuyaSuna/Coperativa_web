@@ -17,7 +17,7 @@ import {
 } from "@headlessui/react";
 import IconButton from "@mui/material/IconButton";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import VerRecibo from "../VerDetalles/VerRecibo/verRecibo";
+import VerRecibo from "../VerDetalles/VerRecibo/VerRecibo";
 import DashboardCard from "./DashboardCard";
 import { getAllRecibosPorSocio } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
