@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { postDevolucionCapital } from "../../../../Api/api.js";
 
 const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
@@ -17,6 +17,7 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
   const handleChangeTipoRetiro = (e) => setTipoRetiro(e.target.value);
   const handleChangeMontoDescuento = (e) => setMontoDescuento(e.target.value);
   const handleChangeDescripcionDescuento = (e) => setDescripcionDescuento(e.target.value);
+
 
   const validarFormulario = () => {
     const errores = {};

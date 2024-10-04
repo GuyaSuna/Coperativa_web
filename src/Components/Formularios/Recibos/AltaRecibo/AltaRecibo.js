@@ -53,6 +53,9 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   useEffect(() => {
     console.log("UNIDAD REAJUSTABLE MENSUAL",ur)
+    const today = new Date().toISOString().split("T")[0];
+    setFechaPago(today);
+    setFechaEmision(today);
     const FechaActual = new Date();
     console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
     console.log("FECHA ACTUAL", FechaActual.getFullYear());

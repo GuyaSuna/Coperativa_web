@@ -10,6 +10,10 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
   const [errores, setErrores] = useState({});
   const {cooperativa} = useContext(MiembroContext);
   
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0];
+    setFechaPago(today);
+  },[])
   const validarFormulario = () => {
     const newErrores = {};
 

@@ -68,7 +68,7 @@ const ComponentesOrganizados = ({
     case 0: {
       return (
         <ListadoSocio
-          setCedulaSocio={setCedulaSocio}
+          setSocio={setSocio}
           setIdentificadorComponente={setIdentificadorComponente}
           setSocioRecibo={setSocioRecibo}
         />
@@ -110,7 +110,9 @@ const ComponentesOrganizados = ({
       );
     }
     case 7: {
-      return <AltaSuplente />;
+      return <AltaSuplente 
+        setIdentificadorComponente={setIdentificadorComponente}
+      />;
     }
     case 8: {
       return <AltaAviso />;

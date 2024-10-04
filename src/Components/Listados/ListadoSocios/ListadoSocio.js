@@ -8,6 +8,7 @@ import {
   getViviendaPorSocio,
   updateVivienda,
   getConveniosVigenteSocio,
+  getDevolucionCapital,
 } from "../../../Api/api.js";
 import {
   Button,
@@ -24,9 +25,9 @@ import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 
 const ListadoSocio = ({
-  setSocioRecibo,
-  setCedulaSocio,
-  setIdentificadorComponente,
+  setSocio,
+  setIdentificadorComponente, 
+   setSocioRecibo,
 }) => {
   const [allSocios, setAllSocios] = useState([]);
   const { cooperativa } = useContext(MiembroContext);
@@ -55,15 +56,10 @@ const ListadoSocio = ({
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
-      console.log("Cooperativa", cooperativa);
-      console.log("Respuesta all socios", response);
       const sociosConFechaFormateada = response.map((socio) => {
-        console.log("Fecha ingreso antes: ", socio.fechaIngresoCooeprativa);
-
         if (socio.fechaIngresoCooeprativa) {
           const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
           const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          console.log("Fecha formateada: ", fechaFormateada);
           return {
             ...socio,
             fechaIngresoCooeprativa: fechaFormateada,
@@ -72,15 +68,14 @@ const ListadoSocio = ({
           return socio;
         }
       });
-      const sociosSinArchivar = sociosConFechaFormateada.filter(
-        (socio) => !socio.archivado
-      );
-      setAllSocios(sociosSinArchivar);
-      setBuscadorFiltrado(sociosSinArchivar);
+  
+      setAllSocios(sociosConFechaFormateada); 
+      setBuscadorFiltrado(sociosConFechaFormateada);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
+  
 
   const handleArchivar = async (socio) => {
     const confirmacion = window.confirm(
@@ -150,6 +145,7 @@ const ListadoSocio = ({
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
+
   const ordenarOptions = [
     {
       label: "Número socio",
@@ -168,28 +164,71 @@ const ListadoSocio = ({
       key: "fechaIngreso",
       icon: <SortIcon />,
       comparator: (a, b) =>
-        new Date(b.fechaIngresoCooeprativa) -
-        new Date(a.fechaIngresoCooeprativa),
+        new Date(b.fechaIngresoCooeprativa) - new Date(a.fechaIngresoCooeprativa),
     },
     {
       label: "Más Antiguos",
       key: "fechaIngreso",
       icon: <SortIcon />,
       comparator: (a, b) =>
-        new Date(a.fechaIngresoCooeprativa) -
-        new Date(b.fechaIngresoCooeprativa),
+        new Date(a.fechaIngresoCooeprativa) - new Date(b.fechaIngresoCooeprativa),
+    },
+    {
+      label: "Solo Socios Archivados", 
+      key: "archivados",
+      icon: <SortIcon />,
+      comparator: (a, b) => a.archivado - b.archivado,
+      filter: (socio) => socio.archivado, 
     },
   ];
-
+  
+  useEffect(() => {
+    if (buscador == "") {
+      // Filtrar para mostrar solo los no archivados por defecto
+      setBuscadorFiltrado(allSocios.filter(socio => !socio.archivado));
+    } else {
+      const buscadorFiltrado = allSocios.filter((socio) =>
+        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase()) &&
+        !socio.archivado // Excluir archivados en la búsqueda por defecto
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allSocios, buscador]);
+  
   const handleSortChange = (option) => {
     console.log("Orden seleccionado:", option.label);
-    if (buscador) {
-      const ordenarFiltrado = [...buscadorFiltrado].sort(option.comparator);
-      setBuscadorFiltrado(ordenarFiltrado);
+  
+    let sociosFiltrados = [...allSocios];
+  
+    if (option.key === "archivados") {
+      // Mostrar solo los archivados al seleccionar esta opción
+      sociosFiltrados = sociosFiltrados.filter((socio) => socio.archivado);
     } else {
-      const ordenarSocios = [...allSocios].sort(option.comparator);
-      setAllSocios(ordenarSocios);
+      // Filtrar para excluir archivados por defecto al ordenar por otras opciones
+      sociosFiltrados = sociosFiltrados.filter((socio) => !socio.archivado);
     }
+  
+    sociosFiltrados = sociosFiltrados.sort(option.comparator);
+    
+    setBuscadorFiltrado(sociosFiltrados);
+  };
+  
+  const handleDevolucionCapital = (socio) => {
+    setSocio(socio);   
+    setIdentificadorComponente(39);
+  };
+
+  const handlePagoDevolucion = (socio) => {
+    const responseDevolucion = getDevolucionCapital(socio.cedulaSocio);
+    if(responseDevolucion != null){
+      console.log("entra")
+      setSocio(socio);
+      setIdentificadorComponente(40);
+    }else{
+      alert("No se encontro ninguna devolucion para este socio, crea una antes de comenzar un pago");
+    }
+    
+   
   };
 
   const handleAgregarSocio = () => {
@@ -313,84 +352,63 @@ const ListadoSocio = ({
                 </td>
 
                 {/* Opciones adicionales */}
-                <td className="px-4 py-3 flex justify-end gap-2">
-                  {/* SVG para pantallas grandes */}
-                  <div className="hidden md:block">
-                    <div className="relative inline-block text-left">
-                      <Menu
-                        as="div"
-                        className="relative inline-block text-left"
-                      >
-                        <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
-                          <svg
-                            viewBox="0 0 24 24"
-                            className="w-5"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                            fill="none"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <circle cx={12} cy={12} r={1} />
-                            <circle cx={19} cy={12} r={1} />
-                            <circle cx={5} cy={12} r={1} />
-                          </svg>
-                        </MenuButton>
-                        <MenuItems
-                          transition
-                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
-                        >
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                              onClick={() => handleArchivar(socio)}
-                            >
-                              Archivar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                              onClick={() => handleModificarSocio(socio)}
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                              onClick={() => handleCrearRecibo(socio)}
-                            >
-                              Crear Recibo
-                            </button>
-                          </MenuItem>
-                        </MenuItems>
-                      </Menu>
-                    </div>
-                  </div>
+                <td className="px-4 py-3 text-right">
+  <Menu as="div" className="relative inline-block text-left">
+    <MenuButton className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+      ⋮
+    </MenuButton>
+    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+      {socio.archivado ? (
+        <>
+          <MenuItem>
+            <button
+              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+              onClick={() => handleDevolucionCapital(socio)}
+            >
+              Asignar devolución de capital
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button
+              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+              onClick={() => handlePagoDevolucion(socio)}
+            >
+              Pagar devolución
+            </button>
+          </MenuItem>
+        </>
+      ) : (
+        <>
+          <MenuItem>
+            <button
+              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+              onClick={() => handleArchivar(socio)}
+            >
+              Archivar
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button
+              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+              onClick={() => handleModificarSocio(socio)}
+            >
+              Modificar
+            </button>
+          </MenuItem>
+          <MenuItem>
+            <button
+              className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+              onClick={() => handleCrearRecibo(socio)}
+            >
+              Crear Recibo
+            </button>
+          </MenuItem>
+        </>
+      )}
+    </MenuItems>
+  </Menu>
+</td>
 
-                  {/* Botones para pantallas pequeñas */}
-                  <div className="flex md:hidden gap-2">
-                    <button
-                      onClick={() => handleArchivar(socio)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
-                    >
-                      Archivar
-                    </button>
-                    <button
-                      onClick={() => handleModificarSocio(socio)}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                    >
-                      Modificar
-                    </button>
-                    <button
-                      onClick={() => handleCrearRecibo(socio)}
-                      className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"
-                    >
-                      Crear Recibo
-                    </button>
-                  </div>
-                </td>
               </tr>
             ))}
           </tbody>

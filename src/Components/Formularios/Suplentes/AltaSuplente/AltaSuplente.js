@@ -9,7 +9,7 @@ import {
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
-const AltaSuplente = () => {
+const AltaSuplente = ({setIdentificadorComponente}) => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
 
@@ -116,6 +116,7 @@ const AltaSuplente = () => {
         alert("Error al agregar suplente");
       } else {
         alert("Suplente agregado exitosamente");
+        setIdentificadorComponente(9);
       }
     } catch (error) {
       console.error("Error al enviar los datos del suplente:", error);
