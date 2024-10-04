@@ -87,22 +87,24 @@ const VerCooperativa = ({ isOpen, onClose, cooperativa }) => {
                       : "► Lista de Socios"}
                   </td>
                 </tr>
-                {isSociosExpanded && cooperativa.listaSocios.length > 0 ? (
-                  cooperativa.listaSocios.map((socio, index) => (
-                    <tr key={index}>
-                      <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
-                        {socio.nombreSocio} {socio.apellidoSocio}
+                {isSociosExpanded ? (
+                  cooperativa.listaSocios && cooperativa.listaSocios.length > 0 ? (
+                    cooperativa.listaSocios.map((socio, index) => (
+                      <tr key={index}>
+                        <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                          {socio.nombreSocio} {socio.apellidoSocio}
+                        </td>
+                        <td className="py-1 px-3">{socio.cedulaSocio}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="2" className="py-1 px-3 text-center">
+                        No tiene socios.
                       </td>
-                      <td className="py-1 px-3">{socio.cedulaSocio}</td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="2" className="py-1 px-3 text-center">
-                      No tiene socios.
-                    </td>
-                  </tr>
-                )}
+                  )
+                ) : null}
               </tbody>
             </table>
           </div>
