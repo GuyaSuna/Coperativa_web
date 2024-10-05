@@ -62,6 +62,18 @@ const InteresAnual = ({ setIdentificadorComponente }) => {
         >
           Obtener Informe
         </button>
+        {resultados != null && (
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Resultados:</h3>
+            <ul className="list-disc pl-5">
+              {resultados.listaInteresAnual.map((dato) => (
+                <li key={dato.socio.cedulaSocio}>
+                  <strong>{dato.socio.nombreSocio}:</strong> {dato.interes} Ur
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </form>
 
       {loading && (

@@ -13,8 +13,8 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
   const [capitalSocio, setCapitalSocio] = useState("");
   const [telefono, setTelefono] = useState("");
   const [fechaIngreso, setFechaIngreso] = useState("");
-  const [fechaIngresoCooperativa , setFechaIngresoCooperativa] = useState("");
-  const [suplente , setSuplente] = useState(null);
+  const [fechaIngresoCooperativa, setFechaIngresoCooperativa] = useState("");
+  const [suplente, setSuplente] = useState(null);
   const [errores, setErrores] = useState({});
 
   useEffect(() => {
@@ -27,15 +27,25 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
         const data = await getSocio(cedulaSocio);
         if (data) {
           // Procesa y establece las fechas
-          const ingreso = data.fechaIngreso ? new Date(data.fechaIngreso).toISOString().split('T')[0] : "";
-          console.log("Fecha Ingreso Cooperativa recibida:", data.fechaIngresoCooperativa);
-const ingresoCooperativa = data.fechaIngresoCooperativa ? new Date(data.fechaIngresoCooperativa).toISOString().split('T')[0] : "";
-console.log("Fecha Ingreso Cooperativa formateada:", ingresoCooperativa);
-setFechaIngresoCooperativa(ingresoCooperativa);
-          
+          const ingreso = data.fechaIngreso
+            ? new Date(data.fechaIngreso).toISOString().split("T")[0]
+            : "";
+          console.log(
+            "Fecha Ingreso Cooperativa recibida:",
+            data.fechaIngresoCooperativa
+          );
+          const ingresoCooperativa = data.fechaIngresoCooperativa
+            ? new Date(data.fechaIngresoCooperativa).toISOString().split("T")[0]
+            : "";
+          console.log(
+            "Fecha Ingreso Cooperativa formateada:",
+            ingresoCooperativa
+          );
+          setFechaIngresoCooperativa(ingresoCooperativa);
+
           setFechaIngresoCooperativa(ingresoCooperativa);
           setFechaIngreso(ingreso);
-          
+
           setNroSocio(data.nroSocio || "");
           setNombreSocio(data.nombreSocio || "");
           setApellidoSocio(data.apellidoSocio || "");
@@ -48,7 +58,7 @@ setFechaIngresoCooperativa(ingresoCooperativa);
         console.error(`An error has occurred in fetchSocio: ${error.message}`);
       }
     };
-  
+
     if (cedulaSocio) {
       fetchSocio();
     }
@@ -64,7 +74,9 @@ setFechaIngresoCooperativa(ingresoCooperativa);
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
     if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-    if(!fechaIngresoCooperativa) errores.fechaIngresoCooperativa="La fecha de ingreso a la cooperativa es obligatoria";
+    if (!fechaIngresoCooperativa)
+      errores.fechaIngresoCooperativa =
+        "La fecha de ingreso a la cooperativa es obligatoria";
     setErrores(errores);
 
     return Object.keys(errores).length === 0;
@@ -75,7 +87,7 @@ setFechaIngresoCooperativa(ingresoCooperativa);
 
     console.log(fechaIngreso);
     if (!validarFormulario()) return;
-    let socioUpdate={
+    let socioUpdate = {
       cedulaSocio,
       nroSocio,
       nombreSocio,
@@ -84,12 +96,11 @@ setFechaIngresoCooperativa(ingresoCooperativa);
       telefono,
       fechaIngreso,
       fechaIngresoCooperativa,
-      suplenteEntity : suplente,
-    }
+      suplenteEntity: suplente,
+    };
     try {
       const result = await updateSocio(socioUpdate);
-      
-      
+
       console.log("Socio actualizado:", result);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
@@ -111,125 +122,141 @@ setFechaIngresoCooperativa(ingresoCooperativa);
   };
 
   return (
-    <div className="general-container">
-      <form onSubmit={handleSubmit} className="form">
-        <label className="label">
-          Nro. Socio:
-          <input
-            type="text"
-            name="nroSocio"
-            value={nroSocio || ""}
-            onChange={(e) => setNroSocio(e.target.value)}
-            className="input"
-          />
-          {errores.nroSocio && (
-            <span className="error">{errores.nroSocio}</span>
-          )}
-        </label>
-        <br />
-        <label className="label">
-          Nombres:
-          <input
-            type="text"
-            name="nombreSocio"
-            value={nombreSocio || ""}
-            onChange={(e) => setNombreSocio(e.target.value)}
-            className="input"
-          />
-          {errores.nombreSocio && (
-            <span className="error">{errores.nombreSocio}</span>
-          )}
-        </label>
-        <br />
-        <label className="label">
-          Apellidos:
-          <input
-            type="text"
-            name="apellidoSocio"
-            value={apellidoSocio || ""}
-            onChange={(e) => setApellidoSocio(e.target.value)}
-            className="input"
-          />
-          {errores.apellidoSocio && (
-            <span className="error">{errores.apellidoSocio}</span>
-          )}
-        </label>
-        <br />
-        <label className="label">
-          Número de CI.:
-          <input
-            type="text"
-            name="cedulaSocio"
-            value={cedulaSocio || ""}
-            onChange={(e) => setCedulaSocio(e.target.value)}
-            className="input"
-          />
-          {errores.cedulaSocio && (
-            <span className="error">{errores.cedulaSocio}</span>
-          )}
-        </label>
-        <br />
-        <label className="label">
-          Teléfono:
-          <input
-            type="text"
-            name="telefonoSocio"
-            value={telefono || ""}
-            onChange={(e) => setTelefono(e.target.value)}
-            className="input"
-          />
-          {errores.telefonoSocio && (
-            <span className="error">{errores.telefonoSocio}</span>
-          )}
-        </label>
-        <br />
-        <label className="label">
-          Capital:
-          <input
-            type="text"
-            name="capitalSocio"
-            value={capitalSocio || ""}
-            onChange={(e) => setCapitalSocio(e.target.value)}
-            className="input"
-          />
-          {errores.capitalSocio && (
-            <span className="error">{errores.capitalSocio}</span>
-          )}
-        </label>
-        <br/>
-        <label className="label">
-          Fecha de Ingreso:
-          <input
-            type="date"
-            name="fechaIngreso"
-            value={fechaIngreso || ""}
-            onChange={(e) => setFechaIngreso(e.target.value)}
-            className="input"
-          />
-          {errores.fechaIngreso && (
-            <span className="error">{errores.fechaIngreso}</span>
-          )}
-        </label>
-        <br />
-        <label className="label">
-          Fecha de Ingreso Cooperativa:
-          <input
-            type="date"
-            name="fechaIngresoCooperativa"
-            value={fechaIngresoCooperativa || ""}
-            onChange={(e) => setFechaIngresoCooperativa(e.target.value)}
-            className="input"
-          />
-          {errores.fechaIngresoCooperativa && (
-            <span className="error">{errores.fechaIngresoCooperativa}</span>
-          )}
-        </label>
-        <br />
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Nro. Socio:
+              <input
+                type="text"
+                name="nroSocio"
+                value={nroSocio || ""}
+                onChange={(e) => setNroSocio(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.nroSocio && (
+                <span className="error">{errores.nroSocio}</span>
+              )}
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Nombres:
+              <input
+                type="text"
+                name="nombreSocio"
+                value={nombreSocio || ""}
+                onChange={(e) => setNombreSocio(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.nombreSocio && (
+                <span className="error">{errores.nombreSocio}</span>
+              )}
+            </label>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Apellidos:
+              <input
+                type="text"
+                name="apellidoSocio"
+                value={apellidoSocio || ""}
+                onChange={(e) => setApellidoSocio(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.apellidoSocio && (
+                <span className="error">{errores.apellidoSocio}</span>
+              )}
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Número de CI.:
+              <input
+                type="text"
+                name="cedulaSocio"
+                value={cedulaSocio || ""}
+                onChange={(e) => setCedulaSocio(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.cedulaSocio && (
+                <span className="error">{errores.cedulaSocio}</span>
+              )}
+            </label>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Teléfono:
+              <input
+                type="text"
+                name="telefonoSocio"
+                value={telefono || ""}
+                onChange={(e) => setTelefono(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.telefonoSocio && (
+                <span className="error">{errores.telefonoSocio}</span>
+              )}
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Capital:
+              <input
+                type="text"
+                name="capitalSocio"
+                value={capitalSocio || ""}
+                onChange={(e) => setCapitalSocio(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.capitalSocio && (
+                <span className="error">{errores.capitalSocio}</span>
+              )}
+            </label>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 md:gap-6">
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Fecha de Ingreso:
+              <input
+                type="date"
+                name="fechaIngreso"
+                value={fechaIngreso || ""}
+                onChange={(e) => setFechaIngreso(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.fechaIngreso && (
+                <span className="error">{errores.fechaIngreso}</span>
+              )}
+            </label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">
+              Fecha de Ingreso Cooperativa:
+              <input
+                type="date"
+                name="fechaIngresoCooperativa"
+                value={fechaIngresoCooperativa || ""}
+                onChange={(e) => setFechaIngresoCooperativa(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {errores.fechaIngresoCooperativa && (
+                <span className="error">{errores.fechaIngresoCooperativa}</span>
+              )}
+            </label>
+          </div>
+        </div>
         <button type="submit" className="button">
           Modificar
-        </button>
-        <button type="button" onClick={handleDelete} className="button">
-          Borrar
         </button>
       </form>
     </div>

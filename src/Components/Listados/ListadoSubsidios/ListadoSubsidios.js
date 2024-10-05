@@ -149,7 +149,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
           </div>
 
           {/* Tabla responsive */}
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto h-screen">
             <table className="w-full text-left text-sm text-gray-600 dark:text-gray-100 block md:table">
               <thead className="text-xs text-gray-400 uppercase hidden md:table-header-group">
                 <tr className="hidden sm:table-row">

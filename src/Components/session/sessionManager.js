@@ -2,16 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "@/Provider/loginProvider";
 import { useRouter } from "next/navigation";
+import { renovarToken } from "./../../Api/ApiToken"; // Asegúrate de que el nombre de la función sea correcto
 
 const SessionManager = () => {
   const { isAuthenticated, logout, authToken } = useSession();
   const [tiempoRestante, setTiempoRestante] = useState(0);
+  const [preguntado, setPreguntado] = useState(false); // Para controlar si ya se preguntó
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
 
-    const tokenExpiracion = parseJwt(authToken)?.exp * 1000;
+    const tokenExpiracion = parseJwt(authToken)?.exp * 1000; // Tiempo de expiración en milisegundos
     const tiempoActual = Date.now();
     const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000;
 
@@ -21,6 +23,7 @@ const SessionManager = () => {
       const tiempoActualizado = (tokenExpiracion - Date.now()) / 1000;
       setTiempoRestante(tiempoActualizado);
 
+      // Si el token ha expirado
       if (tiempoActualizado <= 0) {
         clearInterval(intervalo);
         alert("Tu sesión ha expirado.");
@@ -28,22 +31,33 @@ const SessionManager = () => {
         router.push("/");
       }
 
-      if (tiempoActualizado <= 30) {
-        alert("¿Aún estás ahí?");
-        const tiempoRespuesta = setTimeout(() => {
+      // Mostrar la pregunta 1 minuto antes de expirar, solo una vez
+      if (tiempoActualizado <= 60 && !preguntado) {
+        setPreguntado(true);
+        const confirmarRenovacion = window.confirm(
+          "Tu sesión está por expirar. ¿Quieres continuar?"
+        );
+        if (confirmarRenovacion) {
+          renovarToken(authToken); // Llamamos a la función para renovar el token
+          setPreguntado(false); // Reseteamos para futuras expiraciones
+        } else {
+          clearInterval(intervalo);
           logout();
           router.push("/");
-        }, 30000);
+        }
       }
     };
 
+    // Actualiza el tiempo restante cada segundo
     const intervalo = setInterval(actualizarContador, 1000);
 
+    // Limpieza al desmontar el componente
     return () => {
       clearInterval(intervalo);
     };
-  }, [isAuthenticated, authToken]);
+  }, [isAuthenticated, authToken, preguntado, router, logout]);
 
+  // Función para parsear el token JWT
   const parseJwt = (token) => {
     try {
       const base64Url = token.split(".")[1];
@@ -63,7 +77,7 @@ const SessionManager = () => {
     }
   };
 
-
+  return null;
 };
 
 export default SessionManager;

@@ -3,16 +3,19 @@
 import { useState, useContext, useEffect } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
-import { postVivienda , getAllViviendas } from "../../../../Api/api.js";
+import { postVivienda, getAllViviendas } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaVivienda = ({ setIdentificadorComponente }) => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
   const [NroVivienda, setNroVivienda] = useState();
   const [CantidadDormitorios, setCantidadDormitorios] = useState();
-  const [isOpen , setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
   const [Errores, setErrores] = useState();
+  const [mostrarModal, setMostrarModal] = useState(false);
+
   const handleChangeCantidadDormitorios = (e) => {
     setCantidadDormitorios(e.target.value);
     console.log(e.target.value);
@@ -20,7 +23,7 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
 
   useEffect(() => {
     validarCupos();
-  },[])
+  }, []);
 
   const validarFormulario = () => {
     const errores = {};
@@ -49,20 +52,27 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
 
   const validarCupos = async () => {
     const ViviendaResponse = await getAllViviendas(cooperativa.idCooperativa);
-    console.log("Cantidad viviendas",ViviendaResponse.length);
-    if(ViviendaResponse.length >= cooperativa.cuposLibre){
-      console.log("Seteo false")
+    console.log("Cantidad viviendas", ViviendaResponse.length);
+    if (ViviendaResponse.length >= cooperativa.cuposLibre) {
+      console.log("Seteo false");
       setIsOpen(false);
-     
     }
-    return
-  }
-
+    return;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validarFormulario()) return;
-    if(!isOpen) {
-      alert("No quedan cupos libres en la cooperativa"); 
+
+    setMostrarModal(true);
+  };
+
+  const handleConfirmacion = async (e) => {
+    setMostrarModal(false);
+    e.preventDefault();
+    if (!validarFormulario()) return;
+    if (!isOpen) {
+      alert("No quedan cupos libres en la cooperativa");
       return;
     }
     const data = {
@@ -132,6 +142,13 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
         >
           Submit
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta esta vivienda?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

@@ -127,58 +127,61 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
     }
   };
   return (
-    <div className="general-container">
-      <form onSubmit={handleSubmit} className="form">
-        <label className="label">
+    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+      >
+        <label className="block text-sm font-medium mb-2">
           Cuota Total UR:
           <input
             type="text"
             name="cuotaTotalUr"
             value={cuotaTotalUr}
             onChange={(e) => setCuotaTotalUr(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             readOnly
           />
           {errores.cuotaTotalUr && (
             <span className="error">{errores.cuotaTotalUr}</span>
           )}
         </label>
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Subsidio UR:
           <input
             type="text"
             name="subsidioUr"
             value={subsidioUr}
             onChange={(e) => setSubsidioUr(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {errores.subsidioUr && (
             <span className="error">{errores.subsidioUr}</span>
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Porcentaje:
           <input
             type="text"
             name="porcentaje"
             value={porcentaje}
             onChange={(e) => setPorcentaje(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             readOnly
           />
           {errores.porcentaje && (
             <span className="error">{errores.porcentaje}</span>
           )}
         </label>
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Cuota a Pagar UR:
           <input
             type="text"
             name="cuotaApagarUr"
             value={cuotaApagarUr}
             onChange={(e) => setCuotaApagarUr(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             readOnly
           />
           {errores.cuotaApagarUr && (
@@ -186,42 +189,42 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Vigencia en Meses:
           <input
             type="text"
             name="vigenciaEnMeses"
             value={vigenciaEnMeses}
             onChange={(e) => setVigenciaEnMeses(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {errores.vigenciaEnMeses && (
             <span className="error">{errores.vigenciaEnMeses}</span>
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Fecha Otorgado:
           <input
             type="date"
             name="fechaOtorgado"
             value={fechaOtorgado}
             onChange={(e) => setFechaOtorgado(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
           {errores.fechaOtorgado && (
             <span className="error">{errores.fechaOtorgado}</span>
           )}
         </label>
         <br />
-        <label className="label">
+        <label className="block text-sm font-medium mb-2">
           Fecha Expira:
           <input
             type="date"
             name="fechaExpira"
             value={fechaExpira}
             onChange={(e) => setFechaExpira(e.target.value)}
-            className="input"
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             readOnly
           />
           {errores.fechaExpira && (
@@ -232,9 +235,6 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
 
         <button type="submit" className="button">
           Modificar
-        </button>
-        <button type="button" onClick={handleDelete} className="button">
-          Borrar
         </button>
       </form>
     </div>

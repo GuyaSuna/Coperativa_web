@@ -7,6 +7,7 @@ import {
   postEstadoContable,
 } from "../../../Api/api";
 import { MiembroContext } from "../../../Provider/provider";
+import "../../Formularios/EstadosContables/StyleEstadoContable.css";
 
 const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
@@ -149,11 +150,11 @@ const AltaEstadoContable = () => {
           )}
         </label>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6 bg-gray-100 dark:bg-gray-900">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 mt-6 bg-gray-100 dark:bg-gray-900">
           {/* Ingresos en Pesos */}
-          <div>
+          <div className="max-h-80 min-h-80">
             <h3 className="font-bold text-lg mb-4">Ingresos en Pesos</h3>
-            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border ">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Ingreso</span>
@@ -169,7 +170,7 @@ const AltaEstadoContable = () => {
                   >
                     <span>{ingreso.denominacion}</span>
                     <span>{ingreso.ingreso}</span>
-                    <span>{ingreso.tipoMoneda}</span>
+                    <span>UY</span>
                     <span>{ingreso.subRubro}</span>
                   </li>
                 ))}
@@ -180,9 +181,9 @@ const AltaEstadoContable = () => {
           </div>
 
           {/* Ingresos en Dólares */}
-          <div>
+          <div className="max-h-80 min-h-80">
             <h3 className="font-bold text-lg mb-4">Ingresos en Dólares</h3>
-            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border ">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Ingreso</span>
@@ -209,9 +210,9 @@ const AltaEstadoContable = () => {
           </div>
 
           {/* Egresos en Pesos */}
-          <div>
+          <div className="max-h-80 min-h-80">
             <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
-            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Egreso</span>
@@ -227,7 +228,7 @@ const AltaEstadoContable = () => {
                   >
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
-                    <span>{egreso.tipoMoneda}</span>
+                    <span>UY</span>
                     <span>{egreso.subRubro}</span>
                   </li>
                 ))}
@@ -238,9 +239,9 @@ const AltaEstadoContable = () => {
           </div>
 
           {/* Egresos en Dólares */}
-          <div>
+          <div className="max-h-80 min-h-[20rem]">
             <h3 className="font-bold text-lg mb-4">Egresos en Dólares</h3>
-            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border">
+            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
                 <span>Denom.</span>
                 <span>Egreso</span>
@@ -257,7 +258,7 @@ const AltaEstadoContable = () => {
                     <span>{egreso.denominacion}</span>
                     <span>{egreso.egreso}</span>
                     <span>{egreso.tipoMoneda}</span>
-                    <span>{egreso.subRubro}</span>{" "}
+                    <span>{egreso.subRubro}</span>
                   </li>
                 ))}
             </ul>

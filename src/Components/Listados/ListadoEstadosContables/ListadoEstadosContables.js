@@ -9,7 +9,7 @@ import Buscador from "@/Components/Buscador.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
 
-const ListadoEstadoContables = ({}) => {
+const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
   const [allEstadosContables, setAllEstadosContables] = useState([]);
   const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
     useState(null);
@@ -106,7 +106,7 @@ const ListadoEstadoContables = ({}) => {
               />
             </div>
           </div>
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto h-screen">
             <table className="w-full text-left">
               <thead>
                 <tr className="text-gray-400 hidden sm:table-row">

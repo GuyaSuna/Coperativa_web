@@ -2,10 +2,15 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { postConvenio, getAllSociosImpagos, getRecibosImpagosSocio } from "../../../Api/api.js";
+import {
+  postConvenio,
+  getAllSociosImpagos,
+  getRecibosImpagosSocio,
+} from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
-const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
+const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
   const router = useRouter();
   const [deudaEnUrOriginal, setDeudaEnUrOriginal] = useState("");
@@ -17,6 +22,7 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
   const [tipoDeuda, setTipoDeuda] = useState("");
   const [vigenciaEnRecibos, setVigenciaEnRecibos] = useState(12); // Estado para la vigencia en meses
   const [errores, setErrores] = useState({});
+  const [mostrarModal, setMostrarModal] = useState(false);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -89,26 +95,35 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
     }
 };
 
-  const handleChangeVigenciaEnRecibos = (e) => setVigenciaEnRecibos(e.target.value);
-  const handleChangeDeudaEnUrOriginal = (e) => setDeudaEnUrOriginal(e.target.value);
+  const handleChangeVigenciaEnRecibos = (e) =>
+    setVigenciaEnRecibos(e.target.value);
+  const handleChangeDeudaEnUrOriginal = (e) =>
+    setDeudaEnUrOriginal(e.target.value);
   const handleChangeUrPorMes = (e) => setUrPorMes(e.target.value);
   const handleChangeFechaInicio = (e) => setFechaInicioConvenio(e.target.value);
-  const handleChangeSocioSeleccionado = (e) => setSocioSeleccionado(e.target.value);
+  const handleChangeSocioSeleccionado = (e) =>
+    setSocioSeleccionado(e.target.value);
   const handleChangeTipoDeuda = (e) => setTipoDeuda(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
-    if(tipoDeuda == "") errores.tipoDeuda = "La deuda debe tener un tipo de deuda"
-    if (!deudaEnUrOriginal) errores.deudaEnUrOriginal = "La deuda del convenio es obligatoria";
+    if (tipoDeuda == "")
+      errores.tipoDeuda = "La deuda debe tener un tipo de deuda";
+    if (!deudaEnUrOriginal)
+      errores.deudaEnUrOriginal = "La deuda del convenio es obligatoria";
     if (!urPorMes) errores.urPorMes = "El valor del convenio es obligatorio";
     if (!fechaInicioConvenio) {
       errores.fechaInicioConvenio = "La fecha de inicio es obligatoria";
     } else if (fechaInicioConvenio > fechaHoy) {
-      errores.fechaOtorgado = "La fecha de inicio no puede ser mayor a la fecha actual";
+      errores.fechaOtorgado =
+        "La fecha de inicio no puede ser mayor a la fecha actual";
     }
-    if (!socioSeleccionado) errores.socioSeleccionado = "Debe seleccionar un socio";
-    if (tipoDeuda == "recibo" && recibosImpagos.length == 0) errores.tipoDeuda = "El socio debe tener al menos un recibo impago para aplicar este convenio"
+    if (!socioSeleccionado)
+      errores.socioSeleccionado = "Debe seleccionar un socio";
+    if (tipoDeuda == "recibo" && recibosImpagos.length == 0)
+      errores.tipoDeuda =
+        "El socio debe tener al menos un recibo impago para aplicar este convenio";
 
     setErrores(errores);
     return Object.keys(errores).length === 0;
@@ -116,24 +131,39 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validarFormulario()) return;
 
-    const listaFechasRecibos = recibosImpagos.map(recibo => recibo.fechaRecibo);
+    setMostrarModal(true);
+  };
+
+  const handleConfirmacion = async (e) => {
+    setMostrarModal(false);
+    e.preventDefault();
+    if (!validarFormulario()) return;
+
+    const listaFechasRecibos = recibosImpagos.map(
+      (recibo) => recibo.fechaRecibo
+    );
 
     const ConvenioData = {
       deudaEnUrOriginal,
       deudaRestante: deudaEnUrOriginal,
       urPorMes,
-      vigenciaEnRecibos, 
+      vigenciaEnRecibos,
       fechaInicioConvenio,
-      tipoConvenio : tipoDeuda,
-      listaFechasRecibos
+      tipoConvenio: tipoDeuda,
+      listaFechasRecibos,
     };
 
     try {
-      const response = await postConvenio(ConvenioData, socioSeleccionado, cooperativa.idCooperativa);
+      const response = await postConvenio(
+        ConvenioData,
+        socioSeleccionado,
+        cooperativa.idCooperativa
+      );
       console.log(response);
-      alert("Convenio dado de alta correctamente");
+
       setIdentificadorComponente(26);
     } catch (error) {
       console.error("Error al enviar los datos del convenio:", error);
@@ -142,7 +172,10 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
 
   return (
     <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md" onSubmit={handleSubmit}>
+      <form
+        className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
+        onSubmit={handleSubmit}
+      >
         {/* Tipo de Deuda */}
         <div className="relative z-0 w-full mb-5 group">
           <label className="block text-sm font-medium mb-2" htmlFor="tipoDeuda">
@@ -159,12 +192,17 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
             <option value="recibo">Recibo</option>
             <option value="otro">Otro</option>
           </select>
-          {errores.tipoDeuda && <span className="text-red-500">{errores.tipoDeuda}</span>}
+          {errores.tipoDeuda && (
+            <span className="text-red-500">{errores.tipoDeuda}</span>
+          )}
         </div>
 
         {/* Socio Seleccionado */}
         <div className="relative z-0 w-full mb-5 group">
-          <label className="block text-sm font-medium mb-2" htmlFor="socioSeleccionado">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="socioSeleccionado"
+          >
             Socio Seleccionado
           </label>
           <select
@@ -181,12 +219,17 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
               </option>
             ))}
           </select>
-          {errores.socioSeleccionado && <span className="text-red-500">{errores.socioSeleccionado}</span>}
+          {errores.socioSeleccionado && (
+            <span className="text-red-500">{errores.socioSeleccionado}</span>
+          )}
         </div>
 
         {/* Fecha de Inicio del Convenio */}
         <div className="relative z-0 w-full mb-5 group">
-          <label className="block text-sm font-medium mb-2" htmlFor="fechaInicioConvenio">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="fechaInicioConvenio"
+          >
             Fecha de Inicio del Convenio
           </label>
           <input
@@ -198,12 +241,17 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
-          {errores.fechaInicioConvenio && <span className="text-red-500">{errores.fechaInicioConvenio}</span>}
+          {errores.fechaInicioConvenio && (
+            <span className="text-red-500">{errores.fechaInicioConvenio}</span>
+          )}
         </div>
 
         {/* Vigencia en Meses */}
         <div className="relative z-0 w-full mb-5 group">
-          <label className="block text-sm font-medium mb-2" htmlFor="vigenciaEnRecibos">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="vigenciaEnRecibos"
+          >
             Vigencia en Recibos
           </label>
           <input
@@ -219,7 +267,10 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
 
         {/* Total Deuda en UR */}
         <div className="relative z-0 w-full mb-5 group">
-          <label className="block text-sm font-medium mb-2" htmlFor="deudaEnUrOriginal">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="deudaEnUrOriginal"
+          >
             Total Deuda en UR
           </label>
           <input
@@ -231,7 +282,9 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
-          {errores.deudaEnUrOriginal && <span className="text-red-500">{errores.deudaEnUrOriginal}</span>}
+          {errores.deudaEnUrOriginal && (
+            <span className="text-red-500">{errores.deudaEnUrOriginal}</span>
+          )}
         </div>
 
         {/* Valor a Pagar Mensual (UR por Mes) */}
@@ -248,7 +301,9 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             required
           />
-          {errores.urPorMes && <span className="text-red-500">{errores.urPorMes}</span>}
+          {errores.urPorMes && (
+            <span className="text-red-500">{errores.urPorMes}</span>
+          )}
         </div>
 
         {/* Botón para dar de alta */}
@@ -258,6 +313,13 @@ const AltaConvenio = ({ ur ,setIdentificadorComponente }) => {
         >
           Dar de Alta Convenio
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta este socio?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

@@ -1,0 +1,19 @@
+/* Agregar esto en tu archivo CSS o dentro de Tailwind.config si usas Tailwind extendido */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.6);
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 0.8);
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  

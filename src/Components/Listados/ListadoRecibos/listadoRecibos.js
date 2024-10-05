@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { getAllRecibos } from "../../../Api/api.js";
+import { deleteRecibo, getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { deleteSocio } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
@@ -19,6 +19,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allRecibos);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
+
   useEffect(() => {
     fetchAllRecibos();
   }, []);
@@ -38,9 +39,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     setIdentificadorComponente(4);
   };
 
-  const handleEliminar = async (idRecibo) => {
+  const handleEliminar = async (nroRecibo) => {
     try {
-      const data = await deleteSocio(idRecibo);
+      const data = await deleteRecibo(nroRecibo);
       console.log(data);
       fetchAllRecibos();
     } catch (e) {
@@ -152,26 +153,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
           <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-          <button
-            onClick={handleAgregarRecibo}
-            type="button"
-            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-          >
-            <svg
-              className="h-3.5 w-3.5 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                clipRule="evenodd"
-                fillRule="evenodd"
-                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              />
-            </svg>
-            AGREGAR RECIBO
-          </button>
           <div className="flex items-center space-x-3 w-full md:w-auto">
             <OrdenarPor
               options={ordenarOptions}
@@ -183,7 +164,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
       </div>
 
       {/* Tabla responsive */}
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto h-screen  ">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr>
@@ -226,7 +207,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                   {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
                 </th>
                 <td className="px-4 py-3 block md:table-cell">
-                 $ {recibo.cuotaMensual}
+                  $ {recibo.cuotaMensual}
                 </td>
                 <td className="px-4 py-3 block md:table-cell">
                   {recibo.fechaRecibo}
@@ -272,20 +253,13 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                           <div className="py-1">
                             <MenuItem>
                               <button
-                                onClick={() => handleEliminar(recibo.idRecibo)}
+                                onClick={() => handleEliminar(recibo.nroRecibo)}
                                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                               >
                                 Eliminar
                               </button>
                             </MenuItem>
-                            <MenuItem>
-                              <button
-                                onClick={() => handleModificar(recibo.idRecibo)}
-                                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                              >
-                                Modificar
-                              </button>
-                            </MenuItem>
+
                             <MenuItem>
                               <button
                                 onClick={() => handleDescargarPDF(recibo)}

@@ -154,7 +154,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
         </div>
       </div>
 
-      <div className="overflow-y-auto">
+      <div className="overflow-y-auto h-screen">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr className="hidden sm:table-row">

@@ -127,7 +127,7 @@ const Home = () => {
           <div className="py-12 bg-indigo-100 lg:bg-white flex justify-center lg:justify-start lg:px-12">
             <div className="cursor-pointer flex items-center">
               <div>
-                <img className="h-16 w-16" src="./techito.png" alt="logo" />
+                <img className="h-16 w-16 " src="./techito.png" alt="logo" />
               </div>
               <div className="text-4xl text-[#71675D] tracking-wide ml-2 font-semibold">
                 visoft

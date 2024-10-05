@@ -259,17 +259,20 @@ const getSocio = async (cedulaSocio) => {
   }
 };
 
-const getRecibosImpagosSocio = async (cedulaSocio , idCooperativa) => {
+const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
   try {
     const token = getToken();
     console.log("Token", token);
-    const response = await fetch(`${URL}/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -1384,7 +1387,6 @@ const getConveniosVigenteSocio = async (cedulaSocio) => {
   }
 };
 
-
 const postIngreso = async (ingreso) => {
   try {
     const token = getToken();
@@ -1847,7 +1849,6 @@ const loginMaster = async (MasterData) => {
   }
 };
 
-
 const postDevolucionCapital = async (devolucionCapital) => {
   try {
     const token = getToken();
@@ -1861,9 +1862,9 @@ const postDevolucionCapital = async (devolucionCapital) => {
     });
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
-    } 
+    }
 
-    console.log("llega aca ")
+    console.log("llega aca ");
     const data = await response.json();
 
     return data;
@@ -1885,7 +1886,7 @@ const getDevolucionCapital = async (cedulaSocio) => {
     });
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
-    } 
+    }
 
     const data = await response.json();
 
@@ -1895,7 +1896,6 @@ const getDevolucionCapital = async (cedulaSocio) => {
     throw new Error("Error al recibir los datos de la devolucion");
   }
 };
-
 
 const postPagoDevolucionCapital = async (pagoDevolucionCaptial) => {
   try {
@@ -1980,6 +1980,27 @@ const getAllInteresAnual = async (idCooperativa) => {
 };
 
 
+const deleteRecibo = async (nroRecibo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recibo/${nroRecibo}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteSocio:", error);
+    throw new Error("Error al eliminar el socio");
+  }
+};
 export {
   Login,
   getSocio,
@@ -2051,4 +2072,5 @@ export {
   getAllInteresAnual,
   getAllIngresosByMes,
   getAllEgresosByMes,
+  deleteRecibo,
 };
