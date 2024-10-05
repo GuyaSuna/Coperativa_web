@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "@/Provider/loginProvider";
 import { useRouter } from "next/navigation";
+import { renovarToken } from "./../../Api/ApiToken"; // Asegúrate de que el nombre de la función sea correcto
 
 const SessionManager = () => {
-  const { isAuthenticated, logout, authToken, renovarToken } = useSession(); // 'renovarToken' se asume que es una función que renueva el token
+  const { isAuthenticated, logout, authToken } = useSession();
   const [tiempoRestante, setTiempoRestante] = useState(0);
-  const [preguntado, setPreguntado] = useState(false); // para controlar si ya se preguntó
+  const [preguntado, setPreguntado] = useState(false); // Para controlar si ya se preguntó
   const router = useRouter();
 
   useEffect(() => {
@@ -37,7 +38,7 @@ const SessionManager = () => {
           "Tu sesión está por expirar. ¿Quieres continuar?"
         );
         if (confirmarRenovacion) {
-          renovarToken(); // Llamamos a la función para renovar el token
+          renovarToken(authToken); // Llamamos a la función para renovar el token
           setPreguntado(false); // Reseteamos para futuras expiraciones
         } else {
           clearInterval(intervalo);
@@ -54,7 +55,7 @@ const SessionManager = () => {
     return () => {
       clearInterval(intervalo);
     };
-  }, [isAuthenticated, authToken, preguntado, router, logout, renovarToken]);
+  }, [isAuthenticated, authToken, preguntado, router, logout]);
 
   // Función para parsear el token JWT
   const parseJwt = (token) => {
