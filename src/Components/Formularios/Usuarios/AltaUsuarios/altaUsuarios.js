@@ -38,7 +38,8 @@ const AltaUsuario = () => {
         (socio) => !socioConUsuario.includes(socio.cedulaSocio)
       );
       console.log("Socios disponibles:", response);
-      setSociosDisponibles(sociosSinUsuario);
+      const sociosSinArchivar = sociosSinUsuario.filter(socio => socio.archivado === false);
+      setSociosDisponibles(sociosSinArchivar);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }

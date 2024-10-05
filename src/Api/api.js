@@ -901,24 +901,9 @@ const postRecibo = async (
   socio,
   tesorero
 ) => {
-  console.log(
-    "datos del recibo en api:",
-    fechaRecibo,
-    fechaPago,
-    recargo,
-    interes,
-    capital,
-    cuotaSocial,
-    listaConvenio,
-    subsidio,
-    cuotaMensual,
-    sumaEnPesos,
-    socio,
-    tesorero
-  );
+  
 
   try {
-    // Asegúrate de que 'subsidio' y 'convenio' se envían como null si son 0
     if (subsidio === 0) {
       subsidio = null;
     }
@@ -952,7 +937,8 @@ const postRecibo = async (
     });
 
     if (!response.ok) {
-      throw new Error("La solicitud ha fallado, la respuesta no es válida");
+      const errorData = await response.json(); // Aquí capturas el mensaje de error específico
+      throw new Error(errorData.message || "La solicitud ha fallado, la respuesta no es válida");
     }
 
     const contentType = response.headers.get("Content-Type");
@@ -971,9 +957,10 @@ const postRecibo = async (
     return data;
   } catch (error) {
     console.error("Error en postRecibo:", error);
-    throw new Error("Error al enviar los datos del recibo");
+    return { error: error.message }; // Devolver el mensaje de error específico
   }
 };
+
 
 const getAllRecibosPorSocio = async (cedulaSocio) => {
   try {

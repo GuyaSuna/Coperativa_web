@@ -97,7 +97,8 @@ const AltaSubsidio = ({setIdentificadorComponente}) => {
   const fetchSociosDisponibles = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
-      setSociosDisponibles(response);
+      const sociosSinArchivar = response.filter(socio => socio.archivado === false);
+      setSociosDisponibles(sociosSinArchivar);
       console.log("Socios disponibles: ", response);
     } catch (error) {
       console.error("Error al obtener los socios:", error);

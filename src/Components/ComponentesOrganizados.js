@@ -262,15 +262,7 @@ const ComponentesOrganizados = ({
         <AltaReajuste setIdentificadorComponente={setIdentificadorComponente} />
       );
     }
-    case 32: {
-      return (
-        <ListadoSociosArchivados
-          cooperativa={cooperativa}
-          setSocio={setSocio}
-          setIdentificadorComponente={setIdentificadorComponente}
-        />
-      );
-    }
+// Case 32 Libre
     case 33: {
       return (
         <AltaEstadoContable

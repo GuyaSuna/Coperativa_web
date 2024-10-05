@@ -124,7 +124,7 @@ const AltaRecibo = ({ Socio, ur }) => {
       
       
     } else {
-      setConvenios(0);
+      setConvenios([]);
     }
   };
 
@@ -227,12 +227,14 @@ const AltaRecibo = ({ Socio, ur }) => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("ENTRA y este es el miembro", miembro);
     e.preventDefault();
+  
+    console.log("Convenios del alta" , convenios)
+    // Validar formulario
     if (!validarFormulario()) return;
-
-    console.log("Admin", miembro.responseBody    );
+  
     try {
+      // Intentar dar de alta el recibo
       const response = await postRecibo(
         fechaEmision,
         fechaPago,
@@ -247,38 +249,45 @@ const AltaRecibo = ({ Socio, ur }) => {
         Socio,
         miembro.responseBody
       );
-      if(response == null){
-        alert("No se puede realizar un recibo a una misma persona para un mismo mes")
-        return
+  
+      // Si hay un error en la respuesta del recibo, mostrar el mensaje de error específico
+      if (response && response.error) {
+        alert(response.error); // Mostrar el mensaje de error específico retornado por postRecibo
+        return; // Terminar ejecución para evitar dar de alta el ingreso
       }
-      console.log(response);
-
+  
+      console.log("Recibo dado de alta:", response);
+  
+      // Si el recibo fue exitoso, registrar el ingreso
       let fechaActual = new Date();
-
       const ingreso = {
         subRubro: "Amortizacion",
         denominacion: `Recibo dado de alta el ${fechaEmision}`,
         ingreso: cuotaMensual,
         cooperativaEntity: cooperativa,
         tipoMoneda: "UR",
-        fechaDatosContables : fechaActual,
+        fechaDatosContables: fechaActual,
       };
+  
       try {
+        // Intentar dar de alta el ingreso
         const IngresoResponse = await postIngreso(ingreso);
-        console.log("Ingreso exitoso:", IngresoResponse);      
+        console.log("Ingreso exitoso:", IngresoResponse);
         setIngreso(IngresoResponse);
-        console.log("Ingreso Response", IngresoResponse);
         alert("Dado de alta correctamente");
       } catch (error) {
         console.error("Error en el ingreso:", error.message);
+        alert("Error al dar de alta el ingreso.");
       }
-      
-
+  
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
+      alert("Error al dar de alta el recibo. Por favor, intenta nuevamente.");
     }
   };
-
+  
+  
+  
   useEffect(() => {
     automaticUpdate();
   }, [ingreso]);

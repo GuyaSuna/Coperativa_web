@@ -33,22 +33,25 @@ const AltaSuplente = ({setIdentificadorComponente}) => {
     try {
       const suplentesResponse = await getAllSuplentes();
       setAllSuplentes(suplentesResponse);
-
+  
       const response = await getAllSocios(cooperativa.idCooperativa);
-      let sociosSinSuplente = [];
-      response.forEach((socioTitular) => {
-        if (socioTitular.suplenteEntity === null) {
-          sociosSinSuplente.push(socioTitular);
-        }
-      });
+      console.log(response);
+  
+      const sociosSinArchivar = response.filter(socio => socio.archivado === false);
+      console.log("Socios sin archivar:", sociosSinArchivar);
+      
+  
+
+      let sociosSinSuplente = sociosSinArchivar.filter(socioTitular => !socioTitular.suplenteEntity);
+  
       setSociosDisponibles(sociosSinSuplente);
       console.log("Socios disponibles: ", sociosSinSuplente);
       console.log("Suplentes existentes: ", suplentesResponse);
     } catch (error) {
-      console.error("Error al obtener las viviendas:", error);
+      console.error("Error al obtener los socios:", error);
     }
   };
-
+  
   const handleChangeSocioDelSuplente = (e) => {
     setSocioDelSuplente(e.target.value);
   };

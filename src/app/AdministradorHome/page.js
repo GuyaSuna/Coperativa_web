@@ -128,7 +128,6 @@ const AdminHome = () => {
                       { label: "Suplentes", id: 9 },
                       { label: "Subsidios", id: 17 },
                       { label: "Convenios", id: 26 },
-                      { label: "Socios Archivados", id: 32 },
                       { label: "Estados Contables", id: 35 },
                       { label: "Interes Anual", id: 41 },
                     ].map((item) => (
