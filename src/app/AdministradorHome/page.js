@@ -27,13 +27,13 @@ const AdminHome = () => {
   };
 
   useEffect(() => {
-    if (miembro && cooperativa) {
-      setIsLoading(false);
+    if (!miembro || !cooperativa) {
+      console.log("Esperando a que los datos estén disponibles...");
     } else {
-      console.log("Datos del Provider no están disponibles");
-      router.push("/");
+      console.log("Datos del Provider cargados correctamente.");
+      setIsLoading(false);
     }
-  }, [miembro?.idMiembro, cooperativa?.idCooperativa]);
+  }, [miembro, cooperativa]);
 
   useEffect(() => {
     fetchUr();
@@ -41,43 +41,30 @@ const AdminHome = () => {
 
   const fetchUr = async () => {
     try {
-      const response = await getUr(); 
+      const response = await getUr();
       console.log("RESPUESTA FRONT", response);
-  
-      // Fecha actual y nombre del mes
+
       const fechaActual = new Date();
-      let mesActual = fechaActual.getMonth(); // Índice del mes actual (0-11)
-  
-      // Lista de los meses en español
+      let mesActual = fechaActual.getMonth();
       const meses = [
         "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre"
+        "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre",
       ];
-  
-      let mesActualNombre = meses[mesActual]; // Nombre del mes actual
-      let urEncontrado = false; // Para verificar si encontramos el UR
-  
-      // Primero, buscamos el valor del mes actual
-      response.forEach(element => {
+      let mesActualNombre = meses[mesActual];
+      let urEncontrado = false;
+
+      response.forEach((element) => {
         if (element.mes === mesActualNombre) {
           setUr(element?.valorUr);
-          urEncontrado = true; // Indicamos que ya encontramos el valor
+          urEncontrado = true;
         }
       });
-  
-      // Si no encontramos el valor del mes actual, buscamos el del mes anterior
+
       if (!urEncontrado) {
-        let mesAnterior = mesActual - 1; // Mes anterior al actual
-  
-        // Si estamos en enero (mes 0), cambiamos al mes diciembre (mes 11)
-        if (mesAnterior < 0) {
-          mesAnterior = 11;
-        }
-  
-        let mesAnteriorNombre = meses[mesAnterior]; // Nombre del mes anterior
-  
-        // Buscamos el UR del mes anterior
-        response.forEach(element => {
+        let mesAnterior = mesActual - 1;
+        if (mesAnterior < 0) mesAnterior = 11;
+        let mesAnteriorNombre = meses[mesAnterior];
+        response.forEach((element) => {
           if (element.mes === mesAnteriorNombre) {
             setUr(element?.valorUr);
           }
@@ -87,16 +74,26 @@ const AdminHome = () => {
       console.error("Error al obtener las unidades reajustables:", error);
     }
   };
-  
-  
 
   if (isLoading) {
-    return <Cargando />;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Cargando />
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => router.push("/")}
+            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+          >
+            Volver al inicio
+          </button>
+        </div>
+      </div>
+    );
   }
 
   return (
     <>
-      {cooperativa && (
+      {cooperativa && miembro ? (
         <div className="bg-gray-100 dark:bg-dark dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
             <Header setIdentificadorComponente={setIdentificadorComponente} />
@@ -106,7 +103,7 @@ const AdminHome = () => {
                 className="w-full md:w-1/4 lg:w-1/5"
               />
 
-              <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto ">
+              <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto">
                 <div className="px-4 sm:px-7 pt-4 sm:pt-7 flex flex-col w-full border-b border-gray-200 bg-white dark:bg-gray-900 dark:text-white dark:border-gray-800 sticky top-0">
                   <div className="flex w-full items-center flex-wrap">
                     <div className="flex items-center text-xl sm:text-2xl text-gray-900 dark:text-white">
@@ -160,8 +157,19 @@ const AdminHome = () => {
           </div>
           <Footer className="mt-auto" />
         </div>
+      ) : (
+<div className="flex flex-col items-center justify-center min-h-screen">
+  <Cargando />
+  <div className="flex justify-center mt-6">
+    <button
+      onClick={() => router.push("/")}
+      className="bg-red-500 text-white font-bold uppercase text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105"
+    >
+      Volver al inicio
+    </button>
+  </div>
+</div>
       )}
-      {!cooperativa && <Cargando />}
     </>
   );
 };

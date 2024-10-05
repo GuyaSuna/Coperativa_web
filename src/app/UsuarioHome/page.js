@@ -1,5 +1,4 @@
-"use client";
-
+'use client'
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios, getUr } from "@/Api/api";
@@ -26,13 +25,12 @@ const UsuarioHome = () => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
   };
+
   useEffect(() => {
-    console.log("Entra maistro?");
     if (!miembro || !cooperativa) {
-      console.log("es esto");
       router.push("/");
     }
-  }, []);
+  }, [miembro, cooperativa]);
 
   useEffect(() => {
     fetchUr();
@@ -42,7 +40,6 @@ const UsuarioHome = () => {
     try {
       const response = await getUr();
       setUr(response);
-      console.log("Unidades Reajustables", response);
     } catch (error) {
       console.error("Error al obtener las unidades reajustables:", error);
     }
@@ -73,7 +70,19 @@ const UsuarioHome = () => {
           <Footer className="mt-auto" />
         </div>
       )}
-      {!cooperativa && <Cargando />}
+      {!cooperativa && (
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <Cargando />
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => router.push("/")}
+              className="bg-red-500 text-white font-bold uppercase text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105"
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
