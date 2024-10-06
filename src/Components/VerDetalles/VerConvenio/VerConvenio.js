@@ -58,23 +58,35 @@ const VerConvenio = ({ isOpen, onClose, convenio }) => {
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
-                    Deuda en UR:
+                    Deuda en UR Original:
                   </td>
                   <td className="py-1 px-3">{convenio.deudaEnUrOriginal}</td>
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
-                    Paga por mes:
+                    Deuda Restante:
+                  </td>
+                  <td className="py-1 px-3">{convenio.deudaRestante}</td>
+                </tr>
+                <tr>
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                    Paga por mes (UR):
                   </td>
                   <td className="py-1 px-3">{convenio.urPorMes}</td>
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
-                    Fecha Inicio:
+                    Fecha de Inicio:
                   </td>
                   <td className="py-1 px-3">
                     {formatDate(convenio.fechaInicioConvenio)}
                   </td>
+                </tr>
+                <tr>
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                    Vigencia en Recibos:
+                  </td>
+                  <td className="py-1 px-3">{convenio.vigenciaEnRecibos}</td>
                 </tr>
               </tbody>
             </table>

@@ -107,87 +107,91 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   };
 
   const validarFormulario = () => {
+    console.log(cooperativa.listaSocios)
     const errores = {};
-
+  
+ 
+    const socioExistente = cooperativa.listaSocios.find((socio) => socio.nroSocio == NroSocio && socio.archivado == false);
+  
     if (!CedulaSocio) {
       errores.cedulaSocio = "La cédula es obligatoria";
     } else if (isNaN(CedulaSocio)) {
       errores.cedulaSocio = "La cédula debe ser un número";
     }
-
+  
     if (!NroSocio) {
       errores.nroSocio = "El número de socio es obligatorio";
     } else if (isNaN(NroSocio)) {
       errores.nroSocio = "El número de socio debe ser un número";
     } else if (NroSocio < 1) {
-      errores.nroSocio = "El numero de socio debe ser mayor a 0";
+      errores.nroSocio = "El número de socio debe ser mayor a 0";
+    } else if (socioExistente) {
+      errores.nroSocio = "El número de socio ya existe en la cooperativa.";
     }
-
+  
     if (!NombreSocio) {
       errores.nombreSocio = "El nombre es obligatorio";
     } else if (/[^a-zA-Z\s]/.test(NombreSocio)) {
       errores.nombreSocio = "El nombre solo debe contener letras";
     }
-
+  
     if (!ApellidoSocio) {
       errores.apellidoSocio = "El apellido es obligatorio";
     } else if (/[^a-zA-Z\s]/.test(ApellidoSocio)) {
       errores.apellidoSocio = "El apellido solo debe contener letras";
     }
-
+  
     if (!TelefonoSocio) {
       errores.telefonoSocio = "El teléfono es obligatorio";
     } else if (isNaN(TelefonoSocio)) {
       errores.telefonoSocio = "El teléfono debe ser un número";
     }
-
+  
     if (!CapitalSocio) {
       errores.capitalSocio = "El capital es obligatorio";
     } else if (isNaN(CapitalSocio)) {
       errores.capitalSocio = "El capital debe ser un número";
     }
-
+  
     if (!FechaIngresoCooperativa) {
       errores.fechaIngresoCooperativa = "La fecha de ingreso es obligatoria";
     }
-
+  
     if (!SeleccionVivienda) {
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
     }
-
+  
     if (TieneSuplente) {
       if (!CedulaSuplente) {
         errores.cedulaSuplente = "La cédula del suplente es obligatoria";
       } else if (isNaN(CedulaSuplente)) {
         errores.cedulaSuplente = "La cédula del suplente debe ser un número";
       }
-
+  
       if (!NombreSuplente) {
         errores.nombreSuplente = "El nombre del suplente es obligatorio";
       } else if (/[^a-zA-Z\s]/.test(NombreSuplente)) {
-        errores.nombreSuplente =
-          "El nombre del suplente solo debe contener letras";
+        errores.nombreSuplente = "El nombre del suplente solo debe contener letras";
       }
-
+  
       if (!ApellidoSuplente) {
         errores.apellidoSuplente = "El apellido del suplente es obligatorio";
       } else if (/[^a-zA-Z\s]/.test(ApellidoSuplente)) {
-        errores.apellidoSuplente =
-          "El apellido del suplente solo debe contener letras";
+        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras";
       }
-
+  
       if (!TelefonoSuplente) {
         errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
       } else if (isNaN(TelefonoSuplente)) {
-        errores.telefonoSuplente =
-          "El teléfono del suplente debe ser un número";
+        errores.telefonoSuplente = "El teléfono del suplente debe ser un número";
       }
     }
-
+  
     setErrores(errores);
-
+  
     return Object.keys(errores).length === 0;
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

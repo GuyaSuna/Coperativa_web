@@ -61,7 +61,16 @@ const AltaUsuario = () => {
       (socio) => socio.cedulaSocio == cedulaSeleccionada
     );
     console.log("Socio seleccionado:", socioEncontrado);
-    setSocioSeleccionado(socioEncontrado || null);
+    
+    if (socioEncontrado) {
+      setSocioSeleccionado(socioEncontrado);
+      setFirstname(socioEncontrado.nombreSocio); // Actualiza el nombre
+      setLastname(socioEncontrado.apellidoSocio); // Actualiza el apellido
+    } else {
+      setSocioSeleccionado(null);
+      setFirstname(""); // Limpia el campo de nombre si no se selecciona un socio válido
+      setLastname(""); // Limpia el campo de apellido si no se selecciona un socio válido
+    }
   };
 
   const handleSubmit = async (e) => {
