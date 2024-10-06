@@ -1,5 +1,5 @@
-'use client'
-import React, { createContext, useContext, useState } from 'react';
+"use client";
+import React, { createContext, useContext, useState } from "react";
 
 const SessionContext = createContext();
 
@@ -10,6 +10,7 @@ export const SessionProvider = ({ children }) => {
   const login = (token) => {
     setIsAuthenticated(true);
     setAuthToken(token);
+    console.log("Token en el contexto:", token);
   };
 
   const logout = () => {
@@ -18,11 +19,12 @@ export const SessionProvider = ({ children }) => {
   };
 
   return (
-    <SessionContext.Provider value={{ isAuthenticated, authToken, login, logout }}>
+    <SessionContext.Provider
+      value={{ isAuthenticated, authToken, login, logout, setAuthToken }}
+    >
       {children}
     </SessionContext.Provider>
   );
-  
 };
 
 export const useSession = () => useContext(SessionContext);
