@@ -2,9 +2,9 @@
 
 import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { postReajuste } from "@/Api/api";
+import { postReajuste , getUltimoReajuste } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
-const AltaReajuste = ({ setIdentificadorComponente }) => {
+const AltaReajuste = ({ ur , setIdentificadorComponente }) => {
   const [valorUr, setValorUr] = useState("");
   const [fechaReajuste, setFechaReajuste] = useState("");
   const [cuotaMensualDosHabitacionesEnPesos, setCuotaMensualDosHabitacionesEnPesos] = useState("");
@@ -18,8 +18,19 @@ const AltaReajuste = ({ setIdentificadorComponente }) => {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFechaReajuste(today);
+    fetchReajuste();
   },[])
 
+
+  const fetchReajuste = async () => {
+    const response = await getUltimoReajuste();
+    if(response != null){
+      setCuotaMensualDosHabitacionesEnPesos(response.cuotaMensualDosHabitacionesEnPesos.toFixed(2))
+      setCuotaMensualTresHabitacionesEnPesos(response.cuotaMensualTresHabitacionesEnPesos.toFixed(2))
+    }
+    setValorUr(ur);
+
+  };
 
   const validarFormulario = () => {
     const errores = {};

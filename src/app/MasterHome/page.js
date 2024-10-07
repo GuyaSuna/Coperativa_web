@@ -25,6 +25,9 @@ const AdminHome = () => {
   };
 
   useEffect(() => {
+    if(miembro == null){
+      router.push("/");
+    }
     fetchUr();
   }, []);
 
@@ -64,6 +67,8 @@ const AdminHome = () => {
                     >
                       Cooperativas
                     </button>
+
+                    
                   </div>
                 </div>
                 <ComponentesOrganizados

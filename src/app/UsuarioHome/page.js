@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios, getUr } from "@/Api/api";
@@ -6,10 +6,6 @@ import { MiembroContext } from "@/Provider/provider";
 import Footer from "@/Components/footer";
 import Cargando from "@/Components/Cargando";
 import SidebarUsuario from "@/Components/SidebarUsuario";
-import { Grid } from "@mui/material";
-import DatosUsuario from "@/Components/UsuarioDashboard/DatosUsuario";
-import ListadoRecibosSocios from "@/Components/UsuarioDashboard/ListadoRecibosSocio";
-import DatosVivienda from "@/Components/UsuarioDashboard/DatosVivienda";
 import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import HeaderUsuario from "@/Components/headerUsuario";
 
@@ -27,7 +23,7 @@ const UsuarioHome = () => {
   };
 
   useEffect(() => {
-    console.log("MIEMBRO" , miembro)
+    console.log("MIEMBRO", miembro);
     if (!miembro || !cooperativa) {
       router.push("/");
     }
@@ -49,7 +45,7 @@ const UsuarioHome = () => {
   return (
     <>
       {cooperativa && (
-        <div className="bg-gray-900 dark:bg-gray-100 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
+        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
             <HeaderUsuario
               setIdentificadorComponente={setIdentificadorComponente}

@@ -168,23 +168,10 @@ const VerEstadoContable = ({ isOpen, onClose, estadoContable }) => {
     <>
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 "></div>
       <div className="fixed inset-0 flex items-center justify-center z-50 max-h-64 mt-60">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3 p-4">
-          <button
-            onClick={onClose}
-            className="absolute top-3 right-3 text-gray-400 dark:text-gray-600 hover:text-gray-800 dark:hover:text-gray-200"
-          >
-            <svg
-              className="w-6 h-6"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full md:w-11/12 lg:w-9/10 xl:w-4/5 p-4">
+
+
+
 
           <div className="p-6">
             <h3 className="text-2xl font-bold text-black-900 mb-4">
@@ -203,113 +190,110 @@ const VerEstadoContable = ({ isOpen, onClose, estadoContable }) => {
               </tbody>
             </table>
 
-            {/* Ingresos en Pesos */}
-            <div className="mt-4">
-              <h4 className="font-bold">Ingresos en Pesos:</h4>
-              <table className="w-full text-left mt-2">
-                <thead>
-                  <tr className="bg-gray-200 dark:bg-gray-700">
-                    <th className="px-3 py-1">Denom.</th>
-                    <th className="px-3 py-1">Ingreso</th>
-                    <th className="px-3 py-1">Moneda</th>
-                    <th className="px-3 py-1">SubRubro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {estadoContable.listaIngresos
-                    .filter((ingreso) => ingreso.tipoMoneda === "UR")
-                    .map((ingreso) => (
-                      <tr key={ingreso.id}>
-                        <td className="px-3 py-1">{ingreso.denominacion}</td>
-                        <td className="px-3 py-1">{ingreso.ingreso}</td>
-                        <td className="px-3 py-1">{ingreso.tipoMoneda}</td>
-                        <td className="px-3 py-1">{ingreso.subRubro}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+            <div className="mt-4 w-full lg:w-3/4 mx-auto flex flex-wrap justify-between">
+  {/* Ingresos */}
+  <div className="w-full lg:w-1/2 h-64 overflow-y-auto pr-4"> {/* Columna de Ingresos */}
+    <h4 className="font-bold">Ingresos en Pesos:</h4>
+    <table className="w-full text-left mt-2">
+      <thead>
+        <tr className="bg-gray-200 dark:bg-gray-700">
+          <th className="px-3 py-1">Denom.</th>
+          <th className="px-3 py-1">Ingreso</th>
+          <th className="px-3 py-1">Moneda</th>
+          <th className="px-3 py-1">SubRubro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {estadoContable.listaIngresos
+          .filter((ingreso) => ingreso.tipoMoneda === "UR")
+          .map((ingreso) => (
+            <tr key={ingreso.id}>
+              <td className="px-3 py-1">{ingreso.denominacion}</td>
+              <td className="px-3 py-1">{ingreso.ingreso}</td>
+              <td className="px-3 py-1">{ingreso.tipoMoneda}</td>
+              <td className="px-3 py-1">{ingreso.subRubro}</td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
 
-            {/* Ingresos en Dólares */}
-            <div className="mt-4">
-              <h4 className="font-bold">Ingresos en Dólares:</h4>
-              <table className="w-full text-left mt-2">
-                <thead>
-                  <tr className="bg-gray-200 dark:bg-gray-700">
-                    <th className="px-3 py-1">Denom.</th>
-                    <th className="px-3 py-1">Ingreso</th>
-                    <th className="px-3 py-1">Moneda</th>
-                    <th className="px-3 py-1">SubRubro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {estadoContable.listaIngresos
-                    .filter((ingreso) => ingreso.tipoMoneda === "USD")
-                    .map((ingreso) => (
-                      <tr key={ingreso.id}>
-                        <td className="px-3 py-1">{ingreso.denominacion}</td>
-                        <td className="px-3 py-1">{ingreso.ingreso}</td>
-                        <td className="px-3 py-1">{ingreso.tipoMoneda}</td>
-                        <td className="px-3 py-1">{ingreso.subRubro}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+    <h4 className="font-bold mt-4">Ingresos en Dólares:</h4>
+    <table className="w-full text-left mt-2">
+      <thead>
+        <tr className="bg-gray-200 dark:bg-gray-700">
+          <th className="px-3 py-1">Denom.</th>
+          <th className="px-3 py-1">Ingreso</th>
+          <th className="px-3 py-1">Moneda</th>
+          <th className="px-3 py-1">SubRubro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {estadoContable.listaIngresos
+          .filter((ingreso) => ingreso.tipoMoneda === "USD")
+          .map((ingreso) => (
+            <tr key={ingreso.id}>
+              <td className="px-3 py-1">{ingreso.denominacion}</td>
+              <td className="px-3 py-1">{ingreso.ingreso}</td>
+              <td className="px-3 py-1">{ingreso.tipoMoneda}</td>
+              <td className="px-3 py-1">{ingreso.subRubro}</td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  </div>
 
-            {/* Egresos en Pesos */}
-            <div className="mt-4">
-              <h4 className="font-bold">Egresos en Pesos:</h4>
-              <table className="w-full text-left mt-2">
-                <thead>
-                  <tr className="bg-gray-200 dark:bg-gray-700">
-                    <th className="px-3 py-1">Denom.</th>
-                    <th className="px-3 py-1">Egreso</th>
-                    <th className="px-3 py-1">Moneda</th>
-                    <th className="px-3 py-1">SubRubro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {estadoContable.listaEgresos
-                    .filter((egreso) => egreso.tipoMoneda === "UR")
-                    .map((egreso) => (
-                      <tr key={egreso.id}>
-                        <td className="px-3 py-1">{egreso.denominacion}</td>
-                        <td className="px-3 py-1">{egreso.egreso}</td>
-                        <td className="px-3 py-1">{egreso.tipoMoneda}</td>
-                        <td className="px-3 py-1">{egreso.subRubro}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+  {/* Egresos */}
+  <div className="w-full lg:w-1/2 h-64 overflow-y-auto pl-4"> {/* Columna de Egresos */}
+    <h4 className="font-bold">Egresos en Pesos:</h4>
+    <table className="w-full text-left mt-2">
+      <thead>
+        <tr className="bg-gray-200 dark:bg-gray-700">
+          <th className="px-3 py-1">Denom.</th>
+          <th className="px-3 py-1">Egreso</th>
+          <th className="px-3 py-1">Moneda</th>
+          <th className="px-3 py-1">SubRubro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {estadoContable.listaEgresos
+          .filter((egreso) => egreso.tipoMoneda === "UR")
+          .map((egreso) => (
+            <tr key={egreso.id}>
+              <td className="px-3 py-1">{egreso.denominacion}</td>
+              <td className="px-3 py-1">{egreso.egreso}</td>
+              <td className="px-3 py-1">{egreso.tipoMoneda}</td>
+              <td className="px-3 py-1">{egreso.subRubro}</td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
 
-            {/* Egresos en Dólares */}
-            <div className="mt-4">
-              <h4 className="font-bold">Egresos en Dólares:</h4>
-              <table className="w-full text-left mt-2">
-                <thead>
-                  <tr className="bg-gray-200 dark:bg-gray-700">
-                    <th className="px-3 py-1">Denom.</th>
-                    <th className="px-3 py-1">Egreso</th>
-                    <th className="px-3 py-1">Moneda</th>
-                    <th className="px-3 py-1">SubRubro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {estadoContable.listaEgresos
-                    .filter((egreso) => egreso.tipoMoneda === "USD")
-                    .map((egreso) => (
-                      <tr key={egreso.id}>
-                        <td className="px-3 py-1">{egreso.denominacion}</td>
-                        <td className="px-3 py-1">{egreso.egreso}</td>
-                        <td className="px-3 py-1">{egreso.tipoMoneda}</td>
-                        <td className="px-3 py-1">{egreso.subRubro}</td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
+    <h4 className="font-bold mt-4">Egresos en Dólares:</h4>
+    <table className="w-full text-left mt-2">
+      <thead>
+        <tr className="bg-gray-200 dark:bg-gray-700">
+          <th className="px-3 py-1">Denom.</th>
+          <th className="px-3 py-1">Egreso</th>
+          <th className="px-3 py-1">Moneda</th>
+          <th className="px-3 py-1">SubRubro</th>
+        </tr>
+      </thead>
+      <tbody>
+        {estadoContable.listaEgresos
+          .filter((egreso) => egreso.tipoMoneda === "USD")
+          .map((egreso) => (
+            <tr key={egreso.id}>
+              <td className="px-3 py-1">{egreso.denominacion}</td>
+              <td className="px-3 py-1">{egreso.egreso}</td>
+              <td className="px-3 py-1">{egreso.tipoMoneda}</td>
+              <td className="px-3 py-1">{egreso.subRubro}</td>
+            </tr>
+          ))}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
             {/* Saldos finales */}
             <div className="mt-6">

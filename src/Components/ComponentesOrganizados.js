@@ -259,7 +259,7 @@ const ComponentesOrganizados = ({
     }
     case 31: {
       return (
-        <AltaReajuste setIdentificadorComponente={setIdentificadorComponente} />
+        <AltaReajuste ur={ur} setIdentificadorComponente={setIdentificadorComponente} />
       );
     }
 // Case 32 Libre

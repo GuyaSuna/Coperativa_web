@@ -17,7 +17,7 @@ const Home = () => {
 
   if (!login) {
     console.error("El contexto de sesión no está disponible.");
-    return null; // O algún manejo de error adicional
+    return null; 
   }
 
   const [username, setUsername] = useState("");

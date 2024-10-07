@@ -1,74 +1,48 @@
-"use client";
 import React, { useContext, useState, useEffect } from "react";
-import { Card, CardContent, Typography, Box, Divider } from "@mui/material";
-import DashboardCard from "./DashboardCard";
+import { Card, CardContent, Typography, Box, Divider, CardMedia } from "@mui/material";
 import { MiembroContext } from "@/Provider/provider";
-import { getSocio, getViviendaPorSocio } from "@/Api/api";
-import { useTheme } from "@mui/material/styles";
-import IconButton from "@mui/material/IconButton";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import CardMedia from "@mui/material/CardMedia";
+import { getViviendaPorSocio } from "@/Api/api";
 
 const DatosVivienda = () => {
-  const { miembro, cooperativa } = useContext(MiembroContext);
+  const { miembro } = useContext(MiembroContext);
   const [datoVivienda, setDatoVivienda] = useState({});
   const [cedulaSocio, setCedulaSocio] = useState("");
-  const theme = useTheme();
-  useEffect(() => {
-    setCedulaSocio(miembro.responseBody.socio.cedulaSocio);
-  }, []);
 
   useEffect(() => {
-    const fetchSocio = async () => {
+    setCedulaSocio(miembro.responseBody.socio.cedulaSocio);
+  }, [miembro]);
+
+  useEffect(() => {
+    const fetchVivienda = async () => {
       try {
-        const data = await getViviendaPorSocio(
-          miembro.responseBody.socio.cedulaSocio
-        );
+        const data = await getViviendaPorSocio(cedulaSocio);
         setDatoVivienda(data);
-        console.log("Respuesta get vivienda", data);
       } catch (error) {
-        console.error(`An error has occurred in fetchSocio: ${error.message}`);
+        console.error(`An error has occurred in fetchVivienda: ${error.message}`);
       }
     };
 
     if (cedulaSocio) {
-      fetchSocio();
+      fetchVivienda();
     }
   }, [cedulaSocio]);
 
   return (
-    <Card sx={{ display: "flex", height: 250, width: "100%" }}>
+    <Card sx={{ display: "flex", height: 250, width: "100%" }} className="dark:bg-gray-900 bg-white text-black dark:text-white">
       <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-        <CardContent
-          sx={{ flex: "1 0 auto" }}
-          className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
-        >
+        <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography variant="h5" component="div" pb={3}>
             Datos de la vivienda
           </Typography>
-          <Typography variant="body1">
-            Nro Vivienda: {datoVivienda.nroVivienda}
-          </Typography>
+          <Typography variant="body1">Nro Vivienda: {datoVivienda.nroVivienda}</Typography>
           <Divider />
-          <Typography variant="body1">
-            Cantidad Dormitorios: {datoVivienda.cantidadDormitorios}
-          </Typography>
+          <Typography variant="body1">Cantidad Dormitorios: {datoVivienda.cantidadDormitorios}</Typography>
           <Divider />
-          <Typography variant="body1">
-            Valor de la Vivienda {datoVivienda.valorVivienda}
-          </Typography>
+          <Typography variant="body1">Valor de la Vivienda: {datoVivienda.valorVivienda}</Typography>
           <Divider />
         </CardContent>
       </Box>
-
-      <CardMedia
-        component="img"
-        sx={{ width: 200, height: "100%" }}
-        image="/vivienda.webp"
-        alt="Live from space album cover"
-      />
+      <CardMedia component="img" sx={{ width: 200, height: "100%" }} image="/vivienda.webp" alt="Live from space album cover" />
     </Card>
   );
 };

@@ -15,8 +15,13 @@ const DashboardCard = ({
   return (
     <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
       {cardheading ? (
-        <CardContent>
-          <Typography variant="h5">{headtitle}</Typography>
+        <CardContent
+          className="bg-gray-100 dark:bg-gray-800"
+          sx={{ p: "10px" }} // Ajusta el padding según lo que necesites
+        >
+          <Typography variant="h5" color="textPrimary">
+            {headtitle}
+          </Typography>
           <Typography variant="subtitle2" color="textSecondary">
             {headsubtitle}
           </Typography>
@@ -24,7 +29,7 @@ const DashboardCard = ({
       ) : (
         <CardContent
           sx={{ p: "10px" }}
-          className="dark:bg-gray-100 bg-dark text-white dark:text-gray-600 "
+          className="bg-white dark:bg-gray-900 text-black dark:text-white"
         >
           {title ? (
             <Stack
@@ -35,12 +40,9 @@ const DashboardCard = ({
               mb={3}
             >
               <Box>
-                {title ? <Typography variant="h5">{title}</Typography> : ""}
-
-                {subtitle ? (
+                {title && <Typography variant="h5">{title}</Typography>}
+                {subtitle && (
                   <Typography variant="subtitle2">{subtitle}</Typography>
-                ) : (
-                  ""
                 )}
               </Box>
               {action}

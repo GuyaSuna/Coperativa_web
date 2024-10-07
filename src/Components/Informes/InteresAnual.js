@@ -4,29 +4,33 @@ import { getInteresAnual } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 
 const InteresAnual = ({ setIdentificadorComponente }) => {
-  const [fecha, setFecha] = useState("");
+  const [year, setYear] = useState("");
   const [resultados, setResultados] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    setFecha(today);
-  },[])
+    const currentYear = new Date().getFullYear();
+    setYear(currentYear); // Por defecto, seleccionar el año actual
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    if (!fecha || !cooperativa.idCooperativa) {
-      console.error("Fecha o ID de cooperativa no definidos");
+    if (!year || !cooperativa.idCooperativa) {
+      console.error("Año o ID de cooperativa no definidos");
       setLoading(false);
       return;
     }
 
+    // Convertimos el año en una fecha completa (01-01-[año])
+    const fechaCompleta = `${year}-01-01`;
+
     try {
-      const response = await getInteresAnual(fecha, cooperativa.idCooperativa);
-      console.log("Respuesta Interes Anual" , response)
+      const response = await getInteresAnual(fechaCompleta, cooperativa.idCooperativa);
+      console.log("Respuesta Interes Anual", response);
       setResultados(response);
     } catch (error) {
       console.error("Error al obtener el informe:", error);
@@ -49,9 +53,11 @@ const InteresAnual = ({ setIdentificadorComponente }) => {
             Selecciona el año:
           </label>
           <input
-            type="date"
-            value={fecha}
-            onChange={(e) => setFecha(e.target.value)}
+            type="number"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            min="1900"
+            max={new Date().getFullYear()}
             className="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-400 transition duration-300"
             required
           />
@@ -62,18 +68,7 @@ const InteresAnual = ({ setIdentificadorComponente }) => {
         >
           Obtener Informe
         </button>
-        {resultados != null && (
-          <div>
-            <h3 className="text-xl font-semibold mb-2">Resultados:</h3>
-            <ul className="list-disc pl-5">
-              {resultados.listaInteresAnual.map((dato) => (
-                <li key={dato.socio.cedulaSocio}>
-                  <strong>{dato.socio.nombreSocio}:</strong> {dato.interes} Ur
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        
       </form>
 
       {loading && (

@@ -1,14 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState , useContext } from "react";
 import { loginMaster } from "@/Api/api"; // Tu función que hace el llamado a la API
 import { useRouter } from "next/navigation";
 import { useSession } from "@/Provider/loginProvider";
+import { MiembroContext } from "@/Provider/provider";
 
 const Master = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const { login } = useSession(); // Usar la función login del contexto
+  const { login } = useSession(); 
+  const {loginMiembro} = useContext(MiembroContext);
 
   // Función que maneja el envío del formulario
   const handleSubmit = async (e) => {
@@ -20,6 +22,7 @@ const Master = () => {
 
       if (response && response.token) {
         console.log("Token recibido en el frontend:", response.token);
+        loginMiembro(response,null);
         login(response.token); // Continuar con el proceso de login
         router.push("/MasterHome");
       } else {
