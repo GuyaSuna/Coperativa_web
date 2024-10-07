@@ -123,6 +123,7 @@ const AdminHome = () => {
                       { label: "Viviendas", id: 1 },
                       { label: "Recibos", id: 11 },
                       { label: "Suplentes", id: 9 },
+                      { label: "Usuarios", id: 12 },
                       { label: "Subsidios", id: 17 },
                       { label: "Convenios", id: 26 },
                       { label: "Estados Contables", id: 35 },

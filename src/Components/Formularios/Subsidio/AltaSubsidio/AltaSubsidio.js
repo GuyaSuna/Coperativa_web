@@ -142,33 +142,60 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
 
   const validarFormulario = () => {
     const errores = {};
-    const fechaHoy = new Date().toISOString().split("T")[0];
-
-    if (!valorViviendaUr)
-      errores.valorViviendaUr = "La cuota total es obligatoria";
-    if (!cuotaApagarUr)
+    const fechaHoy = new Date().toISOString().split("T")[0]; // Fecha actual en formato ISO (YYYY-MM-DD)
+  
+    // Verificar que los campos no estén vacíos
+    if (!valorViviendaUr) {
+      errores.valorViviendaUr = "El valor de la vivienda es obligatorio";
+    } else if (valorViviendaUr < 0) {
+      errores.valorViviendaUr = "El valor de la vivienda no puede ser negativo";
+    }
+  
+    if (!cuotaApagarUr) {
       errores.cuotaApagarUr = "La cuota a pagar es obligatoria";
-    if (!subsidioUr) errores.subsidioUr = "El subsidio es obligatorio";
-    if (!porcentaje) errores.porcentaje = "El porcentaje es obligatorio";
-    if (!vigenciaEnMeses)
+    } else if (cuotaApagarUr < 0) {
+      errores.cuotaApagarUr = "La cuota a pagar no puede ser negativa";
+    }
+  
+    if (!subsidioUr) {
+      errores.subsidioUr = "El subsidio es obligatorio";
+    } else if (subsidioUr < 0) {
+      errores.subsidioUr = "El subsidio no puede ser negativo";
+    }
+  
+    if (!porcentaje) {
+      errores.porcentaje = "El porcentaje es obligatorio";
+    } else if (porcentaje < 0 || porcentaje > 100) {
+      errores.porcentaje = "El porcentaje debe estar entre 0 y 100";
+    }
+  
+    if (!vigenciaEnMeses) {
       errores.vigenciaEnMeses = "La vigencia en meses es obligatoria";
-
+    } else if (vigenciaEnMeses < 0) {
+      errores.vigenciaEnMeses = "La vigencia en meses no puede ser negativa";
+    }
+  
+    // Validación de fechas
     if (!fechaOtorgado) {
       errores.fechaOtorgado = "La fecha de otorgamiento es obligatoria";
     } else if (fechaOtorgado > fechaHoy) {
-      errores.fechaOtorgado =
-        "La fecha de otorgamiento no puede ser mayor a la fecha actual";
+      errores.fechaOtorgado = "La fecha de otorgamiento no puede ser mayor a la fecha actual";
     }
-
-    if (!fechaExpira)
+  
+    if (!fechaExpira) {
       errores.fechaExpira = "La fecha de expiración es obligatoria";
-    if (!socioSeleccionado)
+    } else if (fechaExpira < fechaOtorgado) {
+      errores.fechaExpira = "La fecha de expiración no puede ser anterior a la fecha de otorgamiento";
+    }
+  
+    if (!socioSeleccionado) {
       errores.socioSeleccionado = "Debe seleccionar un socio";
-
+    }
+  
     setErrores(errores);
     return Object.keys(errores).length === 0;
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 

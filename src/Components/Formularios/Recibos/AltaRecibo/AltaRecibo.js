@@ -54,14 +54,10 @@ const AltaRecibo = ({ Socio, ur }) => {
   // }
 
   useEffect(() => {
-    console.log("UNIDAD REAJUSTABLE MENSUAL",ur)
     const today = new Date().toISOString().split("T")[0];
     setFechaPago(today);
     setFechaEmision(today);
     const FechaActual = new Date();
-    console.log("FECHA ACTUAL", FechaActual.getMonth() + 1);
-    console.log("FECHA ACTUAL", FechaActual.getFullYear());
-    console.log("COOPERATIVA", cooperativa);
     cooperativa.listaCapitalInteres.map((data) => {
       let fechaData = new Date(data.fecha);
       if (
@@ -107,7 +103,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   const fetchSubsidio = async () => {
     const subsidioResponse = await getSubsidioVigenteSocio(Socio.cedulaSocio);
     if (subsidioResponse != null) {
-      console.log(subsidioResponse);
+      console.log("SUBSIDIOOOOOOOOOOOO",subsidioResponse);
       setSubsidio(subsidioResponse);
     } else {
       setSubsidio(0);
@@ -186,10 +182,8 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     viviendasData.forEach((vivienda) => {
       if (vivienda.socio != null) {
-        console.log("Entra al primero", Socio);
         if (vivienda.socio.cedulaSocio == Socio.cedulaSocio) {
           setVivienda(vivienda);
-          console.log("Vivienda seleccionada", vivienda);
         }
       }
     });
