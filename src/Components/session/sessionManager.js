@@ -2,18 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "@/Provider/loginProvider";
 import { useRouter } from "next/navigation";
-import { renovarToken } from "./../../Api/ApiToken"; // Asegúrate de que el nombre de la función sea correcto
+import { renovarToken } from "./../../Api/ApiToken";
 
 const SessionManager = () => {
-  const { isAuthenticated, logout, authToken } = useSession();
+  const { isAuthenticated, logout, authToken, setAuthToken } = useSession();
   const [tiempoRestante, setTiempoRestante] = useState(0);
-  const [preguntado, setPreguntado] = useState(false); // Para controlar si ya se preguntó
+  const [preguntado, setPreguntado] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
 
-    const tokenExpiracion = parseJwt(authToken)?.exp * 1000; // Tiempo de expiración en milisegundos
+    console.log("AuthToken en useEffect inicial:", authToken);
+
+    const tokenExpiracion = parseJwt(authToken)?.exp * 100; // Expiración en milisegundos
     const tiempoActual = Date.now();
     const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000;
 
@@ -23,7 +25,6 @@ const SessionManager = () => {
       const tiempoActualizado = (tokenExpiracion - Date.now()) / 1000;
       setTiempoRestante(tiempoActualizado);
 
-      // Si el token ha expirado
       if (tiempoActualizado <= 0) {
         clearInterval(intervalo);
         alert("Tu sesión ha expirado.");
@@ -31,15 +32,28 @@ const SessionManager = () => {
         router.push("/");
       }
 
-      // Mostrar la pregunta 1 minuto antes de expirar, solo una vez
+      // Preguntar por la renovación del token si falta 1 minuto
       if (tiempoActualizado <= 60 && !preguntado) {
         setPreguntado(true);
         const confirmarRenovacion = window.confirm(
           "Tu sesión está por expirar. ¿Quieres continuar?"
         );
         if (confirmarRenovacion) {
-          renovarToken(authToken); // Llamamos a la función para renovar el token
-          setPreguntado(false); // Reseteamos para futuras expiraciones
+          renovarToken(authToken).then((nuevoToken) => {
+            if (nuevoToken) {
+              console.log(
+                "Nuevo token recibido en SessionManager:",
+                nuevoToken
+              );
+              setAuthToken(nuevoToken); // Actualizamos el contexto con el nuevo token
+              setCookie("authToken", nuevoToken, 1); // Actualizamos la cookie
+              console.log("Token actualizado y cookie seteada");
+              setPreguntado(false); // Reseteamos para futuras expiraciones
+            } else {
+              logout();
+              router.push("/"); // Redirigir si la renovación falla
+            }
+          });
         } else {
           clearInterval(intervalo);
           logout();
@@ -51,13 +65,11 @@ const SessionManager = () => {
     // Actualiza el tiempo restante cada segundo
     const intervalo = setInterval(actualizarContador, 1000);
 
-    // Limpieza al desmontar el componente
     return () => {
       clearInterval(intervalo);
     };
-  }, [isAuthenticated, authToken, preguntado, router, logout]);
+  }, [isAuthenticated, authToken, preguntado, router, logout, setAuthToken]);
 
-  // Función para parsear el token JWT
   const parseJwt = (token) => {
     try {
       const base64Url = token.split(".")[1];
@@ -75,6 +87,14 @@ const SessionManager = () => {
       console.error("Error al parsear el token:", error);
       return null;
     }
+  };
+
+  const setCookie = (nombre, valor, dias) => {
+    const fecha = new Date();
+    fecha.setTime(fecha.getTime() + dias * 24 * 60 * 60 * 1000);
+    const expira = "expires=" + fecha.toUTCString();
+    document.cookie = `${nombre}=${valor};${expira};path=/`;
+    console.log("Cookie actualizada:", nombre, valor);
   };
 
   return null;
