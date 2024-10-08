@@ -34,7 +34,7 @@ const AltaAviso = () => {
   const handleChangeUsuario = (e) => {
     const selectedUser = parseInt(e.target.value);
     setUsuario(selectedUser);
-    console.log("Usuario seleccionado:", selectedUser); // Agrega este log
+    console.log("Usuario seleccionado:", selectedUser); 
   };
 
   const handleSubmit = async (e) => {
@@ -60,7 +60,7 @@ const AltaAviso = () => {
 
     try {
       if (usuario === -1) {
-        const response = await postAvisoToAll(data, miembro.id);
+        const response = await postAvisoToAll(data, miembro.responseBody.id, cooperativa.idCooperativa);
         console.log("Enviado a todos los miembros:", response);
         setSuccess("El aviso ha sido enviado a todos los miembros.");
       } else {

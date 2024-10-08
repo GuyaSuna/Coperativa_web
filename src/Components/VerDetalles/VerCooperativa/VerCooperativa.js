@@ -76,6 +76,13 @@ const VerCooperativa = ({ isOpen, onClose, cooperativa }) => {
                   </td>
                   <td className="py-1 px-3">{cooperativa.cuposLibre}</td>
                 </tr>
+                {/* Información del Administrador */}
+                <tr>
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                    Administrador:
+                  </td>
+                  <td className="py-1 px-3">{cooperativa.tesorero?.firstname} {cooperativa.tesorero?.lastname}</td>
+                </tr>
                 <tr>
                   <td
                     colSpan="2"

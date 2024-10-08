@@ -1049,11 +1049,11 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
   }
 };
 
-const postAvisoToAll = async (aviso, idAdmin) => {
+const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
   try {
     console.log(aviso);
     const token = getToken();
-    const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
+    const response = await fetch(`${URL}/aviso/All/${idAdmin}/${idCooperativa}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
