@@ -6,16 +6,13 @@ import ThemeToggle from "./ThemeToggle";
 import logoDark from "../../public/logoVisoftDark.png";
 import logoLight from "../../public/logoVisoftLigth.png";
 import Image from "next/image";
+import { getAllAvisosPorUsuario } from "@/Api/api";
 import { useRouter } from "next/navigation";
 import {
   FaHome,
   FaUserPlus,
-  FaUserTie,
   FaUserShield,
   FaBell,
-  FaHandHoldingUsd,
-  FaMoneyBillWave,
-  FaMoneyBill,
 } from "react-icons/fa";
 import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
 
@@ -26,10 +23,20 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [avisos, setAvisos] = useState([]); // Estado para manejar los avisos
+  const [mostrarAvisos, setMostrarAvisos] = useState(false); // Controla si se muestra el menú de avisos
 
   // Acceder al estado del tema
   const { darkMode } = useTheme();
 
+  useEffect(() => {
+    fetchAvisos();
+  },[])
+
+  const fetchAvisos = async () => {
+    const response = await getAllAvisosPorUsuario(miembro.responseBody.id);
+    setAvisos(response);
+  }
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
@@ -44,6 +51,7 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
     if (miembro && miembro.responseBody.username) {
       setMiembroUsername(miembro.responseBody.username);
     }
+    // Aquí podrías cargar los avisos desde tu API si es necesario
   }, [miembro]);
 
   const handlePressCerrarSesion = () => {
@@ -54,6 +62,13 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
   const toggleDropdown = (dropdown) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
+
+  const toggleAvisos = () => {
+    setMostrarAvisos(!mostrarAvisos); // Alternar el estado de mostrar avisos
+  };
+
+  // Obtener la inicial del nombre
+  const initial = miembroUsername.charAt(0).toUpperCase();
 
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
@@ -140,7 +155,6 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
                       <FaUserPlus className="mr-2 text-2xl" />{" "}
                       <a className="text-base">Agregar Socio</a>
                     </button>
-                    {/* Continuar con el resto del código */}
                   </div>
                 )}
               </div>
@@ -149,16 +163,45 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
         </div>
       </div>
       <div className="ml-auto flex items-center space-x-4 lg:space-x-7">
+        {/* Campana de notificaciones */}
+        <div className="relative">
+          <button
+            onClick={toggleAvisos}
+            className="text-gray-600 dark:text-gray-300 focus:outline-none"
+          >
+            <FaBell className="text-2xl" />
+            {avisos.length > 0 && (
+              <span className="absolute top-0 right-0 inline-flex items-center justify-center p-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                {avisos.length}
+              </span>
+            )}
+          </button>
+          {mostrarAvisos && (
+            <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-800 shadow-lg rounded-md z-10">
+              <ul className="py-2">
+                {avisos.map((aviso, index) => (
+                  <li
+                    key={index}
+                    className="px-4 py-2 text-sm text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  >
+                    {aviso.mensaje}
+                  </li>
+                ))}
+                {avisos.length === 0 && (
+                  <li className="px-4 py-2 text-sm text-gray-800 dark:text-gray-300">
+                    No hay avisos.
+                  </li>
+                )}
+              </ul>
+            </div>
+          )}
+        </div>
+
         <Menu as="div" className="relative inline-block text-left justify-end">
           <div>
             <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:text-gray-300 text-gray-900 shadow-sm border dark:border-gray-600 border-gray-200">
-              <span className="relative flex-shrink-0">
-                <img
-                  className="w-7 h-7 rounded-full"
-                  src="https://images.unsplash.com/photo-1521587765099-8835e7201186?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
-                  alt="profile"
-                />
-                <span className="absolute right-0 -mb-0.5 bottom-0 w-2 h-2 rounded-full bg-green-500 border border-white dark:border-gray-900" />
+              <span className="relative flex-shrink-0 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                {initial} {/* Muestra la inicial del nombre */}
               </span>
               <span className="ml-2 md:text-xs  dark:text-dark text-white self-center">
                 {miembroUsername}
@@ -191,8 +234,7 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
               </MenuItem>
               <MenuItem>
                 <button
-                  href={"/"}
-                  onClick={() => handlePressCerrarSesion()}
+                  onClick={handlePressCerrarSesion}
                   className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                 >
                   Cerrar Sesion

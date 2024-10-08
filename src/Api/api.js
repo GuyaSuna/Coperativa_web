@@ -994,6 +994,35 @@ const getAllRecibosPorSocio = async (cedulaSocio) => {
   }
 };
 
+const getAllAvisosPorUsuario = async (idUsuario) => {
+  try {
+    const token = getToken();
+
+    const response = await fetch(
+      `${URL}/aviso/getAllAvisosPorUsuario/${idUsuario}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllAvisosPorUsuario:", error);
+    throw new Error("Error al obtener los datos de los Avisos.");
+  }
+};
+
 const postAviso = async (aviso, idAdmin, idUsuario) => {
   try {
     console.log(aviso);
@@ -1019,6 +1048,33 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
     throw new Error("Error al enviar los datos del aviso");
   }
 };
+
+const postAvisoToAll = async (aviso, idAdmin) => {
+  try {
+    console.log(aviso);
+    const token = getToken();
+    const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(aviso),
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en postSocio:", error);
+    throw new Error("Error al enviar los datos del aviso");
+  }
+};
+
 
 // usuario
 const postUsuario = async (usuarioEntity) => {
@@ -2073,4 +2129,6 @@ export {
   getAllIngresosByMes,
   getAllEgresosByMes,
   deleteRecibo,
+  postAvisoToAll,
+  getAllAvisosPorUsuario,
 };

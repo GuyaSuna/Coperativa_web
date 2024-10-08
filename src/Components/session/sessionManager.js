@@ -10,12 +10,14 @@ const SessionManager = () => {
   const [preguntado, setPreguntado] = useState(false);
   const router = useRouter();
 
+
   useEffect(() => {
     if (!isAuthenticated || !authToken) return;
 
     console.log("AuthToken en useEffect inicial:", authToken);
 
-    const tokenExpiracion = parseJwt(authToken)?.exp * 100; // Expiración en milisegundos
+    // Recuperar la fecha de expiración del token desde el payload
+    const tokenExpiracion = parseJwt(authToken)?.exp * 1000;
     const tiempoActual = Date.now();
     const tiempoInicial = (tokenExpiracion - tiempoActual) / 1000;
 
@@ -32,7 +34,7 @@ const SessionManager = () => {
         router.push("/");
       }
 
-      // Preguntar por la renovación del token si falta 1 minuto
+      // Preguntar por la renovación del token si faltan 60 segundos
       if (tiempoActualizado <= 60 && !preguntado) {
         setPreguntado(true);
         const confirmarRenovacion = window.confirm(
@@ -41,17 +43,14 @@ const SessionManager = () => {
         if (confirmarRenovacion) {
           renovarToken(authToken).then((nuevoToken) => {
             if (nuevoToken) {
-              console.log(
-                "Nuevo token recibido en SessionManager:",
-                nuevoToken
-              );
+              console.log("Nuevo token recibido en SessionManager:", nuevoToken);
               setAuthToken(nuevoToken); // Actualizamos el contexto con el nuevo token
-              setCookie("authToken", nuevoToken, 1); // Actualizamos la cookie
+              setCookie("token", nuevoToken, 1); // Actualizamos la cookie
               console.log("Token actualizado y cookie seteada");
               setPreguntado(false); // Reseteamos para futuras expiraciones
             } else {
               logout();
-              router.push("/"); // Redirigir si la renovación falla
+              router.push("/");
             }
           });
         } else {
@@ -62,7 +61,6 @@ const SessionManager = () => {
       }
     };
 
-    // Actualiza el tiempo restante cada segundo
     const intervalo = setInterval(actualizarContador, 1000);
 
     return () => {

@@ -11,6 +11,7 @@ import Footer from "@/Components/footer";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import Cargando from "@/Components/Cargando";
 import Sidebar from "@/Components/Sidebar";
+import { getToken } from "@/Api/getToken";
 
 const AdminHome = () => {
   const router = useRouter();
@@ -27,14 +28,24 @@ const AdminHome = () => {
   };
 
   useEffect(() => {
-    if (!miembro || !cooperativa) {
+    if (!miembro || !cooperativa || !fetchToken()) {
       console.log("Esperando a que los datos estén disponibles...");
     } else {
+      
       console.log("Datos del Provider cargados correctamente.");
       setIsLoading(false);
     }
+
   }, [miembro, cooperativa]);
 
+  const fetchToken = async () => {
+    const token = getToken();
+    if(token == null){
+      return false;
+    }else{
+      return true;
+    }
+  }
   useEffect(() => {
     fetchUr();
   }, []);
