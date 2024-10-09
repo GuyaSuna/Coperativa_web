@@ -1370,17 +1370,24 @@ const getUltimoReajuste = async () => {
     });
 
     if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+      // Si la respuesta no es 200, verifica si es 404 (no encontrado)
+      if (response.status === 404) {
+        // Si no hay reajuste, retorna null en vez de lanzar error
+        return null;
+      }
+      // Si el error es otro, lanzar un error
+      throw new Error("La petición falló, respuesta no es correcta");
     }
 
     const data = await response.json();
-
     return data;
   } catch (error) {
     console.error("Error en getUltimoReajuste:", error);
-    throw new Error("Error al obtener los datos de el ultimo reajuste");
+    // Retornar null si hay algún error en la petición para no interrumpir el flujo
+    return null;
   }
 };
+
 
 const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
   console.log("Cedula que mandamos", cedulaSocio);
@@ -1891,7 +1898,7 @@ const loginMaster = async (MasterData) => {
       throw new Error("The petition has failed, response isn't ok");
     }
     const data = await response.json();
-
+console.log("API" , data)
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
     } else {
@@ -1929,6 +1936,92 @@ const postDevolucionCapital = async (devolucionCapital) => {
     throw new Error("Error al enviar los datos de la devolucion");
   }
 };
+
+const postBalanceAnual = async (fecha, idCooperativa) => {
+  try {
+    const token = getToken();
+    const fechaISO = fecha.toISOString().split("T")[0];
+    console.log("Fecha en formato ISO: ", fechaISO);
+    console.log("Token usado: ", token);
+
+    const response = await fetch(`${URL}/balanceAnual/${fechaISO}/${idCooperativa}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorDetails = await response.json();
+      console.error("Detalles del error: ", errorDetails);
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en postBalanceAnual:", error);
+    throw new Error("Error al enviar los datos de postBalanceAnual");
+  }
+};
+
+const getBalanceAnual = async (idBalance) => {
+  try {
+    console.log("Llega aca");
+    const token = getToken();
+    console.log(token);
+    const response = await fetch(
+      `${URL}/balanceAnual/${idBalance}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en GetBalanceAnual:", error);
+    throw new Error("Error al enviar los datos de GetBalanceAnual");
+  }
+};
+
+const getAllBalanceAnual = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/balanceAnual/allBalanceAnual/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en GetBalanceAnual:", error);
+    throw new Error("Error al enviar los datos de GetBalanceAnual");
+  }
+};
+
 
 const getDevolucionCapital = async (cedulaSocio) => {
   try {
@@ -2131,4 +2224,7 @@ export {
   deleteRecibo,
   postAvisoToAll,
   getAllAvisosPorUsuario,
+  postBalanceAnual,
+  getBalanceAnual,
+  getAllBalanceAnual,
 };

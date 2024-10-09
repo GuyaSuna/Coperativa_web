@@ -17,25 +17,25 @@ import VerConvenio from "@/Components/VerDetalles/VerConvenio/VerConvenio.js";
 
 const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   const [allConvenios, setAllConvenios] = useState([]);
+  const [archivados, setArchivados] = useState(false); // Para alternar entre archivados y no archivados
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allConvenios);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para controlar la visibilidad del modal
-  const [convenioSeleccionado, setSocioSeleccionado] = useState(null); // Estado para el s
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [convenioSeleccionado, setConvenioSeleccionado] = useState(null);
 
   useEffect(() => {
     fetchAllConvenios();
-  }, []);
+  }, [archivados]); // Llama al fetch cuando se cambia el estado de archivados
 
   const fetchAllConvenios = async () => {
     try {
       const response = await getAllConvenios(cooperativa.idCooperativa);
       const dataFiltrada = response.filter(
-        (convenio) => convenio.socio && convenio.socio.archivado === false
+        (convenio) => convenio.socio && convenio.socio.archivado === archivados
       );
-
       setAllConvenios(dataFiltrada);
-      console.log("Convenios ", response);
+      setBuscadorFiltrado(dataFiltrada); // Mantén los datos filtrados
     } catch (error) {
       console.error("Error al obtener los convenios:", error);
     }
@@ -45,7 +45,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     if (buscador === "") {
       setBuscadorFiltrado(allConvenios);
     } else {
-      const buscadorFiltrado = allSocios.filter((convenio) =>
+      const buscadorFiltrado = allConvenios.filter((convenio) =>
         convenio.socio.nombreSocio
           .toLowerCase()
           .includes(buscador.toLowerCase())
@@ -53,31 +53,36 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
       setBuscadorFiltrado(buscadorFiltrado);
     }
   }, [allConvenios, buscador]);
+
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
+  };
+
+  const handleArchivadosToggle = () => {
+    setArchivados(!archivados); // Cambia entre archivados y no archivados
   };
 
   const handleModificar = (cedula) => {
     setCedulaSocio(cedula);
     setIdentificadorComponente(4);
   };
+
   const handleCrearConvenio = (convenio) => {
     setConvenio(convenio);
     setIdentificadorComponente(18);
   };
 
   const handleVerConvenio = (convenio) => {
-    console.log(convenio);
-    setSocioSeleccionado(convenio);
+    setConvenioSeleccionado(convenio);
     setIsModalOpen(true);
   };
+
   const handleEliminar = async (idConvenio) => {
     try {
       const data = await deleteConvenio(idConvenio);
-      console.log(data);
-      fetchAllSocios();
+      fetchAllConvenios();
     } catch (e) {
-      throw ("Fallo al eliminar el convenio ", e.error);
+      throw new Error("Fallo al eliminar el convenio ", e.error);
     }
   };
 
@@ -88,6 +93,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
   const ordenarOptions = [
     {
       label: "Número convenio",
@@ -119,7 +125,6 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   ];
 
   const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
     const ordenarConvenios = [...allConvenios].sort(option.comparator);
     setAllConvenios(ordenarConvenios);
   };
@@ -136,20 +141,15 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
             onClick={handleCrearConvenio}
             className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
-            <svg
-              className="h-3.5 w-3.5 mr-2"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                clipRule="evenodd"
-                fillRule="evenodd"
-                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-              />
-            </svg>
             Agregar Convenio
+          </button>
+
+          <button
+            type="button"
+            onClick={handleArchivadosToggle}
+            className="text-white bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-lg"
+          >
+            {archivados ? "Ver No Archivados" : "Ver Archivados"}
           </button>
 
           <OrdenarPor
@@ -186,20 +186,15 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
             </tr>
           </thead>
           <tbody>
-            {allConvenios?.map((convenio) => (
-              <tr className="border-b dark:border-gray-700 sm:table-row">
+            {buscadorFiltrado?.map((convenio) => (
+              <tr className="border-b dark:border-gray-700 sm:table-row" key={convenio.idConvenio}>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">
-                    Nro. Convenio:
-                  </span>
                   {convenio.idConvenio}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Deuda en UR:</span>
                   {convenio.deudaEnUrOriginal} UR
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">Paga Por Mes:</span>
                   {convenio.urPorMes} UR
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
@@ -208,87 +203,32 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                 <td className="block sm:table-cell px-4 py-3">
                   {convenio.socio.nombreSocio}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <button
-                    type="button"
-                    onClick={() => handleVerConvenio(convenio)}
-                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
-                  >
-                    Ver
-                  </button>
-                </td>
-                <td className="px-4 py-3 flex items-center justify-end md:table-cell">
-                  <div className="relative inline-block text-left">
-                    <Menu as="div" className="relative inline-block text-left">
-                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
-                        <svg
-                          viewBox="0 0 24 24"
-                          className="w-5"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx={12} cy={12} r={1} />
-                          <circle cx={19} cy={12} r={1} />
-                          <circle cx={5} cy={12} r={1} />
-                        </svg>
-                      </MenuButton>
-                      <MenuItems
-                        transition
-                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
-                      >
-                        <div className="py-1">
-                          <MenuItem>
-                            <button
-                              onClick={() =>
-                                handleEliminar(convenio.idConvenio)
-                              }
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Eliminar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() =>
-                                handleModificar(convenio.idConvenio)
-                              }
-                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem>
-                        </div>
-                      </MenuItems>
-                    </Menu>
-                  </div>
-                </td>
-                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
-                  <button
-                    onClick={() => handleEliminar(convenio.idConvenio)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Eliminar
-                  </button>
-                  <button
-                    onClick={() => handleModificar(convenio.idConvenio)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Modificar
-                  </button>
-                </td>
+
+               
+                  <Menu>
+                    <MenuItems>
+                        <MenuItem>
+                          <button
+                            className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                            onClick={() => handleFinalizar(subsidio)}
+                          >
+                            Fializar
+                          </button>
+                        </MenuItem>
+                  </MenuItems>
+                </Menu>
+                
+  
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
       {isModalOpen && (
         <VerConvenio
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
           convenio={convenioSeleccionado}
+          onClose={() => setIsModalOpen(false)}
         />
       )}
     </div>
@@ -296,3 +236,4 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
 };
 
 export default ListadoConvenio;
+

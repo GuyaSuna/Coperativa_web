@@ -231,6 +231,7 @@ const ListadoSocio = ({
    
   };
   const handleModificarSocio = (Socio) => {
+     setSocio(Socio)
     setIdentificadorComponente(4);
   };
   const handleAgregarSocio = () => {

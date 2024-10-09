@@ -11,10 +11,12 @@ import SortIcon from "@mui/icons-material/Sort";
 
 const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const [allSubsidios, setAllSubsidios] = useState([]);
+  const [archivedSubsidios, setArchivedSubsidios] = useState([]);
   const [subsidioSeleccionado, setSubsidioSeleccionado] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allSubsidios);
+  const [showArchived, setShowArchived] = useState(false); // Estado para mostrar subsidios archivados
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
@@ -24,10 +26,15 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const fetchAllSubsidios = async () => {
     try {
       const response = await getAllSubsidios(cooperativa.idCooperativa);
-      const subsidioDataFilter = response.filter(
-        (subsidio) => subsidio.socio && subsidio.socio.archivado == false
+      const activeSubsidios = response.filter(
+        (subsidio) => subsidio.socio && subsidio.socio.archivado === false
       );
-      setAllSubsidios(subsidioDataFilter);
+      const archivedSubsidios = response.filter(
+        (subsidio) => subsidio.socio && subsidio.socio.archivado === true
+      );
+      setAllSubsidios(activeSubsidios);
+      setArchivedSubsidios(archivedSubsidios);
+      setBuscadorFiltrado(activeSubsidios); // Inicializa el buscador con subsidios activos
       console.log(response);
     } catch (error) {
       console.error("Error al obtener los subsidios:", error);
@@ -42,10 +49,10 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
 
   const handleEliminarSubsidio = async (idSubsidio) => {
     try {
-      const data = await deleteSubsidio(idSubsidio);
+      await deleteSubsidio(idSubsidio);
       fetchAllSubsidios();
     } catch (e) {
-      throw ("Fallo al eliminar el subsidio", e.error);
+      console.error("Fallo al eliminar el subsidio", e.error);
     }
   };
 
@@ -53,6 +60,21 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
     setSubsidio(subsidio);
     setIdentificadorComponente(19);
     console.log("Modificar subsidio", subsidio);
+  };
+
+  const handleArchivar = (subsidio) => {
+    console.log("Archivar subsidio", subsidio);
+    // Implementar la lógica de archivo aquí
+  };
+
+  const handleDevolucionCapital = (subsidio) => {
+    console.log("Asignar devolución de capital", subsidio);
+    // Implementar la lógica de devolución de capital aquí
+  };
+
+  const handlePagoDevolucion = (subsidio) => {
+    console.log("Pagar devolución", subsidio);
+    // Implementar la lógica de pago de devolución aquí
   };
 
   const ordenarOptions = [
@@ -80,8 +102,8 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
 
   const handleSortChange = (option) => {
     console.log("Orden seleccionado:", option.label);
-    const ordenarSubsidios = [...allSubsidios].sort(option.comparator);
-    setAllSubsidios(ordenarSubsidios);
+    const ordenarSubsidios = [...(showArchived ? archivedSubsidios : allSubsidios)].sort(option.comparator);
+    setBuscadorFiltrado(ordenarSubsidios);
   };
 
   const handleChangeBuscador = (event) => {
@@ -89,24 +111,29 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   };
 
   useEffect(() => {
+    const subsidiosAFiltrar = showArchived ? archivedSubsidios : allSubsidios;
     if (buscador === "") {
-      setBuscadorFiltrado(allSubsidios);
+      setBuscadorFiltrado(subsidiosAFiltrar);
     } else {
-      const buscadorFiltrado = allSubsidios.filter((subsidio) =>
-        subsidio.socio.nombreSocio
-          .toLowerCase()
-          .includes(buscador.toLowerCase())
+      const buscadorFiltrado = subsidiosAFiltrar.filter((subsidio) =>
+        subsidio.socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
       );
       setBuscadorFiltrado(buscadorFiltrado);
     }
-  }, [allSubsidios, buscador]);
+  }, [allSubsidios, archivedSubsidios, buscador, showArchived]);
 
   const handleAgregarSubsidio = () => {
     setIdentificadorComponente(16);
   };
+
+  const toggleShowArchived = () => {
+    setShowArchived(!showArchived);
+    setBuscador(""); // Resetear el buscador al cambiar entre estados
+  };
+
   return (
     <div className="sm:p-7 p-4">
-      {allSubsidios.length === 0 ? (
+      {allSubsidios.length === 0 && archivedSubsidios.length === 0 ? (
         <div className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center ml-4">
             Todavía no existen Subsidios
@@ -119,25 +146,12 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
               <Buscador value={buscador} onChange={handleChangeBuscador} />
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+              {/* Botón para mostrar subsidios archivados */}
               <button
-                onClick={handleAgregarSubsidio}
-                type="button"
-                className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                onClick={toggleShowArchived}
+                className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
               >
-                <svg
-                  className="h-3.5 w-3.5 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    clipRule="evenodd"
-                    fillRule="evenodd"
-                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
-                  />
-                </svg>
-                AGREGAR SUBSIDIO
+                {showArchived ? "Mostrar Activos" : "Mostrar Archivados"}
               </button>
 
               <OrdenarPor
@@ -169,156 +183,110 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                     Vigencia
                   </th>
                   <th scope="col" className="px-4 py-3 text-center">
-                    Fecha Otorgado
-                  </th>
-                  <th scope="col" className="px-4 py-3 text-center">
-                    Fecha Expira
-                  </th>
-                  <th scope="col" className="px-4 py-3 text-center">
                     Acciones
                   </th>
                 </tr>
               </thead>
-
               <tbody className="block md:table-row-group">
-                {buscadorFiltrado?.map((subsidio) => (
-                  <tr
-                    key={subsidio.idSubsidio}
-                    className="border-b border-gray-200 dark:border-gray-800 md:table-row"
-                  >
-                    <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">
-                        Nombre Socio:
-                      </span>
-                      {subsidio.socio?.nombreSocio}{" "}
-                      {subsidio.socio?.apellidoSocio}
-                    </td>
-                    <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">
-                        Cuota Total UR:
-                      </span>
-                      {subsidio.cuotaTotalUr}
-                    </td>
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">
-                        Subsidio UR:
-                      </span>
-                      {subsidio.subsidioUr}
-                    </td>
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">
-                        Porcentaje:
-                      </span>
-                      {subsidio.porcentaje}
-                    </td>
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">Vigencia:</span>
-                      {subsidio.vigenciaEnMeses} meses
-                    </td>
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">
-                        Fecha Otorgado:
-                      </span>
-                      {new Date(subsidio.fechaOtorgado).toLocaleDateString()}
-                    </td>
-                    <td className="block sm:table-cell px-3 py-2 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <span className="sm:hidden font-semibold">
-                        Fecha Expira:
-                      </span>
-                      {new Date(subsidio.fechaExpira).toLocaleDateString()}
-                    </td>
-                    <td className="px-4 py-3 flex items-center justify-end md:table-cell">
-                      <div className="relative inline-block text-left">
-                        <Menu
-                          as="div"
-                          className="relative inline-block text-left"
-                        >
-                          <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
-                            <svg
-                              viewBox="0 0 24 24"
-                              className="w-5"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                              fill="none"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            >
-                              <circle cx={12} cy={12} r={1} />
-                              <circle cx={19} cy={12} r={1} />
-                              <circle cx={5} cy={12} r={1} />
-                            </svg>
-                          </MenuButton>
-                          <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <div className="py-1">
-                              <MenuItem>
-                                <button
-                                  onClick={() => handleVerSubsidio(subsidio)}
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                  Ver Detalle
-                                </button>
-                              </MenuItem>
-                              <MenuItem>
-                                <button
-                                  onClick={() =>
-                                    handleEliminarSubsidio(subsidio.idSubsidio)
-                                  }
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                  Eliminar
-                                </button>
-                              </MenuItem>
-                              <MenuItem>
-                                <button
-                                  onClick={() =>
-                                    handleModificarSubsidio(subsidio)
-                                  }
-                                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                                >
-                                  Modificar
-                                </button>
-                              </MenuItem>
-                            </div>
-                          </MenuItems>
-                        </Menu>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
-                      <button
-                        onClick={() => handleVerSubsidio(subsidio)}
-                        className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"
-                      >
-                        Ver Detalle
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleEliminarSubsidio(subsidio.idSubsidio)
-                        }
-                        className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
-                      >
-                        Eliminar
-                      </button>
-                      <button
-                        onClick={() => handleModificarSubsidio(subsidio)}
-                        className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                      >
-                        Modificar
-                      </button>
+                {buscadorFiltrado.length === 0 ? (
+                  <tr className="border-b dark:border-gray-700 md:border-b-0 md:dark:border-gray-600">
+                    <td colSpan="6" className="text-center py-4">
+                      No hay subsidios que coincidan con la búsqueda.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  buscadorFiltrado.map((subsidio) => (
+                    <tr
+                      key={subsidio.idSubsidio}
+                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                    >
+                      <td className="px-4 py-3 text-center">
+                        {subsidio.socio.nombreSocio}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {subsidio.cuotaTotalUr}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {subsidio.subsidioUr}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {subsidio.porcentaje}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {subsidio.vigenciaEnMeses}
+                      </td>
+                      <td className="px-4 py-3 text-center flex justify-center">
+                        {/* Menu con opciones para cada subsidio */}
+                        <Menu as="div" className="relative inline-block text-left">
+                          <MenuButton className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                            ⋮
+                          </MenuButton>
+                          <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            {subsidio.socio.archivado ? (
+                              <>
+                                <MenuItem>
+                                  <button
+                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                                    onClick={() => handleDevolucionCapital(subsidio)}
+                                  >
+                                    Asignar devolución de capital
+                                  </button>
+                                </MenuItem>
+                                <MenuItem>
+                                  <button
+                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                                    onClick={() => handlePagoDevolucion(subsidio)}
+                                  >
+                                    Pagar devolución
+                                  </button>
+                                </MenuItem>
+                              </>
+                            ) : (
+                              <>
+                                {subsidio.socio.cedulaSocio !== miembro.responseBody.socio.cedulaSocio && (
+                                  <MenuItem>
+                                    <button
+                                      className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                                      onClick={() => handleArchivar(subsidio)}
+                                    >
+                                      Archivar
+                                    </button>
+                                  </MenuItem>
+                                )}
+                                <MenuItem>
+                                  <button
+                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                                    onClick={() => handleModificarSubsidio(subsidio)}
+                                  >
+                                    Modificar
+                                  </button>
+                                </MenuItem>
+                                <MenuItem>
+                                  <button
+                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
+                                    onClick={() => handleCrearRecibo(subsidio)}
+                                  >
+                                    Crear Recibo
+                                  </button>
+                                </MenuItem>
+                              </>
+                            )}
+                          </MenuItems>
+                        </Menu>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
-
-          {isModalOpen && (
-            <VerSubsidio
-              isOpen={isModalOpen}
-              onClose={() => setIsModalOpen(false)}
-              subsidio={subsidioSeleccionado}
-            />
-          )}
         </>
+      )}
+      {isModalOpen && (
+        <VerSubsidio
+          subsidio={subsidioSeleccionado}
+          setIsOpen={setIsModalOpen}
+        />
       )}
     </div>
   );

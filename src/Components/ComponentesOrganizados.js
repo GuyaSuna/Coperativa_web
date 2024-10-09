@@ -31,7 +31,7 @@ import AltaCooperativa from "./Formularios/Cooperativas/AltaCooperativa/AltaCoop
 import ModificarCooperativa from "./Formularios/Cooperativas/ModificarCooperativa/ModificarCooperativa";
 import AltaAdministrador from "./Formularios/Administradores/AltaAdministrador/altaAdministrador";
 import AltaReajuste from "./Formularios/Reajustes/AltaReajustes/AltaReajustes";
-import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchivados";
+import BalanceAnual from "./Formularios/BalanceAnual/balanceAnual";
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
@@ -40,7 +40,7 @@ import PagoDevolucionCapitalForm from "./Formularios/PagoDevolucionCapital/PagoD
 import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
 import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
 import ListadoInteresAnual from "./Listados/ListadoInteresAnual/listadoInteresAnual";
-
+import ListadoBalanceAnual from "./Listados/ListadoBalanceAnual/listadoBalanceAnual";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -94,7 +94,7 @@ const ComponentesOrganizados = ({
       );
     }
     case 4: {
-      return <ModificarSocio cedulaSocioParam={cedulaSocio} />;
+      return <ModificarSocio socio={socio} />;
     }
     case 5: {
       return <ModificarVivienda nroViviendaParam={nroVivienda} />;
@@ -262,7 +262,11 @@ const ComponentesOrganizados = ({
         <AltaReajuste ur={ur} setIdentificadorComponente={setIdentificadorComponente} />
       );
     }
-// Case 32 Libre
+    case 32: {
+      return (
+        <BalanceAnual setIdentificadorComponente={setIdentificadorComponente} />
+      );
+    }
     case 33: {
       return (
         <AltaEstadoContable
@@ -318,6 +322,13 @@ const ComponentesOrganizados = ({
     case 41: {
       return (
         <ListadoInteresAnual
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 42: {
+      return (
+        <ListadoBalanceAnual
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

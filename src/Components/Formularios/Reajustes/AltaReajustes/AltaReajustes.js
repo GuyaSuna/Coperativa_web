@@ -24,13 +24,16 @@ const AltaReajuste = ({ ur , setIdentificadorComponente }) => {
 
   const fetchReajuste = async () => {
     const response = await getUltimoReajuste();
-    if(response != null){
-      setCuotaMensualDosHabitacionesEnPesos(response.cuotaMensualDosHabitacionesEnPesos.toFixed(2))
-      setCuotaMensualTresHabitacionesEnPesos(response.cuotaMensualTresHabitacionesEnPesos.toFixed(2))
+    if (response) {
+      setCuotaMensualDosHabitacionesEnPesos(response.cuotaMensualDosHabitacionesEnPesos.toFixed(2));
+      setCuotaMensualTresHabitacionesEnPesos(response.cuotaMensualTresHabitacionesEnPesos.toFixed(2));
+    } else {
+      setCuotaMensualDosHabitacionesEnPesos("");
+      setCuotaMensualTresHabitacionesEnPesos("");
     }
     setValorUr(ur);
-
   };
+  
 
   const validarFormulario = () => {
     const errores = {};

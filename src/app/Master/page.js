@@ -22,6 +22,7 @@ const Master = () => {
 
       if (response && response.token) {
         console.log("Token recibido en el frontend:", response.token);
+        console.log("Prueba para ver el admin" , response)
         loginMiembro(response,null);
         login(response.token); // Continuar con el proceso de login
         router.push("/MasterHome");

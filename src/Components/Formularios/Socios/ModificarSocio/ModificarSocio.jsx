@@ -3,66 +3,19 @@
 import React, { useState, useEffect } from "react";
 import { getSocio, updateSocio } from "../../../../Api/api";
 
-const ModificarSocio = ({ cedulaSocioParam }) => {
-  console.log(" Es Esto: ");
-  console.log(cedulaSocioParam);
-  const [cedulaSocio, setCedulaSocio] = useState("");
-  const [nroSocio, setNroSocio] = useState("");
-  const [nombreSocio, setNombreSocio] = useState("");
-  const [apellidoSocio, setApellidoSocio] = useState("");
-  const [capitalSocio, setCapitalSocio] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [fechaIngreso, setFechaIngreso] = useState("");
-  const [fechaIngresoCooperativa, setFechaIngresoCooperativa] = useState("");
-  const [suplente, setSuplente] = useState(null);
+const ModificarSocio = ({ socio }) => {
+  console.log("SocioModificar" , socio)
+  const [cedulaSocio, setCedulaSocio] = useState(socio?.cedulaSocio);
+  const [nroSocio, setNroSocio] = useState(socio?.nroSocio );
+  const [nombreSocio, setNombreSocio] = useState(socio?.nombreSocio);
+  const [apellidoSocio, setApellidoSocio] = useState(socio?.apellidoSocio);
+  const [capitalSocio, setCapitalSocio] = useState(socio?.capitalSocio.toFixed(2) );
+  const [telefono, setTelefono] = useState(socio?.telefono );
+  const [fechaIngreso, setFechaIngreso] = useState(socio?.fechaIngreso );
+  const [fechaIngresoCooperativa, setFechaIngresoCooperativa] = useState(socio?.fechaIngresoCooeprativa );
+  const [suplente, setSuplente] = useState(socio?.suplente || null);
   const [errores, setErrores] = useState({});
 
-  useEffect(() => {
-    setCedulaSocio(cedulaSocioParam);
-  }, []);
-
-  useEffect(() => {
-    const fetchSocio = async () => {
-      try {
-        const data = await getSocio(cedulaSocio);
-        if (data) {
-          // Procesa y establece las fechas
-          const ingreso = data.fechaIngreso
-            ? new Date(data.fechaIngreso).toISOString().split("T")[0]
-            : "";
-          console.log(
-            "Fecha Ingreso Cooperativa recibida:",
-            data.fechaIngresoCooperativa
-          );
-          const ingresoCooperativa = data.fechaIngresoCooperativa
-            ? new Date(data.fechaIngresoCooperativa).toISOString().split("T")[0]
-            : "";
-          console.log(
-            "Fecha Ingreso Cooperativa formateada:",
-            ingresoCooperativa
-          );
-          setFechaIngresoCooperativa(ingresoCooperativa);
-
-          setFechaIngresoCooperativa(ingresoCooperativa);
-          setFechaIngreso(ingreso);
-
-          setNroSocio(data.nroSocio || "");
-          setNombreSocio(data.nombreSocio || "");
-          setApellidoSocio(data.apellidoSocio || "");
-          setCapitalSocio(data.capitalSocio || "");
-          setTelefono(data.telefono || "");
-          setSuplente(data.suplenteEntity);
-        }
-        console.log(data);
-      } catch (error) {
-        console.error(`An error has occurred in fetchSocio: ${error.message}`);
-      }
-    };
-
-    if (cedulaSocio) {
-      fetchSocio();
-    }
-  }, [cedulaSocio]);
   const validarFormulario = () => {
     const errores = {};
 
@@ -75,19 +28,18 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
     if (!fechaIngreso)
       errores.fechaIngreso = "La fecha de ingreso es obligatoria";
     if (!fechaIngresoCooperativa)
-      errores.fechaIngresoCooperativa =
-        "La fecha de ingreso a la cooperativa es obligatoria";
-    setErrores(errores);
+      errores.fechaIngresoCooperativa = "La fecha de ingreso a la cooperativa es obligatoria";
 
+    setErrores(errores);
     return Object.keys(errores).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log(fechaIngreso);
     if (!validarFormulario()) return;
-    let socioUpdate = {
+
+    const socioUpdate = {
       cedulaSocio,
       nroSocio,
       nombreSocio,
@@ -98,26 +50,12 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
       fechaIngresoCooperativa,
       suplenteEntity: suplente,
     };
+
     try {
       const result = await updateSocio(socioUpdate);
-
       console.log("Socio actualizado:", result);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
-    }
-  };
-
-  const handleDelete = async () => {
-    const confirmDelete = confirm(
-      "¿Estás seguro de que quieres eliminar este socio?"
-    );
-    if (confirmDelete) {
-      try {
-        await deleteSocio(cedulaSocio);
-        alert("Socio eliminado con éxito");
-      } catch (error) {
-        console.error(`An error has occurred in deleteSocio: ${error.message}`);
-      }
     }
   };
 
@@ -134,7 +72,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="text"
                 name="nroSocio"
-                value={nroSocio || ""}
+                value={nroSocio}
                 onChange={(e) => setNroSocio(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -149,7 +87,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="text"
                 name="nombreSocio"
-                value={nombreSocio || ""}
+                value={nombreSocio}
                 onChange={(e) => setNombreSocio(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -166,7 +104,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="text"
                 name="apellidoSocio"
-                value={apellidoSocio || ""}
+                value={apellidoSocio}
                 onChange={(e) => setApellidoSocio(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -181,7 +119,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="text"
                 name="cedulaSocio"
-                value={cedulaSocio || ""}
+                value={cedulaSocio}
                 onChange={(e) => setCedulaSocio(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -198,7 +136,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="text"
                 name="telefonoSocio"
-                value={telefono || ""}
+                value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -213,7 +151,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="text"
                 name="capitalSocio"
-                value={capitalSocio || ""}
+                value={capitalSocio}
                 onChange={(e) => setCapitalSocio(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -230,7 +168,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="date"
                 name="fechaIngreso"
-                value={fechaIngreso || ""}
+                value={fechaIngreso}
                 onChange={(e) => setFechaIngreso(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
@@ -245,7 +183,7 @@ const ModificarSocio = ({ cedulaSocioParam }) => {
               <input
                 type="date"
                 name="fechaIngresoCooperativa"
-                value={fechaIngresoCooperativa || ""}
+                value={fechaIngresoCooperativa}
                 onChange={(e) => setFechaIngresoCooperativa(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
               />
