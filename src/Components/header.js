@@ -24,6 +24,7 @@ import {
   FaHouseUser,
 } from "react-icons/fa";
 import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const Header = ({ setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -66,8 +67,9 @@ const Header = ({ setIdentificadorComponente }) => {
     setOpenSecondDropdown(!openSecondDropdown); // Alterna el estado del segundo dropdown
   };
 
+  const initial = miembroUsername.charAt(0).toUpperCase();
   return (
-    <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
+    <header className="h-16 flex justify-between w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
       <div className="flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <button
           className="lg:hidden text-white focus:outline-none"
@@ -133,7 +135,8 @@ const Header = ({ setIdentificadorComponente }) => {
                   <span
                     className="transform transition-transform duration-200 text-1xl"
                     style={{
-                      transform: openDropdown === 1 ? "rotate(180deg)" : "rotate(0)",
+                      transform:
+                        openDropdown === 1 ? "rotate(180deg)" : "rotate(0)",
                     }}
                   >
                     ▼
@@ -260,6 +263,58 @@ const Header = ({ setIdentificadorComponente }) => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
+        <Menu
+          as="div"
+          className="relative inline-block text-left justify-end mx-4 my-2"
+        >
+          <div>
+            <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:text-gray-300 text-gray-900 shadow-sm border dark:border-gray-600 border-gray-200">
+              <span className="relative flex-shrink-0 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                {initial} {/* Muestra la inicial del nombre */}
+              </span>
+              <span className="ml-2 md:text-xs  text-dark dark:text-white self-center">
+                {miembroUsername}
+              </span>
+              <svg
+                viewBox="0 0 24 24"
+                className="w-4 ml-1 flex-shrink-0"
+                stroke="currentColor"
+                strokeWidth={2}
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </MenuButton>
+          </div>
+          <MenuItems
+            transition
+            className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+          >
+            <div className="py-1">
+              <MenuItem>
+                <button
+                  onClick={() => handleModificar(socios.cedulaSocio)}
+                  className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                >
+                  Modificar
+                </button>
+              </MenuItem>
+              <MenuItem>
+                <button
+                  onClick={handlePressCerrarSesion}
+                  className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                >
+                  Cerrar Sesion
+                </button>
+              </MenuItem>
+            </div>
+          </MenuItems>
+        </Menu>
+        <ThemeToggle />
       </div>
     </header>
   );

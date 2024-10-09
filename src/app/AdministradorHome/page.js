@@ -31,21 +31,19 @@ const AdminHome = () => {
     if (!miembro || !cooperativa || !fetchToken()) {
       console.log("Esperando a que los datos estén disponibles...");
     } else {
-      
       console.log("Datos del Provider cargados correctamente.");
       setIsLoading(false);
     }
-
   }, [miembro, cooperativa]);
 
   const fetchToken = async () => {
     const token = getToken();
-    if(token == null){
+    if (token == null) {
       return false;
-    }else{
+    } else {
       return true;
     }
-  }
+  };
   useEffect(() => {
     fetchUr();
   }, []);
@@ -58,8 +56,18 @@ const AdminHome = () => {
       const fechaActual = new Date();
       let mesActual = fechaActual.getMonth();
       const meses = [
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre",
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Setiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
       ];
       let mesActualNombre = meses[mesActual];
       let urEncontrado = false;
@@ -124,7 +132,7 @@ const AdminHome = () => {
                         alt="profile"
                       />
                       <a className="text-sm sm:text-base md:text-lg lg:text-xl">
-                        {cooperativa?.nombre} - {miembro?.email}
+                        {cooperativa?.nombre}
                       </a>
                     </div>
                   </div>
@@ -170,17 +178,17 @@ const AdminHome = () => {
           <Footer className="mt-auto" />
         </div>
       ) : (
-<div className="flex flex-col items-center justify-center min-h-screen">
-  <Cargando />
-  <div className="flex justify-center mt-6">
-    <button
-      onClick={() => router.push("/")}
-      className="bg-red-500 text-white font-bold uppercase text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105"
-    >
-      Volver al inicio
-    </button>
-  </div>
-</div>
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <Cargando />
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => router.push("/")}
+              className="bg-red-500 text-white font-bold uppercase text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105"
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
