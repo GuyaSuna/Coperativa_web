@@ -46,7 +46,7 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
         return;
       }
       
-      montoEgreso = montoPago * ur;
+      let montoEgreso = montoPago * ur;
   
       const egreso = {
         subRubro: "Devolución de Capital",

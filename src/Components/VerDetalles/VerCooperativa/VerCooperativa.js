@@ -1,9 +1,25 @@
-"use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getUltimoReajuste } from "@/Api/api";
 
 const VerCooperativa = ({ isOpen, onClose, cooperativa }) => {
   const [isSociosExpanded, setIsSociosExpanded] = useState(false);
+  const [ultimoReajuste, setUltimoReajuste] = useState(null);
+
+  useEffect(() => {
+    const fetchUltimoReajuste = async () => {
+      try {
+        const reajuste = await getUltimoReajuste(cooperativa.idCooperativa);
+        console.log("REAJUSTE",reajuste)
+        setUltimoReajuste(reajuste);
+      } catch (error) {
+        console.error("Error al obtener el último reajuste:", error);
+      }
+    };
+
+    if (cooperativa.idCooperativa) {
+      fetchUltimoReajuste();
+    }
+  }, [cooperativa.idCooperativa]);
 
   if (!isOpen) return null;
 
@@ -76,12 +92,26 @@ const VerCooperativa = ({ isOpen, onClose, cooperativa }) => {
                   </td>
                   <td className="py-1 px-3">{cooperativa.cuposLibre}</td>
                 </tr>
-                {/* Información del Administrador */}
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Administrador:
                   </td>
-                  <td className="py-1 px-3">{cooperativa.tesorero?.firstname} {cooperativa.tesorero?.lastname}</td>
+                  <td className="py-1 px-3">
+                    {cooperativa.tesorero?.firstname}{" "}
+                    {cooperativa.tesorero?.lastname}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                    Último Reajuste:
+                  </td>
+                  <td className="py-1 px-3">
+                    {ultimoReajuste ? (
+                      <span>{ultimoReajuste.fechaReajuste}</span>
+                    ) : (
+                      <span>No ha realizado reajustes</span>
+                    )}
+                  </td>
                 </tr>
                 <tr>
                   <td
@@ -94,24 +124,40 @@ const VerCooperativa = ({ isOpen, onClose, cooperativa }) => {
                       : "► Lista de Socios"}
                   </td>
                 </tr>
-                {isSociosExpanded ? (
-                  cooperativa.listaSocios && cooperativa.listaSocios.length > 0 ? (
-                    cooperativa.listaSocios.map((socio, index) => (
-                      <tr key={index}>
-                        <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
-                          {socio.nombreSocio} {socio.apellidoSocio}
-                        </td>
-                        <td className="py-1 px-3">{socio.cedulaSocio}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="2" className="py-1 px-3 text-center">
-                        No tiene socios.
-                      </td>
-                    </tr>
-                  )
-                ) : null}
+                {isSociosExpanded && (
+                  <tr>
+                    <td colSpan="2">
+                      <div className="max-h-40 overflow-y-auto">
+                        <table className="w-full text-left">
+                          <tbody className="text-gray-600 dark:text-gray-100">
+                            {cooperativa.listaSocios &&
+                            cooperativa.listaSocios.length > 0 ? (
+                              cooperativa.listaSocios.map((socio, index) => (
+                                <tr key={index}>
+                                  <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                                    {socio.nombreSocio} {socio.apellidoSocio}
+                                  </td>
+                                  <td className="py-1 px-3">
+                                    {socio.cedulaSocio}
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr>
+                                <td
+                                  colSpan="2"
+                                  className="py-1 px-3 text-center"
+                                >
+                                  No tiene socios.
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

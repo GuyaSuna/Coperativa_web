@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useContext, useEffect } from "react";
 import "./livingPlaceStyle.css";
 import { useRouter } from "next/navigation";
@@ -15,61 +13,70 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [Errores, setErrores] = useState();
   const [mostrarModal, setMostrarModal] = useState(false);
-
-  const handleChangeCantidadDormitorios = (e) => {
-    setCantidadDormitorios(e.target.value);
-    console.log(e.target.value);
-  };
+  const [viviendasExistentes, setViviendasExistentes] = useState([]);
 
   useEffect(() => {
     validarCupos();
+    cargarViviendas();
   }, []);
+
+  // Cargar todas las viviendas existentes
+  const cargarViviendas = async () => {
+    const ViviendaResponse = await getAllViviendas(cooperativa.idCooperativa);
+    setViviendasExistentes(ViviendaResponse);
+  };
 
   const validarFormulario = () => {
     const errores = {};
+
+    // Validar número de vivienda
     if (!NroVivienda) {
       errores.nroVivienda = "El número de vivienda es obligatorio";
     } else if (isNaN(NroVivienda)) {
       errores.nroVivienda = "El número de vivienda debe ser un número válido";
+    } else if (viviendasExistentes.some(v => v.nroVivienda == NroVivienda)) {
+      errores.nroVivienda = "Ya existe una vivienda con ese número";
     }
 
+    // Validar cantidad de dormitorios
     if (!CantidadDormitorios) {
       errores.cantidadDormitorios = "La cantidad de dormitorios es obligatoria";
     } else if (isNaN(CantidadDormitorios)) {
       errores.cantidadDormitorios =
         "La cantidad de dormitorios debe ser un número válido";
+    } else if (![2, 3].includes(Number(CantidadDormitorios))) {
+      errores.cantidadDormitorios =
+        "La cantidad de dormitorios debe ser 2 o 3";
     }
 
     setErrores(errores);
-
     return Object.keys(errores).length === 0;
   };
 
   const handleChangeNroVivienda = (e) => {
     setNroVivienda(e.target.value);
-    console.log(e.target.value);
+  };
+
+  const handleChangeCantidadDormitorios = (e) => {
+    setCantidadDormitorios(e.target.value);
   };
 
   const validarCupos = async () => {
     const ViviendaResponse = await getAllViviendas(cooperativa.idCooperativa);
-    console.log("Cantidad viviendas", ViviendaResponse.length);
     if (ViviendaResponse.length >= cooperativa.cuposLibre) {
-      console.log("Seteo false");
       setIsOpen(false);
     }
-    return;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validarFormulario()) return;
-
     setMostrarModal(true);
   };
 
   const handleConfirmacion = async (e) => {
-    setMostrarModal(false);
     e.preventDefault();
+    setMostrarModal(false);
     if (!validarFormulario()) return;
     if (!isOpen) {
       alert("No quedan cupos libres en la cooperativa");
@@ -79,11 +86,8 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
       nroVivienda: NroVivienda,
       cantidadDormitorios: CantidadDormitorios,
     };
-    console.log(data);
-
-    const response = await postVivienda(data, cooperativa.idCooperativa);
+    await postVivienda(data, cooperativa.idCooperativa);
     setIdentificadorComponente(1);
-    console.log(response);
   };
 
   return (
@@ -153,4 +157,5 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
     </div>
   );
 };
+
 export default AltaVivienda;

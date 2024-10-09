@@ -54,6 +54,11 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     loginMiembro(null, cooperativa);
   };
 
+  const handleListadoViviendas = (cooperativa) => {
+    loginMiembro(null, cooperativa);
+    setIdentificadorComponente(1);
+  };
+
   const handleCapitalInteres = (cooperativa) => {
     setCooperativa(cooperativa);
     setIdentificadorComponente(14);
@@ -220,6 +225,14 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                         >
                           Ver Usuarios
+                        </button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button
+                          onClick={() => handleListadoViviendas(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Ver Viviendas
                         </button>
                       </MenuItem>
                       <MenuItem>

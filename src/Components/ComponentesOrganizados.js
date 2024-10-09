@@ -35,8 +35,8 @@ import ListadoSociosArchivados from "./Listados/ListadoSocios/ListadoSociosArchi
 import AltaEstadoContable from "./Formularios/EstadosContables/AltaEstadoContable";
 import InteresAnual from "./Informes/InteresAnual";
 import ListadoEstadoContables from "./Listados/ListadoEstadosContables/ListadoEstadosContables";
-import DevolucionCapital from "./Formularios/Socios/DevolucionCapital/DevolucionCapital";
-import PagoDevolucionCapitalForm from "./Formularios/Socios/ModificarSocio/PagoDevolucionCapital";
+import DevolucionCapital from "./Formularios/DevolucionCapital/DevolucionCapital";
+import PagoDevolucionCapitalForm from "./Formularios/PagoDevolucionCapital/PagoDevolucionCapital";
 import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
 import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
 import ListadoInteresAnual from "./Listados/ListadoInteresAnual/listadoInteresAnual";

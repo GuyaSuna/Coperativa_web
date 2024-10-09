@@ -12,6 +12,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
   const [email, setEmail] = useState("");
   const [tipoAdministrador, setTipoAdministrador] = useState("ADMIN");
   const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState(""); // Estado para manejar errores
 
   const router = useRouter();
 
@@ -19,21 +20,52 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
     const fetchSociosData = async () => {
       try {
         const response = await getAllSocios(cooperativa.idCooperativa);
-        setSocios(response);
+        // Filtrar socios archivados
+        const activeSocios = response.filter(socio => !socio.archivado);
+        setSocios(activeSocios);
       } catch (error) {
         console.error("Error al cargar los socios:", error);
       }
     };
 
     fetchSociosData();
-  }, []);
+  }, [cooperativa.idCooperativa]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validaciones
+    if (!selectedSocio || !nombreMiembro || !contraseña || !email) {
+      setError("Por favor, completa todos los campos requeridos.");
+      return;
+    }
+
+    // Validar que el nombre de usuario no contenga números
+    const hasNumbers = /\d/;
+    if (hasNumbers.test(nombreMiembro)) {
+      setError("El nombre de usuario no puede contener números.");
+      return;
+    }
+
+    // Validar formato del email
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setError("Por favor, introduce un email válido.");
+      return;
+    }
+
+    // Reiniciar el mensaje de error
+    setError("");
+
     let SocioEncontrado = socios.find(
-      (socio) => (socio.cedulaSocio = selectedSocio)
+      (socio) => socio.cedulaSocio == selectedSocio
     );
-    console.log("Socio encontrado", SocioEncontrado);
+    
+    if (!SocioEncontrado) {
+      setError("Socio no encontrado.");
+      return;
+    }
+
     const data = {
       firstname: SocioEncontrado.nombreSocio,
       lastname: SocioEncontrado.apellidoSocio,
@@ -44,7 +76,6 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
     };
 
     try {
-      console.log("ANTES DE API", cooperativa.idCooperativa);
       const response = await register(
         data,
         SocioEncontrado.cedulaSocio,
@@ -53,6 +84,11 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
       console.log(response);
       setMensaje("Administrador creado con éxito");
       setIdentificadorComponente(27);
+      // Resetear los campos del formulario si es necesario
+      setSelectedSocio("");
+      setNombreMiembro("");
+      setContraseña("");
+      setEmail("");
     } catch (error) {
       console.error("Error al crear el administrador:", error);
       setMensaje("Error al crear el administrador");
@@ -86,10 +122,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="nombreMiembro"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="nombreMiembro">
             Nombre de Usuario:
           </label>
           <input
@@ -103,10 +136,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="contraseña"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="contraseña">
             Contraseña:
           </label>
           <input
@@ -134,10 +164,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
         </div>
 
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="tipoAdministrador"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="tipoAdministrador">
             Tipo de Administrador:
           </label>
           <select
@@ -159,6 +186,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
           Crear Administrador
         </button>
         {mensaje && <p className="mt-4 text-red-600">{mensaje}</p>}
+        {error && <p className="mt-4 text-red-600">{error}</p>} {/* Mensaje de error */}
       </form>
     </div>
   );

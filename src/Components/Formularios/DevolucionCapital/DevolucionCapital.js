@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { postDevolucionCapital } from "../../../../Api/api.js";
+import { postDevolucionCapital } from "@/Api/api";
 
 const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
   const [capitalDescuento, setCapitalDescuento] = useState(0);

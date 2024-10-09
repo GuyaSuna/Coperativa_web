@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
@@ -8,7 +8,7 @@ import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
 import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { Menu } from "@headlessui/react"; // Importar Menu de Headless UI
 import Cargando from "@/Components/Cargando";
 import Sidebar from "@/Components/Sidebar";
 import { getToken } from "@/Api/getToken";
@@ -19,33 +19,26 @@ const AdminHome = () => {
   const [ur, setUr] = useState(0);
   const [identificadorComponente, setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
-    setSelectedOption(option);
   };
 
   useEffect(() => {
     if (!miembro || !cooperativa || !fetchToken()) {
       console.log("Esperando a que los datos estén disponibles...");
     } else {
-      
       console.log("Datos del Provider cargados correctamente.");
       setIsLoading(false);
     }
-
   }, [miembro, cooperativa]);
 
   const fetchToken = async () => {
     const token = getToken();
-    if(token == null){
-      return false;
-    }else{
-      return true;
-    }
-  }
+    return token !== null;
+  };
+
   useEffect(() => {
     fetchUr();
   }, []);
@@ -54,7 +47,6 @@ const AdminHome = () => {
     try {
       const response = await getUr();
       console.log("RESPUESTA FRONT", response);
-
       const fechaActual = new Date();
       let mesActual = fechaActual.getMonth();
       const meses = [
@@ -128,35 +120,71 @@ const AdminHome = () => {
                       </a>
                     </div>
                   </div>
-                  <div className="w-full flex flex-wrap items-center justify-center md:justify-start space-x-3 md:space-x-6 mt-4 sm:mt-7">
-                    {[
-                      { label: "Socios", id: 0 },
-                      { label: "Viviendas", id: 1 },
-                      { label: "Recibos", id: 11 },
-                      { label: "Suplentes", id: 9 },
-                      { label: "Usuarios", id: 12 },
-                      { label: "Subsidios", id: 17 },
-                      { label: "Convenios", id: 26 },
-                      { label: "Estados Contables", id: 35 },
-                      { label: "Interes Anual", id: 41 },
-                    ].map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => {
-                          setIdentificadorComponente(item.id);
-                          handleSelection(item.id);
-                        }}
-                        className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
-                          selectedOption === item.id
-                            ? "border-b-2 border-blue-500 text-blue-500"
-                            : ""
-                        }`}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
+
+                  <div className="flex space-x-4 mt-4 sm:mt-7">
+                    {/* Primer Dropdown Menu */}
+                    <Menu as="div" className="relative">
+                      <Menu.Button className="bg-blue-500 text-white rounded-md px-4 py-2">
+                        Primer Menú
+                      </Menu.Button>
+                      <Menu.Items className="absolute left-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg">
+                        {[
+                          { label: "Socios", id: 0 },
+                          { label: "Viviendas", id: 1 },
+                          { label: "Recibos", id: 11 },
+                          { label: "Suplentes", id: 9 },
+                        ].map((item) => (
+                          <Menu.Item key={item.id}>
+                            {({ active }) => (
+                              <button
+                                onClick={() => {
+                                  handleSelection(item.id);
+                                }}
+                                className={`${
+                                  active ? "bg-blue-500 text-white" : "text-gray-900"
+                                } block w-full text-left px-4 py-2`}
+                              >
+                                {item.label}
+                              </button>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </Menu.Items>
+                    </Menu>
+
+                    {/* Segundo Dropdown Menu */}
+                    <Menu as="div" className="relative">
+                      <Menu.Button className="bg-blue-500 text-white rounded-md px-4 py-2">
+                        Segundo Menú
+                      </Menu.Button>
+                      <Menu.Items className="absolute left-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg">
+                        {[
+                          { label: "Usuarios", id: 12 },
+                          { label: "Subsidios", id: 17 },
+                          { label: "Convenios", id: 26 },
+                          { label: "Estados Contables", id: 35 },
+                          { label: "Interes Anual", id: 41 },
+                        ].map((item) => (
+                          <Menu.Item key={item.id}>
+                            {({ active }) => (
+                              <button
+                                onClick={() => {
+                                  handleSelection(item.id);
+                                }}
+                                className={`${
+                                  active ? "bg-blue-500 text-white" : "text-gray-900"
+                                } block w-full text-left px-4 py-2`}
+                              >
+                                {item.label}
+                              </button>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </Menu.Items>
+                    </Menu>
                   </div>
                 </div>
+
                 <ComponentesOrganizados
                   identificador={identificadorComponente}
                   setCedulaSocio={setCedulaSocio}
@@ -170,17 +198,17 @@ const AdminHome = () => {
           <Footer className="mt-auto" />
         </div>
       ) : (
-<div className="flex flex-col items-center justify-center min-h-screen">
-  <Cargando />
-  <div className="flex justify-center mt-6">
-    <button
-      onClick={() => router.push("/")}
-      className="bg-red-500 text-white font-bold uppercase text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105"
-    >
-      Volver al inicio
-    </button>
-  </div>
-</div>
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <Cargando />
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={() => router.push("/")}
+              className="bg-red-500 text-white font-bold uppercase text-lg px-6 py-3 rounded-lg shadow-lg hover:bg-red-600 hover:shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105"
+            >
+              Volver al inicio
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
