@@ -85,8 +85,11 @@ const ListadoViviendas = ({
       label: "Nombre Socio",
       key: "nombreSocio",
       icon: <SortIcon />,
-      comparator: (a, b) =>
-        a.socio.nombreSocio.localeCompare(b.socio.nombreSocio),
+      comparator: (a, b) => {
+        const nombreA = a.socio?.nombreSocio || "";
+        const nombreB = b.socio?.nombreSocio || "";
+        return nombreA.localeCompare(nombreB);
+      },
     },
 
     {

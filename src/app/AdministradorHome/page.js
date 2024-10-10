@@ -50,8 +50,18 @@ const AdminHome = () => {
       const fechaActual = new Date();
       let mesActual = fechaActual.getMonth();
       const meses = [
-        "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-        "Julio", "Agosto", "Setiembre", "Octubre", "Noviembre", "Diciembre",
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Setiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
       ];
       let mesActualNombre = meses[mesActual];
       let urEncontrado = false;
@@ -116,45 +126,39 @@ const AdminHome = () => {
                         alt="profile"
                       />
                       <a className="text-sm sm:text-base md:text-lg lg:text-xl">
-                        {cooperativa?.nombre} - {miembro?.email}
+                        {cooperativa?.nombre}
                       </a>
                     </div>
                   </div>
-
-                  <div className="flex space-x-4 mt-4 sm:mt-7">
-                    <Menu as="div" className="relative">
-                      <Menu.Items className="absolute left-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg">
-                        {[
-                          { label: "Socios", id: 0 },
-                          { label: "Viviendas", id: 1 },
-                          { label: "Recibos", id: 11 },
-                          { label: "Suplentes", id: 9 },
-                          { label: "Usuarios", id: 12 },
-                          { label: "Subsidios", id: 17 },
-                          { label: "Convenios", id: 26 },
-                          { label: "Estados Contables", id: 35 },
-                          { label: "Interes Anual", id: 41 },
-                        ].map((item) => (
-                          <Menu.Item key={item.id}>
-                            {({ active }) => (
-                              <button
-                                onClick={() => {
-                                  handleSelection(item.id);
-                                }}
-                                className={`${
-                                  active ? "bg-blue-500 text-white" : "text-gray-900"
-                                } block w-full text-left px-4 py-2`}
-                              >
-                                {item.label}
-                              </button>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Menu>               
+                  <div className="w-full flex flex-wrap items-center justify-center md:justify-start space-x-3 md:space-x-6 mt-4 sm:mt-7">
+                    {[
+                      { label: "Socios", id: 0 },
+                      { label: "Viviendas", id: 1 },
+                      { label: "Recibos", id: 11 },
+                      { label: "Suplentes", id: 9 },
+                      { label: "Usuarios", id: 12 },
+                      { label: "Subsidios", id: 17 },
+                      { label: "Convenios", id: 26 },
+                      { label: "Estados Contables", id: 35 },
+                      { label: "Interes Anual", id: 41 },
+                    ].map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setIdentificadorComponente(item.id);
+                          handleSelection(item.id);
+                        }}
+                        className={`cursor-pointer h-full hover:border-b-2 hover:border-blue-500 hover:text-blue-500 dark:text-white text-black border-white inline-flex items-center ${
+                          selectedOption === item.id
+                            ? "border-b-2 border-blue-500 text-blue-500"
+                            : ""
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
-
                 <ComponentesOrganizados
                   identificador={identificadorComponente}
                   setCedulaSocio={setCedulaSocio}
@@ -185,3 +189,5 @@ const AdminHome = () => {
 };
 
 export default AdminHome;
+
+
