@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { deleteRecibo, getAllRecibos } from "../../../../Api/api";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
-import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
@@ -27,9 +27,11 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     try {
       const response = await getAllRecibos(miembro.responseBody.id);
       // Filtra los recibos para excluir aquellos cuyos socios están archivados
-      const recibosActivos = response.filter(recibo => !recibo.socio.archived);
+      const recibosActivos = response.filter(
+        (recibo) => !recibo.socio.archived
+      );
       setAllRecibos(recibosActivos);
-      setBuscadorFiltrado(recibosActivos);  // Inicialmente muestra todos los recibos activos
+      setBuscadorFiltrado(recibosActivos); // Inicialmente muestra todos los recibos activos
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -149,29 +151,57 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr>
-              <th scope="col" className="px-4 py-3 text-center">Nro Recibo</th>
-              <th scope="col" className="px-4 py-3">Nombre Socio</th>
-              <th scope="col" className="px-4 py-3">Monto</th>
-              <th scope="col" className="px-4 py-3">Fecha de Recibo</th>
-              <th scope="col" className="px-4 py-3">Estado</th>
-              <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
+              <th scope="col" className="px-4 py-3 text-center">
+                Nro Recibo
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Nombre Socio
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Monto
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Fecha de Recibo
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Estado
+              </th>
+              <th scope="col" className="px-4 py-3">
+                <span className="sr-only">Actions</span>
+              </th>
             </tr>
           </thead>
           <tbody className="block md:table-row-group">
             {buscadorFiltrado?.map((recibo) => (
-              <tr className="border-b dark:border-gray-700 block md:table-row" key={recibo.nroRecibo}>
-                <th scope="row" className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell">
+              <tr
+                className="border-b dark:border-gray-700 block md:table-row"
+                key={recibo.nroRecibo}
+              >
+                <th
+                  scope="row"
+                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell"
+                >
                   {recibo.nroRecibo}
                 </th>
-                <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell">
+                <th
+                  scope="row"
+                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell"
+                >
                   {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
                 </th>
-                <td className="px-4 py-3 block md:table-cell">$ {recibo.cuotaMensual}</td>
-                <td className="px-4 py-3 block md:table-cell">{recibo.fechaRecibo}</td>
+                <td className="px-4 py-3 block md:table-cell">
+                  $ {recibo.cuotaMensual}
+                </td>
+                <td className="px-4 py-3 block md:table-cell">
+                  {recibo.fechaRecibo}
+                </td>
                 <td className="px-4 py-3 block md:table-cell">
                   <span
-                    className={`bg-gradient-to-br ${recibo.estaImpago ? "from-red-600 to-red-500" : "from-green-600 to-green-500"
-                      } text-white text-xs font-medium px-2.5 py-0.5 rounded-md`}
+                    className={`bg-gradient-to-br ${
+                      recibo.estaImpago
+                        ? "from-red-600 to-red-500"
+                        : "from-green-600 to-green-500"
+                    } text-white text-xs font-medium px-2.5 py-0.5 rounded-md`}
                   >
                     {recibo.estaImpago ? "Impago" : "Pago"}
                   </span>
@@ -187,13 +217,21 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
                     <MenuItems className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
                       <div className="py-1">
                         <MenuItem onClick={() => handleVerRecibo(recibo)}>
-                          <span className="text-gray-700 block px-4 py-2 text-sm">Ver Recibo</span>
+                          <span className="text-gray-700 block px-4 py-2 text-sm">
+                            Ver Recibo
+                          </span>
                         </MenuItem>
                         <MenuItem onClick={() => handleDescargarPDF(recibo)}>
-                          <span className="text-gray-700 block px-4 py-2 text-sm">Descargar PDF</span>
+                          <span className="text-gray-700 block px-4 py-2 text-sm">
+                            Descargar PDF
+                          </span>
                         </MenuItem>
-                        <MenuItem onClick={() => handleEliminar(recibo.nroRecibo)}>
-                          <span className="text-gray-700 block px-4 py-2 text-sm">Eliminar</span>
+                        <MenuItem
+                          onClick={() => handleEliminar(recibo.nroRecibo)}
+                        >
+                          <span className="text-gray-700 block px-4 py-2 text-sm">
+                            Eliminar
+                          </span>
                         </MenuItem>
                       </div>
                     </MenuItems>

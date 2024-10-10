@@ -57,7 +57,7 @@ const AltaIngreso = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validarFormulario()) {
-      setMostrarModal(true); 
+      setMostrarModal(true);
     }
   };
 
@@ -76,11 +76,6 @@ const AltaIngreso = () => {
 
     try {
       const response = await postIngreso(ingresoData);
-      if (response !=null) {
-        alert("El Ingreso fue agregado exitosamente");
-      } else {
-        alert("Error al agregar el Ingreso");
-      }
     } catch (error) {
       console.error("Error al enviar los datos del Ingreso:", error);
       alert("Error interno del servidor");

@@ -75,11 +75,7 @@ const AltaEgreso = () => {
 
     try {
       const response = await postEgreso(egresoData);
-      if (response.status != null) {
-        alert("Egreso agregado exitosamente");
-      } else {
-        alert("Error al agregar Egreso");
-      }
+      
     } catch (error) {
       console.error("Error al enviar los datos del egreso:", error);
       alert("Error interno del servidor");

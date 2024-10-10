@@ -8,6 +8,7 @@ import {
 } from "../../../Api/api";
 import { MiembroContext } from "../../../Provider/provider";
 import "../../Formularios/EstadosContables/StyleEstadoContable.css";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
@@ -23,7 +24,7 @@ const AltaEstadoContable = () => {
   const [listaEgresos, setListaEgresos] = useState([]);
   const [listaIngresos, setListaIngresos] = useState([]);
   const [errores, setErrores] = useState({});
-
+  const [mostrarModal, setMostrarModal] = useState(false);
   useEffect(() => {
     fetchDatos();
   }, [fecha]);
@@ -31,23 +32,27 @@ const AltaEstadoContable = () => {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFecha(today);
-  },[])
+  }, []);
   const fetchDatos = async () => {
     try {
-      if(fecha){
+      if (fecha) {
+        const egresos = await getAllEgresosByMes(
+          fecha,
+          cooperativa.idCooperativa
+        );
+        const ingresos = await getAllIngresosByMes(
+          fecha,
+          cooperativa.idCooperativa
+        );
 
-      
-      const egresos = await getAllEgresosByMes(fecha,cooperativa.idCooperativa);
-      const ingresos = await getAllIngresosByMes(fecha , cooperativa.idCooperativa);
+        console.log("Egresos", egresos);
+        console.log("Ingresos", ingresos);
 
-      console.log("Egresos", egresos);
-      console.log("Ingresos", ingresos);
+        setListaEgresos(egresos);
+        setListaIngresos(ingresos);
 
-      setListaEgresos(egresos);
-      setListaIngresos(ingresos);
-
-      calcularTotales(egresos, ingresos);
-    }
+        calcularTotales(egresos, ingresos);
+      }
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
@@ -83,14 +88,16 @@ const AltaEstadoContable = () => {
     setSaldoFinalPesos(sumaIngresosPesos - sumaEgresosPesos);
     setSaldoFinalDolares(sumaIngresosDolares - sumaEgresosDolares);
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const confirmacion = window.confirm(
-      `¿Está seguro de que quiere dar de alta un Estado Contable?`
-    );
-    if (!confirmacion) return;
+    if (!validarFormulario()) return;
+
+    setMostrarModal(true);
+  };
+  const handleConfirmacion = async (e) => {
+    e.preventDefault();
+    setMostrarModal(false);
 
     if (!validarFormulario()) return;
 
@@ -108,12 +115,10 @@ const AltaEstadoContable = () => {
         cooperativa.idCooperativa
       );
       console.log("ESTADO CONTABLE ", response);
-      alert("Estado contable agregado correctamente");
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
     }
   };
-
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
@@ -282,6 +287,13 @@ const AltaEstadoContable = () => {
         >
           Guardar Estado Contable
         </button>
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea dar de alta este socio?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );
