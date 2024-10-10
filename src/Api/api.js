@@ -1333,6 +1333,30 @@ const getReajuste = async (idReajuste) => {
   }
 };
 
+const getAllReajustes = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/reajuste/GetAll/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllReajuste:", error);
+    throw new Error("Error al obtener los datos de los reajustes");
+  }
+};
+
 const postReajuste = async (reajuste, idCooperativa) => {
   try {
     console.log("Pruebaaaa reajuste", reajuste);
@@ -2228,4 +2252,5 @@ export {
   postBalanceAnual,
   getBalanceAnual,
   getAllBalanceAnual,
+  getAllReajustes,
 };

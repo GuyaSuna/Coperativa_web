@@ -140,6 +140,7 @@ const AdminHome = () => {
                       { label: "Usuarios", id: 12 },
                       { label: "Subsidios", id: 17 },
                       { label: "Convenios", id: 26 },
+                      { label: "Reajustes", id: 44 },
                       { label: "Estados Contables", id: 35 },
                       { label: "Interes Anual", id: 41 },
                       { label: "Balance Anual", id: 42 },

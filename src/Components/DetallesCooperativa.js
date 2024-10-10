@@ -9,6 +9,10 @@ const DetallesCooperativa = () => {
     ? `${cooperativa.tesorero.firstname} ${cooperativa.tesorero.lastname}`
     : "No especificado";
 
+    const descargarDocumento = () => {
+      window.location.href = "/capital_interes.xls";
+    };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div className="w-full max-w-7xl bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full">
@@ -57,6 +61,16 @@ const DetallesCooperativa = () => {
               <span className="text-xl text-gray-700">{tesorero}</span>
             </div>
           </div>
+        </div>
+
+        {/* Botón de descarga */}
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={descargarDocumento}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Descargar Documento de Capital/Interés
+          </button>
         </div>
       </div>
     </div>
