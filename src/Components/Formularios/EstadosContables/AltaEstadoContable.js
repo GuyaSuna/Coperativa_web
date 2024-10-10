@@ -58,7 +58,7 @@ const AltaEstadoContable = () => {
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
     const sumaIngresosPesos = ingresos
-      .filter((ingreso) => ingreso.tipoMoneda === "UR")
+      .filter((ingreso) => ingreso.tipoMoneda === "UYU")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaIngresosDolares = ingresos
@@ -66,7 +66,7 @@ const AltaEstadoContable = () => {
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaEgresosPesos = egresos
-      .filter((egreso) => egreso.tipoMoneda === "UR")
+      .filter((egreso) => egreso.tipoMoneda === "UYU")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
     const sumaEgresosDolares = egresos
@@ -211,32 +211,32 @@ const AltaEstadoContable = () => {
 
           {/* Egresos en Pesos */}
           <div className="max-h-80 min-h-80">
-            <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
-            <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
-              <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
-                <span>Denom.</span>
-                <span>Egreso</span>
-                <span>Moneda</span>
-                <span>SubRubro</span>
-              </li>
-              {listaEgresos
-                .filter((egreso) => egreso.tipoMoneda === "UR")
-                .map((egreso) => (
-                  <li
-                    key={egreso.id}
-                    className="grid grid-cols-4 py-2 border-b dark:border-gray-700"
-                  >
-                    <span>{egreso.denominacion}</span>
-                    <span>{egreso.egreso}</span>
-                    <span>UY</span>
-                    <span>{egreso.subRubro}</span>
-                  </li>
-                ))}
-            </ul>
-            <h3 className="mt-4 text-gray-800 dark:text-gray-400">
-              Total Egresos en Pesos: {totalEgresosPesos}
-            </h3>
-          </div>
+  <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
+  <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
+    <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
+      <span className="whitespace-nowrap">Denom.</span>
+      <span className="whitespace-nowrap">Egreso</span>
+      <span className="whitespace-nowrap">Moneda</span>
+      <span className="whitespace-nowrap">SubRubro</span>
+    </li>
+    {listaEgresos
+      .filter((egreso) => egreso.tipoMoneda === "UYU")
+      .map((egreso) => (
+        <li
+          key={egreso.id}
+          className="grid grid-cols-4 py-2 border-b dark:border-gray-700"
+        >
+          <span className="truncate">{egreso.denominacion}</span>
+          <span className="truncate">{egreso.egreso}</span>
+          <span>UY</span>
+          <span className="truncate">{egreso.subRubro}</span>
+        </li>
+      ))}
+  </ul>
+  <h3 className="mt-4 text-gray-800 dark:text-gray-400">
+    Total Egresos en Pesos: {totalEgresosPesos}
+  </h3>
+</div>
 
           {/* Egresos en Dólares */}
           <div className="max-h-80 min-h-[20rem]">
