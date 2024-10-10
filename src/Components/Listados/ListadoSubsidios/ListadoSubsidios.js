@@ -113,7 +113,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
 
   const mostrarArchivados = () => {
     setShowArchived(!showArchived);
-    setBuscador(""); // Resetear el buscador al cambiar entre estados
+    setBuscador(""); 
   };
 
   return (
