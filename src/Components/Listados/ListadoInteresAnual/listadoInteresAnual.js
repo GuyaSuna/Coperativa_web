@@ -102,90 +102,114 @@ const ListadoInteresAnual = ({ setIdentificadorComponente }) => {
           />
         </div>
       </div>
-      <table className="w-full text-left">
-        <thead>
-          <tr className="text-gray-400">
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Año
-            </th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Cooperativa
-            </th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
-              Interés Anual{" "}
-            </th>
-            <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
-          </tr>
-        </thead>
-        <tbody className="text-gray-600 dark:text-gray-100">
-          {listaInteresAnual.map((interesAnual, index) => {
-            const totalInteresAnual = calcularInteresTotal(
-              interesAnual.listaInteresAnual
-            );
-            return (
-              <tr key={index}>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center ml-4">
-                    {interesAnual.anio}
-                  </div>
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center ml-4">
-                    {cooperativa.nombre}
-                  </div>
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  <div className="flex items-center">
-                    {totalInteresAnual.toFixed(2)}
-                  </div>
-                </td>
-                <td className="sm:p-3 py-2 px-1 border-b border-gray-200 dark:border-gray-800">
-                  <Menu
-                    as="div"
-                    className="relative inline-block text-left justify-end"
-                  >
-                    <div>
-                      <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
-                        <svg
-                          viewBox="0 0 24 24"
-                          className="w-5"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        >
-                          <circle cx={12} cy={12} r={1} />
-                          <circle cx={19} cy={12} r={1} />
-                          <circle cx={5} cy={12} r={1} />
-                        </svg>
-                      </MenuButton>
-                    </div>
 
-                    <MenuItems
-                      transition
-                      className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                    >
-                      <div className="py-1">
-                        <MenuItem>
-                          <button
-                            onClick={() =>
-                              console.log("Ver detalle:", interesAnual)
-                            }
-                            className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+      {/* Tabla responsiva que cambia a vista vertical en pantallas pequeñas */}
+      <div className="overflow-x-auto">
+        <table className="w-full text-left table-auto">
+          <thead className="hidden md:table-header-group">
+            <tr className="text-gray-400">
+              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                Año
+              </th>
+              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                Cooperativa
+              </th>
+              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+                Interés Anual
+              </th>
+              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
+            </tr>
+          </thead>
+          <tbody className="text-gray-600 dark:text-gray-100">
+            {listaInteresAnual.map((interesAnual, index) => {
+              const totalInteresAnual = calcularInteresTotal(
+                interesAnual.listaInteresAnual
+              );
+              return (
+                <tr
+                  key={index}
+                  className="md:table-row flex flex-col md:flex-row mb-4 md:mb-0 border-b md:border-none border-gray-200 dark:border-gray-800"
+                >
+                  {/* Año */}
+                  <td className="md:table-cell flex md:flex-none sm:p-3 py-2 px-1">
+                    <span className="block md:hidden font-bold">Año:</span>
+                    <div className="ml-4 md:ml-0">{interesAnual.anio}</div>
+                  </td>
+
+                  {/* Cooperativa */}
+                  <td className="md:table-cell flex md:flex-none sm:p-3 py-2 px-1">
+                    <span className="block md:hidden font-bold">
+                      Cooperativa:
+                    </span>
+                    <div className="ml-4 md:ml-0">{cooperativa.nombre}</div>
+                  </td>
+
+                  {/* Interés Anual */}
+                  <td className="md:table-cell flex md:flex-none sm:p-3 py-2 px-1">
+                    <span className="block md:hidden font-bold">
+                      Interés Anual:
+                    </span>
+                    <div className="ml-4 md:ml-0">
+                      {totalInteresAnual.toFixed(2)}
+                    </div>
+                  </td>
+
+                  <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
+                    <div className="relative inline-block text-left">
+                      <Menu
+                        as="div"
+                        className="relative inline-block text-left"
+                      >
+                        <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                          <svg
+                            viewBox="0 0 24 24"
+                            className="w-5"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                            fill="none"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
                           >
-                            Ver Detalle
-                          </button>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </Menu>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                            <circle cx={12} cy={12} r={1} />
+                            <circle cx={19} cy={12} r={1} />
+                            <circle cx={5} cy={12} r={1} />
+                          </svg>
+                        </MenuButton>
+
+                        <MenuItems
+                          transition
+                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+                        >
+                          <div className="py-1">
+                            <MenuItem>
+                              <button
+                                onClick={() =>
+                                  console.log("Ver detalle:", interesAnual)
+                                }
+                                className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                              >
+                                Ver Detalle
+                              </button>
+                            </MenuItem>
+                          </div>
+                        </MenuItems>
+                      </Menu>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                    <button
+                      onClick={() => console.log("Ver detalle:", interesAnual)}
+                      className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      VerDetalle
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
