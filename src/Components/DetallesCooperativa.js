@@ -16,13 +16,10 @@ const DetallesCooperativa = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-200">
       <div className="w-full max-w-7xl bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full">
-        {/* Encabezado */}
         <div className="bg-blue-700 p-10 text-white">
           <h2 className="text-5xl font-bold">{cooperativa.nombre}</h2>
           <p className="text-2xl">Estado: {cooperativa.estadoCooperativa}</p>
         </div>
-
-        {/* Contenido */}
         <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 p-10">
           <div className="p-6">
             <h3 className="text-3xl font-semibold text-gray-900 mb-4">Información General</h3>
@@ -62,8 +59,6 @@ const DetallesCooperativa = () => {
             </div>
           </div>
         </div>
-
-        {/* Botón de descarga */}
         <div className="flex justify-center mt-6">
           <button
             onClick={descargarDocumento}

@@ -186,13 +186,6 @@ const ListadoSocio = ({
       comparator: (a, b) =>
         new Date(a.fechaIngresoCooeprativa) - new Date(b.fechaIngresoCooeprativa),
     },
-    {
-      label: "Solo Socios Archivados", 
-      key: "archivados",
-      icon: <SortIcon />,
-      comparator: (a, b) => a.archivado - b.archivado,
-      filter: (socio) => socio.archivado, 
-    },
   ];
   
   useEffect(() => {
@@ -413,16 +406,18 @@ const ListadoSocio = ({
       </>
     ) : (
       <>
-        {socio.cedulaSocio !== miembro.responseBody.socio.cedulaSocio && (
-          <MenuItem>
-            <button
-              className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-              onClick={() => handleArchivar(socio)}
-            >
-              Archivar
-            </button>
-          </MenuItem>
-        )}
+{miembro?.responseBody != null && socio.cedulaSocio !== miembro.responseBody.socio.cedulaSocio && (
+  <MenuItem>
+    <button
+      className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+      onClick={() => handleArchivar(socio)}
+    >
+      Archivar
+    </button>
+  </MenuItem>
+)}
+
+
         <MenuItem>
           <button
             className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"

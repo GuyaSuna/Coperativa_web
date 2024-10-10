@@ -163,9 +163,11 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     } else {
       const fechaIngreso = new Date(FechaIngresoCooperativa);
       const fechaHoy = new Date();
-  
+    
       if (fechaIngreso > fechaHoy) {
         errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser mayor a la fecha actual";
+      } else if (fechaIngreso < fechaHoy) {
+        errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser anterior a la fecha actual";
       }
     }
   
