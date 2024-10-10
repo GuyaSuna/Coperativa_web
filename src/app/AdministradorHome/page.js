@@ -8,7 +8,6 @@ import ComponentesOrganizados from "@/Components/ComponentesOrganizados";
 import Header from "@/Components/header";
 import ListadoLateral from "@/Components/ListadoLateral";
 import Footer from "@/Components/footer";
-import { Menu } from "@headlessui/react"; // Importar Menu de Headless UI
 import Cargando from "@/Components/Cargando";
 import Sidebar from "@/Components/Sidebar";
 import { getToken } from "@/Api/getToken";
@@ -143,6 +142,9 @@ const AdminHome = () => {
                       { label: "Convenios", id: 26 },
                       { label: "Estados Contables", id: 35 },
                       { label: "Interes Anual", id: 41 },
+                      { label: "Balance Anual", id: 42 },
+                      { label: "Ingresos", id: 20 },
+                      { label: "Egresos", id: 21 },
                     ].map((item) => (
                       <button
                         key={item.id}

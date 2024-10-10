@@ -134,6 +134,7 @@ const ComponentesOrganizados = ({
       return (
         <ListadoRecibos
           setIdentificadorComponente={setIdentificadorComponente}
+          ur={ur}
         />
       );
     }

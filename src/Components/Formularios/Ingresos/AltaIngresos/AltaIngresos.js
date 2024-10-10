@@ -3,6 +3,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { postIngreso } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion"; // Importa el modal de confirmación
 
 const AltaIngreso = () => {
   const [subRubro, setSubRubro] = useState("");
@@ -11,6 +12,7 @@ const AltaIngreso = () => {
   const [errores, setErrores] = useState({});
   const [tipoMoneda, setTipoMoneda] = useState("UR");
   const [fechaDatosContables, setFechaDatosContables] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false); // Estado para mostrar el modal
 
   const { cooperativa } = useContext(MiembroContext);
 
@@ -46,14 +48,21 @@ const AltaIngreso = () => {
 
   const obtenerFechaHoy = () => {
     const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    const dia = String(hoy.getDate()).padStart(2, "0");
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
     const año = hoy.getFullYear();
     return `${año}-${mes}-${dia}`;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    if (validarFormulario()) {
+      setMostrarModal(true); 
+    }
+  };
+
+  const handleConfirmacion = async () => {
+    setMostrarModal(false);
     if (!validarFormulario()) return;
 
     const ingresoData = {
@@ -62,15 +71,15 @@ const AltaIngreso = () => {
       ingreso,
       cooperativaEntity: cooperativa,
       tipoMoneda,
-      fechaDatosContables :fechaDatosContables,
+      fechaDatosContables,
     };
 
     try {
       const response = await postIngreso(ingresoData);
-      if (response.status === 201) {
-        alert("Error al agregar un Ingreso");
-      } else {
+      if (response !=null) {
         alert("El Ingreso fue agregado exitosamente");
+      } else {
+        alert("Error al agregar el Ingreso");
       }
     } catch (error) {
       console.error("Error al enviar los datos del Ingreso:", error);
@@ -84,6 +93,7 @@ const AltaIngreso = () => {
         onSubmit={handleSubmit}
         className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
+        {/* Campos del formulario */}
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2">
@@ -134,6 +144,7 @@ const AltaIngreso = () => {
             )}
           </div>
         </div>
+
         <div className="grid md:grid-cols-2 md:gap-6">
           <div className="mb-4">
             <label
@@ -201,6 +212,14 @@ const AltaIngreso = () => {
         >
           Registrar Ingreso
         </button>
+
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea registrar este ingreso?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

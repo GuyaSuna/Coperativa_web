@@ -2,16 +2,20 @@
 
 import React from "react";
 
-const VerRecibo = ({ recibo, isOpen, onClose }) => {
+const VerRecibo = ({ recibo, isOpen, setIsOpen }) => {
   if (!isOpen) return null;
-
+  if (!recibo) {
+    return <p>No se encontró el recibo.</p>;
+  }
+  const totalConvenios = recibo.listaConvenio.reduce((total, convenio) => total + (convenio.urPorMes || 0), 0);
+  
   return (
     <>
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50"></div>
       <div className="fixed inset-0 flex items-center justify-center z-50">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-11/12 md:w-1/2 lg:w-1/3 p-6">
           <button
-            onClick={onClose}
+            onClick={() => setIsOpen(false)}
             className="absolute top-3 right-3 text-gray-400 dark:text-gray-600 hover:text-gray-800 dark:hover:text-gray-200"
           >
             <svg
@@ -87,11 +91,11 @@ const VerRecibo = ({ recibo, isOpen, onClose }) => {
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-white-800">Convenio:</span>
-                <span className="text-white-600">{recibo.convenio}</span>
+                <span className="text-white-600">{totalConvenios}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-white-800">Subsidio:</span>
-                <span className="text-white-600">{recibo.subsidio}</span>
+                <span className="text-white-600">{recibo.subsidio?.subsidioUr}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-white-800">
@@ -111,7 +115,7 @@ const VerRecibo = ({ recibo, isOpen, onClose }) => {
             <button
               type="button"
               className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-150 ease-in-out"
-              onClick={onClose}
+              onClick={() => setIsOpen(false)}
             >
               Cerrar
             </button>

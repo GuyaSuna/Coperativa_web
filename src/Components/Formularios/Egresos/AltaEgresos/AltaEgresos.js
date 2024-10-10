@@ -3,6 +3,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { postEgreso } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion"; // Importa el modal de confirmación
 
 const AltaEgreso = () => {
   const [subRubro, setSubRubro] = useState("");
@@ -12,6 +13,7 @@ const AltaEgreso = () => {
   const [tipoMoneda, setTipoMoneda] = useState("UYU");
   const { cooperativa } = useContext(MiembroContext);
   const [fechaDatosContables, setFechaDatosContables] = useState("");
+  const [mostrarModal, setMostrarModal] = useState(false); // Estado para mostrar el modal
 
   useEffect(() => {
     setFechaDatosContables(obtenerFechaHoy());
@@ -45,14 +47,21 @@ const AltaEgreso = () => {
 
   const obtenerFechaHoy = () => {
     const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    const dia = String(hoy.getDate()).padStart(2, "0");
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0");
     const año = hoy.getFullYear();
     return `${año}-${mes}-${dia}`;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    if (validarFormulario()) {
+      setMostrarModal(true); // Muestra el modal de confirmación
+    }
+  };
+
+  const handleConfirmacion = async () => {
+    setMostrarModal(false); // Oculta el modal de confirmación
     if (!validarFormulario()) return;
 
     const egresoData = {
@@ -66,10 +75,10 @@ const AltaEgreso = () => {
 
     try {
       const response = await postEgreso(egresoData);
-      if (response.status === 201) {
-        alert("Error al agregar Egreso");
-      } else {
+      if (response.status != null) {
         alert("Egreso agregado exitosamente");
+      } else {
+        alert("Error al agregar Egreso");
       }
     } catch (error) {
       console.error("Error al enviar los datos del egreso:", error);
@@ -201,6 +210,14 @@ const AltaEgreso = () => {
         >
           Registrar Egreso
         </button>
+
+        {mostrarModal && (
+          <ModalConfirmacion
+            mensaje="¿Está seguro de que desea registrar este egreso?"
+            onConfirm={handleConfirmacion}
+            onCancel={() => setMostrarModal(false)}
+          />
+        )}
       </form>
     </div>
   );

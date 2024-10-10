@@ -1,616 +1,219 @@
 "use client";
 
 import React, { useState, useEffect, useContext } from "react";
-import { NumerosALetras } from "numero-a-letras";
+import { deleteRecibo, getAllRecibos } from "../../../../Api/api";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import { MiembroContext } from "@/Provider/provider.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo.js";
+import SortIcon from "@mui/icons-material/Sort";
+import OrdenarPor from "@/Components/OrdenarPor.js";
+import Buscador from "@/Components/Buscador.js";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
-import { useRouter } from "next/navigation";
-import {
-  postRecibo,
-  getUltimoReajuste,
-  getUr,
-  getAllViviendas,
-  getConveniosVigenteSocio,
-  getSubsidioVigenteSocio,
-  postIngreso,
-  updateSocio,
-} from "../../../../Api/api.js";
-import { MiembroContext } from "@/Provider/provider";
-import { Recargo } from "@/Calculos/Calculos.js";
-import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
-
-const AltaRecibo = ({ Socio, ur }) => {
-  const router = useRouter();
-  const { miembro, cooperativa } = useContext(MiembroContext);
-  const [fechaEmision, setFechaEmision] = useState();
-  const [nombreSocio, setNombreSocio] = useState("");
-  const [apellidoSocio, setApellidoSocio] = useState("");
-  const [recargo, setRecargo] = useState(0); // suma a la cuota dependiendo de cuantos dias hayan pasado
-  const [capitalExcel, setCapitalExcel] = useState(0);
-  const [interesExcel, setInteresExcel] = useState(0);
-  const [interes, setInteres] = useState(0); // interes se descuenta de capital (cuotaMensual en ur * valor calculado de el contador)
-  const [capital, setCapital] = useState(0); // NO sale del socio y se le resta el interes
-  const [cuotaSocial, setCuotaSocial] = useState(0); // valor de 300 pesos aprox
-  const [convenios, setConvenios] = useState([]); // el convenio es un contrato en donde si te atrasas con un pago te permiten pagarla sumandole dinero a la cuota por meses
-  const [subsidio, setSubsidio] = useState(null);
-  const [cuotaMensualBase, setCuotaMensualBase] = useState(0);
-  const [cuotaMensual, setCuotaMensual] = useState(0); // cuota fija que se divide por el valor de la ur (se multiplica por el interes)
-  const [sumaPesos, setSumaPesos] = useState(""); // Texto del dinero total
-  const [fechaPago, setFechaPago] = useState();
-  const [reajuste, setReajuste] = useState({});
-  const [valorVivienda, setValorVivienda] = useState(0);
-  const [Errores, setErrores] = useState({});
-  const [vivienda, setVivienda] = useState({});
-  const [ingreso, setIngreso] = useState(null);
-  const [valorConvenio, setValorCovenio] = useState(0);
-  const [mostrarModal, setMostrarModal] = useState(false);
-  //Nahuel- va en altaRecibo la peticion de ur
-
-  // useEffect (() => {
-  //   fetchUr();
-  // },[])
-
-  // const fetchUr = async () => {
-  //   const dataUr = await getUr();
-  // }
+const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
+  const [allRecibos, setAllRecibos] = useState([]);
+  const { cooperativa, miembro } = useContext(MiembroContext);
+  const [buscador, setBuscador] = useState("");
+  const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
 
   useEffect(() => {
-    const today = new Date().toISOString().split("T")[0];
-    setFechaPago(today);
-    setFechaEmision(today);
-    const FechaActual = new Date();
-    cooperativa.listaCapitalInteres.map((data) => {
-      let fechaData = new Date(data.fecha);
-      if (
-        fechaData.getMonth() == FechaActual.getMonth() &&
-        fechaData.getFullYear() == FechaActual.getFullYear()
-      ) {
-        setCapitalExcel(data.capital);
-        setInteresExcel(data.interes);
-      }
-    });
+    fetchAllRecibos();
   }, []);
-  useEffect(() => {
-    fetchReajusteAnual();
-  }, [Socio]);
 
-  useEffect(() => {
-    fetchSubsidio();
-    fetchConvenio();
-  }, [reajuste]);
-
-  useEffect(() => {
-    if (convenios == null) return;
-    fetchCalculos();
-    setCuotaSocial(400);
-    console.log(Socio, "SOCIO");
-    setNombreSocio(Socio.nombreSocio || "");
-    setApellidoSocio(Socio.apellidoSocio || "");
-  }, [convenios]);
-
-  useEffect(() => {
-    setCuotaMensual(cuotaMensualBase + recargo);
-    let valorEnLetras = NumerosALetras(Math.round(cuotaMensualBase + recargo));
-    valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
-    setSumaPesos(valorEnLetras);
-  }, [recargo]);
-
-  const fetchReajusteAnual = async () => {
-    const reajusteData = await getUltimoReajuste();
-    console.log("Reajuste Anual", reajusteData);
-    setReajuste(reajusteData);
-  };
-
-  const fetchSubsidio = async () => {
-    const subsidioResponse = await getSubsidioVigenteSocio(Socio.cedulaSocio);
-    if (subsidioResponse != null) {
-      console.log("SUBSIDIOOOOOOOOOOOO",subsidioResponse);
-      setSubsidio(subsidioResponse);
-    } else {
-      setSubsidio(0);
-    }
-  };
-
-  const fetchConvenio = async () => {
-    const convenioResponse = await getConveniosVigenteSocio(Socio.cedulaSocio);
-    if (convenioResponse != null) {
-      console.log(convenioResponse);
-      setConvenios(convenioResponse);
-      if (convenioResponse.length > 0) {
-        const totalConvenio = convenioResponse.reduce(
-          (acc, convenio) => acc + convenio.urPorMes,
-          0
-        );
-        setValorCovenio(totalConvenio);
-      }
-    } else {
-      setConvenios([]);
-    }
-  };
-
-  
-  useEffect(() => {
-
-    fetchConvenio()
-    Recargo(fechaEmision,fechaPago, setRecargo, ur);
-
-  }, [fechaPago]);
-
-  useEffect(() => {
-    setValorVivienda(vivienda.valorVivienda);
-  }, [vivienda]);
-
-  useEffect(() => {
-    let valorDormitorios;
-    if (vivienda.cantidadDormitorios === 2) {
-      valorDormitorios = reajuste.cuotaMensualDosHabitacionesEnPesos;
-    } else if (vivienda.cantidadDormitorios === 3) {
-      valorDormitorios = reajuste.cuotaMensualTresHabitacionesEnPesos;
-    }
-
-    setInteres(interesExcel * (valorDormitorios / ur));
-    setCapital(capitalExcel * (valorDormitorios / ur));
-
-    let ValorViviendaModificar = valorVivienda;
-
-    if (subsidio && subsidio.subsidioUr) {
-      ValorViviendaModificar -= subsidio.subsidioUr;
-    }
-
-    let valorConConveniosPesos = 0;
-    if (convenios.length > 0) {
-      convenios.forEach((convenio) => {
-        if (convenio && convenio.urPorMes) {
-          valorConConveniosPesos += convenio.urPorMes * ur;
-        }
-      });
-    }
-
-    let valorCuotaTotalEnPesos =
-      ValorViviendaModificar * reajuste.valorUr + valorConConveniosPesos;
-
-    let cuenta = parseFloat(valorCuotaTotalEnPesos) + parseFloat(cuotaSocial);
-    setCuotaMensualBase(cuenta);
-    setCuotaMensual(Math.round(cuenta));
-
-    let valorEnLetras = NumerosALetras(Math.round(cuenta));
-    valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
-    setSumaPesos(valorEnLetras);
-  }, [valorVivienda, reajuste, subsidio, convenios]);
-
-  const fetchCalculos = async () => {
-    const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
-
-    viviendasData.forEach((vivienda) => {
-      if (vivienda.socio != null) {
-        if (vivienda.socio.cedulaSocio == Socio.cedulaSocio) {
-          setVivienda(vivienda);
-        }
-      }
-    });
-  };
-
-  const handleChangefechaRecibo = (e) => {
-    setFechaEmision(e.target.value);
-  };
-
-  const handleChangefechaPago = (event) => {
-    const fechaSeleccionada = event.target.value;
-    setFechaPago(fechaSeleccionada);
-  };
-
-  const handleChangeSumaPesos = (e) => {
-    setSumaPesos(e.target.value);
-  };
-
-  const validarFormulario = () => {
-    const errores = {};
-    if (!fechaEmision)
-      errores.fechaEmision = "La fecha de ingreso es obligatoria";
-    if (!interes) errores.Interes = "El Interes es obligatorio";
-    if (!capital) errores.Capital = "El Capital es obligatorio";
-    if (!cuotaSocial) errores.CuotaSocial = "La Cuota Social es obligatorio";
-    if (!cuotaMensual) errores.CuotaMensual = "La CuotaMensual es obligatorio";
-    if (!sumaPesos) errores.SumaPesos = "La Suma en Pesos es obligatorio";
-    if (!fechaPago) errores.fechaPago = "La fecha del pago es obligatoria";
-
-    setErrores(errores);
-
-    return Object.keys(errores).length === 0;
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validarFormulario()) return;
-
-    setMostrarModal(true);
-  };
-
-  const handleConfirmacion = async (e) => {
-    setMostrarModal(false);
-    console.log("ENTRA y este es el miembro", miembro);
-    e.preventDefault();
-  
-    console.log("Convenios del alta" , convenios)
-    // Validar formulario
-    if (!validarFormulario()) return;
-  
+  const fetchAllRecibos = async () => {
     try {
-      // Intentar dar de alta el recibo
-      const response = await postRecibo(
-        fechaEmision,
-        fechaPago,
-        recargo,
-        interes,
-        capital,
-        cuotaSocial,
-        convenios,
-        subsidio,
-        cuotaMensual,
-        sumaPesos,
-        Socio,
-        miembro.responseBody
-      );
-  
-      if (response && response.error) {
-        alert(response.error); 
-        return; 
-      }
-  
-      console.log("Recibo dado de alta:", response);
-  
-      let fechaActual = new Date();
-      const ingreso = {
-        subRubro: "Amortizacion",
-        denominacion: `Recibo dado de alta el ${fechaEmision}`,
-        ingreso: cuotaMensual,
-        cooperativaEntity: cooperativa,
-        tipoMoneda: "UYU",
-        fechaDatosContables: fechaActual,
-      };
-  
-      try {
-        const IngresoResponse = await postIngreso(ingreso);
-        console.log("Ingreso exitoso:", IngresoResponse);
-        setIngreso(IngresoResponse);
-        alert("Dado de alta correctamente");
-      } catch (error) {
-        console.error("Error en el ingreso:", error.message);
-        alert("Error al dar de alta el ingreso.");
-      }
+      const response = await getAllRecibos(miembro.responseBody.id);
+      // Filtra los recibos para excluir aquellos cuyos socios están archivados
+      const recibosActivos = response.filter(recibo => !recibo.socio.archived);
+      setAllRecibos(recibosActivos);
+      setBuscadorFiltrado(recibosActivos);  // Inicialmente muestra todos los recibos activos
     } catch (error) {
-      console.error("Error al enviar los datos del recibo:", error);
-      alert("Error al dar de alta el recibo. Por favor, intenta nuevamente.");
+      console.error("Error al obtener los socios:", error);
     }
   };
-  
-  
-  
-  useEffect(() => {
-    automaticUpdate();
-  }, [ingreso]);
 
-  const automaticUpdate = async () => {
-    let socioActualizar = Socio;
-    let capitalMenosInteres = capital - interes;
-    socioActualizar.capitalSocio += capitalMenosInteres;
-    if (ingreso != null) {
-      const socioUpdate = await updateSocio(socioActualizar);
-      console.log("Socio Update", socioUpdate);
+  const handleEliminar = async (nroRecibo) => {
+    try {
+      await deleteRecibo(nroRecibo);
+      fetchAllRecibos();
+    } catch (e) {
+      throw ("Fallo al eliminar el recibo ", e.error);
     }
   };
-  //      ruta dinamica
-  //      router.push(`/UserInfo/${NroSocio}`);
+
+  useEffect(() => {
+    if (buscador === "") {
+      setBuscadorFiltrado(allRecibos);
+    } else {
+      const buscadorFiltrado = allRecibos?.filter((recibo) =>
+        recibo.socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allRecibos, buscador]);
+
+  const handleChangeBuscador = (event) => {
+    setBuscador(event.target.value);
+  };
+
+  const ordenarOptions = [
+    {
+      label: "Número Recibo",
+      key: "nroSocio",
+      icon: <SortIcon />,
+      comparator: (a, b) => a.nroRecibo - b.nroRecibo,
+    },
+    {
+      label: "Más Recientes",
+      key: "fechaIngreso",
+      icon: <SortIcon />,
+      comparator: (a, b) => new Date(b.fechaPago) - new Date(a.fechaPago),
+    },
+    {
+      label: "Más Antiguos",
+      key: "fechaIngreso",
+      icon: <SortIcon />,
+      comparator: (a, b) => new Date(a.fechaIngreso) - new Date(b.fechaIngreso),
+    },
+  ];
+
+  const handleSortChange = (option) => {
+    const ordenarRecibos = [...allRecibos].sort(option.comparator);
+    setAllRecibos(ordenarRecibos);
+  };
+
+  const handleVerRecibo = (recibo) => {
+    setReciboSeleccionado(recibo);
+    setIsModalOpen(true);
+  };
+
+  const handleDescargarPDF = (recibo) => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("COVIAMUROS", 20, 20);
+    doc.setFontSize(12);
+    doc.text("COOPERATIVA DE VIVIENDA", 20, 26);
+    doc.text("AYUDA MUTUA ROSARIO", 20, 32);
+    doc.text("ROSARIO - Dpto. de Colonia", 20, 38);
+    doc.text("RECIBO", 160, 20);
+    doc.text(`${recibo.nroRecibo}`, 160, 26);
+    doc.text("DIA  MES  AÑO", 160, 32);
+    doc.text(`${recibo.fechaPago}`, 160, 38);
+
+    doc.autoTable({
+      startY: 50,
+      head: [["CONCEPTOS", "IMPORTES"]],
+      body: [
+        ["1 - Ahorro/Mes Set 23", `${recibo.cuotaMensual}`],
+        ["2 - Cuota Social", `${recibo.cuotaSocial}`],
+        ["3 - Convenio", `${recibo.convenio}`],
+        ["4 - Recargo", `${recibo.recargo}`],
+      ],
+      theme: "grid",
+      styles: { fontSize: 10 },
+    });
+
+    doc.text("TOTAL:  8396", 150, 95);
+    doc.text("Hemos Recibido de: ", 20, 100);
+    doc.text(`${recibo.socio.nombreSocio}`, 65, 100);
+    doc.text("La suma de $: ", 20, 105);
+    doc.text(`${recibo.sumaEnPesos}`, 60, 105);
+    doc.text("TESORERO", 150, 120);
+    doc.text(`${recibo.tesorero.firstname}`, 145, 125);
+    doc.text(`${recibo.tesorero.lastname}`, 165, 125);
+
+    doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
-      >
-        <label className="block text-sm font-medium mb-2 text-right"></label>
-        <label className="block text-sm font-medium mb-2 text-right">
-          Valor UR del Mes: {ur || 0}
-        </label>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="nombreSocio"
-            >
-              Nombre Socio:
-            </label>
-            <input
-              type="text"
-              readOnly
-              id="nombreSocio"
-              name="nombreSocio"
-              value={nombreSocio || ""}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="apellidoSocio"
-            >
-              Apellido Socio:
-            </label>
-            <input
-              type="text"
-              id="apellidoSocio"
-              name="apellidoSocio"
-              readOnly
-              value={apellidoSocio || ""}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+    <div className="sm:p-7 p-4">
+      <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+        <div className="w-full md:w-1/2">
+          <Buscador value={buscador} onChange={handleChangeBuscador} />
+        </div>
+        <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+          <div className="flex items-center space-x-3 w-full md:w-auto">
+            <OrdenarPor
+              options={ordenarOptions}
+              buttonText="Ordenar por"
+              onOptionSelect={handleSortChange}
             />
           </div>
         </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="cedulaSocio"
-            >
-              Número de CI.:
-            </label>
-            <input
-              type="text"
-              id="cedulaSocio"
-              name="cedulaSocio"
-              readOnly
-              value={Socio.cedulaSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="telefonoSocio"
-            >
-              Nombre Administrador:
-            </label>
-            <input
-              type="text"
-              id="nombreSocio"
-              name="nombreSocio"
-              readOnly
-              value={miembro.responseBody.socio.nombreSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="capitalSocio"
-            >
-              Apellido Administrador:
-            </label>
-            <input
-              type="text"
-              id="capitalSocio"
-              name="capitalSocio"
-              readOnly
-              value={miembro.responseBody.socio.apellidoSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-          </div>
+      </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="fechaEmision"
-            >
-              Fecha de Recibo:
-            </label>
-            <input
-              type="date"
-              id="fechaIngreso"
-              name="fechaIngreso"
-              value={fechaEmision || ""}
-              onChange={handleChangefechaRecibo}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.fechaEmision && (
-              <span className="text-red-500 text-sm">
-                {Errores.fechaEmision}
-              </span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="fechaPago"
-            >
-              Fecha de Pago:
-            </label>
-            <input
-              type="date"
-              id="fechaPago"
-              name="fechaPago"
-              value={fechaPago}
-              onChange={handleChangefechaPago}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.fechaPago && (
-              <span className="text-red-500 text-sm">{Errores.fechaPago}</span>
-            )}
-          </div>
+      <div className="overflow-y-auto h-screen">
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
+            <tr>
+              <th scope="col" className="px-4 py-3 text-center">Nro Recibo</th>
+              <th scope="col" className="px-4 py-3">Nombre Socio</th>
+              <th scope="col" className="px-4 py-3">Monto</th>
+              <th scope="col" className="px-4 py-3">Fecha de Recibo</th>
+              <th scope="col" className="px-4 py-3">Estado</th>
+              <th scope="col" className="px-4 py-3"><span className="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody className="block md:table-row-group">
+            {buscadorFiltrado?.map((recibo) => (
+              <tr className="border-b dark:border-gray-700 block md:table-row" key={recibo.nroRecibo}>
+                <th scope="row" className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell">
+                  {recibo.nroRecibo}
+                </th>
+                <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell">
+                  {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
+                </th>
+                <td className="px-4 py-3 block md:table-cell">$ {recibo.cuotaMensual}</td>
+                <td className="px-4 py-3 block md:table-cell">{recibo.fechaRecibo}</td>
+                <td className="px-4 py-3 block md:table-cell">
+                  <span
+                    className={`bg-gradient-to-br ${recibo.estaImpago ? "from-red-600 to-red-500" : "from-green-600 to-green-500"
+                      } text-white text-xs font-medium px-2.5 py-0.5 rounded-md`}
+                  >
+                    {recibo.estaImpago ? "Impago" : "Pago"}
+                  </span>
+                </td>
+                <td className="px-4 py-3 flex items-center justify-center space-x-1 block md:table-cell">
+                  <Menu as="div" className="relative inline-block text-left">
+                    <div>
+                      <MenuButton className="p-1 text-sm font-medium inline-flex items-center dark:bg-primary bg-white dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none border rounded-md focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                        Acciones
+                      </MenuButton>
+                    </div>
 
-          {/* posible optional */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="recargo">
-              Recargo:
-            </label>
-            <input
-              type="text"
-              id="recargo"
-              name="recargo"
-              value={recargo}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.Recargo && (
-              <span className="text-red-500 text-sm">{Errores.Recargo}</span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="interes">
-              Interes:
-            </label>
-            <input
-              type="text"
-              id="interes"
-              name="interes"
-              readOnly
-              value={interes}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.Interes && (
-              <span className="text-red-500 text-sm">{Errores.Interes}</span>
-            )}
-          </div>
+                    <MenuItems className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
+                      <div className="py-1">
+                        <MenuItem onClick={() => handleVerRecibo(recibo)}>
+                          <span className="text-gray-700 block px-4 py-2 text-sm">Ver Recibo</span>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleDescargarPDF(recibo)}>
+                          <span className="text-gray-700 block px-4 py-2 text-sm">Descargar PDF</span>
+                        </MenuItem>
+                        <MenuItem onClick={() => handleEliminar(recibo.nroRecibo)}>
+                          <span className="text-gray-700 block px-4 py-2 text-sm">Eliminar</span>
+                        </MenuItem>
+                      </div>
+                    </MenuItems>
+                  </Menu>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="capital">
-              Capital:
-            </label>
-            <input
-              type="text"
-              id="capital"
-              name="capital"
-              value={capital}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.Capital && (
-              <span className="text-red-500 text-sm">{Errores.Capital}</span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="convenio"
-            >
-              Convenio:
-            </label>
-            <input
-              type="text"
-              id="convenio"
-              name="convenio"
-              readOnly
-              value={valorConvenio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.Convenios && (
-              <span className="text-red-500 text-sm">{Errores.Convenios}</span>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="subsidio"
-            >
-              Subsidio:
-            </label>
-            <input
-              type="text"
-              id="subsidio"
-              name="subsidio"
-              readOnly
-              value={subsidio?.subsidioUr || 0}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.Subsidio && (
-              <span className="text-red-500 text-sm">{Errores.Subsidio}</span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-4 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="cuotaSocial"
-            >
-              Cuota Social:
-            </label>
-            <input
-              type="number"
-              id="cuotaSocial"
-              name="cuotaSocial"
-              value={cuotaSocial}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.CuotaSocial && (
-              <span className="text-red-500 text-sm">
-                {Errores.CuotaSocial}
-              </span>
-            )}
-          </div>
-
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="cuotaMensual"
-            >
-              Cuota Mensual:
-            </label>
-            <input
-              type="number"
-              id="cuotaMensual"
-              name="cuotaMensual"
-              readOnly
-              value={Math.round(cuotaMensual)}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.CuotaMensual && (
-              <span className="text-red-500 text-sm">
-                {Errores.CuotaMensual}
-              </span>
-            )}
-          </div>
-
-          <div className="mb-4 col-span-2">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="sumaPesos"
-            >
-              Pesos Uruguayos:
-            </label>
-            <input
-              type="text"
-              id="sumaPesos"
-              name="sumaPesos"
-              value={sumaPesos}
-              onChange={handleChangeSumaPesos}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.sumaPesos && (
-              <span className="text-red-500 text-sm">{Errores.SumaPesos}</span>
-            )}
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
-        >
-          Agregar
-        </button>
-        {mostrarModal && (
-          <ModalConfirmacion
-            mensaje="¿Está seguro de que desea dar de alta este recibo?"
-            onConfirm={handleConfirmacion}
-            onCancel={() => setMostrarModal(false)}
-          />
-        )}
-      </form>
+      {isModalOpen && (
+        <VerRecibo
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          recibo={reciboSeleccionado}
+        />
+      )}
     </div>
   );
 };
-export default AltaRecibo;
+
+export default ListadoRecibos;
