@@ -40,7 +40,7 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
 
     try {
       const response = await updateAdministrador(data);
-      console.log(response);
+
       setMensaje("Administrador modificado con éxito");
       setIdentificadorComponente(27);  // Cambia el identificador según corresponda
     } catch (error) {

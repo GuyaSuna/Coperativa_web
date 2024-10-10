@@ -23,7 +23,6 @@ const UsuarioHome = () => {
   };
 
   useEffect(() => {
-    console.log("MIEMBRO", miembro);
     if (!miembro || !cooperativa) {
       router.push("/");
     }

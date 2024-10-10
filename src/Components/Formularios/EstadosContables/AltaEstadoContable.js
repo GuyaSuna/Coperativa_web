@@ -45,8 +45,6 @@ const AltaEstadoContable = () => {
           cooperativa.idCooperativa
         );
 
-        console.log("Egresos", egresos);
-        console.log("Ingresos", ingresos);
 
         setListaEgresos(egresos);
         setListaIngresos(ingresos);
@@ -109,12 +107,10 @@ const AltaEstadoContable = () => {
       listaIngresos,
     };
     try {
-      console.log("postEstado en Submit", nuevoEstadoContable);
       const response = await postEstadoContable(
         nuevoEstadoContable,
         cooperativa.idCooperativa
       );
-      console.log("ESTADO CONTABLE ", response);
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
     }

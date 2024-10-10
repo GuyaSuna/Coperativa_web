@@ -26,7 +26,6 @@ const Login = async (username, password) => {
 
     const data = await response.json();
 
-    console.log("Data", data);
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
     } else {
@@ -63,7 +62,7 @@ const LoginMaster = async (username, password) => {
 
     const data = await response.json();
 
-    console.log("Data", data);
+  
     if (data.token) {
       // Guardar el token en la cookie
       document.cookie = `token=${data.token}; path=/; max-age=${
@@ -82,7 +81,7 @@ const LoginMaster = async (username, password) => {
 
 const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
   try {
-    console.log("Id cooperativa", idCooperativa);
+
     const response = await fetch(
       `${URL}/auth/register/${cedulaSocio}/${idCooperativa}`,
       {
@@ -149,7 +148,7 @@ const getAllCooperativas = async () => {
     }
 
     const data = await response.json();
-    console.log(data);
+   
 
     return data;
   } catch (error) {
@@ -160,8 +159,7 @@ const getAllCooperativas = async () => {
 
 const postCooperativa = async (cooperativaEntity) => {
   try {
-    console.log(cooperativaEntity);
-    console.log("ESTE ES LA API", cooperativaEntity);
+
     const token = getToken();
     const response = await fetch(`${URL}/cooperativa`, {
       method: "POST",
@@ -262,7 +260,7 @@ const getSocio = async (cedulaSocio) => {
 const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
   try {
     const token = getToken();
-    console.log("Token", token);
+
     const response = await fetch(
       `${URL}/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`,
       {
@@ -354,8 +352,7 @@ const getAllSociosImpagos = async (idCooperativa) => {
 
 const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
   try {
-    console.log(socioEntity);
-    console.log("ESTE ES LA API", idCooperativa);
+
     const token = getToken();
     const response = await fetch(
       `${URL}/socio/${nroVivienda}/${idCooperativa}`,
@@ -392,7 +389,7 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 
 const updateSocio = async (socioEntity) => {
   let cedulaSocio = socioEntity.cedulaSocio;
-  console.log("La cedula del socio es: " + cedulaSocio);
+
 
   try {
     // const fechaFormateada = formatDateToSQL(FechaIngreso);
@@ -449,8 +446,7 @@ const deleteSocio = async (cedulaSocio, idCooperativa) => {
 // suplente
 const postSuplente = async (suplenteEntity, CedulaSocio) => {
   try {
-    console.log(suplenteEntity);
-    console.log("Cedula del socio:", CedulaSocio);
+
     const token = getToken();
     const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
       method: "POST",
@@ -490,7 +486,7 @@ const getAllSuplentes = async () => {
     }
 
     const data = await response.json();
-    console.log(data);
+
 
     return data;
   } catch (error) {
@@ -567,7 +563,7 @@ const updateSuplente = async (
       }),
     });
     const data = await response.json();
-    console.log(data);
+    
     if (!response.ok) {
       throw new Error("Error al actualizar el suplente.");
     }
@@ -582,7 +578,7 @@ const updateSuplente = async (
 //vivienda
 const postVivienda = async (viviendaEntity, idCooperativa) => {
   try {
-    console.log(viviendaEntity);
+
     const token = getToken();
     const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
       method: "POST",
@@ -608,7 +604,7 @@ const postVivienda = async (viviendaEntity, idCooperativa) => {
 
 const getVivienda = async (nroVivienda) => {
   try {
-    console.log(nroVivienda, "nro vivienda getAPI");
+
     const token = getToken();
     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "GET",
@@ -632,7 +628,7 @@ const getVivienda = async (nroVivienda) => {
 };
 
 const getAllViviendas = async (idCooperativa) => {
-  console.log("COOPERATIVA", idCooperativa);
+
   try {
     const token = getToken();
     const response = await fetch(
@@ -669,15 +665,7 @@ const updateVivienda = async (
   socio
 ) => {
   try {
-    console.log(
-      "ACAAAAAA",
-      idVivienda,
-      nroVivienda,
-      listaAntiguosTitulares,
-      cantidadDormitorios,
-      valorVivienda
-    );
-    console.log(cooperativaEntity);
+
     const token = getToken();
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
@@ -696,7 +684,7 @@ const updateVivienda = async (
       }),
     });
     const data = await response.json();
-    console.log(data);
+
     if (!response.ok) {
       throw new Error("Error al actualizar la vivienda");
     }
@@ -772,7 +760,7 @@ const getCooperativaPorAdmin = async (id) => {
     }
 
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error("Error en getCooperativasPorAdmin:", error);
@@ -794,7 +782,7 @@ const getCooperativaPorSocio = async (cedulaSocio) => {
     }
 
     const data = await response.json();
-    console.log(data);
+
     return data;
   } catch (error) {
     console.error("Error en getCooperativasPorSocio:", error);
@@ -815,7 +803,7 @@ const getUr = async () => {
 
     // Verifica si la respuesta tiene contenido
     const responseText = await response.text();
-    console.log("Contenido de la respuesta:", responseText);
+
 
     // Si la respuesta está vacía, maneja el caso
     if (!responseText) {
@@ -840,8 +828,8 @@ const getUr = async () => {
 const getAllRecibos = async (id) => {
   try {
     const token = getToken();
-    console.log("Token:", token);
-    console.log(`${URL}/recibo/getAllRecibosPorCooperativa/${id}`);
+  
+  
 
     const response = await fetch(
       `${URL}/recibo/getAllRecibosPorCooperativa/${id}`,
@@ -952,9 +940,7 @@ const postRecibo = async (
       !contentType ||
       !contentType.includes("application/json")
     ) {
-      console.log(
-        "No hay contenido en la respuesta o el contenido no es JSON."
-      );
+     
       return null;
     }
 
@@ -986,7 +972,7 @@ const getAllRecibosPorSocio = async (cedulaSocio) => {
     }
 
     const data = await response.json();
-    console.log(data);
+   
 
     return data;
   } catch (error) {
@@ -1015,7 +1001,7 @@ const getAllAvisosPorUsuario = async (idUsuario) => {
     }
 
     const data = await response.json();
-    console.log(data);
+   
 
     return data;
   } catch (error) {
@@ -1026,7 +1012,7 @@ const getAllAvisosPorUsuario = async (idUsuario) => {
 
 const postAviso = async (aviso, idAdmin, idUsuario) => {
   try {
-    console.log(aviso);
+  
     const token = getToken();
     const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
       method: "POST",
@@ -1052,7 +1038,7 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 
 const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
   try {
-    console.log(aviso);
+  
     const token = getToken();
     const response = await fetch(
       `${URL}/aviso/All/${idAdmin}/${idCooperativa}`,
@@ -1082,7 +1068,7 @@ const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
 // usuario
 const postUsuario = async (usuarioEntity) => {
   try {
-    console.log("UsuarioEntityAPI", usuarioEntity);
+
     const token = getToken();
     const response = await fetch(`${URL}/usuario`, {
       method: "POST",
@@ -1153,7 +1139,7 @@ const deleteUsuario = async (idMiembro) => {
 //Subsidio
 const postSubsidio = async (subsidioEntity) => {
   try {
-    console.log(subsidioEntity);
+   
     const token = getToken();
     const response = await fetch(`${URL}/subsidio`, {
       method: "POST",
@@ -1191,7 +1177,7 @@ const getAllSubsidios = async () => {
     }
 
     const data = await response.json();
-    console.log(data);
+  
 
     return data;
   } catch (error) {
@@ -1212,17 +1198,7 @@ const updateSubsidio = async (
   socio
 ) => {
   try {
-    console.log(
-      idSubsidio,
-      cuotaTotalUr,
-      cuotaApagarUr,
-      subsidioUr,
-      porcentaje,
-      vigenciaEnMeses,
-      fechaOtorgado,
-      fechaExpira,
-      socio
-    );
+
     const token = getToken();
     const response = await fetch(`${URL}/subsidio`, {
       method: "PUT",
@@ -1361,7 +1337,7 @@ const getAllReajustes = async (idCooperativa) => {
 
 const postReajuste = async (reajuste, idCooperativa) => {
   try {
-    console.log("Pruebaaaa reajuste", reajuste);
+
     const token = getToken();
     const response = await fetch(`${URL}/reajuste/${idCooperativa}`, {
       method: "POST",
@@ -1416,7 +1392,7 @@ const getUltimoReajuste = async () => {
 };
 
 const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
-  console.log("Cedula que mandamos", cedulaSocio);
+
   try {
     const token = getToken();
     const response = await fetch(
@@ -1567,7 +1543,7 @@ const getAllIngresos = async (idCooperativa) => {
     }
 
     const data = await response.json();
-    console.log(data);
+   
 
     return data;
   } catch (error) {
@@ -1593,7 +1569,7 @@ const getAllIngresosByMes = async (fecha, idCooperativa) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    
 
     return data;
   } catch (error) {
@@ -1668,7 +1644,7 @@ const getAllConvenios = async (idCooperativa) => {
     }
 
     const data = await response.json();
-    console.log(data);
+  
 
     return data;
   } catch (error) {
@@ -1680,7 +1656,7 @@ const getAllConvenios = async (idCooperativa) => {
 const postEgreso = async (egreso) => {
   try {
     const token = getToken();
-    console.log(egreso);
+    
     const response = await fetch(`${URL}/egresos`, {
       method: "POST",
       headers: {
@@ -1766,8 +1742,7 @@ const getAllEgresos = async (idCooperativa) => {
     }
 
     const data = await response.json();
-    console.log(data);
-
+  
     return data;
   } catch (error) {
     console.error("Error en getAllEgresos:", error);
@@ -1777,7 +1752,7 @@ const getAllEgresos = async (idCooperativa) => {
 
 const getAllEgresosByMes = async (fecha, idCooperativa) => {
   const fullUrl = `${URL}/egresos/allEgresosByMes/${fecha}/${idCooperativa}`;
-  console.log("URL completa:", fullUrl); // Agregar esta línea
+
 
   try {
     const token = getToken();
@@ -1793,7 +1768,7 @@ const getAllEgresosByMes = async (fecha, idCooperativa) => {
     }
 
     const data = await response.json();
-    console.log(data);
+    
 
     return data;
   } catch (error) {
@@ -1854,7 +1829,7 @@ const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
 
 const getAllEstadosContables = async () => {
   try {
-    console.log("Llega aca");
+   
     const token = getToken();
     const response = await fetch(`${URL}/estadoContable/allEstadosContables`, {
       method: "GET",
@@ -1868,7 +1843,7 @@ const getAllEstadosContables = async () => {
     }
 
     const data = await response.json();
-    console.log(data);
+   
 
     return data;
   } catch (error) {
@@ -1881,9 +1856,9 @@ const getAllEstadosContables = async () => {
 
 const getInteresAnual = async (fecha, idCooperativa) => {
   try {
-    console.log("Llega aca");
+  
     const token = getToken();
-    console.log(token);
+    
     const response = await fetch(
       `${URL}/interesAnual/${fecha}/${idCooperativa}`,
       {
@@ -1923,7 +1898,7 @@ const loginMaster = async (MasterData) => {
       throw new Error("The petition has failed, response isn't ok");
     }
     const data = await response.json();
-    console.log("API", data);
+  
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
     } else {
@@ -1952,7 +1927,7 @@ const postDevolucionCapital = async (devolucionCapital) => {
       throw new Error("The petition has failed, response isn't ok");
     }
 
-    console.log("llega aca ");
+  
     const data = await response.json();
 
     return data;
@@ -1966,8 +1941,7 @@ const postBalanceAnual = async (fecha, idCooperativa) => {
   try {
     const token = getToken();
     const fechaISO = fecha.toISOString().split("T")[0];
-    console.log("Fecha en formato ISO: ", fechaISO);
-    console.log("Token usado: ", token);
+
 
     const response = await fetch(
       `${URL}/balanceAnual/${fechaISO}/${idCooperativa}`,
@@ -1996,9 +1970,9 @@ const postBalanceAnual = async (fecha, idCooperativa) => {
 
 const getBalanceAnual = async (idBalance) => {
   try {
-    console.log("Llega aca");
+
     const token = getToken();
-    console.log(token);
+
     const response = await fetch(`${URL}/balanceAnual/${idBalance}`, {
       method: "GET",
       headers: {
@@ -2134,7 +2108,7 @@ const getAllInteresAnual = async (idCooperativa) => {
     );
 
     // Verifica el estado de la respuesta
-    console.log("Response:", response);
+
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -2143,7 +2117,7 @@ const getAllInteresAnual = async (idCooperativa) => {
     const data = await response.json();
 
     // Verifica los datos que se han recibido
-    console.log("Data received:", data);
+
 
     return data;
   } catch (error) {
@@ -2175,7 +2149,7 @@ const deleteRecibo = async (nroRecibo) => {
 };
 const getUltimoBalanceAnual = async (idCooperativa) => {
   try {
-    console.log("llega aca")
+  
     const token = getToken();
     const response = await fetch(`${URL}/balanceAnual/ultimo/${idCooperativa}`, {
       method: "GET",

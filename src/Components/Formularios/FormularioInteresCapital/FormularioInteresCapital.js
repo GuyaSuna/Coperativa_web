@@ -58,8 +58,6 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
         setInteres(todayData[9]); // Interés
         setCapitalParm(todayData[8]);
         setInteresParm(todayData[9]);
-      } else {
-        console.log("No se encontró una fila para el mes y año actuales.");
       }
     };
 
@@ -88,7 +86,7 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
       );
 
       alert("Datos de capital e interés actualizados con éxito.");
-      console.log("Respuesta del servidor:", response);
+
     } catch (error) {
       console.error("Error al enviar los datos:", error);
       alert(

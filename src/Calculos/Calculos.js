@@ -23,9 +23,6 @@ const valorCuotaEnPesos = (ur) => {
 const Recargo = (fechaEmision, fechaPago, setRecargo, ur) => {
     // Verifica que fechaPago y ur existan y que ur.buy sea un número
     if (!fechaPago || !ur || isNaN(ur)) {
-        console.log("retorno fallo");
-        console.log("fechaPago:", fechaPago);
-        console.log("ur:", ur);
         return;
     }
  
@@ -37,13 +34,6 @@ const Recargo = (fechaEmision, fechaPago, setRecargo, ur) => {
     const mesPago = fechaPagoParsed.getUTCMonth();
     const mesActual = fechaActual.getUTCMonth();
     const mesEmision = fechaEmisionParsed.getUTCMonth();
-
-    console.log("Fecha de pago:", fechaPagoParsed);
-    console.log("Fecha actual:", fechaActual);
-    console.log("Mes de emisión:", mesEmision);
-    console.log("Mes de pago:", mesPago);
-    console.log("Mes actual:", mesActual);
-    console.log("entro");
 
     // Comparar el mes de pago con el mes de emisión
     if (mesPago > mesEmision) {

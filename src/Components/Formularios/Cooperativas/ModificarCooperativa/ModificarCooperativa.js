@@ -55,7 +55,7 @@ const ModificarCooperativa = ({ cooperativa , setIdentificadorComponente }) => {
 
     try {
       const response = await updateCooperativa(data);
-      console.log(response);
+
       setMensaje("Cooperativa modificada con éxito");
       setIdentificadorComponente(27);  
     } catch (error) {

@@ -36,7 +36,6 @@ const ModificarEgreso = ({ egresoData }) => {
 
     try {
       // Aquí realizarías la actualización
-      console.log("Egreso modificado:", updatedEgreso);
     } catch (error) {
       console.error("Error al modificar el egreso:", error);
     }

@@ -63,7 +63,6 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const fetchRecibosImpagos = async (cedulaSocio) => {
     try {
         const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
-        console.log("RESPUESTA RECIBOS CONVENIOS", response);
 
         const fechaActual = new Date();
         const mesActual = fechaActual.getMonth() + 1; 
@@ -162,7 +161,7 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
         socioSeleccionado,
         cooperativa.idCooperativa
       );
-      console.log(response);
+
 
       setIdentificadorComponente(26);
     } catch (error) {

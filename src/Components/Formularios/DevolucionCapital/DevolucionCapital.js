@@ -70,7 +70,7 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
 
     try {
       const response = await postDevolucionCapital(devolucionData);
-      console.log(response);
+
     } catch (error) {
       console.error("Error al enviar los datos de la devolución:", error);
       alert("Error interno del servidor");

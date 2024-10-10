@@ -35,7 +35,6 @@ const AdminHome = () => {
     try {
       const response = await getUr();
       setUr(response);
-      console.log("Unidades Reajustables", response);
     } catch (error) {
       console.error("Error al obtener las unidades reajustables:", error);
     }

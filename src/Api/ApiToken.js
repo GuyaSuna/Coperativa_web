@@ -11,7 +11,7 @@ const renovarToken = async (authToken) => {
 
     if (response.ok) {
       const data = await response.json();
-      console.log("Nuevo token:", data.token);
+
       return data.token;
     } else {
       throw new Error("Error al renovar el token");

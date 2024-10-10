@@ -39,7 +39,6 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
   
     try {
       const result = await postPagoDevolucionCapital(pagoDevolucionData);
-      console.log("Pago de devolución creado:", result);
   
       if (!result) {
         alert("No se pudo registrar el pago de devolución");
@@ -59,7 +58,7 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
   
       try {
         const egresoResponse = await postEgreso(egreso);
-        console.log("Egreso registrado exitosamente:", egresoResponse);
+
         alert("Pago de devolución y egreso registrados correctamente");
       } catch (error) {
         console.error("Error al registrar el egreso:", error);

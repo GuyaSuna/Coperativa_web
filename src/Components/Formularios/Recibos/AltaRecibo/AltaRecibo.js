@@ -82,7 +82,7 @@ const AltaRecibo = ({ Socio, ur }) => {
     if (convenios == null) return;
     fetchCalculos();
     setCuotaSocial(400);
-    console.log(Socio, "SOCIO");
+
     setNombreSocio(Socio.nombreSocio || "");
     setApellidoSocio(Socio.apellidoSocio || "");
   }, [convenios]);
@@ -96,14 +96,14 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   const fetchReajusteAnual = async () => {
     const reajusteData = await getUltimoReajuste();
-    console.log("Reajuste Anual", reajusteData);
+   
     setReajuste(reajusteData);
   };
 
   const fetchSubsidio = async () => {
     const subsidioResponse = await getSubsidioVigenteSocio(Socio.cedulaSocio);
     if (subsidioResponse != null) {
-      console.log("SUBSIDIOOOOOOOOOOOO", subsidioResponse);
+
       setSubsidio(subsidioResponse);
     } else {
       setSubsidio(0);
@@ -113,7 +113,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   const fetchConvenio = async () => {
     const convenioResponse = await getConveniosVigenteSocio(Socio.cedulaSocio);
     if (convenioResponse != null) {
-      console.log(convenioResponse);
+ 
       setConvenios(convenioResponse);
       if (convenioResponse.length > 0) {
         const totalConvenio = convenioResponse.reduce(
@@ -224,10 +224,10 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   const handleConfirmacion = async (e) => {
     setMostrarModal(false);
-    console.log("ENTRA y este es el miembro", miembro);
+  
     e.preventDefault();
 
-    console.log("Convenios del alta", convenios);
+  
     // Validar formulario
     if (!validarFormulario()) return;
 
@@ -254,7 +254,7 @@ const AltaRecibo = ({ Socio, ur }) => {
         return; // Terminar ejecución para evitar dar de alta el ingreso
       }
 
-      console.log("Recibo dado de alta:", response);
+
 
       // Si el recibo fue exitoso, registrar el ingreso
       let fechaActual = new Date();
@@ -270,7 +270,7 @@ const AltaRecibo = ({ Socio, ur }) => {
       try {
         // Intentar dar de alta el ingreso
         const IngresoResponse = await postIngreso(ingreso);
-        console.log("Ingreso exitoso:", IngresoResponse);
+   
         setIngreso(IngresoResponse);
         alert("Dado de alta correctamente");
       } catch (error) {
@@ -293,7 +293,7 @@ const AltaRecibo = ({ Socio, ur }) => {
     socioActualizar.capitalSocio += capitalMenosInteres;
     if (ingreso != null) {
       const socioUpdate = await updateSocio(socioActualizar);
-      console.log("Socio Update", socioUpdate);
+
     }
   };
   //      ruta dinamica

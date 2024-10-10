@@ -30,7 +30,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const [mostrarModal, setMostrarModal] = useState(false); 
   const [isConfirmed, setIsConfirmed] = useState(false); 
 
-  console.log("Vivienda seleccionada", SeleccionVivienda);
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFechaIngresoCooperativa(today);
@@ -40,7 +40,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const fetchViviendasDisponibles = async () => {
     try {
       const response = await getAllViviendas(cooperativa.idCooperativa);
-      console.log(response);
+ 
       let viviendasDisponibles = [];
       response.forEach((vivienda) => {
         if (vivienda.socio == null) {
@@ -48,7 +48,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
         }
       });
       setViviendasDisponibles(viviendasDisponibles);
-      console.log("viviendas disponibles" + viviendasDisponibles);
+  
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -106,7 +106,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     setTieneSuplente(e.target.checked);
   };
   const validarFormulario = () => {
-    console.log(cooperativa.listaSocios);
+
     const errores = {};
   
     const socioExistente = cooperativa.listaSocios.find((socio) => socio.nroSocio == NroSocio && socio.archivado == false);
@@ -239,19 +239,19 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     };
 
     try {
-      console.log("Datos enviados:", SocioData);
+ 
       const response = await postSocio(
         SocioData,
         SeleccionVivienda,
         cooperativa.idCooperativa
       );
-      console.log(response);
+
       cooperativa.listaSocios.push(response);
       loginMiembro(miembro, cooperativa);
 
       if (TieneSuplente) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
-        console.log(responseSuplente);
+
       }
 
       setIdentificadorComponente(0); // Reseteo del componente o vista

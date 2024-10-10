@@ -87,7 +87,7 @@ const AltaCooperativa = () => {
       };
 
       const response = await postCooperativa(data);
-      console.log(response);
+
       setMensaje("Cooperativa creada con éxito");
     } catch (error) {
       console.error("Error al crear la cooperativa:", error);

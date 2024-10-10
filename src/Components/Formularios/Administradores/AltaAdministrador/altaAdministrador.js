@@ -81,7 +81,6 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
         SocioEncontrado.cedulaSocio,
         cooperativa.idCooperativa
       );
-      console.log(response);
       setMensaje("Administrador creado con éxito");
       setIdentificadorComponente(27);
       // Resetear los campos del formulario si es necesario
