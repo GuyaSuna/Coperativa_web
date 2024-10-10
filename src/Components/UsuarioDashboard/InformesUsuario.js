@@ -4,7 +4,7 @@ import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContablePDF/Ver
 import {
   getUltimoEstadoContable,
   getUltimoReajuste,
-  getUtimoBalance,
+  getUltimoBalance,
 } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import { jsPDF } from "jspdf";
@@ -93,7 +93,7 @@ const InformesUsuario = ({}) => {
   };
   const fetchUltimoBalanceAnual = async () => {
     try {
-      const balance = await getUtimoBalance(cooperativa.idCooperativa);
+      const balance = await GetUltimoBalanceAnual();
       console.log("ULTIMO BALANCE", balance);
       setUltimoBalance(balance);
     } catch (error) {

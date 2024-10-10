@@ -16,8 +16,8 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <div 
-      className={`xl:w-72 w-48 flex-shrink-0 border-r ${darkMode ? "border-gray-800 bg-gray-900" : "border-gray-200 bg-gray-50"} overflow-y-auto lg:block hidden p-5`}
+    <div
+      className={`xl:w-72 w-48 flex-shrink-0 border-r  bg-gray-50 dark:bg-dark border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5`}
     >
       <Image
         key={darkMode ? "dark" : "light"}
@@ -32,15 +32,22 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
       <div className="space-y-4 mt-3">
         <button
           onClick={() => handleSelection(37)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center ${darkMode ? "text-white hover:bg-blue-900" : "text-black hover:bg-blue-100"} ${selectedOption === 37 ? "bg-gray-300" : ""}`}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+            selectedOption === 38 ? "bg-blue-500 text-white" : ""
+          }`}
         >
-          <FaHome className="mr-2" /> Inicio
+          <FaHome className="mr-2 text-2xl" />{" "}
+          <span className="text-base">Inicio</span>
         </button>
+
         <button
           onClick={() => handleSelection(38)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center ${darkMode ? "text-white hover:bg-blue-900" : "text-black hover:bg-blue-100"} ${selectedOption === 38 ? "bg-gray-300" : ""}`}
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+            selectedOption === 38 ? "bg-blue-500 text-white" : ""
+          }`}
         >
-          <FaUserShield className="mr-2" /> Ver informes
+          <FaUserShield className="mr-2 text-2xl" />{" "}
+          <span className="text-base">Ver informes</span>
         </button>
       </div>
     </div>

@@ -43,6 +43,7 @@ import ListadoInteresAnual from "./Listados/ListadoInteresAnual/listadoInteresAn
 import ListadoBalanceAnual from "./Listados/ListadoBalanceAnual/listadoBalanceAnual";
 import DetallesCooperativa from "./DetallesCooperativa";
 import ListadoReajustes from "./Listados/ListadoReajuste/listadoReajuste";
+import ModificarUsuario from "./Formularios/Usuarios/ModificarUsuario/modificarUsuario";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -112,9 +113,9 @@ const ComponentesOrganizados = ({
       );
     }
     case 7: {
-      return <AltaSuplente 
-        setIdentificadorComponente={setIdentificadorComponente}
-      />;
+      return (
+        <AltaSuplente setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
     case 8: {
       return <AltaAviso />;
@@ -163,9 +164,9 @@ const ComponentesOrganizados = ({
       return <ListadoInformes />;
     }
     case 16: {
-      return <AltaSubsidio 
-        setIdentificadorComponente={setIdentificadorComponente}
-      />;
+      return (
+        <AltaSubsidio setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
     case 17: {
       return (
@@ -176,10 +177,12 @@ const ComponentesOrganizados = ({
       );
     }
     case 18: {
-      return <AltaConvenio 
-      ur={ur} 
-      setIdentificadorComponente={setIdentificadorComponente}
-      />;
+      return (
+        <AltaConvenio
+          ur={ur}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
     case 19: {
       return (
@@ -262,7 +265,10 @@ const ComponentesOrganizados = ({
     }
     case 31: {
       return (
-        <AltaReajuste ur={ur} setIdentificadorComponente={setIdentificadorComponente} />
+        <AltaReajuste
+          ur={ur}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
       );
     }
     case 32: {
@@ -349,6 +355,9 @@ const ComponentesOrganizados = ({
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );
+    }
+    case 45: {
+      return <ModificarUsuario usuario={usuario} />;
     }
   }
 };

@@ -2173,10 +2173,10 @@ const deleteRecibo = async (nroRecibo) => {
     throw new Error("Error al eliminar el socio");
   }
 };
-const getUtimoBalance = async () => {
+const GetUltimoBalanceAnual = async (idCooperativa) => {
   try {
     const token = getToken();
-    const response = await fetch(`${URL}/balanceAnual`, {
+    const response = await fetch(`${URL}/balanceAnual/${idCooperativa}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -2185,23 +2185,47 @@ const getUtimoBalance = async () => {
     });
 
     if (!response.ok) {
-      // Si la respuesta no es 200, verifica si es 404 (no encontrado)
       if (response.status === 404) {
-        // Si no hay balance, retorna null en vez de lanzar error
+        console.warn("Balance anual no encontrado (404).");
         return null;
       }
-      // Si el error es otro, lanzar un error
-      throw new Error("La petición falló, respuesta no es correcta");
+      throw new Error(`Error de servidor: ${response.statusText}`);
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     console.error("Error en getUltimoBalance:", error);
-    // Retornar null si hay algún error en la petición para no interrumpir el flujo
     return null;
   }
 };
+
+const updateUser = async (UpdateUserRequest, cedulaSocio, idCooperativa) => {
+  try {
+    const response = await fetch(
+      `${URL}/api/users/update/${cedulaSocio}/${idCooperativa}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(UpdateUserRequest),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The request has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error in updateUser:", error);
+    throw new Error("Error updating user");
+  }
+};
+
 export {
   Login,
   getSocio,
@@ -2280,5 +2304,6 @@ export {
   getBalanceAnual,
   getAllBalanceAnual,
   getAllReajustes,
-  getUtimoBalance,
+  GetUltimoBalanceAnual,
+  updateUser,
 };
