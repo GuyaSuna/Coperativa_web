@@ -47,7 +47,6 @@ const AdminHome = () => {
   const fetchUr = async () => {
     try {
       const response = await getUr();
-      console.log("RESPUESTA FRONT", response);
       const fechaActual = new Date();
       let mesActual = fechaActual.getMonth();
       const meses = [

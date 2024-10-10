@@ -93,7 +93,6 @@ const InformesUsuario = ({}) => {
     const fechaBalance = new Date(fechaBalanceAnual + "T00:00:00");
     const doc = new jsPDF();
   
-    // Título principal
     doc.setFontSize(18);
     doc.text(`Balance Anual - ${cooperativaEntity.nombre}`, 14, 22);
   
