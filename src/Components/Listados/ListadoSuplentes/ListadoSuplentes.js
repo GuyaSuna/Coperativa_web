@@ -240,7 +240,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                             <MenuItem>
                               <button
                                 onClick={() =>
-                                  handleModificar(suplente.cedulaSuplente)
+                                  handleModificar(suplente)
                                 }
                                 className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                               >
@@ -251,20 +251,6 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                         </MenuItems>
                       </Menu>
                     </div>
-                  </td>
-                  <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
-                    <button
-                      onClick={() => handleEliminar(suplente.cedulaSuplente)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
-                    >
-                      Eliminar
-                    </button>
-                    <button
-                      onClick={() => handleModificar(suplente.cedulaSuplente)}
-                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                    >
-                      Modificar
-                    </button>
                   </td>
                 </tr>
               );

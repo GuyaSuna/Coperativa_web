@@ -164,7 +164,6 @@ const AdminHome = () => {
                           { label: "Convenios", id: 26 },
                           { label: "Estados Contables", id: 35 },
                           { label: "Interes Anual", id: 41 },
-                          { label: "Balance Anual", id: 42 },
                         ].map((item) => (
                           <Menu.Item key={item.id}>
                             {({ active }) => (

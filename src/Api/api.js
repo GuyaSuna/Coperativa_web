@@ -529,6 +529,7 @@ const deleteSuplente = async (cedulaSuplente) => {
     const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
       method: "DELETE",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });

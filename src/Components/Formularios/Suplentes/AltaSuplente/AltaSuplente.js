@@ -8,6 +8,7 @@ import {
   getAllSuplentes,
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaSuplente = ({setIdentificadorComponente}) => {
   const router = useRouter();
