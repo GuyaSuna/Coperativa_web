@@ -905,8 +905,6 @@ const postRecibo = async (
   socio,
   tesorero
 ) => {
-  
-
   try {
     if (subsidio === 0) {
       subsidio = null;
@@ -942,7 +940,10 @@ const postRecibo = async (
 
     if (!response.ok) {
       const errorData = await response.json(); // Aquí capturas el mensaje de error específico
-      throw new Error(errorData.message || "La solicitud ha fallado, la respuesta no es válida");
+      throw new Error(
+        errorData.message ||
+          "La solicitud ha fallado, la respuesta no es válida"
+      );
     }
 
     const contentType = response.headers.get("Content-Type");
@@ -964,7 +965,6 @@ const postRecibo = async (
     return { error: error.message }; // Devolver el mensaje de error específico
   }
 };
-
 
 const getAllRecibosPorSocio = async (cedulaSocio) => {
   try {
@@ -1054,14 +1054,17 @@ const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
   try {
     console.log(aviso);
     const token = getToken();
-    const response = await fetch(`${URL}/aviso/All/${idAdmin}/${idCooperativa}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(aviso),
-    });
+    const response = await fetch(
+      `${URL}/aviso/All/${idAdmin}/${idCooperativa}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(aviso),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -1075,7 +1078,6 @@ const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
     throw new Error("Error al enviar los datos del aviso");
   }
 };
-
 
 // usuario
 const postUsuario = async (usuarioEntity) => {
@@ -1413,7 +1415,6 @@ const getUltimoReajuste = async () => {
   }
 };
 
-
 const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
   console.log("Cedula que mandamos", cedulaSocio);
   try {
@@ -1574,7 +1575,7 @@ const getAllIngresos = async (idCooperativa) => {
     throw new Error("Error al obtener los datos de los Ingresos.");
   }
 };
-const getAllIngresosByMes = async (fecha , idCooperativa) => {
+const getAllIngresosByMes = async (fecha, idCooperativa) => {
   try {
     const token = getToken();
     const response = await fetch(
@@ -1801,7 +1802,6 @@ const getAllEgresosByMes = async (fecha, idCooperativa) => {
   }
 };
 
-
 const postCapitalInteres = async (CapitalInteresList, idCooperativa) => {
   try {
     const token = getToken();
@@ -1923,7 +1923,7 @@ const loginMaster = async (MasterData) => {
       throw new Error("The petition has failed, response isn't ok");
     }
     const data = await response.json();
-console.log("API" , data)
+    console.log("API", data);
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
     } else {
@@ -1969,13 +1969,16 @@ const postBalanceAnual = async (fecha, idCooperativa) => {
     console.log("Fecha en formato ISO: ", fechaISO);
     console.log("Token usado: ", token);
 
-    const response = await fetch(`${URL}/balanceAnual/${fechaISO}/${idCooperativa}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await fetch(
+      `${URL}/balanceAnual/${fechaISO}/${idCooperativa}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (!response.ok) {
       const errorDetails = await response.json();
@@ -1996,16 +1999,13 @@ const getBalanceAnual = async (idBalance) => {
     console.log("Llega aca");
     const token = getToken();
     console.log(token);
-    const response = await fetch(
-      `${URL}/balanceAnual/${idBalance}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${URL}/balanceAnual/${idBalance}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -2046,7 +2046,6 @@ const getAllBalanceAnual = async (idCooperativa) => {
     throw new Error("Error al enviar los datos de GetBalanceAnual");
   }
 };
-
 
 const getDevolucionCapital = async (cedulaSocio) => {
   try {
@@ -2153,7 +2152,6 @@ const getAllInteresAnual = async (idCooperativa) => {
   }
 };
 
-
 const deleteRecibo = async (nroRecibo) => {
   try {
     const token = getToken();
@@ -2175,6 +2173,59 @@ const deleteRecibo = async (nroRecibo) => {
     throw new Error("Error al eliminar el socio");
   }
 };
+const GetUltimoBalanceAnual = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/balanceAnual/${idCooperativa}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.warn("Balance anual no encontrado (404).");
+        return null;
+      }
+      throw new Error(`Error de servidor: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en getUltimoBalance:", error);
+    return null;
+  }
+};
+
+const updateUser = async (UpdateUserRequest, cedulaSocio, idCooperativa) => {
+  try {
+    const response = await fetch(
+      `${URL}/api/users/update/${cedulaSocio}/${idCooperativa}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(UpdateUserRequest),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The request has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error in updateUser:", error);
+    throw new Error("Error updating user");
+  }
+};
+
 export {
   Login,
   getSocio,
@@ -2253,4 +2304,6 @@ export {
   getBalanceAnual,
   getAllBalanceAnual,
   getAllReajustes,
+  GetUltimoBalanceAnual,
+  updateUser,
 };

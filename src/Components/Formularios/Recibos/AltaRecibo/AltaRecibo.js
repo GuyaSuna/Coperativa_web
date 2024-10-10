@@ -103,7 +103,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   const fetchSubsidio = async () => {
     const subsidioResponse = await getSubsidioVigenteSocio(Socio.cedulaSocio);
     if (subsidioResponse != null) {
-      console.log("SUBSIDIOOOOOOOOOOOO",subsidioResponse);
+      console.log("SUBSIDIOOOOOOOOOOOO", subsidioResponse);
       setSubsidio(subsidioResponse);
     } else {
       setSubsidio(0);
@@ -127,12 +127,9 @@ const AltaRecibo = ({ Socio, ur }) => {
     }
   };
 
-  
   useEffect(() => {
-
-    fetchConvenio()
-    Recargo(fechaEmision,fechaPago, setRecargo, ur);
-
+    fetchConvenio();
+    Recargo(fechaEmision, fechaPago, setRecargo, ur);
   }, [fechaPago]);
 
   useEffect(() => {
@@ -229,11 +226,11 @@ const AltaRecibo = ({ Socio, ur }) => {
     setMostrarModal(false);
     console.log("ENTRA y este es el miembro", miembro);
     e.preventDefault();
-  
-    console.log("Convenios del alta" , convenios)
+
+    console.log("Convenios del alta", convenios);
     // Validar formulario
     if (!validarFormulario()) return;
-  
+
     try {
       // Intentar dar de alta el recibo
       const response = await postRecibo(
@@ -250,15 +247,15 @@ const AltaRecibo = ({ Socio, ur }) => {
         Socio,
         miembro.responseBody
       );
-  
+
       // Si hay un error en la respuesta del recibo, mostrar el mensaje de error específico
       if (response && response.error) {
         alert(response.error); // Mostrar el mensaje de error específico retornado por postRecibo
         return; // Terminar ejecución para evitar dar de alta el ingreso
       }
-  
+
       console.log("Recibo dado de alta:", response);
-  
+
       // Si el recibo fue exitoso, registrar el ingreso
       let fechaActual = new Date();
       const ingreso = {
@@ -269,7 +266,7 @@ const AltaRecibo = ({ Socio, ur }) => {
         tipoMoneda: "UR",
         fechaDatosContables: fechaActual,
       };
-  
+
       try {
         // Intentar dar de alta el ingreso
         const IngresoResponse = await postIngreso(ingreso);
@@ -285,9 +282,7 @@ const AltaRecibo = ({ Socio, ur }) => {
       alert("Error al dar de alta el recibo. Por favor, intenta nuevamente.");
     }
   };
-  
-  
-  
+
   useEffect(() => {
     automaticUpdate();
   }, [ingreso]);

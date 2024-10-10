@@ -22,6 +22,7 @@ import {
   FaRegNewspaper,
   FaChartLine,
   FaHouseUser,
+  FaClipboardList,
 } from "react-icons/fa";
 import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
@@ -34,6 +35,7 @@ const Header = ({ setIdentificadorComponente }) => {
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openSecondDropdown, setOpenSecondDropdown] = useState(null); // Estado para el segundo dropdown
+  const [openThirdDropdown, setOpenThirdDropdown] = useState(null);
 
   // Acceder al estado del tema
   const { darkMode } = useTheme();
@@ -66,7 +68,9 @@ const Header = ({ setIdentificadorComponente }) => {
   const toggleSecondDropdown = () => {
     setOpenSecondDropdown(!openSecondDropdown); // Alterna el estado del segundo dropdown
   };
-
+  const toggleThirdDropdown = () => {
+    setOpenThirdDropdown(openThirdDropdown ? null : true); // Alterna el tercer desplegable
+  };
   const initial = miembroUsername.charAt(0).toUpperCase();
   return (
     <header className="h-16 flex justify-between w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
@@ -111,17 +115,17 @@ const Header = ({ setIdentificadorComponente }) => {
               height={65}
             />
             <div className="space-y-4 mt-3">
-              {/* Sección de botones del sidebar */}
               <div className="relative">
                 <button
-                  onClick={() => handleSelection(0)}
+                  onClick={() => handleSelection(43)}
                   className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                    selectedOption === 0 ? "bg-blue-500 text-white" : ""
+                    selectedOption === 43 ? "bg-blue-500 text-white" : ""
                   }`}
                 >
-                  <FaHome className="mr-2 text-2xl" />{" "}
-                  <a className="text-base">Inicio</a>
+                  <FaHouseUser className="mr-2 text-2xl" />{" "}
+                  <span className="text-base">Ver Cooperativa</span>
                 </button>
+
                 <button
                   onClick={() => toggleDropdown(1)}
                   className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
@@ -129,7 +133,7 @@ const Header = ({ setIdentificadorComponente }) => {
                   }`}
                 >
                   <div className="flex items-center">
-                    <FaUserShield className="mr-2 text-2xl" />
+                    <FaUserShield className="mr-2 text-2xl" />{" "}
                     <span className="text-base">Agregar Entidades</span>
                   </div>
                   <span
@@ -152,7 +156,7 @@ const Header = ({ setIdentificadorComponente }) => {
                       }`}
                     >
                       <FaHouseUser className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Vivienda</a>
+                      <span className="text-base">Agregar Vivienda</span>
                     </button>
                     <button
                       onClick={() => handleSelection(3)}
@@ -160,10 +164,9 @@ const Header = ({ setIdentificadorComponente }) => {
                         selectedOption === 3 ? "bg-blue-500 text-white" : ""
                       }`}
                     >
-                      <FaUserPlus className="mr-2 text-2xl" />
+                      <FaUserPlus className="mr-2 text-2xl" />{" "}
                       <span className="text-base">Agregar Socio</span>
                     </button>
-
                     <button
                       onClick={() => handleSelection(7)}
                       className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
@@ -171,7 +174,7 @@ const Header = ({ setIdentificadorComponente }) => {
                       }`}
                     >
                       <FaUserPlus className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Suplente</a>
+                      <span className="text-base">Agregar Suplente</span>
                     </button>
                     <button
                       onClick={() => handleSelection(16)}
@@ -180,7 +183,7 @@ const Header = ({ setIdentificadorComponente }) => {
                       }`}
                     >
                       <FaHandHoldingUsd className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Subsidio</a>
+                      <span className="text-base">Agregar Subsidio</span>
                     </button>
                     <button
                       onClick={() => handleSelection(18)}
@@ -189,7 +192,7 @@ const Header = ({ setIdentificadorComponente }) => {
                       }`}
                     >
                       <FaFileAlt className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Convenio</a>
+                      <span className="text-base">Agregar Convenio</span>
                     </button>
                     <button
                       onClick={() => handleSelection(13)}
@@ -198,7 +201,84 @@ const Header = ({ setIdentificadorComponente }) => {
                       }`}
                     >
                       <FaUser className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar Usuario</a>
+                      <span className="text-base">Agregar Usuario</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Segundo desplegable */}
+              <div className="relative">
+                <button
+                  onClick={toggleSecondDropdown}
+                  className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                    openSecondDropdown ? "bg-blue-500 text-white" : ""
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <FaChartLine className="mr-2 text-2xl" />{" "}
+                    <span className="text-base">Opciones Adicionales</span>
+                  </div>
+                  <span
+                    className="transform transition-transform duration-200 text-1xl"
+                    style={{
+                      transform: openSecondDropdown
+                        ? "rotate(180deg)"
+                        : "rotate(0)",
+                    }}
+                  >
+                    ▼
+                  </span>
+                </button>
+
+                {openSecondDropdown && (
+                  <div className="mt-2 space-y-2 ml-4">
+                    <button
+                      onClick={() => handleSelection(8)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 8 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaBell className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Generar Aviso</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(22)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 22 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBillWave className="mr-2 text-2xl" />
+                      <span className="text-base">Declarar Ingreso</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleSelection(24)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 24 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />
+                      <span className="text-base">Declarar Egreso</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleSelection(34)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 34 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileSignature className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Informe Interes Anual</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(31)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 31 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaRegNewspaper className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Reajuste Anual</span>
                     </button>
                     <button
                       onClick={() => handleSelection(33)}
@@ -207,59 +287,97 @@ const Header = ({ setIdentificadorComponente }) => {
                       }`}
                     >
                       <FaFileInvoice className="mr-2 text-2xl" />{" "}
-                      <a className="text-base">Agregar EstadosCont.</a>
+                      <span className="text-base">
+                        Agregar Estados Contables
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(32)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 32 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileSignature className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Agregar Balance Anual</span>
                     </button>
                   </div>
                 )}
               </div>
+              <div className="relative">
+                <button
+                  onClick={toggleThirdDropdown}
+                  className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                    openThirdDropdown ? "bg-blue-500 text-white" : ""
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <FaClipboardList className="mr-2 text-2xl" />{" "}
+                    <span className="text-base">Listados Adicionales</span>
+                  </div>
+                  <span
+                    className="transform transition-transform duration-200 text-1xl"
+                    style={{
+                      transform: openThirdDropdown
+                        ? "rotate(180deg)"
+                        : "rotate(0)",
+                    }}
+                  >
+                    ▼
+                  </span>
+                </button>
 
-              <button
-                onClick={() => handleSelection(8)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                  selectedOption === 8 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaBell className="mr-2 text-2xl" />{" "}
-                <a className="text-base">Generar Aviso</a>
-              </button>
-              <button
-                onClick={() => handleSelection(22)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                  selectedOption === 22 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaMoneyBillWave className="mr-2 text-2xl" />
-                <a className="text-base">Declarar Ingreso</a>
-              </button>
+                {openThirdDropdown && (
+                  <div className="mt-2 space-y-2 ml-4">
+                    <button
+                      onClick={() => handleSelection(35)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 35 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileInvoice className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Estados Contables</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(41)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 41 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaRegNewspaper className="mr-2 text-2xl" />
+                      <span className="text-base">Interes Anual</span>
+                    </button>
 
-              <button
-                onClick={() => handleSelection(24)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                  selectedOption === 24 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaMoneyBill className="mr-2 text-2xl" />
-                <a className="text-base">Declarar Egreso</a>
-              </button>
+                    <button
+                      onClick={() => handleSelection(42)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 42 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileSignature className="mr-2 text-2xl" />
+                      <span className="text-base">Balance Anual</span>
+                    </button>
 
-              <button
-                onClick={() => handleSelection(34)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                  selectedOption === 34 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaFileSignature className="mr-2 text-2xl" />{" "}
-                <a className="text-base">Informe Interes Anual.</a>
-              </button>
-              <button
-                onClick={() => handleSelection(31)}
-                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                  selectedOption === 31 ? "bg-blue-500 text-white" : ""
-                }`}
-              >
-                <FaRegNewspaper className="mr-2 text-2xl" />{" "}
-                <a className="text-base">Resjuste Anual.</a>
-              </button>
+                    <button
+                      onClick={() => handleSelection(20)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 20 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Listado Ingresos</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(21)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 21 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Listado Egresos</span>
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

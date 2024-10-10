@@ -8,12 +8,7 @@ import logoLight from "../../public/logoVisoftLigth.png";
 import Image from "next/image";
 import { getAllAvisosPorUsuario } from "@/Api/api";
 import { useRouter } from "next/navigation";
-import {
-  FaHome,
-  FaUserPlus,
-  FaUserShield,
-  FaBell,
-} from "react-icons/fa";
+import { FaHome, FaUserPlus, FaUserShield, FaBell } from "react-icons/fa";
 import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
 
 const HeaderUsuario = ({ setIdentificadorComponente }) => {
@@ -31,12 +26,12 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
 
   useEffect(() => {
     fetchAvisos();
-  },[])
+  }, []);
 
   const fetchAvisos = async () => {
     const response = await getAllAvisosPorUsuario(miembro.responseBody.id);
     setAvisos(response);
-  }
+  };
   const handleSelection = (option) => {
     setIdentificadorComponente(option);
     setSelectedOption(option);
@@ -69,7 +64,9 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
 
   // Obtener la inicial del nombre
   const initial = miembroUsername.charAt(0).toUpperCase();
-
+  const handleModificar = () => {
+    setIdentificadorComponente(45);
+  };
   return (
     <header className="h-16 flex justify-start w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
       <div className="flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
@@ -203,7 +200,7 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
               <span className="relative flex-shrink-0 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
                 {initial} {/* Muestra la inicial del nombre */}
               </span>
-              <span className="ml-2 md:text-xs  dark:text-dark text-white self-center">
+              <span className="ml-2 md:text-xs  text-dark dark:text-white self-center">
                 {miembroUsername}
               </span>
               <svg
@@ -226,7 +223,7 @@ const HeaderUsuario = ({ setIdentificadorComponente }) => {
             <div className="py-1">
               <MenuItem>
                 <button
-                  onClick={() => handleModificar(socios.cedulaSocio)}
+                  onClick={() => handleModificar(miembro.responseBody)}
                   className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                 >
                   Modificar

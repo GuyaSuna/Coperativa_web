@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
@@ -141,11 +141,6 @@ const AdminHome = () => {
                       { label: "Subsidios", id: 17 },
                       { label: "Convenios", id: 26 },
                       { label: "Reajustes", id: 44 },
-                      { label: "Estados Contables", id: 35 },
-                      { label: "Interes Anual", id: 41 },
-                      { label: "Balance Anual", id: 42 },
-                      { label: "Ingresos", id: 20 },
-                      { label: "Egresos", id: 21 },
                     ].map((item) => (
                       <button
                         key={item.id}
@@ -194,5 +189,3 @@ const AdminHome = () => {
 };
 
 export default AdminHome;
-
-
