@@ -2173,17 +2173,20 @@ const deleteRecibo = async (nroRecibo) => {
     throw new Error("Error al eliminar el socio");
   }
 };
-const GetUltimoBalanceAnual = async (idCooperativa) => {
+const getUltimoBalanceAnual = async (idCooperativa) => {
   try {
+    console.log("llega aca")
     const token = getToken();
-    const response = await fetch(`${URL}/balanceAnual/${idCooperativa}`, {
+    const response = await fetch(`${URL}/balanceAnual/ultimo/${idCooperativa}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
-
+    if(response == null){
+      return response;
+    }
     if (!response.ok) {
       if (response.status === 404) {
         console.warn("Balance anual no encontrado (404).");
@@ -2304,6 +2307,6 @@ export {
   getBalanceAnual,
   getAllBalanceAnual,
   getAllReajustes,
-  GetUltimoBalanceAnual,
+  getUltimoBalanceAnual,
   updateUser,
 };

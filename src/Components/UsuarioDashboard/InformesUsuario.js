@@ -4,7 +4,7 @@ import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContablePDF/Ver
 import {
   getUltimoEstadoContable,
   getUltimoReajuste,
-  getUltimoBalance,
+  getUltimoBalanceAnual,
 } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import { jsPDF } from "jspdf";
@@ -39,8 +39,8 @@ const InformesUsuario = ({}) => {
   };
   console.log("Ultimo estado contable", estadoContable);
 
-  const descargarPdfReajuste = (ultimoReajuste) => {
-    const fechaReajuste = new Date(ultimoReajuste.fechaReajuste + "T00:00:00");
+  const descargarPdfReajuste = (reajuste) => {
+    const fechaReajuste = new Date(reajuste.fechaReajuste + "T00:00:00");
     const doc = new jsPDF();
 
     doc.setFontSize(18);
@@ -50,20 +50,8 @@ const InformesUsuario = ({}) => {
     doc.text("Detalles del Reajuste:", 14, 30);
 
     const data = [
-      [
-        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
-        "2 D",
-        "5,55",
-        ultimoReajuste.valorUr.toFixed(2),
-        ultimoReajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2),
-      ],
-      [
-        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
-        "2 D",
-        "5,55",
-        ultimoReajuste.valorUr.toFixed(2),
-        ultimoReajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2),
-      ],
+      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr, reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
+      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr,reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
     ];
 
     doc.autoTable({
@@ -79,7 +67,7 @@ const InformesUsuario = ({}) => {
       doc.autoTable.previous.finalY + 10
     );
 
-    doc.save(`Reajuste_Anual_${ultimoReajuste.fechaReajuste}.pdf`);
+    doc.save(`Reajuste_Anual_${reajuste.fechaReajuste}.pdf`);
   };
 
   const fetchUltimoReajuste = async () => {
@@ -91,57 +79,72 @@ const InformesUsuario = ({}) => {
       console.error("Error al obtener el último reajuste:", error);
     }
   };
-  const fetchUltimoBalanceAnual = async () => {
-    try {
-      const balance = await GetUltimoBalanceAnual();
-      console.log("ULTIMO BALANCE", balance);
-      setUltimoBalance(balance);
-    } catch (error) {
-      console.error("Error al obtener el último balance:", error);
+
+  const descargarPdfBalanceAnual = () => {
+    console.log("ULTIMO", ultimoBalance);
+  
+    if (!ultimoBalance) {
+      alert("No se encontraron datos de balance anual para generar el PDF.");
+      return;
     }
-  };
-  const descargarPdfBalance = (ultimoBalance) => {
-    const fechaReajuste = new Date(ultimoBalance.fechaReajuste + "T00:00:00");
+  
+    const { cooperativaEntity, egresoTotal, ingresoTotal, resultadoFinal, listaEgresos, listaIngresos, fechaBalanceAnual } = ultimoBalance;
+  
+    const fechaBalance = new Date(fechaBalanceAnual + "T00:00:00");
     const doc = new jsPDF();
-
+  
+    // Título principal
     doc.setFontSize(18);
-    doc.text("Reajuste Anual", 14, 22);
-
+    doc.text(`Balance Anual - ${cooperativaEntity.nombre}`, 14, 22);
+  
     doc.setFontSize(12);
-    doc.text("Detalles del Reajuste:", 14, 30);
+    doc.text(`Año: ${fechaBalance.getFullYear()}`, 170, 22, { align: 'right' });
+    
+  
 
-    const data = [
-      [
-        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
-        "2 D",
-        "5,55",
-        ultimoBalance.valorUr.toFixed(2),
-        ultimo.cuotaMensualDosHabitacionesEnPesos.toFixed(2),
-      ],
-      [
-        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
-        "2 D",
-        "5,55",
-        ultimoReajuste.valorUr.toFixed(2),
-        ultimoReajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2),
-      ],
-    ];
+    const ingresosStartY = 40;
+    doc.setFontSize(14);
+    doc.text("Ingresos:", 14, ingresosStartY);
+  
+    doc.autoTable({
+      head: [["SubRubro", "Monto"]],
+      body: listaIngresos.length > 0 
+        ? listaIngresos.map(ingreso => [ingreso.subRubro, ingreso.ingreso?.toFixed(2)]) 
+        : [["Sin ingresos", "0.00"]],
+      startY: ingresosStartY + 5, 
+      theme: "grid",
+      
+    });
+  
+
+    const egresosStartY = doc.autoTable.previous.finalY + 10;
+    doc.setFontSize(14);
+    doc.text("Egresos:", 14, egresosStartY);
+  
 
     doc.autoTable({
-      head: [["PERIODO", "TIPO", "VALOR CASA", "REAJUSTE", "ANUAL CUOTA"]],
-      body: data,
-      startY: 40,
+      head: [["SubRubro", "Monto"]],
+      body: listaEgresos.length > 0 
+        ? listaEgresos.map(egreso => [egreso.subRubro, egreso.egreso?.toFixed(2)]) 
+        : [["Sin egresos", "0.00"]],
+      startY: egresosStartY + 5,
       theme: "grid",
     });
-
+  
+    // Totales y resultado final
+    const totalsStartY = doc.autoTable.previous.finalY + 10;
+    doc.setFontSize(12);
     doc.text(
-      "Se debe agregar cuota social $400",
+      `Total Ingresos: ${ingresoTotal?.toFixed(2)} - Total Egresos: ${egresoTotal?.toFixed(2)} - Resultado: ${resultadoFinal.toFixed(2)}`,
       14,
-      doc.autoTable.previous.finalY + 10
+      totalsStartY
     );
-
-    doc.save(`Reajuste_Anual_${ultimoReajuste.fechaReajuste}.pdf`);
+  
+    // Guarda el archivo PDF con el nombre adecuado
+    doc.save(`Balance_Anual_${fechaBalance.getFullYear()}.pdf`);
   };
+  
+
   console.log("Ultimo reajuste: ", ultimoReajuste);
   console.log("Ultimo balance: ", ultimoBalance);
   return (
@@ -183,13 +186,13 @@ const InformesUsuario = ({}) => {
             </span>
           </p>
           <div className="flex items-center justify-center mt-6">
-            <a
-              href="#"
+          <button
+              onClick={() => descargarPdfBalanceAnual()}
               className="bg-blue-600 hover:bg-blue-700 px-8 py-2 text-sm text-gray-200 uppercase rounded font-bold transition duration-150"
               title="Purchase"
             >
-              Descargar Informe
-            </a>
+              Descargar Balance
+            </button>
           </div>
         </div>
         <div className="dark:bg-white bg-slate-500 shadow-2xl rounded-lg py-4">

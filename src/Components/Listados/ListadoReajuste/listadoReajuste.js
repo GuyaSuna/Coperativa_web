@@ -87,31 +87,33 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
   };
 
   const descargarPdf = (reajuste) => {
-    const fechaReajuste = new Date(reajuste.fechaReajuste + "T00:00:00"); 
+    const fechaReajuste = new Date(reajuste.fechaReajuste + "T00:00:00");
     const doc = new jsPDF();
 
     doc.setFontSize(18);
     doc.text("Reajuste Anual", 14, 22);
- 
+
     doc.setFontSize(12);
     doc.text("Detalles del Reajuste:", 14, 30);
-  
 
     const data = [
-      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', '5,55', reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
-      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', '5,55',reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
+      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr, reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
+      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr,reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
     ];
-  
-    doc.autoTable({
-      head: [['PERIODO', 'TIPO', 'VALOR CASA', 'REAJUSTE', 'ANUAL CUOTA']],
-      body: data,
-      startY: 40, 
-      theme: 'grid', 
-    });
-  
 
-    doc.text("Se debe agregar cuota social $400", 14, doc.autoTable.previous.finalY + 10);
-  
+    doc.autoTable({
+      head: [["PERIODO", "TIPO", "VALOR CASA", "REAJUSTE", "ANUAL CUOTA"]],
+      body: data,
+      startY: 40,
+      theme: "grid",
+    });
+
+    doc.text(
+      "Se debe agregar cuota social $400",
+      14,
+      doc.autoTable.previous.finalY + 10
+    );
+
     doc.save(`Reajuste_Anual_${reajuste.fechaReajuste}.pdf`);
   };
   
