@@ -10,7 +10,7 @@ const AltaIngreso = () => {
   const [denominacion, setDenominacion] = useState("");
   const [ingreso, setIngreso] = useState("");
   const [errores, setErrores] = useState({});
-  const [tipoMoneda, setTipoMoneda] = useState("UR");
+  const [tipoMoneda, setTipoMoneda] = useState("UYU");
   const [fechaDatosContables, setFechaDatosContables] = useState("");
   const [mostrarModal, setMostrarModal] = useState(false); // Estado para mostrar el modal
 

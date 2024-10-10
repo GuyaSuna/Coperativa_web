@@ -63,7 +63,7 @@ const AltaEstadoContable = () => {
   const calcularTotales = (egresos, ingresos) => {
     // Filtrar y sumar los ingresos y egresos por tipo de moneda
     const sumaIngresosPesos = ingresos
-      .filter((ingreso) => ingreso.tipoMoneda === "UR")
+      .filter((ingreso) => ingreso.tipoMoneda === "UYU")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaIngresosDolares = ingresos
@@ -71,7 +71,7 @@ const AltaEstadoContable = () => {
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
 
     const sumaEgresosPesos = egresos
-      .filter((egreso) => egreso.tipoMoneda === "UR")
+      .filter((egreso) => egreso.tipoMoneda === "UYU")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
     const sumaEgresosDolares = egresos
@@ -225,7 +225,7 @@ const AltaEstadoContable = () => {
                 <span>SubRubro</span>
               </li>
               {listaEgresos
-                .filter((egreso) => egreso.tipoMoneda === "UR")
+                .filter((egreso) => egreso.tipoMoneda === "UYU")
                 .map((egreso) => (
                   <li
                     key={egreso.id}
