@@ -186,13 +186,6 @@ const ListadoSocio = ({
       comparator: (a, b) =>
         new Date(a.fechaIngresoCooeprativa) - new Date(b.fechaIngresoCooeprativa),
     },
-    {
-      label: "Solo Socios Archivados", 
-      key: "archivados",
-      icon: <SortIcon />,
-      comparator: (a, b) => a.archivado - b.archivado,
-      filter: (socio) => socio.archivado, 
-    },
   ];
   
   useEffect(() => {
