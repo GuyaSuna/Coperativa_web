@@ -122,43 +122,13 @@ const AdminHome = () => {
                   </div>
 
                   <div className="flex space-x-4 mt-4 sm:mt-7">
-                    {/* Primer Dropdown Menu */}
                     <Menu as="div" className="relative">
-                      <Menu.Button className="bg-blue-500 text-white rounded-md px-4 py-2">
-                        Primer Menú
-                      </Menu.Button>
                       <Menu.Items className="absolute left-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg">
                         {[
                           { label: "Socios", id: 0 },
                           { label: "Viviendas", id: 1 },
                           { label: "Recibos", id: 11 },
                           { label: "Suplentes", id: 9 },
-                        ].map((item) => (
-                          <Menu.Item key={item.id}>
-                            {({ active }) => (
-                              <button
-                                onClick={() => {
-                                  handleSelection(item.id);
-                                }}
-                                className={`${
-                                  active ? "bg-blue-500 text-white" : "text-gray-900"
-                                } block w-full text-left px-4 py-2`}
-                              >
-                                {item.label}
-                              </button>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Menu>
-
-                    {/* Segundo Dropdown Menu */}
-                    <Menu as="div" className="relative">
-                      <Menu.Button className="bg-blue-500 text-white rounded-md px-4 py-2">
-                        Segundo Menú
-                      </Menu.Button>
-                      <Menu.Items className="absolute left-0 z-10 mt-1 w-48 bg-white rounded-md shadow-lg">
-                        {[
                           { label: "Usuarios", id: 12 },
                           { label: "Subsidios", id: 17 },
                           { label: "Convenios", id: 26 },
@@ -181,7 +151,7 @@ const AdminHome = () => {
                           </Menu.Item>
                         ))}
                       </Menu.Items>
-                    </Menu>
+                    </Menu>               
                   </div>
                 </div>
 

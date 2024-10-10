@@ -105,20 +105,20 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const handleChangeTieneSuplente = (e) => {
     setTieneSuplente(e.target.checked);
   };
-
   const validarFormulario = () => {
-    console.log(cooperativa.listaSocios)
+    console.log(cooperativa.listaSocios);
     const errores = {};
   
- 
     const socioExistente = cooperativa.listaSocios.find((socio) => socio.nroSocio == NroSocio && socio.archivado == false);
   
+    // Validación de la cédula del socio
     if (!CedulaSocio) {
       errores.cedulaSocio = "La cédula es obligatoria";
     } else if (isNaN(CedulaSocio)) {
       errores.cedulaSocio = "La cédula debe ser un número";
     }
   
+    // Validación del número de socio
     if (!NroSocio) {
       errores.nroSocio = "El número de socio es obligatorio";
     } else if (isNaN(NroSocio)) {
@@ -129,38 +129,52 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
       errores.nroSocio = "El número de socio ya existe en la cooperativa.";
     }
   
+    // Validación del nombre del socio
     if (!NombreSocio) {
       errores.nombreSocio = "El nombre es obligatorio";
     } else if (/[^a-zA-Z\s]/.test(NombreSocio)) {
       errores.nombreSocio = "El nombre solo debe contener letras";
     }
   
+    // Validación del apellido del socio
     if (!ApellidoSocio) {
       errores.apellidoSocio = "El apellido es obligatorio";
     } else if (/[^a-zA-Z\s]/.test(ApellidoSocio)) {
       errores.apellidoSocio = "El apellido solo debe contener letras";
     }
   
+    // Validación del teléfono del socio
     if (!TelefonoSocio) {
       errores.telefonoSocio = "El teléfono es obligatorio";
     } else if (isNaN(TelefonoSocio)) {
       errores.telefonoSocio = "El teléfono debe ser un número";
     }
   
+    // Validación del capital del socio
     if (!CapitalSocio) {
       errores.capitalSocio = "El capital es obligatorio";
     } else if (isNaN(CapitalSocio)) {
       errores.capitalSocio = "El capital debe ser un número";
     }
   
+    // Validación de la fecha de ingreso a la cooperativa
     if (!FechaIngresoCooperativa) {
       errores.fechaIngresoCooperativa = "La fecha de ingreso es obligatoria";
+    } else {
+      const fechaIngreso = new Date(FechaIngresoCooperativa);
+      const fechaHoy = new Date();
+  
+      if (fechaIngreso > fechaHoy) {
+        errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser mayor a la fecha actual";
+      }
     }
   
+    // Validación de la selección de vivienda
     if (!SeleccionVivienda) {
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
     }
   
+    // Validación para el suplente
     if (TieneSuplente) {
       if (!CedulaSuplente) {
         errores.cedulaSuplente = "La cédula del suplente es obligatoria";
@@ -395,7 +409,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
             />
             {Errores.fechaIngreso && (
               <span className="text-red-500 text-sm">
-                {Errores.fechaIngresoCooeprativa}
+                {Errores.fechaIngresoCooperativa}
               </span>
             )}
           </div>
