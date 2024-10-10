@@ -9,6 +9,7 @@ import {
   register,
 } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaUsuario = () => {
   const router = useRouter();

@@ -36,7 +36,19 @@ const ListadoSocio = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [recibos, setRecibos] = useState([]);
+  const [verArchivados, setVerArchivados] = useState(false); 
 
+
+  useEffect(() => {
+    const filteredSocios = allSocios.filter((socio) => 
+      !verArchivados ? !socio.archivado : socio.archivado // Filtra por archivados o no
+    );
+    setBuscadorFiltrado(filteredSocios);
+  }, [allSocios, verArchivados]);
+
+  const handleVerArchivados = () => {
+    setVerArchivados(!verArchivados); 
+  };
   useEffect(() => {
     console.log("MIEMBROOO" ,miembro);
     if (cooperativa?.idCooperativa) {
@@ -248,6 +260,7 @@ const ListadoSocio = ({
           <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+        
           <button
             type="button"
             onClick={handleAgregarSocio}
@@ -268,7 +281,13 @@ const ListadoSocio = ({
             </svg>
             AGREGAR SOCIO
           </button>
-
+            <button
+            type="button"
+            onClick={handleVerArchivados}
+            className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+          >
+            {verArchivados ? "Ver Activos" : "Ver Archivados"}
+          </button>
           <OrdenarPor
             options={ordenarOptions}
             buttonText="Ordenar por"
@@ -356,62 +375,75 @@ const ListadoSocio = ({
 
                 {/* Opciones adicionales */}
                 <td className="px-4 py-3 text-right">
-              <Menu as="div" className="relative inline-block text-left">
-                <MenuButton className="bg-gray-300 hover:bg-gray-200 focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
-                  ⋮
-                </MenuButton>
-                <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                  {socio.archivado ? (
-                    <>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleDevolucionCapital(socio)}
+                <Menu as="div" className="relative inline-block text-left">
+                <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
                         >
-                          Asignar devolución de capital
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handlePagoDevolucion(socio)}
-                        >
-                          Pagar devolución
-                        </button>
-                      </MenuItem>
-                    </>
-                  ) : (
-                    <>
-                       {socio.cedulaSocio !== miembro.responseBody.socio.cedulaSocio && (
-                        <MenuItem>
-                          <button
-                            className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                            onClick={() => handleArchivar(socio)}
-                          >
-                            Archivar
-                          </button>
-                        </MenuItem>
-                      )}
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleModificarSocio(socio)}
-                        >
-                          Modificar
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                          onClick={() => handleCrearRecibo(socio)}
-                        >
-                          Crear Recibo
-                        </button>
-                      </MenuItem>
-                    </>
-                  )}
-                </MenuItems>
-              </Menu>
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+  <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+    {socio.archivado ? (
+      <>
+        <MenuItem>
+          <button
+            className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+            onClick={() => handleDevolucionCapital(socio)}
+          >
+            Asignar devolución de capital
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+            onClick={() => handlePagoDevolucion(socio)}
+          >
+            Pagar devolución
+          </button>
+        </MenuItem>
+      </>
+    ) : (
+      <>
+        {socio.cedulaSocio !== miembro.responseBody.socio.cedulaSocio && (
+          <MenuItem>
+            <button
+              className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+              onClick={() => handleArchivar(socio)}
+            >
+              Archivar
+            </button>
+          </MenuItem>
+        )}
+        <MenuItem>
+          <button
+            className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+            onClick={() => handleModificarSocio(socio)}
+          >
+            Modificar
+          </button>
+        </MenuItem>
+        <MenuItem>
+          <button
+            className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+            onClick={() => handleCrearRecibo(socio)}
+          >
+            Crear Recibo
+          </button>
+        </MenuItem>
+      </>
+    )}
+  </MenuItems>
+</Menu>
+
             </td>
 
               </tr>

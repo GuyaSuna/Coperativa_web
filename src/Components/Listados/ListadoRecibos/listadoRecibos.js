@@ -23,7 +23,8 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
   useEffect(() => {
     fetchAllRecibos();
   }, []);
-  console.log("El recibo: ", allRecibos);
+
+
   const fetchAllRecibos = async () => {
     try {
       const response = await getAllRecibos(miembro.responseBody.id);
@@ -146,6 +147,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
     // Guarda el PDF con un nombre personalizado
     doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
   };
+
   return (
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -163,7 +165,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente }) => {
         </div>
       </div>
 
-      {/* Tabla responsive */}
+
       <div className="overflow-y-auto h-screen  ">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">

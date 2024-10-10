@@ -41,6 +41,7 @@ import InformesUsuario from "./UsuarioDashboard/InformesUsuario";
 import UsuarioDashboard from "./UsuarioDashboard/UsuarioDashboard";
 import ListadoInteresAnual from "./Listados/ListadoInteresAnual/listadoInteresAnual";
 import ListadoBalanceAnual from "./Listados/ListadoBalanceAnual/listadoBalanceAnual";
+import DetallesCooperativa from "./DetallesCooperativa";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -329,6 +330,13 @@ const ComponentesOrganizados = ({
     case 42: {
       return (
         <ListadoBalanceAnual
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
+    }
+    case 43: {
+      return (
+        <DetallesCooperativa
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

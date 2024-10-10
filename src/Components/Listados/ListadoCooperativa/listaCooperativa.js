@@ -69,34 +69,10 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
     setIdentificadorComponente(12);
   };
 
-  //   const handleEliminar = async (idIngreso) => {
-  //     try {
-  //       const data = await deleteIngreso(idIngreso);
-  //       console.log("Ingreso eliminado:", data);
-  //       fetchDatosDeLaLista();
-  //     } catch (e) {
-  //       console.error("Fallo al eliminar el ingreso:", e);
-  //     }
-  //   };
 
   return (
     <div className="sm:p-7 p-4">
-      <div className="flex w-full items-center mb-7">
-        <button className="inline-flex items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-700 dark:text-gray-400 dark:border-gray-800 border border-gray-200 leading-none py-0">
-          Filter by
-          <svg
-            viewBox="0 0 24 24"
-            className="w-4 ml-1.5 text-gray-400 dark:text-gray-600"
-            stroke="currentColor"
-            strokeWidth={2}
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="6 9 12 15 18 9" />
-          </svg>
-        </button>
-      </div>
+      
       <table className="w-full text-left">
         <thead>
           <tr className="text-gray-400">
@@ -168,15 +144,21 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                         >
                           Ver Detalle
                         </button>
+                      </MenuItem>                      
+                      <MenuItem>
+                        <button
+                          onClick={() => handleListaUsuarios(cooperativa)}
+                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
+                        >
+                          Ver Usuarios
+                        </button>
                       </MenuItem>
                       <MenuItem>
                         <button
-                          onClick={() =>
-                            handleEliminar(cooperativa.idCooperativa)
-                          }
+                          onClick={() => handleListadoViviendas(cooperativa)}
                           className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
                         >
-                          Eliminar
+                          Ver Viviendas
                         </button>
                       </MenuItem>
                       <MenuItem>
@@ -219,22 +201,8 @@ const ListadoCooperativa = ({ setCooperativa, setIdentificadorComponente }) => {
                           Agregar Socio
                         </button>
                       </MenuItem>
-                      <MenuItem>
-                        <button
-                          onClick={() => handleListaUsuarios(cooperativa)}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                        >
-                          Ver Usuarios
-                        </button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button
-                          onClick={() => handleListadoViviendas(cooperativa)}
-                          className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                        >
-                          Ver Viviendas
-                        </button>
-                      </MenuItem>
+
+
                       <MenuItem>
                         <button
                           onClick={() => handleCapitalInteres(cooperativa)}

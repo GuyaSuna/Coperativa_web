@@ -59,7 +59,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   };
 
   const handleArchivadosToggle = () => {
-    setArchivados(!archivados); // Cambia entre archivados y no archivados
+    setArchivados(!archivados); 
   };
 
   const handleModificar = (cedula) => {
@@ -147,9 +147,9 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           <button
             type="button"
             onClick={handleArchivadosToggle}
-            className="text-white bg-gray-600 hover:bg-gray-500 px-4 py-2 rounded-lg"
+             className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
-            {archivados ? "Ver No Archivados" : "Ver Archivados"}
+            {archivados ? "Ver Activos" : "Ver Archivados"}
           </button>
 
           <OrdenarPor
@@ -203,22 +203,59 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                 <td className="block sm:table-cell px-4 py-3">
                   {convenio.socio.nombreSocio}
                 </td>
-
-               
-                  <Menu>
-                    <MenuItems>
-                        <MenuItem>
-                          <button
-                            className="group flex rounded-md items-center w-full px-2 py-2 text-sm"
-                            onClick={() => handleFinalizar(subsidio)}
-                          >
-                            Fializar
-                          </button>
-                        </MenuItem>
-                  </MenuItems>
-                </Menu>
-                
-  
+                <td className="px-4 py-3 text-center">
+                <button onClick={() => handleVerConvenio(convenio)} className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1">
+                  Ver
+                </button>
+                </td>
+                <td className="px-4 py-3 flex items-center justify-end md:table-cell">
+                  <div className="relative inline-block text-left">
+                    <Menu as="div" className="relative inline-block text-left">
+                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+                      <MenuItems
+                        transition
+                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+                      >
+                        <div className="py-1">
+                          <MenuItem>
+                            <button
+                              onClick={() =>
+                                handleEliminar(convenio.idConvenio)
+                              }
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                            >
+                              Finalizar
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              onClick={() =>
+                                handleModificar(convenio.idConvenio)
+                              }
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                            >
+                              Modificar
+                            </button>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </Menu>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -227,8 +264,9 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
 
       {isModalOpen && (
         <VerConvenio
-          convenio={convenioSeleccionado}
+          isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
+          convenio={convenioSeleccionado}
         />
       )}
     </div>

@@ -55,6 +55,16 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
 
         
         <div className="relative">
+        <button
+                onClick={() => handleSelection(43)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 43 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaHouseUser className="mr-2 text-2xl" />{" "}
+                <span className="text-base">Ver Cooperativa</span>
+              </button>
+
           <button
             onClick={() => toggleDropdown(1)}
             className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
