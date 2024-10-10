@@ -219,10 +219,10 @@ const AltaEstadoContable = () => {
             <h3 className="font-bold text-lg mb-4">Egresos en Pesos</h3>
             <ul className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg border max-h-48 min-h-48 overflow-y-auto custom-scrollbar">
               <li className="grid grid-cols-4 font-medium text-gray-600 mb-2">
-                <span>Denom.</span>
-                <span>Egreso</span>
-                <span>Moneda</span>
-                <span>SubRubro</span>
+                <span className="whitespace-nowrap">Denom.</span>
+                <span className="whitespace-nowrap">Egreso</span>
+                <span className="whitespace-nowrap">Moneda</span>
+                <span className="whitespace-nowrap">SubRubro</span>
               </li>
               {listaEgresos
                 .filter((egreso) => egreso.tipoMoneda === "UYU")
@@ -231,10 +231,10 @@ const AltaEstadoContable = () => {
                     key={egreso.id}
                     className="grid grid-cols-4 py-2 border-b dark:border-gray-700"
                   >
-                    <span>{egreso.denominacion}</span>
-                    <span>{egreso.egreso}</span>
+                    <span className="truncate">{egreso.denominacion}</span>
+                    <span className="truncate">{egreso.egreso}</span>
                     <span>UY</span>
-                    <span>{egreso.subRubro}</span>
+                    <span className="truncate">{egreso.subRubro}</span>
                   </li>
                 ))}
             </ul>

@@ -163,14 +163,12 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     } else {
       const fechaIngreso = new Date(FechaIngresoCooperativa);
       const fechaHoy = new Date();
-    
+      
+      // Eliminar la restricción que no permite fechas anteriores
       if (fechaIngreso > fechaHoy) {
         errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser mayor a la fecha actual";
-      } else if (fechaIngreso < fechaHoy) {
-        errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser anterior a la fecha actual";
       }
     }
-  
     // Validación de la selección de vivienda
     if (!SeleccionVivienda) {
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
@@ -409,7 +407,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
               onChange={handleChangeFechaIngreso}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
-            {Errores.fechaIngreso && (
+            {Errores.fechaIngresoCooperativa && (
               <span className="text-red-500 text-sm">
                 {Errores.fechaIngresoCooperativa}
               </span>

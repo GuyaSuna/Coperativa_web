@@ -175,7 +175,7 @@ const AltaIngreso = () => {
               onChange={handleChangeTipoMoneda}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             >
-              <option value="UR">Pesos Uruguayos</option>
+              <option value="UYU">Pesos Uruguayos</option>
               <option value="USD">Dolares</option>
             </select>
             {errores.tipoMoneda && (
