@@ -10,6 +10,13 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+
+    // Validar que se ha seleccionado un archivo
+    if (!file) {
+      alert("Por favor, selecciona un archivo antes de continuar.");
+      return;
+    }
+
     const reader = new FileReader();
 
     reader.onload = (e) => {
@@ -20,6 +27,7 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
       const worksheet = workbook.Sheets[sheetName];
       let jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
+      // Eliminar las primeras dos filas (que podrían contener encabezados)
       jsonData = jsonData.slice(2);
       setData(jsonData);
 
@@ -35,6 +43,7 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
       const currentMonth = today.getMonth() + 1;
       const currentYear = today.getFullYear();
 
+      // Buscar datos de capital e interés para el mes actual
       const todayData = jsonData.find((row) => {
         const excelDate = new Date((row[0] - 25567) * 86400 * 1000);
         return (
@@ -43,6 +52,7 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
         );
       });
 
+      // Si hay datos para el mes actual, los asigna
       if (todayData) {
         setCapital(todayData[8]); // Capital
         setInteres(todayData[9]); // Interés
@@ -63,7 +73,7 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
         return;
       }
 
-      if (cooperativa.listaCapitalInteres !== null) {
+      if (cooperativa.listaCapitalInteres.length > 0) {
         const confirmOverwrite = window.confirm(
           "Esta cooperativa ya tiene datos de interés y capital. Los datos anteriores se eliminarán y se reemplazarán con los nuevos. ¿Deseas continuar?"
         );
@@ -71,6 +81,7 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
           return;
         }
       }
+
       const response = await postCapitalInteres(
         capitalInteresEntities,
         cooperativa.idCooperativa
@@ -93,8 +104,11 @@ const ExcelReader = ({ setInteresParm, setCapitalParm, cooperativa }) => {
         <h2>Datos del archivo:</h2>
         {capital !== null && interes !== null ? (
           <div>
-            <button onClick={handleCpitalInteres}>
-              Dar de alta Interes Capital
+            <button
+              className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+              onClick={handleCpitalInteres}
+            >
+              Agregar Capital-Interés
             </button>
             <p>
               <strong>Capital del mes actual:</strong> {capital}
