@@ -6,7 +6,6 @@ import { getAllSuplentes, updateSuplente } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
 const ModificarSuplente = ({ suplenteParam }) => {
-  console.log("Suplente", suplenteParam)
   const [cedulaSuplente, setCedulaSuplente] = useState(0);
   const [nombreSuplente, setNombreSuplente] = useState("");
   const [apellidoSuplente, setApellidoSuplente] = useState("");

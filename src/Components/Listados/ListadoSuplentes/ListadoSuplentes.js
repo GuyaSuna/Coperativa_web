@@ -30,7 +30,6 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const fetchDatosDeLaLista = async () => {
     try {
       const suplentesResponse = await getAllSuplentes();
-      console.log("Suplentes recibidos:", suplentesResponse);
 
       const sociosResponse = await getAllSocios(cooperativa.idCooperativa);
 
@@ -44,8 +43,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
       setAllSocios(sociosResponse);
       setAllSuplentes(suplentesArchivados);
 
-      console.log("Socios recibidos:", sociosResponse);
-      console.log("Suplentes de socios archivados:", suplentesArchivados);
+
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
@@ -57,8 +55,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
 
   const handleVerSuplente = (suplente, socio) => {
-    console.log("Suplente seleccionado:", suplente);
-    console.log("Socio seleccionado:", socio);
+
     setSuplenteSeleccionado(suplente);
     setSocioSeleccionado(socio);
     setIsModalOpen(true);
@@ -67,7 +64,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   const handleEliminar = async (cedulaSuplente) => {
     try {
       const data = await deleteSuplente(cedulaSuplente);
-      console.log("Suplente eliminado:", data);
+
       fetchDatosDeLaLista();
     } catch (e) {
       console.error("Fallo al eliminar el suplente:", e);
@@ -75,11 +72,11 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
 
   const getSocioPorSuplente = (cedulaSuplente) => {
-    console.log("Suplentes recibidos:", allSuplentes);
+
     const socio = allSocios.find(
       (socio) => socio.suplenteEntity?.cedulaSuplente === cedulaSuplente
     );
-    console.log("socio del suplente", socio);
+
     return socio;
   };
   useEffect(() => {
@@ -111,7 +108,6 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   ];
 
   const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
     const ordenarSuplentes = [...allSuplentes].sort(option.comparator);
     setAllSuplentes(ordenarSuplentes);
   };
@@ -158,7 +154,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
+              <th scope="col" className="px-4 py-3">
                 Cédula
               </th>
               <th scope="col" className="px-4 py-3">
@@ -239,9 +235,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                             </MenuItem>
                             <MenuItem>
                               <button
-                                onClick={() =>
-                                  handleModificar(suplente)
-                                }
+                                onClick={() => handleModificar(suplente)}
                                 className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                               >
                                 Modificar

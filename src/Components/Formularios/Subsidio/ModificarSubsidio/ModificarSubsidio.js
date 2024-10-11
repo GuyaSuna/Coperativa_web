@@ -89,7 +89,6 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("handleSubmit ejecutado");
     if (!validarFormulario()) return;
 
     try {
@@ -104,7 +103,6 @@ const ModificarSubsidio = ({ subsidioParam, setIdentificadorComponente }) => {
         fechaExpira,
         subsidioParam.socio
       );
-      console.log("Subsidio nuevo", subsidioNuevo);
       setIdentificadorComponente(17);
     } catch (error) {
       console.error("Error al actualizar subsidio:", error);

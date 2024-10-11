@@ -37,7 +37,7 @@ const InformesUsuario = ({}) => {
       console.error("Error al obtener los Estados Contables:", error);
     }
   };
-  console.log("Ultimo estado contable", estadoContable);
+
 
   const descargarPdfReajuste = (reajuste) => {
     const fechaReajuste = new Date(reajuste.fechaReajuste + "T00:00:00");
@@ -50,8 +50,8 @@ const InformesUsuario = ({}) => {
     doc.text("Detalles del Reajuste:", 14, 30);
 
     const data = [
-      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr, reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
-      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr,reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
+      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', (reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr).toFixed(2), reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
+      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',(reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr).toFixed(2),reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
     ];
 
     doc.autoTable({
@@ -73,7 +73,6 @@ const InformesUsuario = ({}) => {
   const fetchUltimoReajuste = async () => {
     try {
       const reajuste = await getUltimoReajuste(cooperativa.idCooperativa);
-      console.log("REAJUSTE", reajuste);
       setUltimoReajuste(reajuste);
     } catch (error) {
       console.error("Error al obtener el último reajuste:", error);
@@ -81,7 +80,6 @@ const InformesUsuario = ({}) => {
   };
 
   const descargarPdfBalanceAnual = () => {
-    console.log("ULTIMO", ultimoBalance);
   
     if (!ultimoBalance) {
       alert("No se encontraron datos de balance anual para generar el PDF.");
@@ -143,9 +141,15 @@ const InformesUsuario = ({}) => {
     doc.save(`Balance_Anual_${fechaBalance.getFullYear()}.pdf`);
   };
   
+  const fetchUltimoBalanceAnual = async () => {
+    try {
+      const balance = await getUltimoBalanceAnual(cooperativa.idCooperativa);
+      setUltimoBalance(balance);
+    } catch (error) {
+      console.error("Error al obtener el último balance:", error);
+    }
+  };
 
-  console.log("Ultimo reajuste: ", ultimoReajuste);
-  console.log("Ultimo balance: ", ultimoBalance);
   return (
     <div className="w-full 2xl:w-3/4 flex items-start justify-center px-8 md:px-32 lg:px-16 2xl:px-0 mx-auto mt-28">
       <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-8">

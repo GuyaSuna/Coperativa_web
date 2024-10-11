@@ -10,7 +10,6 @@ export const SessionProvider = ({ children }) => {
   const login = (token) => {
     setIsAuthenticated(true);
     setAuthToken(token);
-    console.log("Token en el contexto:", token);
   };
 
   const logout = () => {

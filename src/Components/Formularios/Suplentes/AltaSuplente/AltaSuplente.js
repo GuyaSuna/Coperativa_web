@@ -34,18 +34,12 @@ const AltaSuplente = ({setIdentificadorComponente}) => {
       setAllSuplentes(suplentesResponse);
   
       const response = await getAllSocios(cooperativa.idCooperativa);
-      console.log(response);
   
       const sociosSinArchivar = response.filter(socio => socio.archivado === false);
-      console.log("Socios sin archivar:", sociosSinArchivar);
-      
   
-
       let sociosSinSuplente = sociosSinArchivar.filter(socioTitular => !socioTitular.suplenteEntity);
   
       setSociosDisponibles(sociosSinSuplente);
-      console.log("Socios disponibles: ", sociosSinSuplente);
-      console.log("Suplentes existentes: ", suplentesResponse);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }

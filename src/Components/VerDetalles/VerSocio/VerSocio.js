@@ -34,7 +34,6 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
             socio.cedulaSocio,
             cooperativa.idCooperativa
           );
-          console.log("Recibos Impagos: ", recibos);
           setRecibosImpagos(recibos);
 
           // Calcular el total de recibos impagos

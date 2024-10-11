@@ -3,7 +3,6 @@
 import React from "react";
 
 const VerReajuste = ({ reajuste, isOpen, onClose }) => {
-    console.log(reajuste)
   if (!isOpen) return null;
 
   return (

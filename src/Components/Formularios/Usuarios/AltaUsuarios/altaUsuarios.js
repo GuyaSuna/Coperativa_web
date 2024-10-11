@@ -38,7 +38,6 @@ const AltaUsuario = () => {
       const sociosSinUsuario = response.filter(
         (socio) => !socioConUsuario.includes(socio.cedulaSocio)
       );
-      console.log("Socios disponibles:", response);
       const sociosSinArchivar = sociosSinUsuario.filter(socio => socio.archivado === false);
       setSociosDisponibles(sociosSinArchivar);
     } catch (error) {
@@ -61,7 +60,6 @@ const AltaUsuario = () => {
     const socioEncontrado = sociosDisponibles.find(
       (socio) => socio.cedulaSocio == cedulaSeleccionada
     );
-    console.log("Socio seleccionado:", socioEncontrado);
     
     if (socioEncontrado) {
       setSocioSeleccionado(socioEncontrado);
@@ -87,16 +85,12 @@ const AltaUsuario = () => {
       password,
       email,
     };
-    console.log("UsuarioEtity:", registerRequest);
-    console.log("Cedula a enviar: ", socioSeleccionado.cedulaSocio);
-    console.log("Cooperativa que enviamos: ", cooperativa.idCooperativa);
     try {
       const response = await register(
         registerRequest,
         socioSeleccionado.cedulaSocio,
         cooperativa.idCooperativa
       );
-      console.log("response", response);
       if (response.status === 201) {
         alert("Error al agregar usuario");
       } else {

@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { getSocio, updateSocio } from "../../../../Api/api";
 
 const ModificarSocio = ({ socio }) => {
-  console.log("SocioModificar" , socio)
   const [cedulaSocio, setCedulaSocio] = useState(socio?.cedulaSocio);
   const [nroSocio, setNroSocio] = useState(socio?.nroSocio );
   const [nombreSocio, setNombreSocio] = useState(socio?.nombreSocio);
@@ -53,7 +52,6 @@ const ModificarSocio = ({ socio }) => {
 
     try {
       const result = await updateSocio(socioUpdate);
-      console.log("Socio actualizado:", result);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
     }

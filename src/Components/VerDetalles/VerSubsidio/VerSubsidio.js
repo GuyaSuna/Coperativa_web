@@ -3,7 +3,6 @@
 import React from "react";
 
 const VerSubsidio = ({ isOpen, setIsOpen, subsidio }) => {
-console.log(setIsOpen)
   if (!isOpen) return null;
 
   return (

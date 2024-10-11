@@ -1,7 +1,33 @@
 import { getToken } from "./getToken";
 const URL = "http://localhost:5000";
 
-//logins
+//logins 
+
+const registerMaster = async (bodymaster) => {
+  try {
+    
+    const response = await fetch(`${URL}/auth/registerMaster`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodymaster),
+    });
+
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; 
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en register master:", error);
+    throw new Error("Error al generar master.");
+  }
+};
+
 const Login = async (username, password) => {
   try {
     const body = {
@@ -812,7 +838,7 @@ const getUr = async () => {
 
     // Si la respuesta no es un JSON válido, lanza un error
     const data = JSON.parse(responseText);
-    console.log("Datos recibidos:", data);
+
 
     if (!response.ok) {
       throw new Error("La petición ha fallado, el response no es 'ok'");
@@ -1431,26 +1457,29 @@ const getConveniosVigenteSocio = async (cedulaSocio) => {
       },
     });
 
-    // Verificar si la respuesta no es exitosa
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; // No hay contenido o no es JSON
     }
 
-    // Parsear la respuesta en formato JSON
+    if (!response.ok) {
+      throw new Error("La petición ha fallado, la respuesta no es correcta.");
+    }
+
+    // Verificar si el cuerpo de la respuesta es null o vacío
     const data = await response.json();
 
-    // Verificar si no hay convenios o si es null
     if (!data || data.length === 0) {
       return null;
     }
 
-    // Devolver la lista de convenios si existen
     return data;
   } catch (error) {
     console.error("Error al obtener convenios vigentes para el socio:", error);
-    return null; // Devolver null en caso de error
+    return null;
   }
 };
+
 
 const postIngreso = async (ingreso) => {
   try {
@@ -2180,7 +2209,7 @@ const getUltimoBalanceAnual = async (idCooperativa) => {
 const updateUser = async (UpdateUserRequest, cedulaSocio, idCooperativa) => {
   try {
     const response = await fetch(
-      `${URL}/api/users/update/${cedulaSocio}/${idCooperativa}`,
+      `${URL}/auth/update/${cedulaSocio}/${idCooperativa}`,
       {
         method: "PUT",
         headers: {
@@ -2283,4 +2312,5 @@ export {
   getAllReajustes,
   getUltimoBalanceAnual,
   updateUser,
+  registerMaster,
 };

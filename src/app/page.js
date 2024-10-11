@@ -5,6 +5,7 @@ import {
   Login,
   getCooperativaPorAdmin,
   getCooperativaPorSocio,
+  registerMaster,
 } from "../Api/api.js";
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
@@ -14,6 +15,19 @@ const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const { login } = useSession();
+
+  
+  useEffect(() => {
+    const bodyMaster = {
+      username : "Admin",
+      lastname : "Pages" ,
+      firstname : "Admin",
+      password : 1234 ,
+      role : "MASTER"
+    }
+
+    const responseMaster = registerMaster(bodyMaster);
+  },[])
 
   if (!login) {
     console.error("El contexto de sesión no está disponible.");
