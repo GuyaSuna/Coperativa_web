@@ -19,9 +19,9 @@ const Home = () => {
   
   useEffect(() => {
     const bodyMaster = {
-      username : "Nahuel",
+      username : "Admin",
       lastname : "Pages" ,
-      firstname : "Nahuel",
+      firstname : "Admin",
       password : 1234 ,
       role : "MASTER"
     }
