@@ -30,10 +30,6 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
     }
   };
 
-  const handleModificar = (ingreso) => {
-    setIngreso(ingreso);
-    setIdentificadorComponente(20); // Ajusta el identificador del componente si es necesario
-  };
 
   const handleVerIngreso = (ingreso) => {
     console.log("Ingreso seleccionado:", ingreso);
@@ -193,14 +189,7 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
                               Eliminar
                             </button>
                           </MenuItem>
-                          <MenuItem>
-                            <button
-                              onClick={() => handleModificar(ingreso)}
-                              className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem>
+ 
                         </div>
                       </MenuItems>
                     </Menu>

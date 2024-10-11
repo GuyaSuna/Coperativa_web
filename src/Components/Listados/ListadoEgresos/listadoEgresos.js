@@ -30,10 +30,6 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
     }
   };
 
-  const handleModificar = (egreso) => {
-    setEgreso(egreso);
-    setIdentificadorComponente(30); // Ajusta el identificador del componente si es necesario
-  };
 
   const handleVerEgreso = (egreso) => {
     console.log("Egreso seleccionado:", egreso);
@@ -211,12 +207,7 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
                   >
                     Eliminar
                   </button>
-                  <button
-                    onClick={() => handleModificar(vivienda.nroVivienda)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Modificar
-                  </button>
+
 
                   <button
                     onClick={() => handleVerEgreso(egreso)}
