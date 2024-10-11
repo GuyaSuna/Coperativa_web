@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect , useContext} from "react";
 import { updateUser } from "../../../../Api/api.js"; // Asegúrate de tener la función updateUser
+import { MiembroContext } from "@/Provider/provider.js";
 
 const ModificarUsuario = ({ usuario }) => {
   const [username, setUsername] = useState(usuario?.username);
@@ -9,17 +10,15 @@ const ModificarUsuario = ({ usuario }) => {
   const [firstname, setFirstname] = useState(usuario?.firstname);
   const [lastname, setLastname] = useState(usuario?.lastname);
   const [email, setEmail] = useState(usuario?.email);
-  const [role, setRole] = useState(usuario?.role);
   const [errores, setErrores] = useState({});
   const [errorMessage, setErrorMessage] = useState("");
-
+  const {cooperativa, miembro } = useContext(MiembroContext);
   const validarFormulario = () => {
     const errores = {};
     if (!username) errores.username = "El nombre de usuario es obligatorio";
     if (!email) errores.email = "El correo es obligatorio";
     if (!firstname) errores.firstname = "El nombre es obligatorio";
     if (!lastname) errores.lastname = "El apellido es obligatorio";
-    if (!role) errores.role = "El rol es obligatorio";
 
     setErrores(errores);
     return Object.keys(errores).length === 0;
@@ -32,16 +31,18 @@ const ModificarUsuario = ({ usuario }) => {
 
     const UpdateUserRequest = {
       username,
-      password: password || undefined, // Solo envía la contraseña si está definida
+      password: password || undefined, 
       firstname,
       lastname,
       email,
-      role,
+      role : "USER",
     };
-
+console.log("Miembro" , miembro)
     try {
-      const result = await updateUser(UpdateUserRequest); // Asegúrate de pasar el id si es necesario en la función updateUser
-      console.log("Usuario actualizado:", result);
+      const result = await updateUser(UpdateUserRequest, miembro.responseBody.socio.cedulaSocio,  cooperativa.idCooperativa);
+      if(result != null){
+        alert("Usuario modificado");
+      }
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
       setErrorMessage("Error al actualizar usuario");
@@ -75,7 +76,7 @@ const ModificarUsuario = ({ usuario }) => {
               </button>
             </div>
           )}
-
+  
           {/* Form structure */}
           <form onSubmit={handleSubmit}>
             {/* Input fields */}
@@ -84,7 +85,7 @@ const ModificarUsuario = ({ usuario }) => {
                 Nombre de usuario
               </label>
               <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
                 type="text"
                 placeholder="Nombre de usuario"
                 value={username}
@@ -92,13 +93,13 @@ const ModificarUsuario = ({ usuario }) => {
                 required
               />
             </div>
-
+  
             <div className="mt-8">
               <label className="text-sm font-bold dark:text-white tracking-wide">
                 Correo electrónico
               </label>
               <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
                 type="email"
                 placeholder="Correo electrónico"
                 value={email}
@@ -106,26 +107,26 @@ const ModificarUsuario = ({ usuario }) => {
                 required
               />
             </div>
-
+  
             <div className="mt-8">
               <label className="text-sm font-bold dark:text-white tracking-wide">
                 Contraseña (opcional)
               </label>
               <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
                 type="password"
                 placeholder="Nueva contraseña (opcional)"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-
+  
             <div className="mt-8">
               <label className="text-sm font-bold dark:text-white tracking-wide">
                 Nombre
               </label>
               <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
                 type="text"
                 placeholder="Nombre"
                 value={firstname}
@@ -133,13 +134,13 @@ const ModificarUsuario = ({ usuario }) => {
                 required
               />
             </div>
-
+  
             <div className="mt-8">
               <label className="text-sm font-bold dark:text-white tracking-wide">
                 Apellido
               </label>
               <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
+                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500 dark:bg-gray-800 dark:text-white"
                 type="text"
                 placeholder="Apellido"
                 value={lastname}
@@ -147,21 +148,7 @@ const ModificarUsuario = ({ usuario }) => {
                 required
               />
             </div>
-
-            <div className="mt-8">
-              <label className="text-sm font-bold dark:text-white tracking-wide">
-                Rol
-              </label>
-              <input
-                className="w-full text-lg py-2 border-b border-gray-300 focus:outline-none focus:border-indigo-500"
-                type="text"
-                placeholder="Rol (ej: USER, ADMIN)"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                required
-              />
-            </div>
-
+  
             <div className="mt-10">
               <button
                 className="bg-[#71675D] text-gray-100 p-4 w-full rounded-full tracking-wide font-semibold font-display focus:outline-none focus:shadow-outline hover:bg-gray-400 shadow-lg"
@@ -175,6 +162,7 @@ const ModificarUsuario = ({ usuario }) => {
       </div>
     </div>
   );
+  
 };
 
 export default ModificarUsuario;

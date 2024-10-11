@@ -50,8 +50,8 @@ const InformesUsuario = ({}) => {
     doc.text("Detalles del Reajuste:", 14, 30);
 
     const data = [
-      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr, reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
-      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr,reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
+      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', (reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr).toFixed(2), reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
+      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',(reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr).toFixed(2),reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
     ];
 
     doc.autoTable({

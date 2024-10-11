@@ -2185,7 +2185,7 @@ const getUltimoBalanceAnual = async (idCooperativa) => {
 const updateUser = async (UpdateUserRequest, cedulaSocio, idCooperativa) => {
   try {
     const response = await fetch(
-      `${URL}/api/users/update/${cedulaSocio}/${idCooperativa}`,
+      `${URL}/auth/update/${cedulaSocio}/${idCooperativa}`,
       {
         method: "PUT",
         headers: {
