@@ -144,6 +144,15 @@ const InformesUsuario = ({}) => {
     doc.save(`Balance_Anual_${fechaBalance.getFullYear()}.pdf`);
   };
   
+  const fetchUltimoBalanceAnual = async () => {
+    try {
+      const balance = await getUltimoBalanceAnual(cooperativa.idCooperativa);
+      console.log("ULTIMO BALANCE", balance);
+      setUltimoBalance(balance);
+    } catch (error) {
+      console.error("Error al obtener el último balance:", error);
+    }
+  };
 
   console.log("Ultimo reajuste: ", ultimoReajuste);
   console.log("Ultimo balance: ", ultimoBalance);

@@ -2150,6 +2150,7 @@ const deleteRecibo = async (nroRecibo) => {
 const getUltimoBalanceAnual = async (idCooperativa) => {
   try {
   
+    console.log("ACAAA" , idCooperativa);
     const token = getToken();
     const response = await fetch(`${URL}/balanceAnual/ultimo/${idCooperativa}`, {
       method: "GET",
