@@ -21,7 +21,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allConvenios);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [convenioSeleccionado, setConvenioSeleccionado] = useState(null);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   };
 
   const handleArchivadosToggle = () => {
-    setArchivados(!archivados); 
+    setArchivados(!archivados);
   };
 
   const handleModificar = (cedula) => {
@@ -147,7 +147,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           <button
             type="button"
             onClick={handleArchivadosToggle}
-             className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+            className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
             {archivados ? "Ver Activos" : "Ver Archivados"}
           </button>
@@ -164,7 +164,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
+              <th scope="col" className="px-4 py-3">
                 Nro. Convenio
               </th>
               <th scope="col" className="px-4 py-3">
@@ -187,7 +187,10 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
           </thead>
           <tbody>
             {buscadorFiltrado?.map((convenio) => (
-              <tr className="border-b dark:border-gray-700 sm:table-row" key={convenio.idConvenio}>
+              <tr
+                className="border-b dark:border-gray-700 sm:table-row"
+                key={convenio.idConvenio}
+              >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   {convenio.idConvenio}
                 </td>
@@ -204,9 +207,12 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                   {convenio.socio.nombreSocio}
                 </td>
                 <td className="px-4 py-3 text-center">
-                <button onClick={() => handleVerConvenio(convenio)} className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1">
-                  Ver
-                </button>
+                  <button
+                    onClick={() => handleVerConvenio(convenio)}
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1"
+                  >
+                    Ver
+                  </button>
                 </td>
                 <td className="px-4 py-3 flex items-center justify-end md:table-cell">
                   <div className="relative inline-block text-left">
@@ -274,4 +280,3 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
 };
 
 export default ListadoConvenio;
-

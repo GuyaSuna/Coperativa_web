@@ -37,7 +37,6 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
     setIsModalOpen(true);
   };
 
-
   const handleModificar = (idReajuste) => {
     console.log("Modificar reajuste con ID:", idReajuste);
   };
@@ -62,7 +61,8 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
       label: "Fecha Reajuste",
       key: "fechaReajuste",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(a.fechaReajuste) - new Date(b.fechaReajuste),
+      comparator: (a, b) =>
+        new Date(a.fechaReajuste) - new Date(b.fechaReajuste),
     },
     {
       label: "Valor UR",
@@ -83,7 +83,7 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
   };
 
   const handleAgregarReajuste = () => {
-    setIdentificadorComponente(31); 
+    setIdentificadorComponente(31);
   };
 
   const descargarPdf = (reajuste) => {
@@ -97,8 +97,20 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
     doc.text("Detalles del Reajuste:", 14, 30);
 
     const data = [
-      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr, reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
-      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr,reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
+      [
+        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
+        "2 D",
+        reajuste.cuotaMensualDosHabitacionesEnPesos / reajuste.valorUr,
+        reajuste.valorUr.toFixed(2),
+        reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2),
+      ],
+      [
+        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
+        "3 D",
+        reajuste.cuotaMensualTresHabitacionesEnPesos / reajuste.valorUr,
+        reajuste.valorUr.toFixed(2),
+        reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2),
+      ],
     ];
 
     doc.autoTable({
@@ -116,8 +128,6 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
 
     doc.save(`Reajuste_Anual_${reajuste.fechaReajuste}.pdf`);
   };
-  
-  
 
   return (
     <div className="sm:p-7 p-4">
@@ -146,22 +156,36 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr>
-              <th scope="col" className="px-4 py-3 text-center">Fecha Reajuste</th>
-              <th scope="col" className="px-4 py-3 text-center">Valor UR</th>
-              <th scope="col" className="px-4 py-3 text-center">Cuota 2 hab</th>
-              <th scope="col" className="px-4 py-3 text-center">Cuota 3 hab</th>
-
+              <th scope="col" className="px-4 py-3 ">
+                Fecha Reajuste
+              </th>
+              <th scope="col" className="px-4 py-3 ">
+                Valor UR
+              </th>
+              <th scope="col" className="px-4 py-3 ">
+                Cuota 2 hab
+              </th>
+              <th scope="col" className="px-4 py-3 ">
+                Cuota 3 hab
+              </th>
             </tr>
           </thead>
           <tbody>
             {buscadorFiltrado?.map((reajuste) => (
-              <tr key={reajuste.idReajuste} className="border-b dark:border-gray-700">
+              <tr
+                key={reajuste.idReajuste}
+                className="border-b dark:border-gray-700"
+              >
                 <td className="px-4 py-3">{reajuste.fechaReajuste}</td>
                 <td className="px-4 py-3">{reajuste.valorUr}</td>
-                <td className="px-4 py-3">{reajuste.cuotaMensualDosHabitacionesEnPesos}</td>
-                <td className="px-4 py-3">{reajuste.cuotaMensualTresHabitacionesEnPesos}</td>
+                <td className="px-4 py-3">
+                  {reajuste.cuotaMensualDosHabitacionesEnPesos}
+                </td>
+                <td className="px-4 py-3">
+                  {reajuste.cuotaMensualTresHabitacionesEnPesos}
+                </td>
                 <td className="block sm:table-cell px-4 py-3">
-                <button
+                  <button
                     type="button"
                     onClick={() => handleVerDetalles(reajuste)}
                     className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"

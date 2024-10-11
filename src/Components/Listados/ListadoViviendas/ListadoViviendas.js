@@ -152,7 +152,7 @@ const ListadoViviendas = ({
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
+              <th scope="col" className="px-4 py-3">
                 Nro Vivienda
               </th>
               <th scope="col" className="px-4 py-3">

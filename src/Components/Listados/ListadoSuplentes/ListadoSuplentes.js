@@ -158,7 +158,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
             <tr className="hidden sm:table-row">
-              <th scope="col" className="px-4 py-3 text-center">
+              <th scope="col" className="px-4 py-3">
                 Cédula
               </th>
               <th scope="col" className="px-4 py-3">
@@ -239,9 +239,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                             </MenuItem>
                             <MenuItem>
                               <button
-                                onClick={() =>
-                                  handleModificar(suplente)
-                                }
+                                onClick={() => handleModificar(suplente)}
                                 className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                               >
                                 Modificar
