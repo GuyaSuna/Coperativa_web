@@ -28,7 +28,6 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
           setCantidadDormitorios(data.cantidadDormitorios);
         }
         if (data.socioTitular) {
-          console.log(data.socioTitular);
           const dataSocio = await getSocio(data.socioTitular.cedulaSocio);
           setSocioTitular(dataSocio);
         }
@@ -46,7 +45,7 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
     const fetchSocios = async () => {
       try {
         const data = await getAllSocios();
-        console.log(data, "data de los socios");
+
         setSocios(data);
       } catch (error) {
         console.error(`An error has occurred in fetchSocios: ${error.message}`);
@@ -80,7 +79,6 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
         cooperativa.idCooperativa,
         socioTitular
       );
-      console.log("Vivienda actualizada:", result);
     } catch (error) {
       console.error("Error al actualizar vivienda:", error);
     }
@@ -88,10 +86,8 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
 
   const handleSocioChange = async (e) => {
     const cedulaSocio = e.target.value;
-    console.log("CEDULAA : " + cedulaSocio);
     try {
       const socioData = await getSocio(cedulaSocio);
-      console.log(socioData);
       setSocioTitular(socioData);
     } catch (error) {
       console.error("Error al obtener al socio titular:", error);

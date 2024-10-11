@@ -35,7 +35,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
       setAllSubsidios(activeSubsidios);
       setArchivedSubsidios(archivedSubsidios);
       setBuscadorFiltrado(activeSubsidios); // Inicializa el buscador con subsidios activos
-      console.log(response);
+
     } catch (error) {
       console.error("Error al obtener los subsidios:", error);
     }
@@ -44,7 +44,6 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const handleVerSubsidio = (subsidio) => {
     setSubsidioSeleccionado(subsidio);
     setIsModalOpen(true);
-    console.log("Ver subsidio", subsidio);
   };
 
   const handleEliminarSubsidio = async (idSubsidio) => {
@@ -59,7 +58,6 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const handleModificarSubsidio = (subsidio) => {
     setSubsidio(subsidio);
     setIdentificadorComponente(19);
-    console.log("Modificar subsidio", subsidio);
   };
 
   const ordenarOptions = [
@@ -86,7 +84,6 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   ];
 
   const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
     const ordenarSubsidios = [...(showArchived ? archivedSubsidios : allSubsidios)].sort(option.comparator);
     setBuscadorFiltrado(ordenarSubsidios);
   };

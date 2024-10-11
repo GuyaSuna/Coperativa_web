@@ -37,7 +37,6 @@ const ModificarUsuario = ({ usuario }) => {
       email,
       role : "USER",
     };
-console.log("Miembro" , miembro)
     try {
       const result = await updateUser(UpdateUserRequest, miembro.responseBody.socio.cedulaSocio,  cooperativa.idCooperativa);
       if(result != null){

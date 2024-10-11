@@ -28,7 +28,7 @@ const ListadoUsuario = ({
   const fetchAllUsuarios = async () => {
     try {
       const response = await getAllUsuarios(cooperativa.idCooperativa);
-      console.log("Usuarios", response);
+ 
       setAllUsuarios(response);
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);

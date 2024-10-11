@@ -125,7 +125,7 @@ const ListadoSocioArchivados = ({
   const handlePagoDevolucion = (socio) => {
     const responseDevolucion = getDevolucionCapital(socio.cedulaSocio);
     if (responseDevolucion != null) {
-      console.log("entra");
+
       setSocio(socio);
       setIdentificadorComponente(40);
     } else {

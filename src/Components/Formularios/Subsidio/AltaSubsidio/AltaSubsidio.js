@@ -49,7 +49,6 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
   const fetchAllSubsidios = async () => {
     try {
       const responseSubsidio = await getAllSubsidios();
-      console.log("All subsidios", responseSubsidio);
       setAllSubsidios(responseSubsidio);
     } catch {
       console.log("Error en el gatAllSubsidio");
@@ -100,7 +99,6 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
       const response = await getAllSocios(cooperativa.idCooperativa);
       const sociosSinArchivar = response.filter(socio => socio.archivado === false);
       setSociosDisponibles(sociosSinArchivar);
-      console.log("Socios disponibles: ", response);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -113,18 +111,17 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
 
   const handleChangeSocioSeleccionado = async (e) => {
     const selectedCedula = e.target.value;
-    console.log(selectedCedula, "cedula seleccionada handle");
+
     const selectedSocio = sociosDisponibles.find(
       (socio) => socio.cedulaSocio == selectedCedula
     );
     setSocioSeleccionado(selectedSocio);
-    console.log(selectedSocio, "socio seleccionado");
     if (selectedSocio) {
       try {
         const vivienda = await getViviendaPorSocio(selectedSocio.cedulaSocio);
         if (vivienda) {
           setValorViviendaUr(vivienda.valorVivienda);
-          console.log("Vivienda obtenida:", vivienda);
+
         }
       } catch (error) {
         console.error("Error al obtener la vivienda del socio:", error);

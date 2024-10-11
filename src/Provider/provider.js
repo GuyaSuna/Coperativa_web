@@ -7,7 +7,6 @@ const MiembroProvider = ({ children }) => {
   const [cooperativa, setCooperativa] = useState(null);
 
   const loginMiembro = (DatosMiembro, DatosCooperativa, token) => {
-    console.log("Datos administrador", DatosMiembro);
     setMiembro(DatosMiembro);
     setCooperativa(DatosCooperativa);
   };

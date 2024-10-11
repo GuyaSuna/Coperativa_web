@@ -26,7 +26,6 @@ const ListadoBalanceAnual = () => {
   const fetchBalancesAnuales = async () => {
     try {
       const data = await getAllBalanceAnual(cooperativa.idCooperativa);
-      console.log(data);
       setBalances(data);
       setBuscadorFiltrado(data);
     } catch (error) {
@@ -70,7 +69,6 @@ const ListadoBalanceAnual = () => {
   };
 
   const descargarPdfBalanceAnual = (ultimoBalance) => {
-    console.log("ULTIMO", ultimoBalance);
   
     if (!ultimoBalance) {
       alert("No se encontraron datos de balance anual para generar el PDF.");

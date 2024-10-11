@@ -27,7 +27,6 @@ const ListadoInteresAnual = ({ setIdentificadorComponente }) => {
         cooperativa.idCooperativa
       );
       setListaInteresAnual(interesAnualResponse);
-      console.log("Interés anual recibido:", interesAnualResponse);
     } catch (error) {
       console.error("Error al obtener el interés anual:", error);
     }

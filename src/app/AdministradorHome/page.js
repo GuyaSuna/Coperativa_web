@@ -25,7 +25,7 @@ const AdminHome = () => {
     setSelectedOption(option);
     setIdentificadorComponente(option);
   };
-
+  
   useEffect(() => {
     if (!miembro || !cooperativa || !fetchToken()) {
       console.log("Esperando a que los datos estén disponibles...");

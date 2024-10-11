@@ -9,7 +9,6 @@ const VerCooperativa = ({ isOpen, onClose, cooperativa }) => {
     const fetchUltimoReajuste = async () => {
       try {
         const reajuste = await getUltimoReajuste(cooperativa.idCooperativa);
-        console.log("REAJUSTE",reajuste)
         setUltimoReajuste(reajuste);
       } catch (error) {
         console.error("Error al obtener el último reajuste:", error);

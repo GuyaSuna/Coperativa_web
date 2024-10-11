@@ -32,7 +32,6 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
 
 
   const handleVerEgreso = (egreso) => {
-    console.log("Egreso seleccionado:", egreso);
     setEgresoSeleccionado(egreso);
     setIsModalOpen(true);
   };
@@ -40,7 +39,6 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
   const handleEliminar = async (idEgreso) => {
     try {
       const data = await deleteEgreso(idEgreso);
-      console.log("Egreso eliminado:", data);
       fetchDatosDeLaLista();
     } catch (e) {
       console.error("Fallo al eliminar el egreso:", e);

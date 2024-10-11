@@ -49,7 +49,7 @@ const ListadoSocio = ({
     setVerArchivados(!verArchivados);
   };
   useEffect(() => {
-    console.log("MIEMBROOO", miembro);
+
     if (cooperativa?.idCooperativa) {
       fetchAllData();
     }
@@ -62,7 +62,7 @@ const ListadoSocio = ({
   const fetchRecibos = async () => {
     const reciboResponse = await getAllRecibos(cooperativa.idCooperativa);
     setRecibos(reciboResponse);
-    console.log("Listado recibo: ", reciboResponse);
+
   };
 
   const fetchAllSocios = async () => {
@@ -113,7 +113,7 @@ const ListadoSocio = ({
         const viviedaResponse = await getViviendaPorSocio(socio.cedulaSocio);
 
         viviedaResponse.socio = null;
-        console.log(viviedaResponse);
+
         await updateVivienda(
           viviedaResponse.idVivienda,
           viviedaResponse.nroVivienda,
@@ -202,7 +202,6 @@ const ListadoSocio = ({
   }, [allSocios, buscador]);
 
   const handleSortChange = (option) => {
-    console.log("Orden seleccionado:", option.label);
 
     let sociosFiltrados = [...allSocios];
 
@@ -227,7 +226,7 @@ const ListadoSocio = ({
   const handlePagoDevolucion = (socio) => {
     const responseDevolucion = getDevolucionCapital(socio.cedulaSocio);
     if (responseDevolucion != null) {
-      console.log("entra");
+
       setSocio(socio);
       setIdentificadorComponente(40);
     } else {

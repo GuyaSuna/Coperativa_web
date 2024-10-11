@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { deleteRecibo, getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
-import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";
@@ -12,7 +12,6 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 
 const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
-  console.log(ur);
   const [allRecibos, setAllRecibos] = useState([]);
   const { cooperativa, miembro } = useContext(MiembroContext);
   const [archivados, setArchivados] = useState(false);
@@ -105,7 +104,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
   };
 
   const handleDescargarPDF = (recibo) => {
-    console.log("Recibo doc", recibo);
     const doc = new jsPDF();
 
     // Título principal
@@ -132,7 +130,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
       (total, convenio) => total + (convenio.urPorMes || 0),
       0
     );
-    console.log(totalConvenios);
+
     // Tabla con conceptos
     doc.autoTable({
       startY: 70,

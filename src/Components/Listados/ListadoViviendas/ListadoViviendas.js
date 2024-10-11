@@ -33,7 +33,7 @@ const ListadoViviendas = ({
     try {
       const response = await getAllViviendas(cooperativa.idCooperativa);
       setAllViviendas(response);
-      console.log(response, "Viviendas");
+
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -52,7 +52,7 @@ const ListadoViviendas = ({
   const handleEliminar = async (nroVivienda) => {
     try {
       const data = await deleteVivienda(nroVivienda);
-      console.log(data);
+
       fetchAllViviendas();
     } catch (e) {
       throw ("Fallo al eliminar la vivienda ", e.error);

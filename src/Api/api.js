@@ -838,7 +838,7 @@ const getUr = async () => {
 
     // Si la respuesta no es un JSON válido, lanza un error
     const data = JSON.parse(responseText);
-    console.log("Datos recibidos:", data);
+
 
     if (!response.ok) {
       throw new Error("La petición ha fallado, el response no es 'ok'");
@@ -1470,7 +1470,6 @@ const getConveniosVigenteSocio = async (cedulaSocio) => {
     const data = await response.json();
 
     if (!data || data.length === 0) {
-      console.log("No se encontraron convenios para el socio.");
       return null;
     }
 
@@ -2180,7 +2179,6 @@ const deleteRecibo = async (nroRecibo) => {
 const getUltimoBalanceAnual = async (idCooperativa) => {
   try {
   
-    console.log("ACAAA" , idCooperativa);
     const token = getToken();
     const response = await fetch(`${URL}/balanceAnual/ultimo/${idCooperativa}`, {
       method: "GET",
