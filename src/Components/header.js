@@ -415,14 +415,6 @@ const Header = ({ setIdentificadorComponente }) => {
             <div className="py-1">
               <MenuItem>
                 <button
-                  onClick={() => handleModificar(socios.cedulaSocio)}
-                  className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
-                >
-                  Modificar
-                </button>
-              </MenuItem>
-              <MenuItem>
-                <button
                   onClick={handlePressCerrarSesion}
                   className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                 >

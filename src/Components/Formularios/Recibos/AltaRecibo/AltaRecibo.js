@@ -199,6 +199,10 @@ const AltaRecibo = ({ Socio, ur }) => {
     setSumaPesos(e.target.value);
   };
 
+  const handleChangeRecargo = (e) => {
+    setRecargo(e.target.value);
+  };
+
   const validarFormulario = () => {
     const errores = {};
     if (!fechaEmision)
@@ -447,6 +451,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               type="text"
               id="recargo"
               name="recargo"
+              onChange={handleChangeRecargo}
               value={recargo}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />

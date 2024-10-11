@@ -1431,26 +1431,30 @@ const getConveniosVigenteSocio = async (cedulaSocio) => {
       },
     });
 
-    // Verificar si la respuesta no es exitosa
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; // No hay contenido o no es JSON
     }
 
-    // Parsear la respuesta en formato JSON
+    if (!response.ok) {
+      throw new Error("La petición ha fallado, la respuesta no es correcta.");
+    }
+
+    // Verificar si el cuerpo de la respuesta es null o vacío
     const data = await response.json();
 
-    // Verificar si no hay convenios o si es null
     if (!data || data.length === 0) {
+      console.log("No se encontraron convenios para el socio.");
       return null;
     }
 
-    // Devolver la lista de convenios si existen
     return data;
   } catch (error) {
     console.error("Error al obtener convenios vigentes para el socio:", error);
-    return null; // Devolver null en caso de error
+    return null;
   }
 };
+
 
 const postIngreso = async (ingreso) => {
   try {
