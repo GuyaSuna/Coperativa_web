@@ -35,7 +35,6 @@ const ModificarIngreso = ({ ingresoData }) => {
     };
 
     try {
-      // Aquí realizarías la actualización
       console.log("Ingreso modificado:", updatedIngreso);
     } catch (error) {
       console.error("Error al modificar el ingreso:", error);
