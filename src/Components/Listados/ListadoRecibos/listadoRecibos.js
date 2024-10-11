@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { deleteRecibo, getAllRecibos } from "../../../Api/api.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { MiembroContext } from "@/Provider/provider.js";
-import VerRecibo from "@/Components/VerDetalles/VerRecibo/verRecibo.js";
+import VerRecibo from "@/Components/VerDetalles/VerRecibo/VerRecibo";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import Buscador from "@/Components/Buscador.js";

@@ -1,7 +1,33 @@
 import { getToken } from "./getToken";
 const URL = "http://localhost:5000";
 
-//logins
+//logins 
+
+const registerMaster = async (bodymaster) => {
+  try {
+    
+    const response = await fetch(`${URL}/auth/registerMaster`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bodymaster),
+    });
+
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; 
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en register master:", error);
+    throw new Error("Error al generar master.");
+  }
+};
+
 const Login = async (username, password) => {
   try {
     const body = {
@@ -2288,4 +2314,5 @@ export {
   getAllReajustes,
   getUltimoBalanceAnual,
   updateUser,
+  registerMaster,
 };
