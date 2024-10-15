@@ -2,9 +2,7 @@
 import React, { useState } from "react";
 import Modal from "./Modal";
 import {
-  FaHome,
   FaUserPlus,
-  FaUserTie,
   FaUser,
   FaUserShield,
   FaBell,
@@ -64,8 +62,10 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
               selectedOption === 43 ? "bg-blue-500 text-white" : ""
             }`}
           >
-            <FaHouseUser className="mr-2 text-2xl" />{" "}
-            <span className="text-base">Ver Cooperativa</span>
+            <div className="flex items-center">
+              <FaHouseUser className="mr-2 text-2xl" />{" "}
+              <span className="text-base">Ver Cooperativa</span>
+            </div>
           </button>
 
           <button
