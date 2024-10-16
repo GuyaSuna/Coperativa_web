@@ -1,6 +1,5 @@
-// src/routes/index.js
-import { createRouter } from '@tanstack/react-router'
-import Home from '../page' // Asegúrate de que la ruta sea correcta
+import { createRouter } from '@tanstack/react-router';
+import Home from '../page'; // Asegúrate de que la ruta sea correcta
 import AdminHome from '../AdministradorHome/page';
 import UsuarioHome from '../UsuarioHome/page';
 

@@ -71,7 +71,7 @@ const Home = () => {
         cooperativaLoginRequest,
         RequestLogin.token
       );
-      router.navigate("./AdminHome");
+      router.navigate('/AdminHome');
     } catch (error) {
       console.error(error);
       setErrorMessage("Ocurrió un error al intentar iniciar sesión.");
@@ -110,7 +110,7 @@ const Home = () => {
         cooperativaMiembro,
         loginRequest.token
       );
-      router.navigate("./UsuarioHome");
+      router.navigate('/UsuarioHome');
     } catch (error) {
       console.error(error);
       setErrorMessage("Ocurrió un error al intentar iniciar sesión.");

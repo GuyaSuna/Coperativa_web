@@ -1,14 +1,11 @@
-// RootLayout.jsx
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "../Components/header";
-import Footer from "../Components/footer";
-import { MiembroProvider } from "@/Provider/provider";
-import { SessionProvider } from "@/Provider/loginProvider";
-import SessionManager from "@/Components/session/sessionManager";
-import { ThemeProvider } from "@/Provider/ThemeProvider";
-import { RouterProvider } from '@tanstack/router';
-import router from '../app/Routes/index'
+// RootLayout.jsx (actualizado)
+import { Inter } from "next/font/google"; 
+import "./globals.css"; 
+import { MiembroProvider } from "@/Provider/provider"; 
+import { SessionProvider } from "@/Provider/loginProvider"; 
+import SessionManager from "@/Components/session/sessionManager"; 
+import { ThemeProvider } from "@/Provider/ThemeProvider"; 
+import ClientLayout from './clientLayout'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +21,11 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <MiembroProvider>
             <SessionProvider>
-              <SessionManager />
-              <RouterProvider router={router}>
-                <Header />
+              <SessionManager>
+              <ClientLayout>
                 {children}
-                <Footer />
-              </RouterProvider>
+              </ClientLayout>
+              </SessionManager>
             </SessionProvider>
           </MiembroProvider>
         </ThemeProvider>
