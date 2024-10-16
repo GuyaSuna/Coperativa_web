@@ -7,12 +7,13 @@ import {
   getCooperativaPorSocio,
   registerMaster,
 } from "../Api/api.js";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
 import { useSession } from "./../Provider/loginProvider";
+import router from "./Routes";
 
 const Home = () => {
-  const router = useRouter();
+  // const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const { login } = useSession();
 
@@ -70,7 +71,7 @@ const Home = () => {
         cooperativaLoginRequest,
         RequestLogin.token
       );
-      router.push("./AdministradorHome");
+      router.navigate("./AdminHome");
     } catch (error) {
       console.error(error);
       setErrorMessage("Ocurrió un error al intentar iniciar sesión.");
@@ -109,7 +110,7 @@ const Home = () => {
         cooperativaMiembro,
         loginRequest.token
       );
-      router.push("./UsuarioHome");
+      router.navigate("./UsuarioHome");
     } catch (error) {
       console.error(error);
       setErrorMessage("Ocurrió un error al intentar iniciar sesión.");

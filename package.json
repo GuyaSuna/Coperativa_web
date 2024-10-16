@@ -17,6 +17,8 @@
     "@mui/material": "^5.x.x",
     "@react-pdf/renderer": "^3.4.4",
     "@tabler/icons-react": "^3.12.0",
+    "@tanstack/react-router": "^1.69.1",
+    "@tanstack/router": "^0.0.1-beta.53",
     "blob-stream": "^0.1.3",
     "coperativa_web": "file:",
     "date-fns": "^3.6.0",
