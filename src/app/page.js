@@ -10,45 +10,63 @@ import {
 import { useRouter } from "next/navigation";
 import { MiembroContext } from "@/Provider/provider";
 import { useSession } from "./../Provider/loginProvider";
+import { useQuery, useMutation } from "@tanstack/react-query"; // Importa los hooks de TanStack Query
 
 const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const { login } = useSession();
 
-  
+  // Registra al master cuando se monta el componente
   useEffect(() => {
     const bodyMaster = {
-      username : "Admin",
-      lastname : "Pages" ,
-      firstname : "Admin",
-      password : 1234 ,
-      role : "MASTER"
-    }
+      username: "Admin",
+      lastname: "Pages",
+      firstname: "Admin",
+      password: 1234,
+      role: "MASTER",
+    };
 
-    const responseMaster = registerMaster(bodyMaster);
-  },[])
+    // Usa la mutación para registrar al master
+    const mutation = useMutation(registerMaster, {
+      onSuccess: (data) => {
+        console.log("Master registrado", data);
+      },
+      onError: (error) => {
+        console.error("Error al registrar al master:", error);
+      },
+    });
+
+    mutation.mutate(bodyMaster);
+  }, []);
 
   if (!login) {
     console.error("El contexto de sesión no está disponible.");
-    return null; 
+    return null;
   }
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para manejar los mensajes de error
+  const [errorMessage, setErrorMessage] = useState("");
 
+  // Función para manejar el inicio de sesión del administrador
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
     try {
-      const RequestLogin = await Login(username, password);
+      // Usa useQuery para hacer la llamada a Login
+      const { data: RequestLogin } = await useQuery(
+        ["loginAdmin", username, password],
+        () => Login(username, password),
+        {
+          enabled: false, // No se ejecuta automáticamente
+        }
+      );
 
-      if (typeof RequestLogin === "string" || !RequestLogin) {
+      if (!RequestLogin) {
         setErrorMessage("Usuario o contraseña incorrectos.");
         return;
       }
 
-      // Verifica si el rol es de administrador
       if (RequestLogin.responseBody.role !== "ADMIN") {
         setErrorMessage("Las credenciales no corresponden a un administrador.");
         return;
@@ -77,17 +95,23 @@ const Home = () => {
     }
   };
 
+  // Similar a handleSubmitAdministrador pero para el usuario
   const handleSubmitUsuario = async (e) => {
     e.preventDefault();
     try {
-      const loginRequest = await Login(username, password);
+      const { data: loginRequest } = await useQuery(
+        ["loginUser", username, password],
+        () => Login(username, password),
+        {
+          enabled: false,
+        }
+      );
 
       if (!loginRequest) {
         setErrorMessage("Usuario o contraseña incorrectos.");
         return;
       }
 
-      // Verifica si el rol es de usuario
       if (loginRequest.responseBody.role !== "USER") {
         setErrorMessage("Las credenciales no corresponden a un usuario.");
         return;
@@ -125,7 +149,6 @@ const Home = () => {
     login(token);
   };
 
-  // Funciones de manejo de entrada
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -153,7 +176,6 @@ const Home = () => {
               Iniciar Sesión
             </h2>
             <div className="mt-12">
-              {/* Mostrar alerta si hay un mensaje de error */}
               {errorMessage && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
                   <span>{errorMessage}</span>
@@ -233,7 +255,7 @@ const Home = () => {
           <img
             src="./visoft.png"
             alt="visoft"
-            className="hidden lg:flex items-center justify-center bg-indigo-100 flex-1 h-screen hover:scale-90 transform duration-700"
+            className="w-full h-auto hidden lg:block lg:w-1/2 xl:w-1/2"
           />
         </div>
       </div>
