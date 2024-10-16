@@ -776,7 +776,6 @@ const getCooperativaPorAdmin = async (id) => {
     const response = await fetch(`${URL}/cooperativa/Admin/${id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
@@ -784,9 +783,9 @@ const getCooperativaPorAdmin = async (id) => {
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
-
+   
     const data = await response.json();
-
+ console.log(data)
     return data;
   } catch (error) {
     console.error("Error en getCooperativasPorAdmin:", error);
@@ -798,9 +797,7 @@ const getCooperativaPorSocio = async (cedulaSocio) => {
   try {
     const response = await fetch(`${URL}/cooperativa/Socio/${cedulaSocio}`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
+ 
     });
 
     if (!response.ok) {
