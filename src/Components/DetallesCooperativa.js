@@ -1,13 +1,30 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { getCooperativaPorAdmin } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 
 const DetallesCooperativa = () => {
-  const { cooperativa } = useContext(MiembroContext);
+  const { miembro ,cooperativa } = useContext(MiembroContext);
+  const [dataCooperativa , setDataCooperativa] = useState(null);
   const tesorero = cooperativa.tesorero
     ? `${cooperativa.tesorero.firstname} ${cooperativa.tesorero.lastname}`
     : "No especificado";
+   
+    const fetchCooperativa = async () => {
+      try {
+        const response = await getCooperativaPorAdmin(miembro.responseBody.id);
+        setDataCooperativa(response);
+      } catch (error) {
+        console.error("Error al obtener los datos de la cooperativa:", error);
+      }
+    };
+
+    useEffect(() => {
+      if (miembro) {
+        fetchCooperativa();
+      }
+    }, [miembro]);
 
   const descargarDocumento = () => {
     window.location.href = "/capital_interes.xls";
@@ -16,8 +33,8 @@ const DetallesCooperativa = () => {
   return (
     <div className="w-full  bg-white shadow-lg rounded-lg overflow-hidden flex flex-col h-full">
       <div className="bg-blue-700 p-10 text-white">
-        <h2 className="text-5xl font-bold">{cooperativa.nombre}</h2>
-        <p className="text-2xl">Estado: {cooperativa.estadoCooperativa}</p>
+        <h2 className="text-5xl font-bold">{dataCooperativa?.nombre}</h2>
+        <p className="text-2xl">Estado: {dataCooperativa?.estadoCooperativa}</p>
       </div>
       <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 p-10">
         <div className="p-6">
@@ -29,8 +46,8 @@ const DetallesCooperativa = () => {
               Dirección:
             </span>
             <span className="text-xl text-gray-700">
-              {cooperativa.direccion}, {cooperativa.localidad},{" "}
-              {cooperativa.departamento}
+              {dataCooperativa?.direccion}, {dataCooperativa?.localidad},{" "}
+              {dataCooperativa?.departamento}
             </span>
           </div>
           <div className="flex justify-between items-center my-4">
@@ -38,7 +55,7 @@ const DetallesCooperativa = () => {
               Teléfono:
             </span>
             <span className="text-xl text-gray-700">
-              {cooperativa.telefono}
+              {dataCooperativa?.telefono}
             </span>
           </div>
           <div className="flex justify-between items-center my-4">
@@ -46,7 +63,7 @@ const DetallesCooperativa = () => {
               Viviendas Totales:
             </span>
             <span className="text-xl text-gray-700">
-              {cooperativa.cantidadViviendas}
+              {dataCooperativa?.cantidadViviendas}
             </span>
           </div>
           <div className="flex justify-between items-center my-4">
@@ -54,7 +71,7 @@ const DetallesCooperativa = () => {
               Cupos Libres:
             </span>
             <span className="text-xl text-gray-700">
-              {cooperativa.cuposLibre}
+              {dataCooperativa?.cuposLibre}
             </span>
           </div>
         </div>
@@ -68,7 +85,7 @@ const DetallesCooperativa = () => {
               Presidente:
             </span>
             <span className="text-xl text-gray-700">
-              {cooperativa.nombrePresidente}
+              {dataCooperativa?.nombrePresidente}
             </span>
           </div>
           <div className="flex justify-between items-center my-4">
@@ -76,7 +93,7 @@ const DetallesCooperativa = () => {
               Vicepresidente:
             </span>
             <span className="text-xl text-gray-700">
-              {cooperativa.nombreVicePresidente}
+              {dataCooperativa?.nombreVicePresidente}
             </span>
           </div>
           <div className="flex justify-between items-center my-4">

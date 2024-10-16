@@ -25,7 +25,7 @@ const AdminHome = () => {
     setSelectedOption(option);
     setIdentificadorComponente(option);
   };
-  
+
   useEffect(() => {
     if (!miembro || !cooperativa || !fetchToken()) {
       console.log("Esperando a que los datos estén disponibles...");
@@ -35,8 +35,9 @@ const AdminHome = () => {
     }
   }, [miembro, cooperativa]);
 
-  const fetchToken = async () => {
+  const fetchToken = () => {
     const token = getToken();
+  
     return token !== null;
   };
 
@@ -88,6 +89,20 @@ const AdminHome = () => {
       console.error("Error al obtener las unidades reajustables:", error);
     }
   };
+
+  useEffect(() => {
+    let intervalId;
+    if (isLoading) {
+      intervalId = setInterval(() => {
+        console.log("Reintentando obtener los datos...");
+        fetchUr();
+      }, 5000);
+    }
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [isLoading]);
 
   if (isLoading) {
     return (
