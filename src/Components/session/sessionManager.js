@@ -9,7 +9,7 @@ const SessionManager = () => {
   const [tiempoRestante, setTiempoRestante] = useState(0);
   const [preguntado, setPreguntado] = useState(false);
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
-  const [contadorDialogo, setContadorDialogo] = useState(120); // Contador de 2 minutos
+  const [contadorDialogo, setContadorDialogo] = useState(120); 
   const router = useRouter();
 
   useEffect(() => {
@@ -46,15 +46,18 @@ const SessionManager = () => {
   useEffect(() => {
     if (mostrarDialogo && contadorDialogo > 0) {
       const contador = setInterval(() => {
-        setContadorDialogo((prev) => prev - 1);
+        setContadorDialogo((prev) => {
+          const nuevoValor = prev - 1;
+          if (nuevoValor <= 0) {
+            setMostrarDialogo(false);
+            clearInterval(contador);
+            logout();
+            router.push("/");
+          }
+          return nuevoValor;
+        });
       }, 1000);
-
-      if (contadorDialogo === 0) {
-        clearInterval(contador);
-        logout();
-        router.push("/");
-      }
-
+  
       return () => clearInterval(contador);
     }
   }, [mostrarDialogo, contadorDialogo, logout, router]);

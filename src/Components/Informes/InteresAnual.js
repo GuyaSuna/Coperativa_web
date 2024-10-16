@@ -30,7 +30,6 @@ const InteresAnual = ({ setIdentificadorComponente }) => {
 
     try {
       const response = await getInteresAnual(fechaCompleta, cooperativa.idCooperativa);
-      console.log("Respuesta Interes Anual", response);
       setResultados(response);
     } catch (error) {
       console.error("Error al obtener el informe:", error);
