@@ -21,11 +21,10 @@ export default function RootLayout({ children }) {
         <ThemeProvider>
           <MiembroProvider>
             <SessionProvider>
-              <SessionManager>
               <ClientLayout>
                 {children}
               </ClientLayout>
-              </SessionManager>
+
             </SessionProvider>
           </MiembroProvider>
         </ThemeProvider>

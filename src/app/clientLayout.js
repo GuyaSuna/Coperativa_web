@@ -5,13 +5,13 @@ import router from "./Routes";
 import Header from "../Components/header";
 import Footer from "../Components/footer";
 
-console.log(Header, Footer, router); 
 
 const ClientLayout = ({ children }) => {
-  if (!Header || !Footer || !router) {
-    return <div>Error: Uno o más componentes no están definidos correctamente.</div>;
+  if (!Header || !Footer || !router || !RouterProvider) {
+    console.error("Error: Uno o más componentes no están definidos correctamente.");
+    return <div>Error: Uno o más componentes no están disponibles.</div>;
   }
-
+  
   return (
     <>
       <Header />

@@ -24,7 +24,7 @@ const UsuarioHome = () => {
 
   useEffect(() => {
     if (!miembro || !cooperativa) {
-      router.push("/");
+      console.log("nono")
     }
   }, [miembro, cooperativa]);
 
