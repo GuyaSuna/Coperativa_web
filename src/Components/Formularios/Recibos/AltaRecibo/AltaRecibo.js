@@ -96,14 +96,13 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   const fetchReajusteAnual = async () => {
     const reajusteData = await getUltimoReajuste();
-   
+
     setReajuste(reajusteData);
   };
 
   const fetchSubsidio = async () => {
     const subsidioResponse = await getSubsidioVigenteSocio(Socio.cedulaSocio);
     if (subsidioResponse != null) {
-
       setSubsidio(subsidioResponse);
     } else {
       setSubsidio(0);
@@ -113,7 +112,6 @@ const AltaRecibo = ({ Socio, ur }) => {
   const fetchConvenio = async () => {
     const convenioResponse = await getConveniosVigenteSocio(Socio.cedulaSocio);
     if (convenioResponse != null) {
- 
       setConvenios(convenioResponse);
       if (convenioResponse.length > 0) {
         const totalConvenio = convenioResponse.reduce(
@@ -228,10 +226,9 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   const handleConfirmacion = async (e) => {
     setMostrarModal(false);
-  
+
     e.preventDefault();
 
-  
     // Validar formulario
     if (!validarFormulario()) return;
 
@@ -258,8 +255,6 @@ const AltaRecibo = ({ Socio, ur }) => {
         return; // Terminar ejecución para evitar dar de alta el ingreso
       }
 
-
-
       // Si el recibo fue exitoso, registrar el ingreso
       let fechaActual = new Date();
       const ingreso = {
@@ -274,7 +269,7 @@ const AltaRecibo = ({ Socio, ur }) => {
       try {
         // Intentar dar de alta el ingreso
         const IngresoResponse = await postIngreso(ingreso);
-   
+
         setIngreso(IngresoResponse);
         alert("Dado de alta correctamente");
       } catch (error) {
@@ -297,7 +292,6 @@ const AltaRecibo = ({ Socio, ur }) => {
     socioActualizar.capitalSocio += capitalMenosInteres;
     if (ingreso != null) {
       const socioUpdate = await updateSocio(socioActualizar);
-
     }
   };
   //      ruta dinamica
@@ -470,7 +464,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               id="interes"
               name="interes"
               readOnly
-              value={interes}
+              value={interes.toFixed(2)}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
             {Errores.Interes && (
@@ -486,7 +480,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               type="text"
               id="capital"
               name="capital"
-              value={capital}
+              value={capital.toFixed(2)}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
             {Errores.Capital && (
