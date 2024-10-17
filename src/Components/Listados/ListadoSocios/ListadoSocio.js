@@ -336,7 +336,7 @@ const ListadoSocio = ({
                   <span className="block sm:hidden  md:hidden font-semibold">
                     Fecha Ingreso:
                   </span>
-                  {socio.fechaIngresoCooeprativa}
+                  {socio.fechaIngresoCooperativa}
                 </td>
 
                 {/* Actions */}

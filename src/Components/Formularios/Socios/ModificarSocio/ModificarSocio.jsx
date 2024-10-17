@@ -1,19 +1,38 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { getSocio, updateSocio } from "../../../../Api/api";
+import React, { useState, useEffect, useContext } from "react";
+import { getSocio, updateSocio , getAllViviendas} from "../../../../Api/api";
+import { MiembroContext } from "@/Provider/provider";
 
 const ModificarSocio = ({ socio }) => {
   const [cedulaSocio, setCedulaSocio] = useState(socio?.cedulaSocio);
-  const [nroSocio, setNroSocio] = useState(socio?.nroSocio );
+  const [nroSocio, setNroSocio] = useState(socio?.nroSocio);
   const [nombreSocio, setNombreSocio] = useState(socio?.nombreSocio);
   const [apellidoSocio, setApellidoSocio] = useState(socio?.apellidoSocio);
-  const [capitalSocio, setCapitalSocio] = useState(socio?.capitalSocio.toFixed(2) );
-  const [telefono, setTelefono] = useState(socio?.telefono );
-  const [fechaIngreso, setFechaIngreso] = useState(socio?.fechaIngreso );
-  const [fechaIngresoCooperativa, setFechaIngresoCooperativa] = useState(socio?.fechaIngresoCooeprativa );
+  const [capitalSocio, setCapitalSocio] = useState(socio?.capitalSocio.toFixed(2));
+  const [telefono, setTelefono] = useState(socio?.telefono);
+  const [fechaIngreso, setFechaIngreso] = useState(socio?.fechaIngreso);
+  const [fechaIngresoCooperativa, setFechaIngresoCooperativa] = useState(socio?.fechaIngresoCooperativa);
   const [suplente, setSuplente] = useState(socio?.suplente || null);
+  const [viviendas, setViviendas] = useState([]);
+  const [viviendaSocio, setViviendaSocio] = useState(null);
+  const [viviendaSeleccionada, setViviendaSeleccionada] = useState(null);
   const [errores, setErrores] = useState({});
+  const {cooperativa} = useContext(MiembroContext);
+
+  useEffect(() => {
+    console.log(socio);
+    fetchViviendas();
+  }, []);
+
+  const fetchViviendas = async () => {
+    const response = await getAllViviendas(cooperativa.idCooperativa);
+    const viviendaSocioFilter = response.find(vivienda => vivienda.socio?.cedulaSocio === socio.cedulaSocio);
+    setViviendaSocio(viviendaSocioFilter);
+    setViviendaSeleccionada(viviendaSocioFilter?.idVivienda);
+    const viviendasFiltradas = response.filter(vivienda => !vivienda.socio);
+    setViviendas(viviendasFiltradas);
+  };
 
   const validarFormulario = () => {
     const errores = {};
@@ -22,12 +41,10 @@ const ModificarSocio = ({ socio }) => {
     if (!nroSocio) errores.nroSocio = "El número de socio es obligatorio";
     if (!nombreSocio) errores.nombreSocio = "El nombre es obligatorio";
     if (!apellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
-    if (!telefono) errores.Telefono = "El teléfono es obligatorio";
+    if (!telefono) errores.telefono = "El teléfono es obligatorio";
     if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!fechaIngreso)
-      errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-    if (!fechaIngresoCooperativa)
-      errores.fechaIngresoCooperativa = "La fecha de ingreso a la cooperativa es obligatoria";
+    if (!fechaIngreso) errores.fechaIngreso = "La fecha de ingreso es obligatoria";
+    if (!fechaIngresoCooperativa) errores.fechaIngresoCooperativa = "La fecha de ingreso a la cooperativa es obligatoria";
 
     setErrores(errores);
     return Object.keys(errores).length === 0;
@@ -42,6 +59,7 @@ const ModificarSocio = ({ socio }) => {
       cedulaSocio,
       nroSocio,
       nombreSocio,
+      archivado : socio.archivado,
       apellidoSocio,
       capitalSocio,
       telefono,
@@ -51,7 +69,8 @@ const ModificarSocio = ({ socio }) => {
     };
 
     try {
-      const result = await updateSocio(socioUpdate);
+      console.log(viviendaSeleccionada)
+      await updateSocio(socioUpdate, viviendaSeleccionada);
     } catch (error) {
       console.error("Error al actualizar socio:", error);
     }
@@ -188,6 +207,31 @@ const ModificarSocio = ({ socio }) => {
               {errores.fechaIngresoCooperativa && (
                 <span className="error">{errores.fechaIngresoCooperativa}</span>
               )}
+            </label>
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <label className="block text-sm font-medium mb-2">
+              Vivienda:
+              <select
+                name="vivienda"
+                value={viviendaSeleccionada}
+                onChange={(e) => setViviendaSeleccionada(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              >
+          
+                {viviendaSocio && (
+                  <option value={viviendaSocio.idVivienda}>
+                    {viviendaSocio.nroVivienda} (Actual)
+                  </option>
+                )}
+                {/* Mostrar viviendas disponibles */}
+                {viviendas.map((vivienda) => (
+                  <option key={vivienda.idVivienda} value={vivienda.idVivienda}>
+                    {vivienda.nroVivienda}
+                  </option>
+                ))}
+              </select>
+              {errores.idVivienda && <span className="error">{errores.idVivienda}</span>}
             </label>
           </div>
         </div>

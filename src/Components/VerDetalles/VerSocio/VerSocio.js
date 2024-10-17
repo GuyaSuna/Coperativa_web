@@ -16,6 +16,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
   const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] = useState(false);
   const { cooperativa } = useContext(MiembroContext);
 
+  console.log(socio)
   useEffect(() => {
     if (socio && socio.cedulaSocio) {
       const fetchUltimoSubsidio = async () => {

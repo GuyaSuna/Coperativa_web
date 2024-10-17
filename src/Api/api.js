@@ -413,14 +413,14 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 //   return [year, month, day].join("-");
 // };
 
-const updateSocio = async (socioEntity) => {
+const updateSocio = async (socioEntity, idVivienda) => {
   let cedulaSocio = socioEntity.cedulaSocio;
 
 
   try {
     // const fechaFormateada = formatDateToSQL(FechaIngreso);
     const token = getToken();
-    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
+    const response = await fetch(`${URL}/socio/${cedulaSocio}/${idVivienda}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
