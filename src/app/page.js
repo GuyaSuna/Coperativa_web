@@ -12,7 +12,7 @@ import { MiembroContext } from "@/Provider/provider";
 import { useSession } from "./../Provider/loginProvider";
 
 
-const Home = () => {
+function Home  () {
    const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const { login } = useSession();
@@ -71,7 +71,7 @@ const Home = () => {
         cooperativaLoginRequest,
         RequestLogin.token
       );
-      router.navigate('AdminHome');
+      router.push('AdminHome');
     } catch (error) {
       console.error(error);
       setErrorMessage("Ocurrió un error al intentar iniciar sesión.");
@@ -110,7 +110,7 @@ const Home = () => {
         cooperativaMiembro,
         loginRequest.token
       );
-      router.navigate('UsuarioHome');
+      router.push('UsuarioHome');
     } catch (error) {
       console.error(error);
       setErrorMessage("Ocurrió un error al intentar iniciar sesión.");
