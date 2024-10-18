@@ -36,19 +36,99 @@ const ModificarSocio = ({ socio }) => {
 
   const validarFormulario = () => {
     const errores = {};
-
-    if (!cedulaSocio) errores.cedulaSocio = "La cédula es obligatoria";
-    if (!nroSocio) errores.nroSocio = "El número de socio es obligatorio";
-    if (!nombreSocio) errores.nombreSocio = "El nombre es obligatorio";
-    if (!apellidoSocio) errores.apellidoSocio = "El apellido es obligatorio";
-    if (!telefono) errores.telefono = "El teléfono es obligatorio";
-    if (!capitalSocio) errores.capitalSocio = "El capital es obligatorio";
-    if (!fechaIngreso) errores.fechaIngreso = "La fecha de ingreso es obligatoria";
-    if (!fechaIngresoCooperativa) errores.fechaIngresoCooperativa = "La fecha de ingreso a la cooperativa es obligatoria";
-
+  
+    // Verificar si la cédula es válida
+    if (!cedulaSocio) {
+      errores.cedulaSocio = "La cédula es obligatoria";
+    } else if (isNaN(cedulaSocio)) {
+      errores.cedulaSocio = "La cédula debe ser un número";
+    }
+  
+    // Validar el número de socio
+    if (!nroSocio) {
+      errores.nroSocio = "El número de socio es obligatorio";
+    } else if (isNaN(nroSocio)) {
+      errores.nroSocio = "El número de socio debe ser un número";
+    } else if (nroSocio < 1) {
+      errores.nroSocio = "El número de socio debe ser mayor a 0";
+    }
+  
+    // Validar el nombre
+    if (!nombreSocio) {
+      errores.nombreSocio = "El nombre es obligatorio";
+    } else if (/[^a-zA-Z\s]/.test(nombreSocio)) {
+      errores.nombreSocio = "El nombre solo debe contener letras";
+    }
+  
+    // Validar el apellido
+    if (!apellidoSocio) {
+      errores.apellidoSocio = "El apellido es obligatorio";
+    } else if (/[^a-zA-Z\s]/.test(apellidoSocio)) {
+      errores.apellidoSocio = "El apellido solo debe contener letras";
+    }
+  
+    // Validar el teléfono
+    if (!telefono) {
+      errores.telefono = "El teléfono es obligatorio";
+    } else if (isNaN(telefono)) {
+      errores.telefono = "El teléfono debe ser un número";
+    }
+  
+    // Validar el capital
+    if (!capitalSocio) {
+      errores.capitalSocio = "El capital es obligatorio";
+    } else if (isNaN(capitalSocio)) {
+      errores.capitalSocio = "El capital debe ser un número";
+    }
+  
+    // Validar la fecha de ingreso
+    if (!fechaIngreso) {
+      errores.fechaIngreso = "La fecha de ingreso es obligatoria";
+    }
+  
+    // Validar la fecha de ingreso a la cooperativa
+    if (!fechaIngresoCooperativa) {
+      errores.fechaIngresoCooperativa = "La fecha de ingreso a la cooperativa es obligatoria";
+    } else {
+      const fechaIngresoC = new Date(fechaIngresoCooperativa);
+      const fechaHoy = new Date();
+  
+      if (fechaIngresoC > fechaHoy) {
+        errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser mayor a la fecha actual";
+      }
+    }
+  
+    // Validar datos del suplente si existe uno
+    if (suplente) {
+      if (!suplente.cedulaSuplente) {
+        errores.cedulaSuplente = "La cédula del suplente es obligatoria";
+      } else if (isNaN(suplente.cedulaSuplente)) {
+        errores.cedulaSuplente = "La cédula del suplente debe ser un número";
+      }
+  
+      if (!suplente.nombreSuplente) {
+        errores.nombreSuplente = "El nombre del suplente es obligatorio";
+      } else if (/[^a-zA-Z\s]/.test(suplente.nombreSuplente)) {
+        errores.nombreSuplente = "El nombre del suplente solo debe contener letras";
+      }
+  
+      if (!suplente.apellidoSuplente) {
+        errores.apellidoSuplente = "El apellido del suplente es obligatorio";
+      } else if (/[^a-zA-Z\s]/.test(suplente.apellidoSuplente)) {
+        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras";
+      }
+  
+      if (!suplente.telefonoSuplente) {
+        errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
+      } else if (isNaN(suplente.telefonoSuplente)) {
+        errores.telefonoSuplente = "El teléfono del suplente debe ser un número";
+      }
+    }
+  
     setErrores(errores);
     return Object.keys(errores).length === 0;
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
