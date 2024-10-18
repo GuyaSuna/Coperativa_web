@@ -3,17 +3,28 @@
 import {
   getSubsidioVigenteSocio,
   getRecibosImpagosSocio,
+  getConveniosVigenteSocio,
 } from "../../../Api/api";
 import React, { useState, useEffect, useContext } from "react";
 import { MiembroContext } from "@/Provider/provider";
 
 const VerSocio = ({ isOpen, onClose, socio }) => {
   const [ultimoSubsidio, setUltimoSubsidio] = useState(null);
+  const [conveniosPorSocio, setConveniosPorSocio] = useState(null);
   const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [totalImpagos, setTotalImpagos] = useState(0); // Nuevo estado para total
   const [isSuplenteExpanded, setIsSuplenteExpanded] = useState(false);
   const [isSubsidioExpanded, setIsSubsidioExpanded] = useState(false);
-  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] = useState(false);
+  const [isConvenioExpanded, setIsConvenioExpanded] = useState(false);
+  const [isRecibosImpagosExpanded, setIsRecibosImpagosExpanded] =
+    useState(false);
+
+  const [expandedConvenioId, setExpandedConvenioId] = useState(null);
+
+  const toggleConvenio = (id) => {
+    setExpandedConvenioId(expandedConvenioId === id ? null : id);
+  };
+
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
@@ -28,6 +39,20 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
         }
       };
 
+      const fetchConvenios = async () => {
+        try {
+          const convenios = await getConveniosVigenteSocio(socio.cedulaSocio);
+          console.log("Convenios ver del socio", convenios);
+          setConveniosPorSocio(convenios);
+        } catch (error) {
+          console.error(
+            "Error al obtener los Convenios vigentes del Socio",
+            error
+          );
+          setConveniosPorSocio(null);
+        }
+      };
+
       const fetchRecibosImpagos = async () => {
         try {
           const recibos = await getRecibosImpagosSocio(
@@ -37,7 +62,10 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
           setRecibosImpagos(recibos);
 
           // Calcular el total de recibos impagos
-          const total = recibos.reduce((acc, recibo) => acc + Number(recibo.cuotaMensual), 0);
+          const total = recibos.reduce(
+            (acc, recibo) => acc + Number(recibo.cuotaMensual),
+            0
+          );
           setTotalImpagos(total); // Establecer el total en el estado
         } catch (error) {
           console.error("Error al obtener los recibos impagos:", error);
@@ -45,7 +73,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
           setTotalImpagos(0); // Reiniciar el total en caso de error
         }
       };
-
+      fetchConvenios();
       fetchRecibosImpagos();
       fetchUltimoSubsidio();
     }
@@ -222,6 +250,62 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                     )}
                   </>
                 )}
+                {/* Sección Convenio */}
+                <tr>
+                  <td
+                    colSpan="2"
+                    className="font-semibold text-black-900 py-4 cursor-pointer"
+                    onClick={() => setIsConvenioExpanded(!isConvenioExpanded)}
+                  >
+                    {isConvenioExpanded ? "▼ Convenios" : "► Convenios"}
+                  </td>
+                </tr>
+                {isConvenioExpanded && (
+                  <>
+                    {conveniosPorSocio && conveniosPorSocio.length > 0 ? (
+                      conveniosPorSocio.map((convenio) => (
+                        <React.Fragment key={convenio.idConvenio}>
+                          <tr
+                            onClick={() => toggleConvenio(convenio.idConvenio)}
+                          >
+                            <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800 cursor-pointer">
+                              {expandedConvenioId === convenio.idConvenio
+                                ? "▼"
+                                : "►"}{" "}
+                              Nro. Convenio: {convenio.idConvenio}
+                            </td>
+                          </tr>
+                          {expandedConvenioId === convenio.idConvenio && (
+                            <>
+                              <tr>
+                                <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                                  Deuda en UR:
+                                </td>
+                                <td className="py-1 px-3">
+                                  {convenio.deudaEnUrOriginal}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
+                                  Fecha Inicio:
+                                </td>
+                                <td className="py-1 px-3">
+                                  {convenio.fechaInicioConvenio}
+                                </td>
+                              </tr>
+                            </>
+                          )}
+                        </React.Fragment>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="2" className="py-1 px-3 text-center">
+                          No tiene Convenios.
+                        </td>
+                      </tr>
+                    )}
+                  </>
+                )}
 
                 {/* Sección de Recibos Impagos */}
                 <tr>
@@ -249,13 +333,14 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                                 className="border-b border-gray-200 dark:border-gray-800 py-2"
                               >
                                 <div className="font-normal px-3">
-                                  Falta recibo en fecha: {recibo?.fechaRecibo} el
-                                  monto de: {recibo?.cuotaMensual}
+                                  Falta recibo en fecha: {recibo?.fechaRecibo}{" "}
+                                  el monto de: {recibo?.cuotaMensual}
                                 </div>
                               </div>
                             ))}
                             <div className="font-bold px-3 pt-2">
-                              Total Recibos Impagos: ${totalImpagos} {/* Mostrar el total */}
+                              Total Recibos Impagos: ${totalImpagos}{" "}
+                              {/* Mostrar el total */}
                             </div>
                           </>
                         ) : (

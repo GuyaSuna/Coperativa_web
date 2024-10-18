@@ -25,8 +25,6 @@ import logoLight from "../../public/logoVisoftLigth.png";
 const ListadoLateral = ({ setIdentificadorComponente }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [openSecondDropdown, setOpenSecondDropdown] = useState(null);
-  const [openThirdDropdown, setOpenThirdDropdown] = useState(null);
   const { darkMode } = useTheme();
 
   const handleSelection = (option) => {
@@ -36,13 +34,6 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
 
   const toggleDropdown = (dropdown) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
-  };
-
-  const toggleSecondDropdown = () => {
-    setOpenSecondDropdown(openSecondDropdown ? null : true); // Alterna el segundo desplegable
-  };
-  const toggleThirdDropdown = () => {
-    setOpenThirdDropdown(openThirdDropdown ? null : true); // Alterna el tercer desplegable
   };
 
   return (
@@ -151,9 +142,9 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
         {/* Segundo desplegable */}
         <div className="relative">
           <button
-            onClick={toggleSecondDropdown}
+            onClick={() => toggleDropdown(2)}
             className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-              openSecondDropdown ? "bg-blue-500 text-white" : ""
+              openDropdown === 2 ? "bg-blue-500 text-white" : ""
             }`}
           >
             <div className="flex items-center">
@@ -163,14 +154,14 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             <span
               className="transform transition-transform duration-200 text-1xl"
               style={{
-                transform: openSecondDropdown ? "rotate(180deg)" : "rotate(0)",
+                transform: openDropdown === 2 ? "rotate(180deg)" : "rotate(0)",
               }}
             >
               ▼
             </span>
           </button>
 
-          {openSecondDropdown && (
+          {openDropdown === 2 && (
             <div className="mt-2 space-y-2 ml-4">
               <button
                 onClick={() => handleSelection(8)}
@@ -242,9 +233,9 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
         </div>
         <div className="relative">
           <button
-            onClick={toggleThirdDropdown}
+            onClick={() => toggleDropdown(3)}
             className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-              openThirdDropdown ? "bg-blue-500 text-white" : ""
+              openDropdown === 3 ? "bg-blue-500 text-white" : ""
             }`}
           >
             <div className="flex items-center">
@@ -254,14 +245,14 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
             <span
               className="transform transition-transform duration-200 text-1xl"
               style={{
-                transform: openThirdDropdown ? "rotate(180deg)" : "rotate(0)",
+                transform: openDropdown === 3 ? "rotate(180deg)" : "rotate(0)",
               }}
             >
               ▼
             </span>
           </button>
 
-          {openThirdDropdown && (
+          {openDropdown === 3 && (
             <div className="mt-2 space-y-2 ml-4">
               <button
                 onClick={() => handleSelection(35)}
