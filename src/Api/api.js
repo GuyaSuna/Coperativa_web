@@ -2092,6 +2092,7 @@ const postPagoDevolucionCapital = async (pagoDevolucionCaptial) => {
     throw new Error("Error al enviar los datos del pago devolucion");
   }
 };
+
 const getUltimoEstadoContable = async () => {
   try {
     const token = getToken();
@@ -2229,6 +2230,30 @@ const updateUser = async (UpdateUserRequest, cedulaSocio, idCooperativa) => {
   }
 };
 
+
+const postDevolucion = async (devolucion) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/devolucion`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(devolucion),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en devolucion:", error);
+    throw new Error("Error al enviar los datos de la devolucion");
+  }
+};
+
 export {
   Login,
   getSocio,
@@ -2310,4 +2335,5 @@ export {
   getUltimoBalanceAnual,
   updateUser,
   registerMaster,
+  postDevolucion,
 };

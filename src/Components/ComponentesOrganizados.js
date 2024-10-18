@@ -44,6 +44,7 @@ import ListadoBalanceAnual from "./Listados/ListadoBalanceAnual/listadoBalanceAn
 import DetallesCooperativa from "./DetallesCooperativa";
 import ListadoReajustes from "./Listados/ListadoReajuste/listadoReajuste";
 import ModificarUsuario from "./Formularios/Usuarios/ModificarUsuario/modificarUsuario";
+import AltaDevolucion from "./Formularios/Devolucion/AltaDevolucion";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -358,6 +359,9 @@ const ComponentesOrganizados = ({
     }
     case 45: {
       return <ModificarUsuario usuario={usuario} />;
+    }
+    case 46: {
+      return <AltaDevolucion/>;
     }
   }
 };
