@@ -179,10 +179,10 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
                 <td className="px-4 py-3">{reajuste.fechaReajuste}</td>
                 <td className="px-4 py-3">{reajuste.valorUr}</td>
                 <td className="px-4 py-3">
-                  {reajuste.cuotaMensualDosHabitacionesEnPesos}
+                  {reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)}
                 </td>
                 <td className="px-4 py-3">
-                  {reajuste.cuotaMensualTresHabitacionesEnPesos}
+                  {reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)}
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
                   <button
