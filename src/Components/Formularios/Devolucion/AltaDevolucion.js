@@ -56,7 +56,7 @@ const AltaDevolucion = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validarFormulario()) {
-      setMostrarModal(true); // Muestra el modal de confirmación
+      setMostrarModal(true); 
     }
   };
 
@@ -67,13 +67,13 @@ const AltaDevolucion = () => {
   const handleConfirmacion = async () => {
     setMostrarModal(false); 
     if (!validarFormulario()) return;
-
+    const socioSelect = socios.find(socioF => socioF.cedulaSocio == socio)
     const devolucionData = {
       totalDevolucionUr,
       pagoDevolucion,
       fechaInicio,
       vigenciaEnRecibos,
-      socio
+      socio : socioSelect
     };
 
     try {

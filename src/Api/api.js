@@ -2254,6 +2254,34 @@ const postDevolucion = async (devolucion) => {
   }
 };
 
+const getAlldevoluciones = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/devolucion/getAllDevoluciones/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllDevolucion:", error);
+    throw new Error("Error al obtener las devoluciones");
+  }
+};
+
+
 export {
   Login,
   getSocio,
@@ -2336,4 +2364,5 @@ export {
   updateUser,
   registerMaster,
   postDevolucion,
+  getAlldevoluciones,
 };

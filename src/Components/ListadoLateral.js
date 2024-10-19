@@ -310,6 +310,15 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                 <FaMoneyBill className="mr-2 text-2xl" />{" "}
                 <span className="text-base">Listado Egresos</span>
               </button>
+              <button
+                onClick={() => handleSelection(47)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 21 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                <span className="text-base">Listado Devoluciones</span>
+              </button>
             </div>
           )}
         </div>
