@@ -9,7 +9,7 @@ const AltaDevolucion = () => {
   const [pagoDevolucion, setPagoDevolucion] = useState("");
   const [fechaInicio, setFechaInicio] = useState("");
   const [vigenciaEnRecibos, setVigenciaEnRecibos] = useState("");
-  const [socioId, setSocioId] = useState("");
+  const [socio, setSocio] = useState({});
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
   const [socios , setAllSocios] = useState([]);
@@ -38,7 +38,8 @@ const AltaDevolucion = () => {
       errores.fechaInicio = "La fecha de inicio no puede ser mayor a la fecha actual";
     }
     if (!vigenciaEnRecibos) errores.vigenciaEnRecibos = "La vigencia en recibos es obligatoria";
-    if (!socioId) errores.socioId = "El ID del socio es obligatorio";
+    if (!socio) errores.socio = "El socio es obligatorio";
+    else if( socio == 0 ) errores.socio = "El socio debe seleccionarse";
 
     setErrores(errores);
     return Object.keys(errores).length === 0;
@@ -59,6 +60,10 @@ const AltaDevolucion = () => {
     }
   };
 
+  const handleChangeSocio = (e) => {
+    setSocio(e.target.value);
+  };
+
   const handleConfirmacion = async () => {
     setMostrarModal(false); 
     if (!validarFormulario()) return;
@@ -68,7 +73,7 @@ const AltaDevolucion = () => {
       pagoDevolucion,
       fechaInicio,
       vigenciaEnRecibos,
-      socio: { id: socioId },
+      socio
     };
 
     try {
@@ -142,16 +147,23 @@ const AltaDevolucion = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2">Socio ID:</label>
-          <input
-            type="number"
-            value={socioId}
-            onChange={handleChange(setSocioId)}
+          <label className="block text-sm font-medium mb-2" htmlFor="seleccionSocio">
+            Seleccionar Socio:
+          </label>
+          <select
+            id="seleccionSocio"
+            name="seleccionSocio"
+            value={socio}
+            onChange={handleChangeSocio}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {errores.socioId && (
-            <span className="text-red-500 text-sm">{errores.socioId}</span>
-          )}
+          >
+            <option value="0">Seleccione un socio</option>
+            {socios.map((socio) => (
+              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
+                {`${socio.nombreSocio} ${socio.apellidoSocio}`}
+              </option>
+            ))}
+          </select>
         </div>
 
         <button
