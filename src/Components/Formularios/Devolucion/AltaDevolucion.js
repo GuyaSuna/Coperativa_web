@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { postDevolucion } from "@/Api/api";
+import React, { useState, useEffect , useContext} from "react";
+import { postDevolucion, getAllSocios } from "@/Api/api";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion.js";
-
+import { MiembroContext } from "@/Provider/provider";
 const AltaDevolucion = () => {
   const [totalDevolucionUr, setTotalDevolucionUr] = useState("");
   const [pagoDevolucion, setPagoDevolucion] = useState("");
@@ -12,11 +12,18 @@ const AltaDevolucion = () => {
   const [socioId, setSocioId] = useState("");
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [socios , setAllSocios] = useState([]);
+  const {cooperativa} = useContext(MiembroContext);
 
   useEffect(() => {
     setFechaInicio(obtenerFechaHoy());
+    fetchSocios();
   }, []);
 
+  const fetchSocios = async () =>{
+    const response = await getAllSocios(cooperativa.idCooperativa);
+    setAllSocios(response);
+  }
   const handleChange = (setter) => (e) => setter(e.target.value);
 
   const validarFormulario = () => {
@@ -61,7 +68,7 @@ const AltaDevolucion = () => {
       pagoDevolucion,
       fechaInicio,
       vigenciaEnRecibos,
-      socio: { id: socioId }, // Asumiendo que socio tiene una relación a SocioEntity
+      socio: { id: socioId },
     };
 
     try {
