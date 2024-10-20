@@ -235,7 +235,7 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                 }`}
               >
                 <FaFileSignature className="mr-2 text-2xl" />{" "}
-                <span className="text-base">Agregar descuento</span>
+                <span className="text-base">Agregar devolucion general</span>
               </button>
             </div>
           )}
