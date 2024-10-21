@@ -3,6 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { getAlldevoluciones } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+import VerDevoluciones from "@/Components/VerDetalles/VerDevoluciones/verDevoluciones";
 
 const ListadoDevoluciones = () => {
   const { cooperativa } = useContext(MiembroContext);
@@ -202,7 +203,7 @@ const ListadoDevoluciones = () => {
       </div>
 
       {isModalOpen && (
-        <VerDevolucion
+        <VerDevoluciones
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           devolucion={devolucionSeleccionada}
