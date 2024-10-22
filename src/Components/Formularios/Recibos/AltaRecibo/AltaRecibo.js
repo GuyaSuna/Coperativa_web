@@ -12,7 +12,10 @@ import {
   getConveniosVigenteSocio,
   getSubsidioVigenteSocio,
   postIngreso,
+  postEgreso,
   updateSocio,
+  getDevolucionBySocio,
+  updateDevolucion,
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
@@ -41,8 +44,10 @@ const AltaRecibo = ({ Socio, ur }) => {
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [ingreso, setIngreso] = useState(null);
+  const [egreso , setEgreso ] = useState(null);
   const [valorConvenio, setValorCovenio] = useState(0);
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [devolucion , setDevolucion] = useState(null);
   //Nahuel- va en altaRecibo la peticion de ur
 
   // useEffect (() => {
@@ -54,6 +59,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   // }
 
   useEffect(() => {
+    fetchDevolucion();
     const today = new Date().toISOString().split("T")[0];
     setFechaPago(today);
     setFechaEmision(today);
@@ -69,6 +75,14 @@ const AltaRecibo = ({ Socio, ur }) => {
       }
     });
   }, []);
+
+  const fetchDevolucion = async () => {
+    const response = await getDevolucionBySocio(Socio.cedulaSocio);
+    console.log("Devolucion obtenida:", response);
+    setDevolucion(response);
+  }
+  
+
   useEffect(() => {
     fetchReajusteAnual();
   }, [Socio]);
@@ -131,8 +145,13 @@ const AltaRecibo = ({ Socio, ur }) => {
   }, [fechaPago]);
 
   useEffect(() => {
-    setValorVivienda(vivienda.valorVivienda);
-  }, [vivienda]);
+    if (devolucion != null) {
+      setValorVivienda(vivienda.valorVivienda - devolucion.pagoDevolucion);
+    } else {
+      setValorVivienda(vivienda.valorVivienda);
+    }
+  }, [vivienda, devolucion]);
+  
 
   useEffect(() => {
     let valorDormitorios;
@@ -172,6 +191,8 @@ const AltaRecibo = ({ Socio, ur }) => {
     setSumaPesos(valorEnLetras);
   }, [valorVivienda, reajuste, subsidio, convenios]);
 
+
+  //Cambiar esta funcion por una de traer vivienda por socio
   const fetchCalculos = async () => {
     const viviendasData = await getAllViviendas(cooperativa.idCooperativa);
 
@@ -229,11 +250,10 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     e.preventDefault();
 
-    // Validar formulario
+
     if (!validarFormulario()) return;
 
     try {
-      // Intentar dar de alta el recibo
       const response = await postRecibo(
         fechaEmision,
         fechaPago,
@@ -249,25 +269,21 @@ const AltaRecibo = ({ Socio, ur }) => {
         miembro.responseBody
       );
 
-      // Si hay un error en la respuesta del recibo, mostrar el mensaje de error específico
       if (response && response.error) {
-        alert(response.error); // Mostrar el mensaje de error específico retornado por postRecibo
-        return; // Terminar ejecución para evitar dar de alta el ingreso
+        alert(response.error); 
+        return; 
       }
-
-      // Si el recibo fue exitoso, registrar el ingreso
       let fechaActual = new Date();
       const ingreso = {
         subRubro: "Amortizacion",
         denominacion: `Recibo dado de alta el ${fechaEmision}`,
         ingreso: cuotaMensual,
         cooperativaEntity: cooperativa,
-        tipoMoneda: "UR",
+        tipoMoneda: "UYU",
         fechaDatosContables: fechaActual,
       };
 
       try {
-        // Intentar dar de alta el ingreso
         const IngresoResponse = await postIngreso(ingreso);
 
         setIngreso(IngresoResponse);
@@ -276,6 +292,23 @@ const AltaRecibo = ({ Socio, ur }) => {
         console.error("Error en el ingreso:", error.message);
         alert("Error al dar de alta el ingreso.");
       }
+      if(devolucion != null){
+        let egreso = {
+          subRubro: "Otros",
+          denominacion: `Recibo dado de alta el ${fechaEmision}`,
+          egreso: devolucion.pagoDevolucion * ur,
+          cooperativaEntity: cooperativa,
+          tipoMoneda: "UYU",
+          fechaDatosContables: fechaActual,
+        }
+        try {
+          const egresoResponse = await postEgreso(egreso);
+          setEgreso(egresoResponse)
+        } catch (error) {
+          console.error("Error en el ingreso:", error.message);
+          alert("Error al dar de alta el ingreso.");
+        }
+    }
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
       alert("Error al dar de alta el recibo. Por favor, intenta nuevamente.");
@@ -286,12 +319,32 @@ const AltaRecibo = ({ Socio, ur }) => {
     automaticUpdate();
   }, [ingreso]);
 
+  useEffect(() => {
+    if(devolucion != null){
+          DevolucionUpdate();
+    }
+  }, [egreso]);
+
+  const DevolucionUpdate = async () =>{
+    const devolucionModificar = { ...devolucion }; 
+
+  devolucionModificar.totalDevolucionUr -= devolucionModificar.pagoDevolucion;
+  devolucionModificar.vigenciaEnRecibos -= 1;
+
+  try {
+    const responseDev = await updateDevolucion(devolucionModificar);
+    console.log("Respuesta de la actualización de la devolución:", responseDev);
+  } catch (error) {
+    console.error("Error al actualizar la devolución:", error);
+  }
+  }
+
   const automaticUpdate = async () => {
     let socioActualizar = Socio;
     let capitalMenosInteres = capital - interes;
     socioActualizar.capitalSocio += capitalMenosInteres;
     if (ingreso != null) {
-      const socioUpdate = await updateSocio(socioActualizar);
+      await updateSocio(socioActualizar, vivienda.idVivienda);
     }
   };
   //      ruta dinamica
@@ -435,8 +488,6 @@ const AltaRecibo = ({ Socio, ur }) => {
               <span className="text-red-500 text-sm">{Errores.fechaPago}</span>
             )}
           </div>
-
-          {/* posible optional */}
           <div className="mb-4">
             <label className="block text-sm font-medium mb-2" htmlFor="recargo">
               Recargo:
@@ -481,6 +532,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               id="capital"
               name="capital"
               value={capital.toFixed(2)}
+              readOnly
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
             {Errores.Capital && (
@@ -541,6 +593,7 @@ const AltaRecibo = ({ Socio, ur }) => {
               type="number"
               id="cuotaSocial"
               name="cuotaSocial"
+              readOnly
               value={cuotaSocial}
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />

@@ -415,10 +415,7 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 
 const updateSocio = async (socioEntity, idVivienda) => {
   let cedulaSocio = socioEntity.cedulaSocio;
-
-
   try {
-    // const fechaFormateada = formatDateToSQL(FechaIngreso);
     const token = getToken();
     const response = await fetch(`${URL}/socio/${cedulaSocio}/${idVivienda}`, {
       method: "PUT",
@@ -2308,6 +2305,43 @@ const getDevolucion = async (idDevolucion) => {
   }
 };
 
+const getDevolucionBySocio = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/devolucion/socio/${cedulaSocio}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const contentType = response.headers.get("Content-Type");
+    if (
+      response.status === 204 ||
+      !contentType ||
+      !contentType.includes("application/json")
+    ) {
+     
+      return null;
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get Devolucion:", error);
+    throw new Error("Error al obtener la devolucion");
+  }
+};
+
 
 const updateDevolucion = async (devolucion) => {
   try {
@@ -2446,5 +2480,7 @@ export {
   getAlldevoluciones,
   updateDevolucion,
   getDevolucion,
-  deleteDevolucion
+  getDevolucionBySocio,
+  deleteDevolucion,
+
 };
