@@ -4,7 +4,7 @@ import React, { useState, useEffect , useContext} from "react";
 import { postDevolucion, getAllSocios } from "@/Api/api";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion.js";
 import { MiembroContext } from "@/Provider/provider";
-const AltaDevolucion = () => {
+const AltaDevolucion = ({setIdentificadorComponente}) => {
   const [totalDevolucionUr, setTotalDevolucionUr] = useState("");
   const [pagoDevolucion, setPagoDevolucion] = useState("");
   const [fechaInicio, setFechaInicio] = useState("");
@@ -12,6 +12,7 @@ const AltaDevolucion = () => {
   const [socio, setSocio] = useState({});
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
+  const [motivo, setMotivo] = useState(""); 
   const [socios , setAllSocios] = useState([]);
   const {cooperativa} = useContext(MiembroContext);
 
@@ -24,6 +25,7 @@ const AltaDevolucion = () => {
     const response = await getAllSocios(cooperativa.idCooperativa);
     setAllSocios(response);
   }
+
   const handleChange = (setter) => (e) => setter(e.target.value);
 
   const validarFormulario = () => {
@@ -38,6 +40,7 @@ const AltaDevolucion = () => {
       errores.fechaInicio = "La fecha de inicio no puede ser mayor a la fecha actual";
     }
     if (!vigenciaEnRecibos) errores.vigenciaEnRecibos = "La vigencia en recibos es obligatoria";
+    if (!motivo) errores.motivo = "El campo de devolución es obligatorio";
     if (!socio) errores.socio = "El socio es obligatorio";
     else if( socio == 0 ) errores.socio = "El socio debe seleccionarse";
 
@@ -67,18 +70,21 @@ const AltaDevolucion = () => {
   const handleConfirmacion = async () => {
     setMostrarModal(false); 
     if (!validarFormulario()) return;
+
     const socioSelect = socios.find(socioF => socioF.cedulaSocio == socio)
     const devolucionData = {
       totalDevolucionUr,
       pagoDevolucion,
       fechaInicio,
       vigenciaEnRecibos,
+      motivo,
       socio : socioSelect
     };
 
     try {
       const response = await postDevolucion(devolucionData);
       console.log("Devolución registrada exitosamente:", response);
+      setIdentificadorComponente(47);
     } catch (error) {
       console.error("Error al enviar los datos de la devolución:", error);
       alert("Error interno del servidor");
@@ -132,7 +138,7 @@ const AltaDevolucion = () => {
             )}
           </div>
         </div>
-
+      <div className="grid md:grid-cols-2 md:gap-6">
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2">Vigencia en Recibos:</label>
           <input
@@ -146,6 +152,19 @@ const AltaDevolucion = () => {
           )}
         </div>
 
+        <div className="mb-4">
+          <label className="block text-sm font-medium mb-2">Motivo de la Devolución:</label>
+          <input
+          type="text"
+            value={motivo}
+            onChange={handleChange(setMotivo)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {errores.motivo && (
+            <span className="text-red-500 text-sm">{errores.motivo}</span>
+          )}
+        </div>
+      </div>
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="seleccionSocio">
             Seleccionar Socio:
