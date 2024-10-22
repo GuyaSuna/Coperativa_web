@@ -7,11 +7,11 @@ import DatosVivienda from "@/Components/UsuarioDashboard/DatosVivienda";
 
 const UsuarioDashboard = () => {
   return (
-    <Grid 
-      container 
-      spacing={1} 
-      p={2} 
-      className="dark:bg-gray-900 bg-white text-black dark:text-white"
+    <Grid
+      container
+      spacing={1}
+      p={2}
+      className="bg-gray-900 dark:bg-white dark:text-black text-white"
     >
       <Grid item xs={12} md={6}>
         <DatosUsuario />

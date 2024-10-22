@@ -56,6 +56,7 @@ const ListadoRecibosSocios = () => {
             overflowX: "auto",
             width: "100%",
             minWidth: "100%",
+            height: "100%",
           }}
         >
           <Table
@@ -65,7 +66,7 @@ const ListadoRecibosSocios = () => {
               mt: 2,
               minWidth: { xs: "500px", sm: "650px" },
             }}
-            className="bg-white dark:bg-gray-900"
+            className="dark:bg-white bg-gray-900"
           >
             <TableHead>
               <TableRow>
@@ -73,7 +74,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="text-black dark:text-white"
+                    className="dark:text-black text-white"
                   >
                     Nro Recibo
                   </Typography>
@@ -82,7 +83,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="text-black dark:text-white"
+                    className="dark:text-black text-white"
                   >
                     Fecha Recibo
                   </Typography>
@@ -91,7 +92,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="text-black dark:text-white"
+                    className="dark:text-black text-white"
                   >
                     Monto
                   </Typography>
@@ -100,7 +101,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="text-black dark:text-white"
+                    className="dark:text-black text-white"
                   >
                     Acciones
                   </Typography>
@@ -111,24 +112,31 @@ const ListadoRecibosSocios = () => {
               {allRecibos.map((recibo, index) => (
                 <TableRow key={index}>
                   <TableCell>
-                    <Typography variant="body1" className="text-black dark:text-white">
+                    <Typography
+                      variant="body1"
+                      className=" dark:text-black text-white"
+                    >
                       {recibo.nroRecibo}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="body1" className="text-black dark:text-white">
+                    <Typography
+                      variant="body1"
+                      className=" dark:text-black text-white"
+                    >
                       {recibo.fechaRecibo}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography variant="body1" className="text-black dark:text-white">
+                    <Typography
+                      variant="body1"
+                      className="dark:text-black text-white"
+                    >
                       {recibo.monto}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Button onClick={() => handleVerRecibo(recibo)}>
-                      Ver
-                    </Button>
+                    <Button onClick={() => handleVerRecibo(recibo)}>Ver</Button>
                     <Button onClick={() => handleDescargarPDF(recibo)}>
                       Descargar PDF
                     </Button>

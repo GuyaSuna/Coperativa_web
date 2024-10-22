@@ -17,7 +17,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
 
   return (
     <div
-      className={`xl:w-72 w-48 flex-shrink-0 border-r  bg-gray-50 dark:bg-dark border-gray-200 dark:border-gray-800 overflow-y-auto lg:block hidden p-5`}
+      className={`xl:w-72 w-48 flex-shrink-0 border-r  dark:bg-gray-50 bg-dark dark:border-gray-200 border-gray-800 overflow-y-auto lg:block hidden p-5`}
     >
       <Image
         key={darkMode ? "dark" : "light"}
@@ -32,7 +32,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
       <div className="space-y-4 mt-3">
         <button
           onClick={() => handleSelection(37)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center text-white dark:text-black dark:hover:bg-blue-900 dark:hover:text-white hover:bg-blue-100 hover:text-black  ${
             selectedOption === 38 ? "bg-blue-500 text-white" : ""
           }`}
         >
@@ -42,7 +42,7 @@ const SidebarUsuario = ({ setIdentificadorComponente }) => {
 
         <button
           onClick={() => handleSelection(38)}
-          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+          className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center text-white dark:text-black dark:hover:bg-blue-900 dark:hover:text-white hover:bg-blue-100 hover:text-black  ${
             selectedOption === 38 ? "bg-blue-500 text-white" : ""
           }`}
         >
