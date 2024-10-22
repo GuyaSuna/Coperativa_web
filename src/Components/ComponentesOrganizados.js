@@ -44,8 +44,9 @@ import ListadoBalanceAnual from "./Listados/ListadoBalanceAnual/listadoBalanceAn
 import DetallesCooperativa from "./DetallesCooperativa";
 import ListadoReajustes from "./Listados/ListadoReajuste/listadoReajuste";
 import ModificarUsuario from "./Formularios/Usuarios/ModificarUsuario/modificarUsuario";
-import AltaDevolucion from "./Formularios/Devolucion/AltaDevolucion";
+import AltaDevolucion from "./Formularios/Devolucion/AltaDevolucion/AltaDevolucion";
 import ListadoDevoluciones from "./Listados/ListaDevoluciones/listadoDevoluciones";
+import ModificarDevolucion from "./Formularios/Devolucion/ModificarDevolucion/ModificarDevolucion";
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -65,6 +66,7 @@ const ComponentesOrganizados = ({
   const [egreso, setEgreso] = useState({});
   const [convenio, setConvenio] = useState({});
   const [cooperativa, setCooperativa] = useState({});
+  const [IdDevolucion , setIdDevolucion] = useState(0);
 
   //Cambiar a futuro esto jaja
   //utilizar diferentes rutas
@@ -362,10 +364,14 @@ const ComponentesOrganizados = ({
       return <ModificarUsuario usuario={usuario} />;
     }
     case 46: {
-      return <AltaDevolucion/>;
+      return <AltaDevolucion  setIdentificadorComponente={setIdentificadorComponente}/>;
     }
     case 47: {
-      return <ListadoDevoluciones/>;
+      return <ListadoDevoluciones setIdentificadorComponente={setIdentificadorComponente} 
+      setIdDevolucion={setIdDevolucion}/>;
+    }
+    case 48: {
+      return <ModificarDevolucion idDevolucionParam={IdDevolucion} setIdentificadorComponente={setIdentificadorComponente}/>;
     }
   }
 };

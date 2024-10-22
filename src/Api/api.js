@@ -415,10 +415,7 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 
 const updateSocio = async (socioEntity, idVivienda) => {
   let cedulaSocio = socioEntity.cedulaSocio;
-
-
   try {
-    // const fechaFormateada = formatDateToSQL(FechaIngreso);
     const token = getToken();
     const response = await fetch(`${URL}/socio/${cedulaSocio}/${idVivienda}`, {
       method: "PUT",
@@ -2281,6 +2278,122 @@ const getAlldevoluciones = async (idCooperativa) => {
   }
 };
 
+const getDevolucion = async (idDevolucion) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/devolucion/${idDevolucion}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get Devolucion:", error);
+    throw new Error("Error al obtener la devolucion");
+  }
+};
+
+const getDevolucionBySocio = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/devolucion/socio/${cedulaSocio}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const contentType = response.headers.get("Content-Type");
+    if (
+      response.status === 204 ||
+      !contentType ||
+      !contentType.includes("application/json")
+    ) {
+     
+      return null;
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get Devolucion:", error);
+    throw new Error("Error al obtener la devolucion");
+  }
+};
+
+
+const updateDevolucion = async (devolucion) => {
+  try {
+    console.log("API" , devolucion)
+    const token = getToken();
+    const response = await fetch(`${URL}/devolucion`,
+
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(devolucion),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The request has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error in updateDevoluciones:", error);
+    throw new Error("Error updating devoluciones");
+  }
+};
+
+const deleteDevolucion = async (idDevolucion) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/devolucion/${idDevolucion}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleteDevolucion:", error);
+    throw new Error("Error al eliminar la devolucion");
+  }
+};
+
 
 export {
   Login,
@@ -2365,4 +2478,9 @@ export {
   registerMaster,
   postDevolucion,
   getAlldevoluciones,
+  updateDevolucion,
+  getDevolucion,
+  getDevolucionBySocio,
+  deleteDevolucion,
+
 };
