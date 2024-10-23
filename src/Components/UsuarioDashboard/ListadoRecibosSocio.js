@@ -48,6 +48,7 @@ const ListadoRecibosSocios = () => {
     doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
   };
 
+  console.log("RECIBOS SOCIO: " + allRecibos);
   return (
     <>
       <DashboardCard title={"Historial de Recibos"}>
@@ -66,7 +67,7 @@ const ListadoRecibosSocios = () => {
               mt: 2,
               minWidth: { xs: "500px", sm: "650px" },
             }}
-            className="dark:bg-white bg-gray-900"
+            className="dark:bg-white bg-gray-300"
           >
             <TableHead>
               <TableRow>
@@ -132,12 +133,14 @@ const ListadoRecibosSocios = () => {
                       variant="body1"
                       className="dark:text-black text-white"
                     >
-                      {recibo.monto}
+                      $ {recibo.cuotaMensual}
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Button onClick={() => handleVerRecibo(recibo)}>Ver</Button>
-                    <Button onClick={() => handleDescargarPDF(recibo)}>
+                    <Button
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => handleDescargarPDF(recibo)}
+                    >
                       Descargar PDF
                     </Button>
                   </TableCell>

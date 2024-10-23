@@ -38,7 +38,7 @@ const DatosVivienda = () => {
 
   return (
     <Card
-      sx={{ display: "flex", height: 250, width: "100%" }}
+      sx={{ display: "flex", height: "100%", width: "100%" }}
       className="bg-gray-900 dark:bg-white dark:text-black text-white"
     >
       <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
