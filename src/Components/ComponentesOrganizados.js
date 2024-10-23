@@ -47,6 +47,9 @@ import ModificarUsuario from "./Formularios/Usuarios/ModificarUsuario/modificarU
 import AltaDevolucion from "./Formularios/Devolucion/AltaDevolucion/AltaDevolucion";
 import ListadoDevoluciones from "./Listados/ListaDevoluciones/listadoDevoluciones";
 import ModificarDevolucion from "./Formularios/Devolucion/ModificarDevolucion/ModificarDevolucion";
+import AltaRecargo from "./Formularios/Recargos/AltaRecargos.js/AltaRecargo";
+import ListadoRecargos from "./Listados/ListadoRecargos/listadoRecargos";
+
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -372,6 +375,12 @@ const ComponentesOrganizados = ({
     }
     case 48: {
       return <ModificarDevolucion idDevolucionParam={IdDevolucion} setIdentificadorComponente={setIdentificadorComponente}/>;
+    }
+    case 49:{
+      return <AltaRecargo setIdentificadorComponente={setIdentificadorComponente} />
+    }
+    case 50 : {
+      return <ListadoRecargos setIdentificadorComponente={setIdentificadorComponente} />
     }
   }
 };
