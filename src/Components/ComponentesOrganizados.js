@@ -47,7 +47,7 @@ import ModificarUsuario from "./Formularios/Usuarios/ModificarUsuario/modificarU
 import AltaDevolucion from "./Formularios/Devolucion/AltaDevolucion/AltaDevolucion";
 import ListadoDevoluciones from "./Listados/ListaDevoluciones/listadoDevoluciones";
 import ModificarDevolucion from "./Formularios/Devolucion/ModificarDevolucion/ModificarDevolucion";
-import AltaRecargo from "./Formularios/Recargos/AltaRecargo";
+import AltaRecargo from "./Formularios/Recargos/AltaRecargos.js/AltaRecargo";
 import ListadoRecargos from "./Listados/ListadoRecargos/listadoRecargos";
 
 const ComponentesOrganizados = ({
