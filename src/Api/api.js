@@ -2394,6 +2394,77 @@ const deleteDevolucion = async (idDevolucion) => {
   }
 };
 
+const postRecargo = async (recargo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recargo`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(recargo),
+    });
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en recargo:", error);
+    throw new Error("Error al enviar los datos de el recargo");
+  }
+};
+
+const deleteRecargo = async (idRecargo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recargo/${idRecargo}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error en la solicitud de borrado");
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error en deleterecargo:", error);
+    throw new Error("Error al eliminar el recargo");
+  }
+};
+
+const getAllRecargos = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/recargo/getAllRecargos/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en getAllRecargos:", error);
+    throw new Error("Error al obtener los Recargos");
+  }
+};
 
 export {
   Login,
@@ -2482,5 +2553,7 @@ export {
   getDevolucion,
   getDevolucionBySocio,
   deleteDevolucion,
-
+  postRecargo,
+  deleteRecargo,
+  getAllRecargos,
 };

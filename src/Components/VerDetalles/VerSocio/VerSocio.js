@@ -62,16 +62,15 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
           );
           setRecibosImpagos(recibos);
 
-          // Calcular el total de recibos impagos
           const total = recibos.reduce(
             (acc, recibo) => acc + Number(recibo.cuotaMensual),
             0
           );
-          setTotalImpagos(total); // Establecer el total en el estado
+          setTotalImpagos(total);
         } catch (error) {
           console.error("Error al obtener los recibos impagos:", error);
           setRecibosImpagos([]);
-          setTotalImpagos(0); // Reiniciar el total en caso de error
+          setTotalImpagos(0);
         }
       };
       fetchConvenios();
@@ -109,7 +108,6 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
             </h3>
             <table className="w-full text-left">
               <tbody className="text-gray-600 dark:text-gray-100">
-                {/* Información del Socio */}
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Nombre:
@@ -134,7 +132,7 @@ const VerSocio = ({ isOpen, onClose, socio }) => {
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
                     Capital Total:
                   </td>
-                  <td className="py-1 px-3">UR {socio.capitalSocio}</td>
+                  <td className="py-1 px-3">UR {socio.capitalSocio.toFixed(2)}</td>
                 </tr>
                 <tr>
                   <td className="font-normal px-3 pt-0 pb-1 border-b border-gray-200 dark:border-gray-800">
