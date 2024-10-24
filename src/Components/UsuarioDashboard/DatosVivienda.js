@@ -37,11 +37,11 @@ const DatosVivienda = () => {
   }, [cedulaSocio]);
 
   return (
-    <Card
-      sx={{ display: "flex", height: "100%", width: "100%" }}
-      className="bg-gray-900 dark:bg-white dark:text-black text-white"
-    >
-      <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
+    <Card sx={{ display: "flex", height: "100%", width: "100%" }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
+        className="dark:bg-white bg-dark dark:text-black text-white"
+      >
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography variant="h5" component="div" pb={3}>
             Datos de la vivienda
@@ -60,12 +60,6 @@ const DatosVivienda = () => {
           <Divider />
         </CardContent>
       </Box>
-      <CardMedia
-        component="img"
-        sx={{ width: 200, height: "100%" }}
-        image="/vivienda.webp"
-        alt="Live from space album cover"
-      />
     </Card>
   );
 };

@@ -49,7 +49,7 @@ const UsuarioHome = () => {
             <HeaderUsuario
               setIdentificadorComponente={setIdentificadorComponente}
             />
-            <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">
+            <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden ">
               <SidebarUsuario
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"

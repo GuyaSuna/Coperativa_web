@@ -16,7 +16,7 @@ const DashboardCard = ({
     <Card sx={{ padding: 0 }} elevation={9} variant={undefined}>
       {cardheading ? (
         <CardContent
-          className="dark:bg-gray-100 bg-gray-300"
+          className="dark:bg-gray-100 bg-gray-500"
           sx={{ p: "10px" }} // Ajusta el padding según lo que necesites
         >
           <Typography variant="h5" color="textPrimary">
@@ -29,7 +29,7 @@ const DashboardCard = ({
       ) : (
         <CardContent
           sx={{ p: "10px" }}
-          className="dark:bg-white bg-gray-300 dark:text-black text-white"
+          className="dark:bg-white bg-dark dark:text-black text-white he"
         >
           {title ? (
             <Stack

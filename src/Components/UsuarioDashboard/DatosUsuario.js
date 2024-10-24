@@ -46,12 +46,16 @@ const DatosUsuario = () => {
       }}
       className="bg-gray-900 dark:bg-white dark:text-black text-white"
     >
-      <CardContent sx={{ px: { xs: "10px", sm: "20px", height: "100%" } }}>
+      <CardContent
+        sx={{ px: { xs: "10px", sm: "20px", height: "100%" } }}
+        className="dark:bg-white bg-dark dark:text-black text-white"
+      >
         {datosUsuario && (
           <Grid container spacing={3} justifyContent="space-between">
             <Grid item xs={12} sm={6}>
               <Box
                 sx={{ textAlign: { xs: "center", sm: "left" }, width: "100%" }}
+                className="dark:bg-white bg-dark dark:text-black text-white"
               >
                 <Typography variant="h5" component="div" pb={3}>
                   Datos del Socio
