@@ -44,6 +44,13 @@ import ListadoBalanceAnual from "./Listados/ListadoBalanceAnual/listadoBalanceAn
 import DetallesCooperativa from "./DetallesCooperativa";
 import ListadoReajustes from "./Listados/ListadoReajuste/listadoReajuste";
 import ModificarUsuario from "./Formularios/Usuarios/ModificarUsuario/modificarUsuario";
+import AltaDevolucion from "./Formularios/Devolucion/AltaDevolucion/AltaDevolucion";
+import ListadoDevoluciones from "./Listados/ListaDevoluciones/listadoDevoluciones";
+import ModificarDevolucion from "./Formularios/Devolucion/ModificarDevolucion/ModificarDevolucion";
+import AltaRecargo from "./Formularios/Recargos/AltaRecargos.js/AltaRecargo";
+import ListadoRecargos from "./Listados/ListadoRecargos/listadoRecargos";
+import ModificarRecargo from "./Formularios/Recargos/ModificarRecargos/ModificarRecargos";
+
 const ComponentesOrganizados = ({
   identificador,
   setIdentificadorComponente,
@@ -63,6 +70,8 @@ const ComponentesOrganizados = ({
   const [egreso, setEgreso] = useState({});
   const [convenio, setConvenio] = useState({});
   const [cooperativa, setCooperativa] = useState({});
+  const [IdDevolucion , setIdDevolucion] = useState(0);
+  const [idRecargo , setIdRecargo] = useState(0);
 
   //Cambiar a futuro esto jaja
   //utilizar diferentes rutas
@@ -358,6 +367,25 @@ const ComponentesOrganizados = ({
     }
     case 45: {
       return <ModificarUsuario usuario={usuario} />;
+    }
+    case 46: {
+      return <AltaDevolucion  setIdentificadorComponente={setIdentificadorComponente}/>;
+    }
+    case 47: {
+      return <ListadoDevoluciones setIdentificadorComponente={setIdentificadorComponente} 
+      setIdDevolucion={setIdDevolucion}/>;
+    }
+    case 48: {
+      return <ModificarDevolucion idDevolucionParam={IdDevolucion} setIdentificadorComponente={setIdentificadorComponente}/>;
+    }
+    case 49:{
+      return <AltaRecargo setIdentificadorComponente={setIdentificadorComponente} />
+    }
+    case 50 : {
+      return <ListadoRecargos setIdRecargo={setIdRecargo} setIdentificadorComponente={setIdentificadorComponente} />
+    }
+    case 51: {
+      return <ModificarRecargo setIdentificadorComponente={setIdentificadorComponente} idRecargoParam={idRecargo}/>
     }
   }
 };

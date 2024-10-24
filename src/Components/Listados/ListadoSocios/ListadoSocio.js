@@ -49,7 +49,6 @@ const ListadoSocio = ({
     setVerArchivados(!verArchivados);
   };
   useEffect(() => {
-
     if (cooperativa?.idCooperativa) {
       fetchAllData();
     }
@@ -62,7 +61,6 @@ const ListadoSocio = ({
   const fetchRecibos = async () => {
     const reciboResponse = await getAllRecibos(cooperativa.idCooperativa);
     setRecibos(reciboResponse);
-
   };
 
   const fetchAllSocios = async () => {
@@ -202,7 +200,6 @@ const ListadoSocio = ({
   }, [allSocios, buscador]);
 
   const handleSortChange = (option) => {
-
     let sociosFiltrados = [...allSocios];
 
     if (option.key === "archivados") {
@@ -226,7 +223,6 @@ const ListadoSocio = ({
   const handlePagoDevolucion = (socio) => {
     const responseDevolucion = getDevolucionCapital(socio.cedulaSocio);
     if (responseDevolucion != null) {
-
       setSocio(socio);
       setIdentificadorComponente(40);
     } else {
@@ -290,8 +286,8 @@ const ListadoSocio = ({
 
       <div className="overflow-y-auto h-screen">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="hidden md:table-header-group">
-            <tr className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+            <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3">
                 NroSocio
               </th>
@@ -309,34 +305,30 @@ const ListadoSocio = ({
             </tr>
           </thead>
 
-          <tbody className="block md:table-row-group">
+          <tbody>
             {buscadorFiltrado?.map((socio) => (
               <tr
-                className="block md:table-row mb-4 md:mb-0 border-b dark:border-gray-700"
+                className="border-b dark:border-gray-700 sm:table-row"
                 key={socio.cedulaSocio}
               >
                 {/* NroSocio */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="block sm:hidden  md:hidden font-semibold">
-                    NroSocio:
-                  </span>
+                  <span className="sm:hidden font-semibold">NroSocio:</span>
                   {socio.nroSocio}
                 </td>
 
                 {/* Nombre */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="block sm:hidden  md:hidden font-semibold">
-                    Nombre:
-                  </span>
+                  <span className="sm:hidden font-semibold">Nombre:</span>
                   {socio.nombreSocio} {socio.apellidoSocio}
                 </td>
 
                 {/* Fecha Ingreso */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="block sm:hidden  md:hidden font-semibold">
+                  <span className="sm:hidden font-semibold">
                     Fecha Ingreso:
                   </span>
-                  {socio.fechaIngresoCooeprativa}
+                  {socio.fechaIngresoCooperativa}
                 </td>
 
                 {/* Actions */}
@@ -350,78 +342,94 @@ const ListadoSocio = ({
                 </td>
 
                 {/* Opciones adicionales */}
-                <td className="px-4 py-3 text-right">
-                  <Menu as="div" className="relative inline-block text-left">
-                    <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
-                      <svg
-                        viewBox="0 0 24 24"
-                        className="w-5"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <circle cx={12} cy={12} r={1} />
-                        <circle cx={19} cy={12} r={1} />
-                        <circle cx={5} cy={12} r={1} />
-                      </svg>
-                    </MenuButton>
-                    <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                      {socio.archivado ? (
-                        <>
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-                              onClick={() => handleDevolucionCapital(socio)}
-                            >
-                              Asignar devolución de capital
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-                              onClick={() => handlePagoDevolucion(socio)}
-                            >
-                              Pagar devolución
-                            </button>
-                          </MenuItem>
-                        </>
-                      ) : (
-                        <>
-                          {miembro?.responseBody != null &&
-                            socio.cedulaSocio !==
-                              miembro.responseBody.socio.cedulaSocio && (
-                              <MenuItem>
-                                <button
-                                  className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-                                  onClick={() => handleArchivar(socio)}
-                                >
-                                  Archivar
-                                </button>
-                              </MenuItem>
-                            )}
+                <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
+                  <div className="relative inline-block text-left">
+                    <Menu as="div" className="relative inline-block text-left">
+                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                        <svg
+                          viewBox="0 0 24 24"
+                          className="w-5"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <circle cx={12} cy={12} r={1} />
+                          <circle cx={19} cy={12} r={1} />
+                          <circle cx={5} cy={12} r={1} />
+                        </svg>
+                      </MenuButton>
+                      <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        {socio.archivado ? (
+                          <>
+                            <MenuItem>
+                              <button
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                onClick={() => handleDevolucionCapital(socio)}
+                              >
+                                Asignar devolución de capital
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              <button
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                onClick={() => handlePagoDevolucion(socio)}
+                              >
+                                Pagar devolución
+                              </button>
+                            </MenuItem>
+                          </>
+                        ) : (
+                          <>
+                            {miembro?.responseBody != null &&
+                              socio.cedulaSocio !==
+                                miembro.responseBody.socio.cedulaSocio && (
+                                <MenuItem>
+                                  <button
+                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                    onClick={() => handleArchivar(socio)}
+                                  >
+                                    Archivar
+                                  </button>
+                                </MenuItem>
+                              )}
 
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-                              onClick={() => handleModificarSocio(socio)}
-                            >
-                              Modificar
-                            </button>
-                          </MenuItem>
-                          <MenuItem>
-                            <button
-                              className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-                              onClick={() => handleCrearRecibo(socio)}
-                            >
-                              Crear Recibo
-                            </button>
-                          </MenuItem>
-                        </>
-                      )}
-                    </MenuItems>
-                  </Menu>
+                            <MenuItem>
+                              <button
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                onClick={() => handleModificarSocio(socio)}
+                              >
+                                Modificar
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              <button
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                onClick={() => handleCrearRecibo(socio)}
+                              >
+                                Crear Recibo
+                              </button>
+                            </MenuItem>
+                          </>
+                        )}
+                      </MenuItems>
+                    </Menu>
+                  </div>
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => handleEliminar(vivienda.nroVivienda)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    onClick={() => handleModificar(vivienda.nroVivienda)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Modificar
+                  </button>
                 </td>
               </tr>
             ))}

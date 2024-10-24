@@ -9,7 +9,7 @@ const SessionManager = () => {
   const [tiempoRestante, setTiempoRestante] = useState(0);
   const [preguntado, setPreguntado] = useState(false);
   const [mostrarDialogo, setMostrarDialogo] = useState(false);
-  const [contadorDialogo, setContadorDialogo] = useState(120); 
+  const [contadorDialogo, setContadorDialogo] = useState(60); 
   const router = useRouter();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const SessionManager = () => {
         handleCancelar();
       }
 
-      if (tiempoActualizado <= 120 && !preguntado) {
+      if (tiempoActualizado <= 60 && !preguntado) {
         setPreguntado(true);
         setMostrarDialogo(true);
       }
@@ -70,6 +70,7 @@ const SessionManager = () => {
         setPreguntado(false);
         setMostrarDialogo(false);
       } else {
+        setMostrarDialogo(false);
         logout();
         router.push("/");
       }
@@ -77,6 +78,7 @@ const SessionManager = () => {
   };
 
   const handleCancelar = () => {
+    setMostrarDialogo(false);
     logout();
     router.push("/");
   };
