@@ -15,7 +15,9 @@ import {
   postEgreso,
   updateSocio,
   getDevolucionBySocio,
+  gerRecargoBySocio,
   updateDevolucion,
+  getRecargoBySocio,
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
@@ -48,6 +50,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   const [valorConvenio, setValorCovenio] = useState(0);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [devolucion , setDevolucion] = useState(null);
+  const [recargoExtraordinario, setRecargoExtraordinario] = useState(null);
   //Nahuel- va en altaRecibo la peticion de ur
 
   // useEffect (() => {
@@ -60,6 +63,7 @@ const AltaRecibo = ({ Socio, ur }) => {
 
   useEffect(() => {
     fetchDevolucion();
+    fetchRecargoExtraordinario();
     const today = new Date().toISOString().split("T")[0];
     setFechaPago(today);
     setFechaEmision(today);
@@ -76,6 +80,11 @@ const AltaRecibo = ({ Socio, ur }) => {
     });
   }, []);
 
+  const fetchRecargoExtraordinario = async () =>{
+    const response = await getRecargoBySocio(Socio.cedulaSocio);
+    console.log("RECARGO OBTENIDO" , response);
+    setRecargoExtraordinario(response)
+  }
   const fetchDevolucion = async () => {
     const response = await getDevolucionBySocio(Socio.cedulaSocio);
     console.log("Devolucion obtenida:", response);
@@ -145,12 +154,21 @@ const AltaRecibo = ({ Socio, ur }) => {
   }, [fechaPago]);
 
   useEffect(() => {
-    if (devolucion != null) {
-      setValorVivienda(vivienda.valorVivienda - devolucion.pagoDevolucion);
+    const pagoDevolucion = Number(devolucion?.pagoDevolucion) || 0;
+    const pagoRecargo = Number(recargoExtraordinario?.pagoRecargo) || 0;
+  
+    if (devolucion != null && recargoExtraordinario != null) {
+      setValorVivienda(vivienda.valorVivienda + (pagoDevolucion + pagoRecargo));
+    } else if (devolucion != null && recargoExtraordinario == null) {
+      setValorVivienda(vivienda.valorVivienda - pagoDevolucion);
+    } else if (recargoExtraordinario != null && devolucion == null) {
+      setValorVivienda(vivienda.valorVivienda + pagoRecargo);
     } else {
       setValorVivienda(vivienda.valorVivienda);
     }
-  }, [vivienda, devolucion]);
+  }, [vivienda, devolucion, recargoExtraordinario]);
+  
+  
   
 
   useEffect(() => {

@@ -2466,6 +2466,98 @@ const getAllRecargos = async (idCooperativa) => {
   }
 };
 
+const updateRecargo = async (recargo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/recargo`,
+
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(recargo),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The request has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error in updateRecargos:", error);
+    throw new Error("Error updating Recargos");
+  }
+};
+
+const getRecargo = async (idRecargo) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/recargo/${idRecargo}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get recargo:", error);
+    throw new Error("Error al obtener el recargo");
+  }
+};
+
+const getRecargoBySocio = async (cedulaSocio) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/recargo/socio/${cedulaSocio}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("The petition has failed, response isn't ok");
+    }
+
+    const contentType = response.headers.get("Content-Type");
+    if (
+      response.status === 204 ||
+      !contentType ||
+      !contentType.includes("application/json")
+    ) {
+     
+      return null;
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error en get Recargo:", error);
+    throw new Error("Error al obtener el Recargo");
+  }
+};
+
 export {
   Login,
   getSocio,
@@ -2556,4 +2648,7 @@ export {
   postRecargo,
   deleteRecargo,
   getAllRecargos,
+  updateRecargo,
+  getRecargo,
+  getRecargoBySocio,
 };

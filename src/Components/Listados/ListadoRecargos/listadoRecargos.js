@@ -44,7 +44,7 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
   };
 
   const handleAgregarRecargo = () => {
-    setIdentificadorComponente(46); // Ajusta el identificador según corresponda
+    setIdentificadorComponente(46); 
   };
 
   const handleEliminar = async (idRecargo) => {
@@ -54,7 +54,7 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
 
   const handleModificar = (idRecargo) => {
     setIdRecargo(idRecargo);
-    setIdentificadorComponente(48); // Ajusta el identificador según corresponda
+    setIdentificadorComponente(51);
   };
 
   const handleVerDetalles = (recargo) => {

@@ -49,6 +49,7 @@ import ListadoDevoluciones from "./Listados/ListaDevoluciones/listadoDevolucione
 import ModificarDevolucion from "./Formularios/Devolucion/ModificarDevolucion/ModificarDevolucion";
 import AltaRecargo from "./Formularios/Recargos/AltaRecargos.js/AltaRecargo";
 import ListadoRecargos from "./Listados/ListadoRecargos/listadoRecargos";
+import ModificarRecargo from "./Formularios/Recargos/ModificarRecargos/ModificarRecargos";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -70,6 +71,7 @@ const ComponentesOrganizados = ({
   const [convenio, setConvenio] = useState({});
   const [cooperativa, setCooperativa] = useState({});
   const [IdDevolucion , setIdDevolucion] = useState(0);
+  const [idRecargo , setIdRecargo] = useState(0);
 
   //Cambiar a futuro esto jaja
   //utilizar diferentes rutas
@@ -380,7 +382,10 @@ const ComponentesOrganizados = ({
       return <AltaRecargo setIdentificadorComponente={setIdentificadorComponente} />
     }
     case 50 : {
-      return <ListadoRecargos setIdentificadorComponente={setIdentificadorComponente} />
+      return <ListadoRecargos setIdRecargo={setIdRecargo} setIdentificadorComponente={setIdentificadorComponente} />
+    }
+    case 51: {
+      return <ModificarRecargo setIdentificadorComponente={setIdentificadorComponente} idRecargoParam={idRecargo}/>
     }
   }
 };

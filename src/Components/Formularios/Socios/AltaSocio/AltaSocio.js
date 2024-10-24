@@ -394,7 +394,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
               className="block text-sm font-medium mb-2"
               htmlFor="fechaIngreso"
             >
-              Fecha de Ingreso a La Cooeprativa:
+              Fecha de Ingreso a La Cooperativa:
             </label>
             <input
               type="date"
@@ -411,7 +411,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
             )}
           </div>
         </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
+      
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
@@ -439,28 +439,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
             </span>
           )}
         </div>
-        <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="fechaIngreso"
-            >
-              Descuento de socio
-            </label>
-            <input
-              type="text"
-              id="descuento"
-              name="descuento"
-              value={Descuento}
-              onChange={handleDescuento}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.descuento && (
-              <span className="text-red-500 text-sm">
-                {Errores.descuento}
-              </span>
-            )}
-          </div>
-        </div>
+
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"

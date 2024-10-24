@@ -47,17 +47,17 @@ const VerRecargos = ({ recargo, isOpen, onClose }) => {
                     : "Sin socio"}
                 </span>
               </div>
-              <div className="space-y-2">
+              <div className="flex justify-between">
                 <span className="font-medium">Motivo del Recargo: </span>
                 <span className="text-gray-300">{recargo.motivo || "No especificado"}</span>
               </div>
-              <div className="space-y-2">
+              <div className="flex justify-between">
                 <span className="font-medium">Fecha de Inicio: </span>
                 <span className="text-gray-300">{recargo.fechaInicio || "No disponible"}</span>
               </div>
-              <div className="space-y-2">
-                <span className="font-medium">Pago del Recargo: </span>
-                <span className="text-gray-300">{recargo.pagoRecargo ? "Pagado" : "No Pagado"}</span>
+              <div className="flex justify-between">
+                <span className="font-medium">Pago por recibo: </span>
+                <span className="text-gray-300">{recargo.pagoRecargo}</span>
               </div>
             </div>
             <div className="mt-8 flex justify-center">

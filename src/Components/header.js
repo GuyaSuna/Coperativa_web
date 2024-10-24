@@ -375,6 +375,24 @@ const Header = ({ setIdentificadorComponente }) => {
                       <FaMoneyBill className="mr-2 text-2xl" />{" "}
                       <span className="text-base">Listado Egresos</span>
                     </button>
+                    <button
+                      onClick={() => handleSelection(47)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 47 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Listado Devoluciones</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(50)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 50 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Listado Recargos</span>
+                    </button>
                   </div>
                 )}
               </div>
@@ -390,7 +408,7 @@ const Header = ({ setIdentificadorComponente }) => {
           <div>
             <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:text-gray-300 text-gray-900 shadow-sm border dark:border-gray-600 border-gray-200">
               <span className="relative flex-shrink-0 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
-                {initial} {/* Muestra la inicial del nombre */}
+                {initial} 
               </span>
               <span className="ml-2 md:text-xs  text-dark dark:text-white self-center">
                 {miembroUsername}
