@@ -64,11 +64,9 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
         !isNaN(valorViviendaValue) &&
         valorViviendaValue !== 0
       ) {
-        // Calcular cuota a pagar
         const cuota = valorViviendaValue - subsidioValue;
         setCuotaApagarUr(cuota.toFixed(2));
 
-        // Calcular porcentaje
         const porcentaje = (subsidioValue / valorViviendaValue) * 100;
         setPorcentaje(porcentaje.toFixed(2));
       } else {
@@ -84,7 +82,6 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
         fechaOtorgamiento.getMonth() + parseInt(vigenciaEnMeses)
       );
 
-      // Asegurarse de que la fecha sea UTC para evitar problemas de zona horaria
       const year = fechaOtorgamiento.getUTCFullYear();
       const month = ("0" + (fechaOtorgamiento.getUTCMonth() + 1)).slice(-2);
       const day = ("0" + fechaOtorgamiento.getUTCDate()).slice(-2);
@@ -131,17 +128,16 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
 
   const obtenerFechaHoy = () => {
     const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, "0"); // Asegura que tenga 2 dígitos
-    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); // Meses empiezan en 0
+    const dia = String(hoy.getDate()).padStart(2, "0"); 
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); 
     const año = hoy.getFullYear();
     return `${año}-${mes}-${dia}`;
   };
 
   const validarFormulario = () => {
     const errores = {};
-    const fechaHoy = new Date().toISOString().split("T")[0]; // Fecha actual en formato ISO (YYYY-MM-DD)
-  
-    // Verificar que los campos no estén vacíos
+    const fechaHoy = new Date().toISOString().split("T")[0]; 
+
     if (!valorViviendaUr) {
       errores.valorViviendaUr = "El valor de la vivienda es obligatorio";
     } else if (valorViviendaUr < 0) {
@@ -227,7 +223,6 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
       if (response.status === 201) {
         alert("Error al agregar subsidio");
       } else {
-        alert("Subsidio agregado exitosamente");
         setIdentificadorComponente(17);
       }
     } catch (error) {

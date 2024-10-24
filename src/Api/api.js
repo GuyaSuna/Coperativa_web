@@ -302,6 +302,8 @@ const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
       throw new Error("The petition has failed, response isn't ok");
     }
 
+    
+
     const data = await response.json();
 
     return data;

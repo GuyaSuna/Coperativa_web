@@ -111,10 +111,11 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     setTieneSuplente(e.target.checked);
   };
   const validarFormulario = () => {
-
     const errores = {};
   
-    const socioExistente = cooperativa.listaSocios.find((socio) => socio.nroSocio == NroSocio && socio.archivado == false);
+    const socioExistente = cooperativa.listaSocios.find(
+      (socio) => socio.nroSocio == NroSocio && socio.archivado == false
+    );
   
     if (!CedulaSocio) {
       errores.cedulaSocio = "La cédula es obligatoria";
@@ -131,17 +132,19 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     } else if (socioExistente) {
       errores.nroSocio = "El número de socio ya existe en la cooperativa.";
     }
+
+    const regexLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
   
     if (!NombreSocio) {
       errores.nombreSocio = "El nombre es obligatorio";
-    } else if (/[^a-zA-Z\s]/.test(NombreSocio)) {
-      errores.nombreSocio = "El nombre solo debe contener letras";
+    } else if (!regexLetras.test(NombreSocio)) {
+      errores.nombreSocio = "El nombre solo debe contener letras y espacios";
     }
   
     if (!ApellidoSocio) {
       errores.apellidoSocio = "El apellido es obligatorio";
-    } else if (/[^a-zA-Z\s]/.test(ApellidoSocio)) {
-      errores.apellidoSocio = "El apellido solo debe contener letras";
+    } else if (!regexLetras.test(ApellidoSocio)) {
+      errores.apellidoSocio = "El apellido solo debe contener letras y espacios";
     }
   
     if (!TelefonoSocio) {
@@ -161,13 +164,12 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     } else {
       const fechaIngreso = new Date(FechaIngresoCooperativa);
       const fechaHoy = new Date();
-      
-
+  
       if (fechaIngreso > fechaHoy) {
         errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser mayor a la fecha actual";
       }
     }
-
+  
     if (!SeleccionVivienda) {
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
     }
@@ -181,20 +183,22 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   
       if (!NombreSuplente) {
         errores.nombreSuplente = "El nombre del suplente es obligatorio";
-      } else if (/[^a-zA-Z\s]/.test(NombreSuplente)) {
-        errores.nombreSuplente = "El nombre del suplente solo debe contener letras";
+      } else if (!regexLetras.test(NombreSuplente)) {
+        errores.nombreSuplente = "El nombre del suplente solo debe contener letras y espacios";
       }
   
       if (!ApellidoSuplente) {
         errores.apellidoSuplente = "El apellido del suplente es obligatorio";
-      } else if (/[^a-zA-Z\s]/.test(ApellidoSuplente)) {
-        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras";
+      } else if (!regexLetras.test(ApellidoSuplente)) {
+        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras y espacios";
       }
   
       if (!TelefonoSuplente) {
         errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
       } else if (isNaN(TelefonoSuplente)) {
         errores.telefonoSuplente = "El teléfono del suplente debe ser un número";
+      } else if (TelefonoSuplente < 1) {
+        errores.telefonoSuplente = "El teléfono del suplente no puede ser un valor negativo";
       }
     }
   
@@ -202,6 +206,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   
     return Object.keys(errores).length === 0;
   };
+  
   
 
   const handleSubmit = async (e) => {

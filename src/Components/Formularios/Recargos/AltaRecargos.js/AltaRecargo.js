@@ -85,7 +85,7 @@ const AltaRecargo = ({ setIdentificadorComponente }) => {
     try {
       const response = await postRecargo(recargoData);
       console.log("Recargo registrado exitosamente:", response);
-      setIdentificadorComponente(47);
+      setIdentificadorComponente(50);
     } catch (error) {
       console.error("Error al enviar los datos del recargo:", error);
       alert("Error interno del servidor");

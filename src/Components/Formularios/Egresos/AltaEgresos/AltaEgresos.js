@@ -4,8 +4,9 @@ import React, { useState, useContext, useEffect } from "react";
 import { postEgreso } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion"; // Importa el modal de confirmación
+import { set } from "date-fns";
 
-const AltaEgreso = () => {
+const AltaEgreso = ({setIdentificadorComponente}) => {
   const [subRubro, setSubRubro] = useState("");
   const [denominacion, setDenominacion] = useState("");
   const [egreso, setEgreso] = useState("");
@@ -33,6 +34,7 @@ const AltaEgreso = () => {
     if (!subRubro) errores.subRubro = "El subrubro es obligatorio";
     if (!denominacion) errores.denominacion = "La denominación es obligatoria";
     if (!egreso) errores.egreso = "El egreso es obligatorio";
+    else if(isNaN(egreso)) errores.egreso = "El egreso debe ser un numero";
     if (!fechaDatosContables) {
       errores.fechaDatosContables = "La fecha del Egreso es obligatoria";
     } else if (fechaDatosContables > fechaHoy) {
@@ -56,12 +58,12 @@ const AltaEgreso = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validarFormulario()) {
-      setMostrarModal(true); // Muestra el modal de confirmación
+      setMostrarModal(true); 
     }
   };
 
   const handleConfirmacion = async () => {
-    setMostrarModal(false); // Oculta el modal de confirmación
+    setMostrarModal(false); 
     if (!validarFormulario()) return;
 
     const egresoData = {
@@ -75,7 +77,7 @@ const AltaEgreso = () => {
 
     try {
       const response = await postEgreso(egresoData);
-      
+      setIdentificadorComponente(21)
     } catch (error) {
       console.error("Error al enviar los datos del egreso:", error);
       alert("Error interno del servidor");

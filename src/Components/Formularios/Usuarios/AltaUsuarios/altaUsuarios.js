@@ -11,7 +11,7 @@ import {
 import { MiembroContext } from "../../../../Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
-const AltaUsuario = () => {
+const AltaUsuario = ({setIdentificadorComponente}) => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
   const [firstname, setFirstname] = useState("");
@@ -95,6 +95,7 @@ const AltaUsuario = () => {
         alert("Error al agregar usuario");
       } else {
         alert("Usuario agregado exitosamente");
+        setIdentificadorComponente(12);
       }
     } catch (error) {
       console.error("Error al enviar los datos del usuario:", error);

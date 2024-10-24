@@ -158,7 +158,7 @@ const ComponentesOrganizados = ({
       );
     }
     case 13: {
-      return <AltaUsuario />;
+      return <AltaUsuario setIdentificadorComponente={setIdentificadorComponente}/>;
     }
     case 14: {
       return (

@@ -6,6 +6,7 @@ import {
   postConvenio,
   getAllSociosImpagos,
   getRecibosImpagosSocio,
+  getAllSocios
 } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
@@ -20,14 +21,17 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const [sociosDisponibles, setSociosDisponibles] = useState([]);
   const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [tipoDeuda, setTipoDeuda] = useState("");
-  const [vigenciaEnRecibos, setVigenciaEnRecibos] = useState(12); // Estado para la vigencia en meses
+  const [vigenciaEnRecibos, setVigenciaEnRecibos] = useState(12);
+  const [allSocios , setAllSocios] = useState([]);
+  const [allSociosImpagos , setAllSociosImpagos] = useState([]);
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFechaInicioConvenio(today);
-    fetchSociosDisponibles();
+    fetchSociosImpagos();
+    fetchAllSocios();
   }, []);
 
   useEffect(() => {
@@ -36,11 +40,16 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
     }
   }, [tipoDeuda, socioSeleccionado]);
 
-  const fetchSociosDisponibles = async () => {
+  const fetchAllSocios = async () =>{
+    const response = await getAllSocios(cooperativa.idCooperativa);
+    setAllSocios(response);
+  }
+
+  const fetchSociosImpagos = async () => {
     try {
       const response = await getAllSociosImpagos(cooperativa.idCooperativa);
       const sociosSinArchivar = response.filter((socio) => !socio.archivado);
-      setSociosDisponibles(sociosSinArchivar);
+      setAllSociosImpagos(sociosSinArchivar);
     } catch (error) {
       console.error("Error al obtener los socios", error);
     }
@@ -52,18 +61,17 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
     }
   }, [tipoDeuda, socioSeleccionado]);
 
-  // Recalcular UR por mes cada vez que cambia la vigencia en recibos
   useEffect(() => {
     if (deudaEnUrOriginal && vigenciaEnRecibos > 0) {
       const urMensual = deudaEnUrOriginal / vigenciaEnRecibos;
-      setUrPorMes(urMensual.toFixed(2)); // Redondear a dos decimales
+      setUrPorMes(urMensual.toFixed(2)); 
     }
   }, [vigenciaEnRecibos, deudaEnUrOriginal]);
 
   const fetchRecibosImpagos = async (cedulaSocio) => {
     try {
         const response = await getRecibosImpagosSocio(cedulaSocio, cooperativa.idCooperativa);
-
+      if(response != null || response.length > 0){
         const fechaActual = new Date();
         const mesActual = fechaActual.getMonth() + 1; 
         const anioActual = fechaActual.getFullYear();
@@ -88,7 +96,10 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
         
         const urMensual = totalDeudaEnUr / vigenciaEnRecibos;
         setUrPorMes(urMensual.toFixed(2));
-
+      }else{
+        setUrPorMes(0);
+        setDeudaEnUrOriginal(0);
+      }
     } catch (error) {
         console.error("Error al obtener los recibos impagos", error);
     }
@@ -168,6 +179,24 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
       console.error("Error al enviar los datos del convenio:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchSocios = async () => {
+      try {
+        if (tipoDeuda === "recibo") {
+          const sociosSinArchivar = allSociosImpagos.filter((socio) => !socio.archivado);
+          setSociosDisponibles(sociosSinArchivar);
+        } else if (tipoDeuda === "otro") {
+          const sociosSinArchivar = allSocios.filter((socio) => !socio.archivado);
+          setSociosDisponibles(sociosSinArchivar);
+        }
+      } catch (error) {
+        console.error("Error al obtener los socios", error);
+      }
+    };
+  
+    fetchSocios();
+  }, [tipoDeuda, cooperativa.idCooperativa]);
 
   return (
     <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
