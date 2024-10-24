@@ -33,6 +33,7 @@ const ListadoViviendas = ({
     try {
       const response = await getAllViviendas(cooperativa.idCooperativa);
       setAllViviendas(response);
+
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -183,7 +184,7 @@ const ListadoViviendas = ({
                     ? `${vivienda.socio.nombreSocio} ${vivienda.socio.apellidoSocio}`
                     : "Sin socio"}
                 </td>
-                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <td className="block sm:table-cell px-4 py-3">
                   <span className="sm:hidden font-semibold">
                     Cantidad Dormitorios:
                   </span>

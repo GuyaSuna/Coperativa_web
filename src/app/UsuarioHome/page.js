@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios, getUr } from "@/Api/api";
@@ -44,12 +44,12 @@ const UsuarioHome = () => {
   return (
     <>
       {cooperativa && (
-        <div className="dark:bg-gray-100 bg-gray-900 text-white dark:text-gray-600 min-h-screen flex flex-col text-sm">
+        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
             <HeaderUsuario
               setIdentificadorComponente={setIdentificadorComponente}
             />
-            <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden ">
+            <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">
               <SidebarUsuario
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"

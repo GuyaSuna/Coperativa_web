@@ -48,29 +48,24 @@ const ListadoRecibosSocios = () => {
     doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
   };
 
-  console.log("RECIBOS SOCIO: " + allRecibos);
   return (
     <>
       <DashboardCard title={"Historial de Recibos"}>
         <Box
           sx={{
-            overflowY: "auto",
+            overflowX: "auto",
             width: "100%",
-            height: "calc(75vh - 350px)", // Ajusta según lo que necesites
-            display: "flex",
-            flexDirection: "column",
+            minWidth: "100%",
           }}
         >
           <Table
             aria-label="simple table"
             sx={{
               whiteSpace: "nowrap",
-              mt: 4,
-              width: "100%",
-              tableLayout: "fixed", // Mantener el ancho de columnas consistente
-              flexGrow: 1,
+              mt: 2,
+              minWidth: { xs: "500px", sm: "650px" },
             }}
-            className="dark:bg-white bg-dark"
+            className="bg-white dark:bg-gray-900"
           >
             <TableHead>
               <TableRow>
@@ -78,8 +73,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }} // Ajuste de línea y padding pequeño
+                    className="text-black dark:text-white"
                   >
                     Nro Recibo
                   </Typography>
@@ -88,8 +82,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }}
+                    className="text-black dark:text-white"
                   >
                     Fecha Recibo
                   </Typography>
@@ -98,8 +91,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }}
+                    className="text-black dark:text-white"
                   >
                     Monto
                   </Typography>
@@ -108,8 +100,7 @@ const ListadoRecibosSocios = () => {
                   <Typography
                     variant="subtitle2"
                     fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }}
+                    className="text-black dark:text-white"
                   >
                     Acciones
                   </Typography>
@@ -118,67 +109,27 @@ const ListadoRecibosSocios = () => {
             </TableHead>
             <TableBody>
               {allRecibos.map((recibo, index) => (
-                <TableRow
-                  key={index}
-                  sx={{
-                    minHeight: "40px", // Asegura un mínimo de altura más pequeño
-                  }}
-                >
-                  <TableCell
-                    sx={{
-                      padding: "4px 8px", // Reducir padding
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      className="dark:text-black text-white"
-                      sx={{ lineHeight: 1.2 }} // Reducir lineHeight
-                    >
+                <TableRow key={index}>
+                  <TableCell>
+                    <Typography variant="body1" className="text-black dark:text-white">
                       {recibo.nroRecibo}
                     </Typography>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      padding: "4px 8px",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      className="dark:text-black text-white"
-                      sx={{ lineHeight: 1.2 }}
-                    >
+                  <TableCell align="center">
+                    <Typography variant="body1" className="text-black dark:text-white">
                       {recibo.fechaRecibo}
                     </Typography>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      padding: "4px 8px",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      className="dark:text-black text-white"
-                      sx={{ lineHeight: 1.2 }}
-                    >
-                      $ {recibo.cuotaMensual}
+                  <TableCell align="center">
+                    <Typography variant="body1" className="text-black dark:text-white">
+                      {recibo.monto}
                     </Typography>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      padding: "4px 8px",
-                    }}
-                  >
-                    <Button
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => handleDescargarPDF(recibo)}
-                      sx={{
-                        padding: "4px 12px", // Botón más compacto
-                        fontSize: "0.875rem", // Tamaño de fuente reducido
-                      }}
-                    >
+                  <TableCell align="center">
+                    <Button onClick={() => handleVerRecibo(recibo)}>
+                      Ver
+                    </Button>
+                    <Button onClick={() => handleDescargarPDF(recibo)}>
                       Descargar PDF
                     </Button>
                   </TableCell>
@@ -188,7 +139,6 @@ const ListadoRecibosSocios = () => {
           </Table>
         </Box>
       </DashboardCard>
-
       {isModalOpen && (
         <VerRecibo
           recibo={reciboSeleccionado}
