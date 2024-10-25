@@ -16,9 +16,9 @@ const AdminHome = () => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [ur, setUr] = useState(0);
-  const [identificadorComponente, setIdentificadorComponente] = useState(0);
+  const [selectedOption , setSelectedOption] = useState(null);
+  const [identificadorComponente , setIdentificadorComponente] = useState(0);
   const [cedulaSocio, setCedulaSocio] = useState(0);
-  const [selectedOption, setSelectedOption] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
 
   const handleSelection = (option) => {
@@ -124,9 +124,14 @@ const AdminHome = () => {
       {cooperativa && miembro ? (
         <div className="bg-gray-100 dark:bg-dark dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
-            <Header setIdentificadorComponente={setIdentificadorComponente} />
+            <Header 
+             selectedOption={selectedOption}
+             setSelectedOption={setSelectedOption}
+            setIdentificadorComponente={setIdentificadorComponente} />
             <div className="flex-grow overflow-hidden flex flex-col md:flex-row overflow-x-hidden">
               <ListadoLateral
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
                 setIdentificadorComponente={setIdentificadorComponente}
                 className="w-full md:w-1/4 lg:w-1/5"
               />

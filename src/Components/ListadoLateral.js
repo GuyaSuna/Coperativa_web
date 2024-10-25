@@ -22,8 +22,7 @@ import { useTheme } from "../Provider/ThemeProvider";
 import logoDark from "../../public/logoVisoftDark.png";
 import logoLight from "../../public/logoVisoftLigth.png";
 
-const ListadoLateral = ({ setIdentificadorComponente }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const ListadoLateral = ({ selectedOption , setSelectedOption, setIdentificadorComponente }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const { darkMode } = useTheme();
 

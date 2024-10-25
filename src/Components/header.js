@@ -27,11 +27,10 @@ import {
 import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-const Header = ({ setIdentificadorComponente }) => {
+const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [miembroUsername, setMiembroUsername] = useState("");
   const { miembro, logoutMiembro } = useContext(MiembroContext);
-  const [selectedOption, setSelectedOption] = useState(null);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
   const [openSecondDropdown, setOpenSecondDropdown] = useState(null); // Estado para el segundo dropdown
