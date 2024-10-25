@@ -12,7 +12,6 @@ import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
 const AltaEstadoContable = () => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
-  const [id, setId] = useState(0);
   const [fecha, setFecha] = useState("");
   const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
   const [saldoFinalEnDolares, setSaldoFinalDolares] = useState(0);
@@ -20,6 +19,22 @@ const AltaEstadoContable = () => {
   const [totalIngresosDolares, setTotalIngresosDolares] = useState(0);
   const [totalEgresosPesos, setTotalEgresosPesos] = useState(0);
   const [totalEgresosDolares, setTotalEgresosDolares] = useState(0);
+  const [
+    estadoCuentaBancariaAnteriorEnPesos,
+    setEstadoCuentaBancariaAnteriorEnPesos,
+  ] = useState();
+  const [
+    estadoCuentaBancariaActualEnPesos,
+    setEstadoCuentaBancariaActualEnPesos,
+  ] = useState();
+  const [
+    estadoCuentaBancariaAnteriorEnDolares,
+    setEstadoCuentaBancariaAnteriorEnDolares,
+  ] = useState();
+  const [
+    estadoCuentaBancariaActualEnDolares,
+    setEstadoCuentaBancariaActualEnDolares,
+  ] = useState();
 
   const [listaEgresos, setListaEgresos] = useState([]);
   const [listaIngresos, setListaIngresos] = useState([]);
@@ -44,7 +59,6 @@ const AltaEstadoContable = () => {
           fecha,
           cooperativa.idCooperativa
         );
-
 
         setListaEgresos(egresos);
         setListaIngresos(ingresos);
@@ -136,8 +150,29 @@ const AltaEstadoContable = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg md:max-w-4xl bg-gray-100 dark:bg-gray-900 p-6 md:p-8 rounded-lg shadow-md"
       >
+        <div>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Anterior (Pesos):
+            <input
+              type="number"
+              value={estadoCuentaBancariaAnteriorEnPesos}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Anterior (Dólares):
+            <input
+              type="number"
+              value={estadoCuentaBancariaAnteriorEnDolares}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+        </div>
+
         <label className="block text-sm font-medium mb-4">
-          FECHA:
+          Fecha Estado Contable:
           <input
             type="date"
             name="fecha"
@@ -276,6 +311,31 @@ const AltaEstadoContable = () => {
         <h3 className="mt-2 text-lg font-bold">
           Saldo Final en Dólares: {saldoFinalEnDolares}
         </h3>
+
+        <div>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Actual (Pesos):
+            <input
+              type="number"
+              value={estadoCuentaBancariaActualEnPesos}
+              onChange={(e) =>
+                setEstadoCuentaBancariaActualEnPesos(e.target.value)
+              }
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Actual (Dólares):
+            <input
+              type="number"
+              value={estadoCuentaBancariaActualEnDolares}
+              onChange={(e) =>
+                setEstadoCuentaBancariaActualEnDolares(e.target.value)
+              }
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+        </div>
 
         <button
           type="submit"
