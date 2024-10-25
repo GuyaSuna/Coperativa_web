@@ -5,26 +5,26 @@ import { getCooperativaPorAdmin } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 
 const DetallesCooperativa = () => {
-  const { miembro ,cooperativa } = useContext(MiembroContext);
-  const [dataCooperativa , setDataCooperativa] = useState(null);
+  const { miembro, cooperativa } = useContext(MiembroContext);
+  const [dataCooperativa, setDataCooperativa] = useState(null);
   const tesorero = cooperativa.tesorero
     ? `${cooperativa.tesorero.firstname} ${cooperativa.tesorero.lastname}`
     : "No especificado";
-   
-    const fetchCooperativa = async () => {
-      try {
-        const response = await getCooperativaPorAdmin(miembro.responseBody.id);
-        setDataCooperativa(response);
-      } catch (error) {
-        console.error("Error al obtener los datos de la cooperativa:", error);
-      }
-    };
 
-    useEffect(() => {
-      if (miembro) {
-        fetchCooperativa();
-      }
-    }, [miembro]);
+  const fetchCooperativa = async () => {
+    try {
+      const response = await getCooperativaPorAdmin(miembro.responseBody.id);
+      setDataCooperativa(response);
+    } catch (error) {
+      console.error("Error al obtener los datos de la cooperativa:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (miembro) {
+      fetchCooperativa();
+    }
+  }, [miembro]);
 
   const descargarDocumento = () => {
     window.location.href = "/capital_interes.xls";
@@ -36,7 +36,7 @@ const DetallesCooperativa = () => {
         <h2 className="text-5xl font-bold">{dataCooperativa?.nombre}</h2>
         <p className="text-2xl">Estado: {dataCooperativa?.estadoCooperativa}</p>
       </div>
-      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-8 p-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-10">
         <div className="p-6">
           <h3 className="text-3xl font-semibold text-gray-900 mb-4">
             Información General

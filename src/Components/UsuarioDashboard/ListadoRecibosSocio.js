@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
-  Typography,
-  Box,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
+  Typography,
+  Box,
+  Menu,
+  MenuItem,
+  IconButton,
 } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button } from "@headlessui/react";
 import DashboardCard from "./DashboardCard";
 import { getAllRecibosPorSocio } from "@/Api/api";
@@ -18,9 +23,11 @@ import jsPDF from "jspdf";
 const ListadoRecibosSocios = () => {
   const { miembro } = useContext(MiembroContext);
   const [anchorEl, setAnchorEl] = useState(null);
+
   const [allRecibos, setAllRecibos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
+  const [selectedRecibo, setSelectedRecibo] = useState(null);
 
   useEffect(() => {
     fetchAllRecibosPorSocio();
@@ -47,7 +54,15 @@ const ListadoRecibosSocios = () => {
     // Configuración del PDF...
     doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
   };
+  const handleMenuOpen = (event, recibo) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedRecibo(recibo);
+  };
 
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedRecibo(null);
+  };
   console.log("RECIBOS SOCIO: " + allRecibos);
   return (
     <>
@@ -61,131 +76,73 @@ const ListadoRecibosSocios = () => {
             flexDirection: "column",
           }}
         >
-          <Table
-            aria-label="simple table"
-            sx={{
-              whiteSpace: "nowrap",
-              mt: 4,
-              width: "100%",
-              tableLayout: "fixed", // Mantener el ancho de columnas consistente
-              flexGrow: 1,
-            }}
-            className="dark:bg-white bg-dark"
-          >
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }} // Ajuste de línea y padding pequeño
-                  >
+          <TableContainer>
+            <Table
+              sx={{
+                width: "100%",
+                tableLayout: "fixed",
+              }}
+              aria-label="recibos table"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell className="dark:text-white text-gray-900">
                     Nro Recibo
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }}
-                  >
-                    Fecha Recibo
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }}
-                  >
-                    Monto
-                  </Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight={600}
-                    className="dark:text-black text-white"
-                    sx={{ lineHeight: 1.2, padding: "4px 8px" }}
-                  >
-                    Acciones
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {allRecibos.map((recibo, index) => (
-                <TableRow
-                  key={index}
-                  sx={{
-                    minHeight: "40px", // Asegura un mínimo de altura más pequeño
-                  }}
-                >
-                  <TableCell
-                    sx={{
-                      padding: "4px 8px", // Reducir padding
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      className="dark:text-black text-white"
-                      sx={{ lineHeight: 1.2 }} // Reducir lineHeight
-                    >
-                      {recibo.nroRecibo}
-                    </Typography>
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      padding: "4px 8px",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      className="dark:text-black text-white"
-                      sx={{ lineHeight: 1.2 }}
-                    >
-                      {recibo.fechaRecibo}
-                    </Typography>
+                  <TableCell className="dark:text-white text-gray-900">
+                    Nombre Socio
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      padding: "4px 8px",
-                    }}
-                  >
-                    <Typography
-                      variant="body1"
-                      className="dark:text-black text-white"
-                      sx={{ lineHeight: 1.2 }}
-                    >
-                      $ {recibo.cuotaMensual}
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      padding: "4px 8px",
-                    }}
-                  >
-                    <Button
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                      onClick={() => handleDescargarPDF(recibo)}
-                      sx={{
-                        padding: "4px 12px", // Botón más compacto
-                        fontSize: "0.875rem", // Tamaño de fuente reducido
-                      }}
-                    >
-                      Descargar PDF
-                    </Button>
-                  </TableCell>
+                  <TableCell>Monto</TableCell>
+                  <TableCell>Fecha de Recibo</TableCell>
+                  <TableCell>Acciones</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHead>
+              <TableBody>
+                {allRecibos.map((recibo) => (
+                  <TableRow key={recibo.nroRecibo}>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {recibo.nroRecibo}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        $ {recibo.cuotaMensual}
+                      </Typography>
+                    </TableCell>
+                    <TableCell>
+                      <Typography variant="body2">
+                        {recibo.fechaPago}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="right">
+                      {/* Menú para acciones */}
+                      <IconButton
+                        onClick={(event) => handleMenuOpen(event, recibo)}
+                        size="small"
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl && selectedRecibo === recibo)}
+                        onClose={handleMenuClose}
+                      >
+                        <MenuItem onClick={() => handleDescargarPDF(recibo)}>
+                          Descargar
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </DashboardCard>
 

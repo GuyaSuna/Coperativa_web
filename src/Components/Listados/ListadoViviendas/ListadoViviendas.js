@@ -173,11 +173,15 @@ const ListadoViviendas = ({
                 key={vivienda.nroVivienda}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Nro Vivienda:</span>
+                  <span className="sm:hidden font-semibold">
+                    Nro Vivienda:{" "}
+                  </span>
                   {vivienda.nroVivienda}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Nombre Socio:</span>
+                  <span className="sm:hidden font-semibold">
+                    Nombre Socio:{"  "}
+                  </span>
                   {vivienda?.socio?.nombreSocio &&
                   vivienda?.socio?.apellidoSocio
                     ? `${vivienda.socio.nombreSocio} ${vivienda.socio.apellidoSocio}`
@@ -185,7 +189,7 @@ const ListadoViviendas = ({
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">
-                    Cantidad Dormitorios:
+                    Cantidad Dormitorios:{" "}
                   </span>
                   {vivienda.cantidadDormitorios}
                 </td>

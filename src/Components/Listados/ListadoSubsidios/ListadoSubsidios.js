@@ -16,7 +16,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allSubsidios);
-  const [showArchived, setShowArchived] = useState(false); 
+  const [showArchived, setShowArchived] = useState(false);
   const { cooperativa } = useContext(MiembroContext);
 
   useEffect(() => {
@@ -35,7 +35,6 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
       setAllSubsidios(activeSubsidios);
       setArchivedSubsidios(archivedSubsidios);
       setBuscadorFiltrado(activeSubsidios); // Inicializa el buscador con subsidios activos
-
     } catch (error) {
       console.error("Error al obtener los subsidios:", error);
     }
@@ -84,7 +83,9 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
   ];
 
   const handleSortChange = (option) => {
-    const ordenarSubsidios = [...(showArchived ? archivedSubsidios : allSubsidios)].sort(option.comparator);
+    const ordenarSubsidios = [
+      ...(showArchived ? archivedSubsidios : allSubsidios),
+    ].sort(option.comparator);
     setBuscadorFiltrado(ordenarSubsidios);
   };
 
@@ -98,7 +99,9 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
       setBuscadorFiltrado(subsidiosAFiltrar);
     } else {
       const buscadorFiltrado = subsidiosAFiltrar.filter((subsidio) =>
-        subsidio.socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
+        subsidio.socio.nombreSocio
+          .toLowerCase()
+          .includes(buscador.toLowerCase())
       );
       setBuscadorFiltrado(buscadorFiltrado);
     }
@@ -110,7 +113,7 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
 
   const mostrarArchivados = () => {
     setShowArchived(!showArchived);
-    setBuscador(""); 
+    setBuscador("");
   };
 
   return (
@@ -146,30 +149,30 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
 
           {/* Tabla responsive */}
           <div className="overflow-x-auto h-screen">
-            <table className="w-full text-left text-sm text-gray-600 dark:text-gray-100 block md:table">
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-400 uppercase hidden md:table-header-group">
                 <tr className="hidden sm:table-row">
-                  <th scope="col" className="px-4 py-3 text-center">
+                  <th scope="col" className="px-4 py-3 ">
                     Nombre Socio
                   </th>
-                  <th scope="col" className="px-4 py-3 text-center">
+                  <th scope="col" className="px-4 py-3 ">
                     Cuota Total UR
                   </th>
-                  <th scope="col" className="px-4 py-3 text-center">
+                  <th scope="col" className="px-4 py-3 ">
                     Subsidio UR
                   </th>
-                  <th scope="col" className="px-4 py-3 text-center">
+                  <th scope="col" className="px-4 py-3 ">
                     Porcentaje
                   </th>
-                  <th scope="col" className="px-4 py-3 text-center">
+                  <th scope="col" className="px-4 py-3 ">
                     Vigencia
                   </th>
-                  <th scope="col" className="px-4 py-3 text-center">
-                    Acciones
+                  <th scope="col" className="px-4 py-3">
+                    <span className="sr-only">Actions</span>
                   </th>
                 </tr>
               </thead>
-              <tbody className="block md:table-row-group">
+              <tbody>
                 {buscadorFiltrado.length === 0 ? (
                   <tr className="border-b dark:border-gray-700 md:border-b-0 md:dark:border-gray-600">
                     <td colSpan="6" className="text-center py-4">
@@ -180,73 +183,114 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                   buscadorFiltrado.map((subsidio) => (
                     <tr
                       key={subsidio.idSubsidio}
-                      className="hover:bg-gray-100 dark:hover:bg-gray-700"
+                      className="border-b dark:border-gray-700 sm:table-row"
                     >
-                      <td className="px-4 py-3 text-center">
+                      <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <span className="sm:hidden font-semibold">Socio: </span>
                         {subsidio.socio.nombreSocio}
                       </td>
-                      <td className="px-4 py-3 text-center">
-                        {subsidio.cuotaTotalUr}
-                      </td>
-                      <td className="px-4 py-3 text-center">
+
+                      <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <span className="sm:hidden font-semibold">
+                          Cuota Total UR:{"  "}
+                        </span>
                         {subsidio.subsidioUr}
                       </td>
-                      <td className="px-4 py-3 text-center">
-                        {subsidio.porcentaje}
+                      <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <span className="sm:hidden font-semibold">
+                          Subsidio UR:{"  "}
+                        </span>
+                        {subsidio.cuotaTotalUr}
                       </td>
-                      <td className="px-4 py-3 text-center">
-                        {subsidio.vigenciaEnMeses}
+                      <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <span className="sm:hidden font-semibold">
+                          Porcentaje:{"  "}
+                        </span>
+                        % {subsidio.porcentaje}
                       </td>
-                      <td className="px-4 py-3 text-center">
-                      <button onClick={() => handleVerSubsidio(subsidio)} className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1">
-                         Ver
-                      </button>
+                      <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <span className="sm:hidden font-semibold">
+                          Vigencia:{"  "}
+                        </span>
+                        {subsidio.vigenciaEnMeses} Meses
                       </td>
-                      <td className="px-4 py-3 text-center flex justify-center">
-                        
-                      <Menu as="div" className="relative inline-block text-left">
-                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
-                        <svg
-                          viewBox="0 0 24 24"
-                          className="w-5"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
+                      <td className="block sm:table-cell px-4 py-3">
+                        <button
+                          type="button"
+                          onClick={() => handleVerSubsidio(subsidio)}
+                          className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                         >
-                          <circle cx={12} cy={12} r={1} />
-                          <circle cx={19} cy={12} r={1} />
-                          <circle cx={5} cy={12} r={1} />
-                        </svg>
-                      </MenuButton>
-  <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-    {subsidio.socio.archivado ? (
-      <>
-        <MenuItem>
-          <button
-            className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-            onClick={() => handleFinalizar(subsidio)}
-          >
-            Finalizar
-          </button>
-        </MenuItem>
-      </>
-    ) : (
-      <>
-        <MenuItem>
-          <button
-            className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
-            onClick={() => handleModificarSubsidio(subsidio)}
-          >
-            Modificar
-          </button>
-        </MenuItem>
-      </>
-    )}
-  </MenuItems>
-</Menu>
-
+                          Ver
+                        </button>
+                      </td>
+                      <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
+                        <div className="relative inline-block text-left">
+                          <Menu
+                            as="div"
+                            className="relative inline-block text-left"
+                          >
+                            <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                              <svg
+                                viewBox="0 0 24 24"
+                                className="w-5"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                fill="none"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              >
+                                <circle cx={12} cy={12} r={1} />
+                                <circle cx={19} cy={12} r={1} />
+                                <circle cx={5} cy={12} r={1} />
+                              </svg>
+                            </MenuButton>
+                            <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                              <div className="py-1">
+                                {subsidio.socio.archivado ? (
+                                  <>
+                                    <MenuItem>
+                                      <button
+                                        className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                        onClick={() =>
+                                          handleFinalizar(subsidio)
+                                        }
+                                      >
+                                        Finalizar
+                                      </button>
+                                    </MenuItem>
+                                  </>
+                                ) : (
+                                  <>
+                                    <MenuItem>
+                                      <button
+                                        className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                        onClick={() =>
+                                          handleModificarSubsidio(subsidio)
+                                        }
+                                      >
+                                        Modificar
+                                      </button>
+                                    </MenuItem>
+                                  </>
+                                )}
+                              </div>
+                            </MenuItems>
+                          </Menu>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                        <button
+                          onClick={() => handleEliminar(vivienda.idVivienda)}
+                          className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                        >
+                          Eliminar
+                        </button>
+                        <button
+                          onClick={() => handleModificar(vivienda.nroVivienda)}
+                          className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                        >
+                          Modificar
+                        </button>
                       </td>
                     </tr>
                   ))
@@ -261,7 +305,6 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
           isOpen={isModalOpen}
           setIsOpen={setIsModalOpen}
           subsidio={subsidioSeleccionado}
-
         />
       )}
     </div>
