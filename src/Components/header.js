@@ -24,7 +24,7 @@ import {
   FaHouseUser,
   FaClipboardList,
 } from "react-icons/fa";
-import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
+import { useTheme } from "../Provider/ThemeProvider"; 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente }) => {
@@ -33,10 +33,9 @@ const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente })
   const { miembro, logoutMiembro } = useContext(MiembroContext);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [openSecondDropdown, setOpenSecondDropdown] = useState(null); // Estado para el segundo dropdown
+  const [openSecondDropdown, setOpenSecondDropdown] = useState(null); 
   const [openThirdDropdown, setOpenThirdDropdown] = useState(null);
 
-  // Acceder al estado del tema
   const { darkMode } = useTheme();
 
   const handleSelection = (option) => {
@@ -65,10 +64,10 @@ const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente })
   };
 
   const toggleSecondDropdown = () => {
-    setOpenSecondDropdown(!openSecondDropdown); // Alterna el estado del segundo dropdown
+    setOpenSecondDropdown(!openSecondDropdown);
   };
   const toggleThirdDropdown = () => {
-    setOpenThirdDropdown(openThirdDropdown ? null : true); // Alterna el tercer desplegable
+    setOpenThirdDropdown(openThirdDropdown ? null : true); 
   };
   const initial = miembroUsername.charAt(0).toUpperCase();
   return (
