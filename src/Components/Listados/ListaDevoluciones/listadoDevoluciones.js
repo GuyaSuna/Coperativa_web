@@ -1,11 +1,15 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { getAlldevoluciones , deleteDevolucion  } from "@/Api/api";
+import { getAlldevoluciones, deleteDevolucion } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import VerDevoluciones from "@/Components/VerDetalles/VerDevoluciones/verDevoluciones";
+import Buscador from "@/Components/Buscador.js";
 
-const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
+const ListadoDevoluciones = ({
+  setIdentificadorComponente,
+  setIdDevolucion,
+}) => {
   const { cooperativa } = useContext(MiembroContext);
   const [devoluciones, setDevoluciones] = useState([]);
   const [buscador, setBuscador] = useState("");
@@ -49,7 +53,7 @@ const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
   };
 
   const handleEliminar = async (idDevolucion) => {
-    const response =  await deleteDevolucion(idDevolucion);
+    const response = await deleteDevolucion(idDevolucion);
     fetchAllDevoluciones();
   };
 
@@ -67,13 +71,7 @@ const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
-          <input
-            type="text"
-            value={buscador}
-            onChange={handleChangeBuscador}
-            placeholder="Buscar por nombre de socio"
-            className="w-full p-2 border border-gray-300 rounded-lg"
-          />
+          <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
@@ -100,14 +98,22 @@ const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
       </div>
 
       <div className="overflow-y-auto h-screen">
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="hidden md:table-header-group text-xs text-gray-700 uppercase border-gray-700 border-b">
-            <tr>
-              <th className="px-4 py-3">Fecha Inicio</th>
-              <th className="px-4 py-3">Total Devolución</th>
-              <th className="px-4 py-3">Pago Devolución</th>
-              <th className="px-4 py-3">Nombre Socio</th>
-              <th className="px-4 py-3"></th>
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+            <tr className="hidden sm:table-row">
+              <th scope="col" className="px-4 py-3">
+                Fecha Inicio
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Total Devolución
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Pago Devolución
+              </th>
+              <th scope="col" className="px-4 py-3">
+                Nombre Socio
+              </th>
+              <th scope="col" className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -117,16 +123,27 @@ const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
                 key={devolucion.idDevolucion}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Fecha Inicio:{" "}
+                  </span>
                   {devolucion.fechaInicio}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Total Devolucion:{" "}
+                  </span>
                   {devolucion.totalDevolucionUr}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Pago Devolucion:{" "}
+                  </span>
                   {devolucion.pagoDevolucion}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  {devolucion.socio.nombreSocio} {devolucion.socio.apellidoSocio}
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Socio: </span>
+                  {devolucion.socio.nombreSocio}{" "}
+                  {devolucion.socio.apellidoSocio}
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
                   <button
@@ -163,7 +180,9 @@ const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
                         <div className="py-1">
                           <MenuItem>
                             <button
-                              onClick={() => handleEliminar(devolucion.idDevolucion)}
+                              onClick={() =>
+                                handleEliminar(devolucion.idDevolucion)
+                              }
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Eliminar
@@ -171,7 +190,9 @@ const ListadoDevoluciones = ({setIdentificadorComponente, setIdDevolucion}) => {
                           </MenuItem>
                           <MenuItem>
                             <button
-                              onClick={() => handleModificar(devolucion.idDevolucion)}
+                              onClick={() =>
+                                handleModificar(devolucion.idDevolucion)
+                              }
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Modificar

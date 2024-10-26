@@ -30,7 +30,6 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
     }
   };
 
-
   const handleVerEgreso = (egreso) => {
     setEgresoSeleccionado(egreso);
     setIsModalOpen(true);
@@ -115,16 +114,16 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <th scope="col" className="px-4 py-3">
                 Sub Rubro
               </th>
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <th scope="col" className="px-4 py-3">
                 Denominación
               </th>
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <th scope="col" className="px-4 py-3">
                 Monto Egreso
               </th>
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
+              <th scope="col" className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -134,15 +133,19 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
                 key={egreso.id}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Sub Rubro:</span>
+                  <span className="sm:hidden font-semibold">Sub Rubro: </span>
                   {egreso.subRubro}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">Denominacion:</span>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Denominacion:{" "}
+                  </span>
                   {egreso.denominacion}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">Monto Egreso:</span>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Monto Egreso:{" "}
+                  </span>
                   {egreso.egreso}
                 </td>
                 <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
@@ -205,7 +208,6 @@ const ListadoEgresos = ({ setEgreso, setIdentificadorComponente }) => {
                   >
                     Eliminar
                   </button>
-
 
                   <button
                     onClick={() => handleVerEgreso(egreso)}

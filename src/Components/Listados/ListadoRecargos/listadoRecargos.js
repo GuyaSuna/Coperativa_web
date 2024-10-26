@@ -4,6 +4,7 @@ import { getAllRecargos, deleteRecargo } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider.js";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import VerRecargos from "@/Components/VerDetalles/VerRecargo/VerRecargos";
+import Buscador from "@/Components/Buscador.js";
 
 const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
   const { cooperativa } = useContext(MiembroContext);
@@ -31,9 +32,7 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
       setBuscadorFiltrado(recargos);
     } else {
       const filtrado = recargos.filter((recargo) =>
-        recargo.socio.nombreSocio
-          .toLowerCase()
-          .includes(buscador.toLowerCase())
+        recargo.socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
       );
       setBuscadorFiltrado(filtrado);
     }
@@ -44,7 +43,7 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
   };
 
   const handleAgregarRecargo = () => {
-    setIdentificadorComponente(46); 
+    setIdentificadorComponente(46);
   };
 
   const handleEliminar = async (idRecargo) => {
@@ -66,13 +65,7 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
-          <input
-            type="text"
-            value={buscador}
-            onChange={handleChangeBuscador}
-            placeholder="Buscar por nombre de socio"
-            className="w-full p-2 border border-gray-300 rounded-lg"
-          />
+          <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
           <button
@@ -99,9 +92,9 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
       </div>
 
       <div className="overflow-y-auto h-screen">
-        <table className="w-full text-sm text-left text-gray-500">
-          <thead className="hidden md:table-header-group text-xs text-gray-700 uppercase border-gray-700 border-b">
-            <tr>
+        <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
+            <tr className="hidden sm:table-row">
               <th className="px-4 py-3">Fecha Inicio</th>
               <th className="px-4 py-3">Total Recargo</th>
               <th className="px-4 py-3">Pago Recargo</th>
@@ -116,15 +109,25 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
                 key={recargo.idRecargo}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Fecha Inicio:{" "}
+                  </span>
                   {recargo.fechaInicio}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Total Recargo:{" "}
+                  </span>
                   {recargo.totalRecargoUr}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Pago Recargo:{" "}
+                  </span>
                   {recargo.pagoRecargo}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Socio: </span>
                   {recargo.socio.nombreSocio} {recargo.socio.apellidoSocio}
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
