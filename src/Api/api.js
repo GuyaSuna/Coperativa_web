@@ -1441,6 +1441,35 @@ const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
     throw new Error("Error al enviar los datos de el convenio");
   }
 };
+//getConvenioById
+const getConvenioById = async (idConvenio) => {
+  try {
+    const token = getToken();
+    const response = await fetch(`${URL}/convenios/${idConvenio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const contentType = response.headers.get("Content-Type");
+    if (!contentType || !contentType.includes("application/json")) {
+      return null; 
+    }
+
+    if (!response.ok) {
+      throw new Error("La petición ha fallado, la respuesta no es correcta.");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error al obtener convenios vigentes para el socio:", error);
+    return null;
+  }
+};
 
 const getConveniosVigenteSocio = async (cedulaSocio) => {
   try {
@@ -1624,7 +1653,7 @@ const deleteConvenio = async (idConvenio) => {
   }
 };
 
-const updateConvenio = async (subRubro, denominacion, ingreso) => {
+const updateConvenio = async (convenio) => {
   try {
     const token = getToken();
     const response = await fetch(`${URL}/convenios`, {
@@ -1634,9 +1663,7 @@ const updateConvenio = async (subRubro, denominacion, ingreso) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        subRubro,
-        denominacion,
-        ingreso,
+       convenio
       }),
     });
     const data = await response.json();
@@ -2653,4 +2680,5 @@ export {
   updateRecargo,
   getRecargo,
   getRecargoBySocio,
+  getConvenioById,
 };

@@ -50,6 +50,7 @@ import ModificarDevolucion from "./Formularios/Devolucion/ModificarDevolucion/Mo
 import AltaRecargo from "./Formularios/Recargos/AltaRecargos.js/AltaRecargo";
 import ListadoRecargos from "./Listados/ListadoRecargos/listadoRecargos";
 import ModificarRecargo from "./Formularios/Recargos/ModificarRecargos/ModificarRecargos";
+import UpdateConvenio from "./Formularios/Convenios/ModificarConvenio/ModificarConvenio";
 
 const ComponentesOrganizados = ({
   identificador,
@@ -139,7 +140,7 @@ const ComponentesOrganizados = ({
       );
     }
     case 10: {
-      return <ModificarSuplente suplenteParam={suplente} />;
+      return <ModificarSuplente setIdentificadorComponente={setIdentificadorComponente} suplenteParam={suplente} />;
     }
     case 11: {
       return (
@@ -386,6 +387,9 @@ const ComponentesOrganizados = ({
     }
     case 51: {
       return <ModificarRecargo setIdentificadorComponente={setIdentificadorComponente} idRecargoParam={idRecargo}/>
+    }
+    case 52: {
+      return <UpdateConvenio convenio={convenio}/>
     }
   }
 };
