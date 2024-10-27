@@ -389,7 +389,7 @@ const ComponentesOrganizados = ({
       return <ModificarRecargo setIdentificadorComponente={setIdentificadorComponente} idRecargoParam={idRecargo}/>
     }
     case 52: {
-      return <UpdateConvenio convenio={convenio}/>
+      return <UpdateConvenio convenio={convenio} setIdentificadorComponente={setIdentificadorComponente}/>
     }
   }
 };

@@ -1653,7 +1653,7 @@ const deleteConvenio = async (idConvenio) => {
   }
 };
 
-const updateConvenio = async (convenio) => {
+const updateConvenio = async (convenioEntity) => {
   try {
     const token = getToken();
     const response = await fetch(`${URL}/convenios`, {
@@ -1662,18 +1662,17 @@ const updateConvenio = async (convenio) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-       convenio
-      }),
+      body: JSON.stringify(convenioEntity),
+
     });
     const data = await response.json();
     if (!response.ok) {
-      throw new Error("Error al actualizar el ingreso");
+      throw new Error("Error al actualizar el convenio");
     }
 
     return data;
   } catch (error) {
-    console.error("Error en updateIngreso:", error);
+    console.error("Error en updateConvenio:", error);
     throw error;
   }
 };

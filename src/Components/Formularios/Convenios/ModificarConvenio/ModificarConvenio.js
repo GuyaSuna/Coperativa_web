@@ -71,15 +71,20 @@ const UpdateConvenio = ({ convenio, ur, setIdentificadorComponente }) => {
     e.preventDefault();
 
     const ConvenioData = {
+      idConvenio : convenio.idConvenio,
+      cooperativaEntity : convenio.cooperativaEntity,
       deudaEnUrOriginal,
+      deudaRestante : convenio.deudaRestante,
+      listasFechasRecibos : convenio.listasFechasRecibos,
+      socio : socioSeleccionado,
       urPorMes,
       vigenciaEnRecibos,
       fechaInicioConvenio,
-      tipoConvenio: tipoDeuda,
+      tipoConvenio: convenio.tipoConvenio,
     };
 
     try {
-      await updateConvenio(convenio.idConvenio, ConvenioData);
+      await updateConvenio(ConvenioData);
       setIdentificadorComponente(26);
     } catch (error) {
       console.error("Error al actualizar el convenio:", error);
@@ -94,7 +99,6 @@ const UpdateConvenio = ({ convenio, ur, setIdentificadorComponente }) => {
       >
         <h2 className="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Actualizar Convenio</h2>
 
-        {/* Socio Seleccionado */}
         <div className="relative z-0 w-full mb-5 group">
           <label className="block text-sm font-medium mb-2" htmlFor="socio">
             Socio
@@ -105,19 +109,13 @@ const UpdateConvenio = ({ convenio, ur, setIdentificadorComponente }) => {
             onChange={(e) => setSocioSeleccionado(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
-            <option value="">Seleccione un socio</option>
-            {sociosDisponibles.map((socio) => (
-              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {socio.nombreSocio} {socio.apellidoSocio}
-              </option>
-            ))}
+            <option value="">{socioSeleccionado.nombreSocio} {socioSeleccionado.apellidoSocio}</option>
           </select>
           {errores.socioSeleccionado && (
             <span className="text-red-500">{errores.socioSeleccionado}</span>
           )}
         </div>
 
-        {/* Deuda en UR Original */}
         <div className="relative z-0 w-full mb-5 group">
           <label className="block text-sm font-medium mb-2" htmlFor="deudaEnUrOriginal">
             Deuda en UR Original
@@ -134,9 +132,54 @@ const UpdateConvenio = ({ convenio, ur, setIdentificadorComponente }) => {
           )}
         </div>
 
-        {/* Otros campos... */}
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="urPorMes">
+            UR por Mes
+          </label>
+          <input
+            type="number"
+            id="urPorMes"
+            value={urPorMes}
+            onChange={(e) => setUrPorMes(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {errores.urPorMes && (
+            <span className="text-red-500">{errores.urPorMes}</span>
+          )}
+        </div>
 
-        {/* Botón para enviar el formulario */}
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaInicioConvenio">
+            Fecha de Inicio
+          </label>
+          <input
+            type="date"
+            id="fechaInicioConvenio"
+            value={fechaInicioConvenio}
+            onChange={(e) => setFechaInicioConvenio(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {errores.fechaInicioConvenio && (
+            <span className="text-red-500">{errores.fechaInicioConvenio}</span>
+          )}
+        </div>
+  
+        <div className="relative z-0 w-full mb-5 group">
+          <label className="block text-sm font-medium mb-2" htmlFor="vigenciaEnRecibos">
+            Vigencia en Recibos
+          </label>
+          <input
+            type="number"
+            id="vigenciaEnRecibos"
+            value={vigenciaEnRecibos}
+            onChange={(e) => setVigenciaEnRecibos(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+          />
+          {errores.vigenciaEnRecibos && (
+            <span className="text-red-500">{errores.vigenciaEnRecibos}</span>
+          )}
+        </div>
+
         <button
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"
