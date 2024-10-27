@@ -43,7 +43,7 @@ const ListadoRecargos = ({ setIdentificadorComponente, setIdRecargo }) => {
   };
 
   const handleAgregarRecargo = () => {
-    setIdentificadorComponente(46);
+    setIdentificadorComponente(49);
   };
 
   const handleEliminar = async (idRecargo) => {

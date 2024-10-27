@@ -9,6 +9,7 @@ const VerRecibo = ({ recibo, isOpen, setIsOpen }) => {
   }
   const totalConvenios = recibo.listaConvenio.reduce((total, convenio) => total + (convenio.urPorMes || 0), 0);
   
+  console.log(recibo)
   return (
     <>
       <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50"></div>
@@ -75,7 +76,7 @@ const VerRecibo = ({ recibo, isOpen, setIsOpen }) => {
                 <span className="font-medium text-white-800">
                   Fecha de Emision:
                 </span>
-                <span className="text-white-600">{recibo.fechaEmision}</span>
+                <span className="text-white-600">{recibo.fechaRecibo}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-white-800">Capital:</span>
@@ -95,8 +96,11 @@ const VerRecibo = ({ recibo, isOpen, setIsOpen }) => {
               </div>
               <div className="flex justify-between">
                 <span className="font-medium text-white-800">Subsidio:</span>
-                <span className="text-white-600">{recibo.subsidio?.subsidioUr}</span>
+                <span className="text-white-600">
+                  {recibo.subsidio?.subsidioUr ?? "Sin subsidio"}
+                </span>
               </div>
+
               <div className="flex justify-between">
                 <span className="font-medium text-white-800">
                   Cuota Social:

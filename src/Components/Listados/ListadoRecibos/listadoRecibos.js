@@ -259,7 +259,7 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
                 <td className="block sm:table-cell px-4 py-3">
                   <button
                     type="button"
-                    onClick={() => handleVerDetalles(recibo)}
+                    onClick={() => handleVerRecibo(recibo)}
                     className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
