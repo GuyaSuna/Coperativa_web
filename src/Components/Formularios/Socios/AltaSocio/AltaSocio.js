@@ -256,7 +256,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
 
       }
 
-      setIdentificadorComponente(0); // Reseteo del componente o vista
+      setIdentificadorComponente(0); 
     } catch (error) {
       console.error("Error al enviar los datos del socio:", error);
     }
