@@ -43,10 +43,117 @@ const styles = StyleSheet.create({
 
 const MyDocument = ({ estadoContable }) => (
   <Document>
-    <Page size="A4" style={styles.page}>
-      {/* Tu contenido para el PDF aquí */}
-    </Page>
-  </Document>
+  <Page size="A4" style={styles.page}>
+    <View style={styles.section}>
+      <Text style={styles.header}>Detalles del Estado Contable</Text>
+      <Text style={styles.text}>
+        Fecha: {new Date(estadoContable.fecha).toLocaleDateString()}
+      </Text>
+    </View>
+
+    {/* Ingresos en Pesos */}
+    <View style={styles.section}>
+      <Text style={styles.text}>Ingresos en Pesos:</Text>
+      <View style={styles.table}>
+        <View style={[styles.tableRow, styles.tableHeader]}>
+          <Text style={styles.tableCol}>Denom.</Text>
+          <Text style={styles.tableCol}>Ingreso</Text>
+          <Text style={styles.tableCol}>Moneda</Text>
+          <Text style={styles.tableCol}>SubRubro</Text>
+        </View>
+        {estadoContable.listaIngresos
+          .filter((ingreso) => ingreso.tipoMoneda === "UYU")
+          .map((ingreso) => (
+            <View key={ingreso.id} style={styles.tableRow}>
+              <Text style={styles.tableCol}>{ingreso.denominacion}</Text>
+              <Text style={styles.tableCol}>{ingreso.ingreso}</Text>
+              <Text style={styles.tableCol}>{ingreso.tipoMoneda}</Text>
+              <Text style={styles.tableCol}>{ingreso.subRubro}</Text>
+            </View>
+          ))}
+      </View>
+    </View>
+
+    {/* Ingresos en Dólares */}
+    <View style={styles.section}>
+      <Text style={styles.text}>Ingresos en Dólares:</Text>
+      <View style={styles.table}>
+        <View style={[styles.tableRow, styles.tableHeader]}>
+          <Text style={styles.tableCol}>Denom.</Text>
+          <Text style={styles.tableCol}>Ingreso</Text>
+          <Text style={styles.tableCol}>Moneda</Text>
+          <Text style={styles.tableCol}>SubRubro</Text>
+        </View>
+        {estadoContable.listaIngresos
+          .filter((ingreso) => ingreso.tipoMoneda === "USD")
+          .map((ingreso) => (
+            <View key={ingreso.id} style={styles.tableRow}>
+              <Text style={styles.tableCol}>{ingreso.denominacion}</Text>
+              <Text style={styles.tableCol}>{ingreso.ingreso}</Text>
+              <Text style={styles.tableCol}>{ingreso.tipoMoneda}</Text>
+              <Text style={styles.tableCol}>{ingreso.subRubro}</Text>
+            </View>
+          ))}
+      </View>
+    </View>
+
+    {/* Egresos en Pesos */}
+    <View style={styles.section}>
+      <Text style={styles.text}>Egresos en Pesos:</Text>
+      <View style={styles.table}>
+        <View style={[styles.tableRow, styles.tableHeader]}>
+          <Text style={styles.tableCol}>Denom.</Text>
+          <Text style={styles.tableCol}>Egreso</Text>
+          <Text style={styles.tableCol}>Moneda</Text>
+          <Text style={styles.tableCol}>SubRubro</Text>
+        </View>
+        {estadoContable.listaEgresos
+          .filter((egreso) => egreso.tipoMoneda === "UYU")
+          .map((egreso) => (
+            <View key={egreso.id} style={styles.tableRow}>
+              <Text style={styles.tableCol}>{egreso.denominacion}</Text>
+              <Text style={styles.tableCol}>{egreso.egreso}</Text>
+              <Text style={styles.tableCol}>{egreso.tipoMoneda}</Text>
+              <Text style={styles.tableCol}>{egreso.subRubro}</Text>
+            </View>
+          ))}
+      </View>
+    </View>
+
+    {/* Egresos en Dólares */}
+    <View style={styles.section}>
+      <Text style={styles.text}>Egresos en Dólares:</Text>
+      <View style={styles.table}>
+        <View style={[styles.tableRow, styles.tableHeader]}>
+          <Text style={styles.tableCol}>Denom.</Text>
+          <Text style={styles.tableCol}>Egreso</Text>
+          <Text style={styles.tableCol}>Moneda</Text>
+          <Text style={styles.tableCol}>SubRubro</Text>
+        </View>
+        {estadoContable.listaEgresos
+          .filter((egreso) => egreso.tipoMoneda === "USD")
+          .map((egreso) => (
+            <View key={egreso.id} style={styles.tableRow}>
+              <Text style={styles.tableCol}>{egreso.denominacion}</Text>
+              <Text style={styles.tableCol}>{egreso.egreso}</Text>
+              <Text style={styles.tableCol}>{egreso.tipoMoneda}</Text>
+              <Text style={styles.tableCol}>{egreso.subRubro}</Text>
+            </View>
+          ))}
+      </View>
+    </View>
+
+    {/* Saldos finales */}
+    <View style={styles.section}>
+      <Text style={styles.text}>
+        Saldo Final en Pesos: {estadoContable.saldoFinalEnPesos}
+      </Text>
+      <Text style={styles.text}>
+        Saldo Final en Dólares: {estadoContable.saldoFinalEnDolares}
+      </Text>
+    </View>
+  </Page>
+</Document>
 );
 
 const VerEstadoContable = ({ isOpen, onClose, estadoContable }) => {
