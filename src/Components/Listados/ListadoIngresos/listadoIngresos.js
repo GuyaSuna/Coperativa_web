@@ -197,18 +197,11 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
                 </td>
                 <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
                   <button
-                    onClick={() => handleEliminar(vivienda.nroVivienda)}
+                    onClick={() => handleEliminar(ingreso.id)}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
                   >
                     Eliminar
                   </button>
-                  <button
-                    onClick={() => handleModificar(vivienda.nroVivienda)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Modificar
-                  </button>
-
                   <button
                     onClick={() => handleVerIngreso(ingreso)}
                     className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"

@@ -417,20 +417,32 @@ const ListadoSocio = ({
                     </Menu>
                   </div>
                 </td>
-                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
-                  <button
-                    onClick={() => handleEliminar(vivienda.nroVivienda)}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Eliminar
-                  </button>
-                  <button
-                    onClick={() => handleModificar(vivienda.nroVivienda)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Modificar
-                  </button>
-                </td>
+                <td className="px-2 py-2 flex justify-end gap-1 sm:flex-wrap md:hidden">
+  <button
+    onClick={() => handleArchivar(socio)}
+    className="bg-red-500 text-white px-2 py-1 rounded-lg text-xs"
+  >
+    Archivar
+  </button>
+  <button
+    onClick={() => handleModificarSocio(socio)}
+    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
+  >
+    Modificar
+  </button>
+  <button
+    onClick={() => handleCrearRecibo(socio)}
+    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
+  >
+    Crear Recibo
+  </button>
+  <button
+    onClick={() => handleDevolucionCapital(socio)}
+    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
+  >
+    Pagar Devolución
+  </button>
+</td>
               </tr>
             ))}
           </tbody>

@@ -131,7 +131,26 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
               <Buscador value={buscador} onChange={handleChangeBuscador} />
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-              {/* Botón para mostrar subsidios archivados */}
+            <button
+            type="button"
+            onClick={handleAgregarSubsidio}
+            className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+          >
+            <svg
+              className="h-3.5 w-3.5 mr-2"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                clipRule="evenodd"
+                fillRule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              />
+            </svg>
+            AGREGAR SUBSIDIO
+          </button>
               <button
                 onClick={mostrarArchivados}
                 className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
@@ -246,20 +265,18 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                             </MenuButton>
                             <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                               <div className="py-1">
-                                {subsidio.socio.archivado ? (
                                   <>
                                     <MenuItem>
                                       <button
                                         className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
                                         onClick={() =>
-                                          handleFinalizar(subsidio)
+                                          handleEliminarSubsidio(subsidio.idSubsidio)
                                         }
                                       >
                                         Finalizar
                                       </button>
                                     </MenuItem>
                                   </>
-                                ) : (
                                   <>
                                     <MenuItem>
                                       <button
@@ -272,7 +289,6 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                                       </button>
                                     </MenuItem>
                                   </>
-                                )}
                               </div>
                             </MenuItems>
                           </Menu>
@@ -280,13 +296,17 @@ const ListadoSubsidios = ({ setSubsidio, setIdentificadorComponente }) => {
                       </td>
                       <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
                         <button
-                          onClick={() => handleEliminar(vivienda.idVivienda)}
+                           onClick={() =>
+                            handleEliminarSubsidio(subsidio.idSubsidio)
+                          }
                           className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
                         >
                           Eliminar
                         </button>
                         <button
-                          onClick={() => handleModificar(vivienda.nroVivienda)}
+                         onClick={() =>
+                          handleModificarSubsidio(subsidio)
+                        }
                           className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
                         >
                           Modificar

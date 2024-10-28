@@ -1256,6 +1256,7 @@ const updateSubsidio = async (
 
 const deleteSubsidio = async (idSubsidio) => {
   try {
+    console.log(idSubsidio);
     const token = getToken();
     const response = await fetch(`${URL}/subsidio/${idSubsidio}`, {
       method: "DELETE",

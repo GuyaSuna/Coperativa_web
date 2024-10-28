@@ -200,10 +200,7 @@ const AltaSubsidio = ({ setIdentificadorComponente }) => {
   const handleConfirmacion = async (e) => {
     e.preventDefault();
     setMostrarModal(false);
-    const confirmacion = window.confirm(
-      `¿Está seguro de que quiere seleccionar al socio ${socioSeleccionado.nombreSocio} ${socioSeleccionado.apellidoSocio}?`
-    );
-    if (!confirmacion) return;
+
 
     if (!validarFormulario()) return;
 
