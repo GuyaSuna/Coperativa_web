@@ -25,18 +25,17 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
   }, []);
 
   const handleArchivadosToggle = () => {
-    setArchivados(!archivados); // Cambiar entre ver archivados y activos
+    setArchivados(!archivados); 
   };
 
   const fetchAllRecibos = async () => {
     try {
       const response = await getAllRecibos(miembro.responseBody.id);
-      // Filtra los recibos para excluir aquellos cuyos socios están archivados
       const recibosActivos = response.filter(
         (recibo) => !recibo.socio.archived
       );
       setAllRecibos(recibosActivos);
-      setBuscadorFiltrado(recibosActivos); // Inicialmente muestra todos los recibos activos
+      setBuscadorFiltrado(recibosActivos);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -106,7 +105,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
   const handleDescargarPDF = (recibo) => {
     const doc = new jsPDF();
 
-    // Título principal
     doc.setFontSize(16);
     doc.text("COVIAMUROS", 105, 20, null, null, "center");
     doc.setFontSize(12);
@@ -114,7 +112,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
     doc.text("AYUDA MUTUA ROSARIO", 105, 32, null, null, "center");
     doc.text("ROSARIO - Dpto. de Colonia", 105, 38, null, null, "center");
 
-    // Información del recibo
     doc.setFontSize(12);
     doc.text("RECIBO", 160, 50);
     doc.text(`${recibo.nroRecibo}`, 160, 56);
@@ -124,25 +121,23 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
     doc.text("Número de CI:", 20, 60);
     doc.text(`${recibo.socio.ci}`, 60, 60);
 
-    // Calcular el total de convenios
-    const listaConvenios = recibo.listaConvenio || []; // Asegúrate de que recibo.listaConvenio exista
+    const listaConvenios = recibo.listaConvenio || []; 
     const totalConvenios = listaConvenios.reduce(
       (total, convenio) => total + (convenio.urPorMes || 0),
       0
     );
 
-    // Tabla con conceptos
     doc.autoTable({
       startY: 70,
       head: [["Conceptos", "Importes"]],
       body: [
         ["Ahorro/Mes", `${recibo.cuotaMensual}`],
         ["Cuota Social", `${recibo.cuotaSocial}`],
-        ["Convenio", `${(totalConvenios * ur).toFixed(2)}`], // Suma de todos los convenios
+        ["Convenio", `${(totalConvenios * ur).toFixed(2)}`],
         [
           "Subsidio",
-          `${(recibo.subsidio?.cuotaApagarUr * ur).toFixed(2) || 0}`,
-        ], // Manejo seguro del subsidio
+         `${recibo.subsidio && recibo.subsidio.cuotaApagarUr ? (recibo.subsidio.cuotaApagarUr * ur).toFixed(2) : 0}`
+        ], 
         ["Recargo", `${recibo.recargo}`],
         ["Interés", `${recibo.interes}`],
         ["Capital", `${recibo.capital}`],
@@ -155,7 +150,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
       },
     });
 
-    // Total y firma
     const totalY = doc.previousAutoTable.finalY + 10;
     doc.setFontSize(12);
     doc.text(`TOTAL: $${recibo.cuotaMensual}`, 150, totalY);
@@ -170,7 +164,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
     doc.text("La suma de $:", 20, totalY + 15);
     doc.text(`${recibo.sumaEnPesos}`, 60, totalY + 15);
 
-    // Tesorería
     doc.text("TESORERO", 150, totalY + 30);
     doc.text(
       `${recibo.tesorero.firstname} ${recibo.tesorero.lastname}`,
@@ -178,9 +171,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
       totalY + 35
     );
 
-    // Guardar el PDF
     doc.save(`Recibo_${recibo.fechaPago}.pdf`);
   };
+
 
   return (
     <div className="sm:p-7 p-4">
@@ -299,10 +292,10 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
                           </MenuItem>
                           <MenuItem>
                             <button
-                              onClick={() => handleModificar(recibo.nroRecibo)}
+                              onClick={() => handleDescargarPDF(recibo)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
-                              Modificar
+                              Descargar Pdf
                             </button>
                           </MenuItem>
                         </div>
@@ -318,10 +311,10 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
                     Eliminar
                   </button>
                   <button
-                    onClick={() => handleModificar(recibo.nroRecibo)}
+                    onClick={() => handleDescargarPDF(recibo)}
                     className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
                   >
-                    Modificar
+                    Descargar Pdf
                   </button>
                 </td>
               </tr>

@@ -13,17 +13,16 @@ import {
   IconButton,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { Button } from "@headlessui/react";
 import DashboardCard from "./DashboardCard";
 import { getAllRecibosPorSocio } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import VerRecibo from "../VerDetalles/VerRecibo/VerRecibo";
 import jsPDF from "jspdf";
 
-const ListadoRecibosSocios = () => {
+const ListadoRecibosSocios = ({ur}) => {
+  console.log(ur);
   const { miembro } = useContext(MiembroContext);
   const [anchorEl, setAnchorEl] = useState(null);
-
   const [allRecibos, setAllRecibos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reciboSeleccionado, setReciboSeleccionado] = useState(null);
@@ -49,11 +48,79 @@ const ListadoRecibosSocios = () => {
     setIsModalOpen(true);
   };
 
-  const handleDescargarPDF = (recibo) => {
-    const doc = new jsPDF();
-    // Configuración del PDF...
-    doc.save(`Recibo_${recibo.fechaRecibo}.pdf`);
-  };
+    const handleDescargarPDF = (recibo) => {
+      const doc = new jsPDF();
+  
+      doc.setFontSize(16);
+      doc.text("COVIAMUROS", 105, 20, null, null, "center");
+      doc.setFontSize(12);
+      doc.text("COOPERATIVA DE VIVIENDA", 105, 26, null, null, "center");
+      doc.text("AYUDA MUTUA ROSARIO", 105, 32, null, null, "center");
+      doc.text("ROSARIO - Dpto. de Colonia", 105, 38, null, null, "center");
+  
+      doc.setFontSize(12);
+      doc.text("RECIBO", 160, 50);
+      doc.text(`${recibo.nroRecibo}`, 160, 56);
+      doc.text("Fecha de Pago:", 20, 50);
+      doc.text(`${recibo.fechaPago}`, 60, 50);
+  
+      doc.text("Número de CI:", 20, 60);
+      doc.text(`${recibo.socio.ci}`, 60, 60);
+  
+      const listaConvenios = recibo.listaConvenio || []; 
+      const totalConvenios = listaConvenios.reduce(
+        (total, convenio) => total + (convenio.urPorMes || 0),
+        0
+      );
+  
+      doc.autoTable({
+        startY: 70,
+        head: [["Conceptos", "Importes"]],
+        body: [
+          ["Ahorro/Mes", `${recibo.cuotaMensual}`],
+          ["Cuota Social", `${recibo.cuotaSocial}`],
+          ["Convenio", `${((totalConvenios ?? 0) * (ur ?? 0)).toFixed(2)}`],
+          [
+            "Subsidio",
+           `${recibo.subsidio && recibo.subsidio.cuotaApagarUr ? (recibo.subsidio.cuotaApagarUr * ur).toFixed(2) : 0}`
+          ], 
+          ["Recargo", `${recibo.recargo}`],
+          ["Interés", `${recibo.interes}`],
+          ["Capital", `${recibo.capital}`],
+        ],
+        theme: "grid",
+        styles: { fontSize: 10 },
+        columnStyles: {
+          0: { cellWidth: 100 },
+          1: { cellWidth: 50, halign: "right" },
+        },
+      });
+  
+      const totalY = doc.previousAutoTable.finalY + 10;
+      doc.setFontSize(12);
+      doc.text(`TOTAL: $${recibo.cuotaMensual}`, 150, totalY);
+  
+      doc.text("Hemos recibido de: ", 20, totalY + 10);
+      doc.text(
+        `${recibo.socio.nombreSocio} ${recibo.socio.apellidoSocio}`,
+        60,
+        totalY + 10
+      );
+  
+      doc.text("La suma de $:", 20, totalY + 15);
+      doc.text(`${recibo.sumaEnPesos}`, 60, totalY + 15);
+  
+      doc.text("TESORERO", 150, totalY + 30);
+      doc.text(
+        `${recibo.tesorero.firstname} ${recibo.tesorero.lastname}`,
+        145,
+        totalY + 35
+      );
+  
+      doc.save(`Recibo_${recibo.fechaPago}.pdf`);
+    };
+
+
   const handleMenuOpen = (event, recibo) => {
     setAnchorEl(event.currentTarget);
     setSelectedRecibo(recibo);
@@ -63,65 +130,68 @@ const ListadoRecibosSocios = () => {
     setAnchorEl(null);
     setSelectedRecibo(null);
   };
-  console.log("RECIBOS SOCIO: " + allRecibos);
+
   return (
     <>
       <DashboardCard title={"Historial de Recibos"}>
-        <Box
-          sx={{
-            overflowY: "auto",
-            width: "100%",
-            height: "calc(75vh - 350px)", // Ajusta según lo que necesites
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <TableContainer>
-            <Table
-              sx={{
-                width: "100%",
-                tableLayout: "fixed",
-              }}
-              aria-label="recibos table"
+        <Box className="overflow-y-auto max-h-[75vh] flex flex-col dark:bg-gray-800 bg-white">
+          {allRecibos.map((recibo) => (
+            <div
+              key={recibo.nroRecibo}
+              className="w-full sm:hidden bg-white shadow-md rounded-lg p-4 mb-4 dark:bg-gray-700"
             >
+              <Typography variant="body1" className="text-black dark:text-white">
+                Nro Recibo: {recibo.nroRecibo}
+              </Typography>
+              <Typography variant="body1" className="text-black dark:text-white">
+                Nombre Socio: {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
+              </Typography>
+              <Typography variant="body1" className="text-black dark:text-white">
+                Monto: $ {recibo.cuotaMensual}
+              </Typography>
+              <Typography variant="body1" className="text-black dark:text-white">
+                Fecha de Recibo: {recibo.fechaPago}
+              </Typography>
+              <div className="flex justify-end">
+                <IconButton
+                  onClick={(event) => handleMenuOpen(event, recibo)}
+                  size="small"
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl && selectedRecibo === recibo)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem onClick={() => handleDescargarPDF(recibo)}>
+                    Descargar
+                  </MenuItem>
+                </Menu>
+              </div>
+            </div>
+          ))}
+          <TableContainer className="hidden sm:block">
+            <Table sx={{ width: "100%", tableLayout: "fixed" }} aria-label="recibos table">
               <TableHead>
                 <TableRow>
-                  <TableCell className="dark:text-white text-gray-900">
-                    Nro Recibo
-                  </TableCell>
-                  <TableCell className="dark:text-white text-gray-900">
-                    Nombre Socio
-                  </TableCell>
-                  <TableCell>Monto</TableCell>
-                  <TableCell>Fecha de Recibo</TableCell>
-                  <TableCell>Acciones</TableCell>
+                  <TableCell className="text-black dark:text-white">Nro Recibo</TableCell>
+                  <TableCell className="text-black dark:text-white">Nombre Socio</TableCell>
+                  <TableCell className="text-black dark:text-white">Monto</TableCell>
+                  <TableCell className="text-black dark:text-white">Fecha de Recibo</TableCell>
+                  <TableCell className="text-black dark:text-white">Acciones</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {allRecibos.map((recibo) => (
-                  <TableRow key={recibo.nroRecibo}>
-                    <TableCell>
-                      <Typography variant="body2">
-                        {recibo.nroRecibo}
-                      </Typography>
+                  <TableRow key={recibo.nroRecibo} className="dark:bg-gray-700">
+                    <TableCell className="text-black dark:text-white">{recibo.nroRecibo}</TableCell>
+                    <TableCell className="text-black dark:text-white">
+                      {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
                     </TableCell>
-                    <TableCell>
-                      <Typography variant="body2">
-                        {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2">
-                        $ {recibo.cuotaMensual}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2">
-                        {recibo.fechaPago}
-                      </Typography>
-                    </TableCell>
+                    <TableCell className="text-black dark:text-white">$ {recibo.cuotaMensual}</TableCell>
+                    <TableCell className="text-black dark:text-white">{recibo.fechaPago}</TableCell>
                     <TableCell align="right">
-                      {/* Menú para acciones */}
                       <IconButton
                         onClick={(event) => handleMenuOpen(event, recibo)}
                         size="small"
@@ -158,3 +228,4 @@ const ListadoRecibosSocios = () => {
 };
 
 export default ListadoRecibosSocios;
+

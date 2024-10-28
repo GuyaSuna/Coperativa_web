@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import {
   Document,
@@ -10,7 +8,6 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 
-// Estilos para el PDF
 const styles = StyleSheet.create({
   page: {
     padding: 30,
@@ -44,137 +41,24 @@ const styles = StyleSheet.create({
   },
 });
 
-// Definir el documento PDF
 const MyDocument = ({ estadoContable }) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text style={styles.header}>Detalles del Estado Contable</Text>
-        <Text style={styles.text}>
-          Fecha: {new Date(estadoContable.fecha).toLocaleDateString()}
-        </Text>
-      </View>
-
-      {/* Ingresos en Pesos */}
-      <View style={styles.section}>
-        <Text style={styles.text}>Ingresos en Pesos:</Text>
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCol}>Denom.</Text>
-            <Text style={styles.tableCol}>Ingreso</Text>
-            <Text style={styles.tableCol}>Moneda</Text>
-            <Text style={styles.tableCol}>SubRubro</Text>
-          </View>
-          {estadoContable.listaIngresos
-            .filter((ingreso) => ingreso.tipoMoneda === "UR")
-            .map((ingreso) => (
-              <View key={ingreso.id} style={styles.tableRow}>
-                <Text style={styles.tableCol}>{ingreso.denominacion}</Text>
-                <Text style={styles.tableCol}>{ingreso.ingreso}</Text>
-                <Text style={styles.tableCol}>{ingreso.tipoMoneda}</Text>
-                <Text style={styles.tableCol}>{ingreso.subRubro}</Text>
-              </View>
-            ))}
-        </View>
-      </View>
-
-      {/* Ingresos en Dólares */}
-      <View style={styles.section}>
-        <Text style={styles.text}>Ingresos en Dólares:</Text>
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCol}>Denom.</Text>
-            <Text style={styles.tableCol}>Ingreso</Text>
-            <Text style={styles.tableCol}>Moneda</Text>
-            <Text style={styles.tableCol}>SubRubro</Text>
-          </View>
-          {estadoContable.listaIngresos
-            .filter((ingreso) => ingreso.tipoMoneda === "USD")
-            .map((ingreso) => (
-              <View key={ingreso.id} style={styles.tableRow}>
-                <Text style={styles.tableCol}>{ingreso.denominacion}</Text>
-                <Text style={styles.tableCol}>{ingreso.ingreso}</Text>
-                <Text style={styles.tableCol}>{ingreso.tipoMoneda}</Text>
-                <Text style={styles.tableCol}>{ingreso.subRubro}</Text>
-              </View>
-            ))}
-        </View>
-      </View>
-
-      {/* Egresos en Pesos */}
-      <View style={styles.section}>
-        <Text style={styles.text}>Egresos en Pesos:</Text>
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCol}>Denom.</Text>
-            <Text style={styles.tableCol}>Egreso</Text>
-            <Text style={styles.tableCol}>Moneda</Text>
-            <Text style={styles.tableCol}>SubRubro</Text>
-          </View>
-          {estadoContable.listaEgresos
-            .filter((egreso) => egreso.tipoMoneda === "UR")
-            .map((egreso) => (
-              <View key={egreso.id} style={styles.tableRow}>
-                <Text style={styles.tableCol}>{egreso.denominacion}</Text>
-                <Text style={styles.tableCol}>{egreso.egreso}</Text>
-                <Text style={styles.tableCol}>{egreso.tipoMoneda}</Text>
-                <Text style={styles.tableCol}>{egreso.subRubro}</Text>
-              </View>
-            ))}
-        </View>
-      </View>
-
-      {/* Egresos en Dólares */}
-      <View style={styles.section}>
-        <Text style={styles.text}>Egresos en Dólares:</Text>
-        <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={styles.tableCol}>Denom.</Text>
-            <Text style={styles.tableCol}>Egreso</Text>
-            <Text style={styles.tableCol}>Moneda</Text>
-            <Text style={styles.tableCol}>SubRubro</Text>
-          </View>
-          {estadoContable.listaEgresos
-            .filter((egreso) => egreso.tipoMoneda === "USD")
-            .map((egreso) => (
-              <View key={egreso.id} style={styles.tableRow}>
-                <Text style={styles.tableCol}>{egreso.denominacion}</Text>
-                <Text style={styles.tableCol}>{egreso.egreso}</Text>
-                <Text style={styles.tableCol}>{egreso.tipoMoneda}</Text>
-                <Text style={styles.tableCol}>{egreso.subRubro}</Text>
-              </View>
-            ))}
-        </View>
-      </View>
-
-      {/* Saldos finales */}
-      <View style={styles.section}>
-        <Text style={styles.text}>
-          Saldo Final en Pesos: {estadoContable.saldoFinalEnPesos}
-        </Text>
-        <Text style={styles.text}>
-          Saldo Final en Dólares: {estadoContable.saldoFinalEnDolares}
-        </Text>
-      </View>
+      {/* Tu contenido para el PDF aquí */}
     </Page>
   </Document>
 );
 
-// Componente VerEstadoContable
 const VerEstadoContable = ({ isOpen, onClose, estadoContable }) => {
   if (!isOpen) return null;
 
   return (
     <>
-      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 "></div>
-      <div className="fixed inset-0 flex items-center justify-center z-50 max-h-64 mt-60">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full md:w-11/12 lg:w-9/10 xl:w-4/5 p-4">
-
-
-
-
-          <div className="p-6">
-            <h3 className="text-2xl font-bold text-black-900 mb-4">
+      <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50"></div>
+      <div className="fixed inset-0 flex items-center justify-center z-50 max-h-full p-4 md:p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-3xl p-4 md:p-6 overflow-y-auto max-h-[90vh]">
+          <div className="pb-4 border-b border-gray-300 dark:border-gray-700">
+            <h3 className="text-lg md:text-2xl font-bold text-black-900 mb-4">
               Detalles del Estado Contable
             </h3>
             <table className="w-full text-left">
@@ -189,155 +73,134 @@ const VerEstadoContable = ({ isOpen, onClose, estadoContable }) => {
                 </tr>
               </tbody>
             </table>
+          </div>
 
-            <div className="mt-4 w-full lg:w-3/4 mx-auto flex flex-wrap justify-between">
-  {/* Ingresos */}
-  <div className="w-full lg:w-1/2 h-64 overflow-y-auto pr-4"> {/* Columna de Ingresos */}
-    <h4 className="font-bold">Ingresos en Pesos:</h4>
-    <table className="w-full text-left mt-2">
-      <thead>
-        <tr className="bg-gray-200 dark:bg-gray-700">
-          <th className="px-3 py-1">Denom.</th>
-          <th className="px-3 py-1">Ingreso</th>
-          <th className="px-3 py-1">Moneda</th>
-          <th className="px-3 py-1">SubRubro</th>
-        </tr>
-      </thead>
-      <tbody>
-        {estadoContable.listaIngresos
-          .filter((ingreso) => ingreso.tipoMoneda === "UR")
-          .map((ingreso) => (
-            <tr key={ingreso.id}>
-              <td className="px-3 py-1">{ingreso.denominacion}</td>
-              <td className="px-3 py-1">{ingreso.ingreso}</td>
-              <td className="px-3 py-1">{ingreso.tipoMoneda}</td>
-              <td className="px-3 py-1">{ingreso.subRubro}</td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
+          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="overflow-y-auto pr-2 max-h-64">
+              <h4 className="font-bold text-base md:text-lg">Ingresos en Pesos:</h4>
+              <table className="w-full text-left mt-2">
+                <thead>
+                  <tr className="bg-gray-200 dark:bg-gray-700">
+                    <th className="px-2 md:px-3 py-1">Denom.</th>
+                    <th className="px-2 md:px-3 py-1">Ingreso</th>
+                    <th className="px-2 md:px-3 py-1">Moneda</th>
+                    <th className="px-2 md:px-3 py-1">SubRubro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {estadoContable.listaIngresos
+                    .filter((ingreso) => ingreso.tipoMoneda === "UYU")
+                    .map((ingreso) => (
+                      <tr key={ingreso.id}>
+                        <td className="px-2 md:px-3 py-1">{ingreso.denominacion}</td>
+                        <td className="px-2 md:px-3 py-1">{ingreso.ingreso}</td>
+                        <td className="px-2 md:px-3 py-1">{ingreso.tipoMoneda}</td>
+                        <td className="px-2 md:px-3 py-1">{ingreso.subRubro}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
 
-    <h4 className="font-bold mt-4">Ingresos en Dólares:</h4>
-    <table className="w-full text-left mt-2">
-      <thead>
-        <tr className="bg-gray-200 dark:bg-gray-700">
-          <th className="px-3 py-1">Denom.</th>
-          <th className="px-3 py-1">Ingreso</th>
-          <th className="px-3 py-1">Moneda</th>
-          <th className="px-3 py-1">SubRubro</th>
-        </tr>
-      </thead>
-      <tbody>
-        {estadoContable.listaIngresos
-          .filter((ingreso) => ingreso.tipoMoneda === "USD")
-          .map((ingreso) => (
-            <tr key={ingreso.id}>
-              <td className="px-3 py-1">{ingreso.denominacion}</td>
-              <td className="px-3 py-1">{ingreso.ingreso}</td>
-              <td className="px-3 py-1">{ingreso.tipoMoneda}</td>
-              <td className="px-3 py-1">{ingreso.subRubro}</td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
-  </div>
+              <h4 className="font-bold mt-4 text-base md:text-lg">Ingresos en Dólares:</h4>
+              <table className="w-full text-left mt-2">
+                <thead>
+                  <tr className="bg-gray-200 dark:bg-gray-700">
+                    <th className="px-2 md:px-3 py-1">Denom.</th>
+                    <th className="px-2 md:px-3 py-1">Ingreso</th>
+                    <th className="px-2 md:px-3 py-1">Moneda</th>
+                    <th className="px-2 md:px-3 py-1">SubRubro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {estadoContable.listaIngresos
+                    .filter((ingreso) => ingreso.tipoMoneda === "USD")
+                    .map((ingreso) => (
+                      <tr key={ingreso.id}>
+                        <td className="px-2 md:px-3 py-1">{ingreso.denominacion}</td>
+                        <td className="px-2 md:px-3 py-1">{ingreso.ingreso}</td>
+                        <td className="px-2 md:px-3 py-1">{ingreso.tipoMoneda}</td>
+                        <td className="px-2 md:px-3 py-1">{ingreso.subRubro}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
 
-  {/* Egresos */}
-  <div className="w-full lg:w-1/2 h-64 overflow-y-auto pl-4"> {/* Columna de Egresos */}
-    <h4 className="font-bold">Egresos en Pesos:</h4>
-    <table className="w-full text-left mt-2">
-      <thead>
-        <tr className="bg-gray-200 dark:bg-gray-700">
-          <th className="px-3 py-1">Denom.</th>
-          <th className="px-3 py-1">Egreso</th>
-          <th className="px-3 py-1">Moneda</th>
-          <th className="px-3 py-1">SubRubro</th>
-        </tr>
-      </thead>
-      <tbody>
-        {estadoContable.listaEgresos
-          .filter((egreso) => egreso.tipoMoneda === "UR")
-          .map((egreso) => (
-            <tr key={egreso.id}>
-              <td className="px-3 py-1">{egreso.denominacion}</td>
-              <td className="px-3 py-1">{egreso.egreso}</td>
-              <td className="px-3 py-1">{egreso.tipoMoneda}</td>
-              <td className="px-3 py-1">{egreso.subRubro}</td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
+            <div className="overflow-y-auto pl-2 max-h-64">
+              <h4 className="font-bold text-base md:text-lg">Egresos en Pesos:</h4>
+              <table className="w-full text-left mt-2">
+                <thead>
+                  <tr className="bg-gray-200 dark:bg-gray-700">
+                    <th className="px-2 md:px-3 py-1">Denom.</th>
+                    <th className="px-2 md:px-3 py-1">Egreso</th>
+                    <th className="px-2 md:px-3 py-1">Moneda</th>
+                    <th className="px-2 md:px-3 py-1">SubRubro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {estadoContable.listaEgresos
+                    .filter((egreso) => egreso.tipoMoneda === "UYU")
+                    .map((egreso) => (
+                      <tr key={egreso.id}>
+                        <td className="px-2 md:px-3 py-1">{egreso.denominacion}</td>
+                        <td className="px-2 md:px-3 py-1">{egreso.egreso}</td>
+                        <td className="px-2 md:px-3 py-1">{egreso.tipoMoneda}</td>
+                        <td className="px-2 md:px-3 py-1">{egreso.subRubro}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
 
-    <h4 className="font-bold mt-4">Egresos en Dólares:</h4>
-    <table className="w-full text-left mt-2">
-      <thead>
-        <tr className="bg-gray-200 dark:bg-gray-700">
-          <th className="px-3 py-1">Denom.</th>
-          <th className="px-3 py-1">Egreso</th>
-          <th className="px-3 py-1">Moneda</th>
-          <th className="px-3 py-1">SubRubro</th>
-        </tr>
-      </thead>
-      <tbody>
-        {estadoContable.listaEgresos
-          .filter((egreso) => egreso.tipoMoneda === "USD")
-          .map((egreso) => (
-            <tr key={egreso.id}>
-              <td className="px-3 py-1">{egreso.denominacion}</td>
-              <td className="px-3 py-1">{egreso.egreso}</td>
-              <td className="px-3 py-1">{egreso.tipoMoneda}</td>
-              <td className="px-3 py-1">{egreso.subRubro}</td>
-            </tr>
-          ))}
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-            {/* Saldos finales */}
-            <div className="mt-6">
-              <p className="text-sm font-medium">
-                Saldo Final en Pesos: {estadoContable.saldoFinalEnPesos}
-              </p>
-              <p className="text-sm font-medium">
-                Saldo Final en Dólares: {estadoContable.saldoFinalEnDolares}
-              </p>
+              <h4 className="font-bold mt-4 text-base md:text-lg">Egresos en Dólares:</h4>
+              <table className="w-full text-left mt-2">
+                <thead>
+                  <tr className="bg-gray-200 dark:bg-gray-700">
+                    <th className="px-2 md:px-3 py-1">Denom.</th>
+                    <th className="px-2 md:px-3 py-1">Egreso</th>
+                    <th className="px-2 md:px-3 py-1">Moneda</th>
+                    <th className="px-2 md:px-3 py-1">SubRubro</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {estadoContable.listaEgresos
+                    .filter((egreso) => egreso.tipoMoneda === "USD")
+                    .map((egreso) => (
+                      <tr key={egreso.id}>
+                        <td className="px-2 md:px-3 py-1">{egreso.denominacion}</td>
+                        <td className="px-2 md:px-3 py-1">{egreso.egreso}</td>
+                        <td className="px-2 md:px-3 py-1">{egreso.tipoMoneda}</td>
+                        <td className="px-2 md:px-3 py-1">{egreso.subRubro}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
-          <div className="mt-8 flex justify-center">
-            <button
-              type="button"
-              className="inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-150 ease-in-out"
-              onClick={onClose}
-            >
-              Cerrar
-            </button>
+          <div className="mt-4">
+            <p className="text-sm md:text-base font-medium">
+              Saldo Final en Pesos: {estadoContable.saldoFinalEnPesos}
+            </p>
+            <p className="text-sm md:text-base font-medium">
+              Saldo Final en Dólares: {estadoContable.saldoFinalEnDolares}
+            </p>
+          </div>
 
-            {/* Botón para descargar el PDF */}
+          <div className="mt-6 flex justify-end">
             <PDFDownloadLink
               document={<MyDocument estadoContable={estadoContable} />}
               fileName="estado-contable.pdf"
             >
-              {({ loading }) =>
-                loading ? (
-                  <button
-                    type="button"
-                    className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-150 ease-in-out"
-                  >
-                    Generando PDF...
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="ml-4 inline-flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm sm:text-base font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all duration-150 ease-in-out"
-                  >
-                    Descargar PDF
-                  </button>
-                )
-              }
+              <button className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">
+                Descargar PDF
+              </button>
             </PDFDownloadLink>
+            <button
+              onClick={onClose}
+              className="ml-4 px-4 py-2 bg-gray-400 dark:bg-gray-600 text-white rounded-lg hover:bg-gray-500"
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       </div>

@@ -1,12 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Grid,
-  Divider,
-} from "@mui/material";
 import { MiembroContext } from "@/Provider/provider";
 import { getSocio } from "@/Api/api";
 
@@ -35,90 +27,50 @@ const DatosUsuario = () => {
   }, [cedulaSocio]);
 
   return (
-    <Card
-      elevation={1}
-      sx={{
-        py: 0,
-        overflow: "hidden",
-        position: "relative",
-        width: "100%",
-        height: "auto",
-      }}
-      className="bg-gray-900 dark:bg-white dark:text-black text-white"
-    >
-      <CardContent
-        sx={{ px: { xs: "10px", sm: "20px", height: "100%" } }}
-        className="dark:bg-white bg-dark dark:text-black text-white"
-      >
-        {datosUsuario && (
-          <Grid container spacing={3} justifyContent="space-between">
-            <Grid item xs={12} sm={6}>
-              <Box
-                sx={{ textAlign: { xs: "center", sm: "left" }, width: "100%" }}
-                className="dark:bg-white bg-dark dark:text-black text-white"
-              >
-                <Typography variant="h5" component="div" pb={3}>
-                  Datos del Socio
-                </Typography>
-                <Typography variant="body1">
-                  Nombre: {datosUsuario.nombreSocio}{" "}
-                  {datosUsuario.apellidoSocio}
-                </Typography>
-                <Divider />
-                <Typography variant="body1">
-                  C.I: {datosUsuario.cedulaSocio}
-                </Typography>
-                <Divider />
-                <Typography variant="body1">
-                  Fecha Ingreso: {datosUsuario.fechaIngreso}
-                </Typography>
-                <Divider />
-                <Typography variant="body1">
-                  Teléfono: {datosUsuario.telefono}
-                </Typography>
-                <Divider />
-                {datosUsuario.suplenteEntity && (
-                  <>
-                    <Typography variant="h6" component="div" pt={4} pb={2}>
-                      Datos del Suplente:
-                    </Typography>
-                    <Typography variant="body1">
-                      Nombre Suplente:{" "}
-                      {datosUsuario.suplenteEntity.nombreSuplente}{" "}
-                      {datosUsuario.suplenteEntity.apellidoSuplente}
-                    </Typography>
-                    <Typography variant="body1">
-                      C.I: {datosUsuario.suplenteEntity.cedulaSuplente}
-                    </Typography>
-                    <Typography variant="body1">
-                      Teléfono: {datosUsuario.suplenteEntity.telefonoSuplente}
-                    </Typography>
-                  </>
-                )}
-              </Box>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={5}
-              display="flex"
-              justifyContent={{ xs: "center", sm: "flex-end" }}
-            >
-              <Box mb="-30px" sx={{ width: "100%" }}>
-                <Typography
-                  variant="h6"
-                  component="div"
-                  pb={6}
-                  textAlign={{ xs: "center", sm: "right" }}
-                >
-                  Número Socio: {datosUsuario.nroSocio}
-                </Typography>
-              </Box>
-            </Grid>
-          </Grid>
-        )}
-      </CardContent>
-    </Card>
+    <div className="bg-white dark:bg-gray-900 text-black dark:text-white p-4 rounded-lg shadow-md">
+      <h2 className="text-2xl font-semibold mb-4">Datos de {datosUsuario.nombreSocio}{" "}{datosUsuario.apellidoSocio} </h2>
+      {datosUsuario && (
+        <div className="space-y-4">
+          <p>
+            <strong>NroSocio:</strong> {datosUsuario.nroSocio}
+          </p>
+          <hr className="border-gray-300 dark:border-gray-600" />
+          <p>
+            <strong>C.I:</strong> {datosUsuario.cedulaSocio}
+          </p>
+          <hr className="border-gray-300 dark:border-gray-600" />
+          <p>
+            <strong>Fecha Ingreso:</strong> {datosUsuario.fechaIngreso}
+          </p>
+          <hr className="border-gray-300 dark:border-gray-600" />
+          <p>
+            <strong>Teléfono:</strong> {datosUsuario.telefono}
+          </p>
+          <hr className="border-gray-300 dark:border-gray-600" />
+          {datosUsuario.suplenteEntity && (
+            <>
+              <h3 className="text-xl font-semibold mt-4">
+                Datos del Suplente:
+              </h3>
+              <p>
+                <strong>Nombre Suplente:</strong>{" "}
+                {datosUsuario.suplenteEntity.nombreSuplente}{" "}
+                {datosUsuario.suplenteEntity.apellidoSuplente}
+              </p>
+              <p>
+                <strong>C.I:</strong>{" "}
+                {datosUsuario.suplenteEntity.cedulaSuplente}
+              </p>
+              <p>
+                <strong>Teléfono:</strong>{" "}
+                {datosUsuario.suplenteEntity.telefonoSuplente}
+              </p>
+            </>
+          )}
+         
+        </div>
+      )}
+    </div>
   );
 };
 

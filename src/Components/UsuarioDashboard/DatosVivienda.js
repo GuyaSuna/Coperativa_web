@@ -1,12 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Divider,
-  CardMedia,
-} from "@mui/material";
 import { MiembroContext } from "@/Provider/provider";
 import { getViviendaPorSocio } from "@/Api/api";
 
@@ -25,9 +17,7 @@ const DatosVivienda = () => {
         const data = await getViviendaPorSocio(cedulaSocio);
         setDatoVivienda(data);
       } catch (error) {
-        console.error(
-          `An error has occurred in fetchVivienda: ${error.message}`
-        );
+        console.error(`An error has occurred in fetchVivienda: ${error.message}`);
       }
     };
 
@@ -37,30 +27,23 @@ const DatosVivienda = () => {
   }, [cedulaSocio]);
 
   return (
-    <Card sx={{ display: "flex", height: "100%", width: "100%" }}>
-      <Box
-        sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}
-        className="dark:bg-white bg-dark dark:text-black text-white"
-      >
-        <CardContent sx={{ flex: "1 0 auto" }}>
-          <Typography variant="h5" component="div" pb={3}>
-            Datos de la vivienda
-          </Typography>
-          <Typography variant="body1">
-            Nro Vivienda: {datoVivienda.nroVivienda}
-          </Typography>
-          <Divider />
-          <Typography variant="body1">
-            Cantidad Dormitorios: {datoVivienda.cantidadDormitorios}
-          </Typography>
-          <Divider />
-          <Typography variant="body1">
-            Valor de la Vivienda: {datoVivienda.valorVivienda}
-          </Typography>
-          <Divider />
-        </CardContent>
-      </Box>
-    </Card>
+    <div className="bg-white dark:bg-gray-900 text-black dark:text-white p-4 rounded-lg shadow-md flex-1 h-full">
+      <h2 className="text-2xl font-semibold mb-4">Datos de la Vivienda</h2>
+      <div className="space-y-4">
+        <p>
+          <strong>Nro Vivienda:</strong> {datoVivienda.nroVivienda || 'No disponible'}
+        </p>
+        <hr className="border-gray-300 dark:border-gray-600" />
+        <p>
+          <strong>Cantidad Dormitorios:</strong> {datoVivienda.cantidadDormitorios || 'No disponible'}
+        </p>
+        <hr className="border-gray-300 dark:border-gray-600" />
+        <p>
+          <strong>Valor de la Vivienda:</strong> {datoVivienda.valorVivienda || 'No disponible'}
+        </p>
+        <hr className="border-gray-300 dark:border-gray-600" />
+      </div>
+    </div>
   );
 };
 

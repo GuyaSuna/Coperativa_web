@@ -33,8 +33,6 @@ const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente })
   const { miembro, logoutMiembro } = useContext(MiembroContext);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [openSecondDropdown, setOpenSecondDropdown] = useState(null); 
-  const [openThirdDropdown, setOpenThirdDropdown] = useState(null);
 
   const { darkMode } = useTheme();
 
@@ -63,12 +61,6 @@ const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente })
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
 
-  const toggleSecondDropdown = () => {
-    setOpenSecondDropdown(!openSecondDropdown);
-  };
-  const toggleThirdDropdown = () => {
-    setOpenThirdDropdown(openThirdDropdown ? null : true); 
-  };
   const initial = miembroUsername.charAt(0).toUpperCase();
   return (
     <header className="h-16 flex justify-between w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">

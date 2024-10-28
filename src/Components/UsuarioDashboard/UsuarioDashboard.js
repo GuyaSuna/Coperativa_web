@@ -12,7 +12,7 @@ import DatosUsuario from "@/Components/UsuarioDashboard/DatosUsuario";
 import ListadoRecibosSocios from "@/Components/UsuarioDashboard/ListadoRecibosSocio";
 import DatosVivienda from "@/Components/UsuarioDashboard/DatosVivienda";
 
-const UsuarioDashboard = () => {
+const UsuarioDashboard = ({ur , setIdentificadorComponente}) => {
   return (
     <Box display="flex">
       <Box flexGrow={1} p={2}>
@@ -24,7 +24,7 @@ const UsuarioDashboard = () => {
             <DatosVivienda />
           </Grid>
           <Grid item xs={12}>
-            <ListadoRecibosSocios />
+            <ListadoRecibosSocios ur={ur} />
           </Grid>
         </Grid>
       </Box>

@@ -310,6 +310,7 @@ const ComponentesOrganizados = ({
     case 37: {
       return (
         <UsuarioDashboard
+          ur={ur}
           setIdentificadorComponente={setIdentificadorComponente}
         />
       );

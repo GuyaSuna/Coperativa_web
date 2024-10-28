@@ -20,7 +20,7 @@ export default function OrdenarPor({
   };
 
   return (
-    <div className="relative inline-block text-left z-50">
+    <div className="relative inline-block text-left z-10">
       <button
         type="button"
         onClick={handleToggleMenu}
