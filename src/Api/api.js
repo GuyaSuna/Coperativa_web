@@ -1,11 +1,10 @@
 import { getToken } from "./getToken";
 const URL = "http://localhost:5000";
 
-//logins 
+//logins
 
 const registerMaster = async (bodymaster) => {
   try {
-    
     const response = await fetch(`${URL}/auth/registerMaster`, {
       method: "POST",
       headers: {
@@ -16,7 +15,7 @@ const registerMaster = async (bodymaster) => {
 
     const contentType = response.headers.get("Content-Type");
     if (!contentType || !contentType.includes("application/json")) {
-      return null; 
+      return null;
     }
 
     const data = await response.json();
@@ -88,7 +87,6 @@ const LoginMaster = async (username, password) => {
 
     const data = await response.json();
 
-  
     if (data.token) {
       // Guardar el token en la cookie
       document.cookie = `token=${data.token}; path=/; max-age=${
@@ -107,7 +105,6 @@ const LoginMaster = async (username, password) => {
 
 const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
   try {
-
     const response = await fetch(
       `${URL}/auth/register/${cedulaSocio}/${idCooperativa}`,
       {
@@ -174,7 +171,6 @@ const getAllCooperativas = async () => {
     }
 
     const data = await response.json();
-   
 
     return data;
   } catch (error) {
@@ -185,7 +181,6 @@ const getAllCooperativas = async () => {
 
 const postCooperativa = async (cooperativaEntity) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/cooperativa`, {
       method: "POST",
@@ -302,8 +297,6 @@ const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
       throw new Error("The petition has failed, response isn't ok");
     }
 
-    
-
     const data = await response.json();
 
     return data;
@@ -380,7 +373,6 @@ const getAllSociosImpagos = async (idCooperativa) => {
 
 const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
   try {
-
     const token = getToken();
     const response = await fetch(
       `${URL}/socio/${nroVivienda}/${idCooperativa}`,
@@ -471,7 +463,6 @@ const deleteSocio = async (cedulaSocio, idCooperativa) => {
 // suplente
 const postSuplente = async (suplenteEntity, CedulaSocio) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
       method: "POST",
@@ -511,7 +502,6 @@ const getAllSuplentes = async () => {
     }
 
     const data = await response.json();
-
 
     return data;
   } catch (error) {
@@ -588,7 +578,7 @@ const updateSuplente = async (
       }),
     });
     const data = await response.json();
-    
+
     if (!response.ok) {
       throw new Error("Error al actualizar el suplente.");
     }
@@ -603,7 +593,6 @@ const updateSuplente = async (
 //vivienda
 const postVivienda = async (viviendaEntity, idCooperativa) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
       method: "POST",
@@ -629,7 +618,6 @@ const postVivienda = async (viviendaEntity, idCooperativa) => {
 
 const getVivienda = async (nroVivienda) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
       method: "GET",
@@ -653,7 +641,6 @@ const getVivienda = async (nroVivienda) => {
 };
 
 const getAllViviendas = async (idCooperativa) => {
-
   try {
     const token = getToken();
     const response = await fetch(
@@ -690,7 +677,6 @@ const updateVivienda = async (
   socio
 ) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/vivienda`, {
       method: "PUT",
@@ -782,9 +768,9 @@ const getCooperativaPorAdmin = async (id) => {
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
-   
+
     const data = await response.json();
- console.log(data)
+    console.log(data);
     return data;
   } catch (error) {
     console.error("Error en getCooperativasPorAdmin:", error);
@@ -796,7 +782,6 @@ const getCooperativaPorSocio = async (cedulaSocio) => {
   try {
     const response = await fetch(`${URL}/cooperativa/Socio/${cedulaSocio}`, {
       method: "GET",
- 
     });
 
     if (!response.ok) {
@@ -826,7 +811,6 @@ const getUr = async () => {
     // Verifica si la respuesta tiene contenido
     const responseText = await response.text();
 
-
     // Si la respuesta está vacía, maneja el caso
     if (!responseText) {
       throw new Error("La respuesta está vacía.");
@@ -834,7 +818,6 @@ const getUr = async () => {
 
     // Si la respuesta no es un JSON válido, lanza un error
     const data = JSON.parse(responseText);
-
 
     if (!response.ok) {
       throw new Error("La petición ha fallado, el response no es 'ok'");
@@ -850,8 +833,6 @@ const getUr = async () => {
 const getAllRecibos = async (id) => {
   try {
     const token = getToken();
-  
-  
 
     const response = await fetch(
       `${URL}/recibo/getAllRecibosPorCooperativa/${id}`,
@@ -962,7 +943,6 @@ const postRecibo = async (
       !contentType ||
       !contentType.includes("application/json")
     ) {
-     
       return null;
     }
 
@@ -994,7 +974,6 @@ const getAllRecibosPorSocio = async (cedulaSocio) => {
     }
 
     const data = await response.json();
-   
 
     return data;
   } catch (error) {
@@ -1023,7 +1002,6 @@ const getAllAvisosPorUsuario = async (idUsuario) => {
     }
 
     const data = await response.json();
-   
 
     return data;
   } catch (error) {
@@ -1034,7 +1012,6 @@ const getAllAvisosPorUsuario = async (idUsuario) => {
 
 const postAviso = async (aviso, idAdmin, idUsuario) => {
   try {
-  
     const token = getToken();
     const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
       method: "POST",
@@ -1060,7 +1037,6 @@ const postAviso = async (aviso, idAdmin, idUsuario) => {
 
 const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
   try {
-  
     const token = getToken();
     const response = await fetch(
       `${URL}/aviso/All/${idAdmin}/${idCooperativa}`,
@@ -1090,7 +1066,6 @@ const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
 // usuario
 const postUsuario = async (usuarioEntity) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/usuario`, {
       method: "POST",
@@ -1161,7 +1136,6 @@ const deleteUsuario = async (idMiembro) => {
 //Subsidio
 const postSubsidio = async (subsidioEntity) => {
   try {
-   
     const token = getToken();
     const response = await fetch(`${URL}/subsidio`, {
       method: "POST",
@@ -1199,7 +1173,6 @@ const getAllSubsidios = async () => {
     }
 
     const data = await response.json();
-  
 
     return data;
   } catch (error) {
@@ -1220,7 +1193,6 @@ const updateSubsidio = async (
   socio
 ) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/subsidio`, {
       method: "PUT",
@@ -1360,7 +1332,6 @@ const getAllReajustes = async (idCooperativa) => {
 
 const postReajuste = async (reajuste, idCooperativa) => {
   try {
-
     const token = getToken();
     const response = await fetch(`${URL}/reajuste/${idCooperativa}`, {
       method: "POST",
@@ -1415,7 +1386,6 @@ const getUltimoReajuste = async () => {
 };
 
 const postConvenio = async (convenio, cedulaSocio, idCooperativa) => {
-
   try {
     const token = getToken();
     const response = await fetch(
@@ -1456,7 +1426,7 @@ const getConvenioById = async (idConvenio) => {
 
     const contentType = response.headers.get("Content-Type");
     if (!contentType || !contentType.includes("application/json")) {
-      return null; 
+      return null;
     }
 
     if (!response.ok) {
@@ -1505,7 +1475,6 @@ const getConveniosVigenteSocio = async (cedulaSocio) => {
     return null;
   }
 };
-
 
 const postIngreso = async (ingreso) => {
   try {
@@ -1598,7 +1567,6 @@ const getAllIngresos = async (idCooperativa) => {
     }
 
     const data = await response.json();
-   
 
     return data;
   } catch (error) {
@@ -1624,7 +1592,6 @@ const getAllIngresosByMes = async (fecha, idCooperativa) => {
     }
 
     const data = await response.json();
-    
 
     return data;
   } catch (error) {
@@ -1664,7 +1631,6 @@ const updateConvenio = async (convenioEntity) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(convenioEntity),
-
     });
     const data = await response.json();
     if (!response.ok) {
@@ -1696,7 +1662,6 @@ const getAllConvenios = async (idCooperativa) => {
     }
 
     const data = await response.json();
-  
 
     return data;
   } catch (error) {
@@ -1708,7 +1673,7 @@ const getAllConvenios = async (idCooperativa) => {
 const postEgreso = async (egreso) => {
   try {
     const token = getToken();
-    
+
     const response = await fetch(`${URL}/egresos`, {
       method: "POST",
       headers: {
@@ -1794,7 +1759,7 @@ const getAllEgresos = async (idCooperativa) => {
     }
 
     const data = await response.json();
-  
+
     return data;
   } catch (error) {
     console.error("Error en getAllEgresos:", error);
@@ -1804,7 +1769,6 @@ const getAllEgresos = async (idCooperativa) => {
 
 const getAllEgresosByMes = async (fecha, idCooperativa) => {
   const fullUrl = `${URL}/egresos/allEgresosByMes/${fecha}/${idCooperativa}`;
-
 
   try {
     const token = getToken();
@@ -1820,7 +1784,6 @@ const getAllEgresosByMes = async (fecha, idCooperativa) => {
     }
 
     const data = await response.json();
-    
 
     return data;
   } catch (error) {
@@ -1881,7 +1844,6 @@ const postEstadoContable = async (estadoContableEntity, idCooperativa) => {
 
 const getAllEstadosContables = async () => {
   try {
-   
     const token = getToken();
     const response = await fetch(`${URL}/estadoContable/allEstadosContables`, {
       method: "GET",
@@ -1895,7 +1857,6 @@ const getAllEstadosContables = async () => {
     }
 
     const data = await response.json();
-   
 
     return data;
   } catch (error) {
@@ -1908,9 +1869,8 @@ const getAllEstadosContables = async () => {
 
 const getInteresAnual = async (fecha, idCooperativa) => {
   try {
-  
     const token = getToken();
-    
+
     const response = await fetch(
       `${URL}/interesAnual/${fecha}/${idCooperativa}`,
       {
@@ -1950,7 +1910,7 @@ const loginMaster = async (MasterData) => {
       throw new Error("The petition has failed, response isn't ok");
     }
     const data = await response.json();
-  
+
     if (data.token) {
       document.cookie = `token=${data.token}; path=/; max-age=1440`;
     } else {
@@ -1979,7 +1939,6 @@ const postDevolucionCapital = async (devolucionCapital) => {
       throw new Error("The petition has failed, response isn't ok");
     }
 
-  
     const data = await response.json();
 
     return data;
@@ -1993,7 +1952,6 @@ const postBalanceAnual = async (fecha, idCooperativa) => {
   try {
     const token = getToken();
     const fechaISO = fecha.toISOString().split("T")[0];
-
 
     const response = await fetch(
       `${URL}/balanceAnual/${fechaISO}/${idCooperativa}`,
@@ -2022,7 +1980,6 @@ const postBalanceAnual = async (fecha, idCooperativa) => {
 
 const getBalanceAnual = async (idBalance) => {
   try {
-
     const token = getToken();
 
     const response = await fetch(`${URL}/balanceAnual/${idBalance}`, {
@@ -2133,6 +2090,15 @@ const getUltimoEstadoContable = async () => {
       }
     );
 
+    const contentType = response.headers.get("Content-Type");
+    if (
+      response.status === 204 ||
+      !contentType ||
+      !contentType.includes("application/json")
+    ) {
+      return null;
+    }
+
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -2162,7 +2128,6 @@ const getAllInteresAnual = async (idCooperativa) => {
 
     // Verifica el estado de la respuesta
 
-
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
     }
@@ -2170,7 +2135,6 @@ const getAllInteresAnual = async (idCooperativa) => {
     const data = await response.json();
 
     // Verifica los datos que se han recibido
-
 
     return data;
   } catch (error) {
@@ -2202,16 +2166,18 @@ const deleteRecibo = async (nroRecibo) => {
 };
 const getUltimoBalanceAnual = async (idCooperativa) => {
   try {
-  
     const token = getToken();
-    const response = await fetch(`${URL}/balanceAnual/ultimo/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    if(response == null){
+    const response = await fetch(
+      `${URL}/balanceAnual/ultimo/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response == null) {
       return response;
     }
     if (!response.ok) {
@@ -2255,7 +2221,6 @@ const updateUser = async (UpdateUserRequest, cedulaSocio, idCooperativa) => {
     throw new Error("Error updating user");
   }
 };
-
 
 const postDevolucion = async (devolucion) => {
   try {
@@ -2310,16 +2275,13 @@ const getAlldevoluciones = async (idCooperativa) => {
 const getDevolucion = async (idDevolucion) => {
   try {
     const token = getToken();
-    const response = await fetch(
-      `${URL}/devolucion/${idDevolucion}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${URL}/devolucion/${idDevolucion}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -2337,16 +2299,13 @@ const getDevolucion = async (idDevolucion) => {
 const getDevolucionBySocio = async (cedulaSocio) => {
   try {
     const token = getToken();
-    const response = await fetch(
-      `${URL}/devolucion/socio/${cedulaSocio}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${URL}/devolucion/socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -2358,7 +2317,6 @@ const getDevolucionBySocio = async (cedulaSocio) => {
       !contentType ||
       !contentType.includes("application/json")
     ) {
-     
       return null;
     }
 
@@ -2371,12 +2329,12 @@ const getDevolucionBySocio = async (cedulaSocio) => {
   }
 };
 
-
 const updateDevolucion = async (devolucion) => {
   try {
-    console.log("API" , devolucion)
+    console.log("API", devolucion);
     const token = getToken();
-    const response = await fetch(`${URL}/devolucion`,
+    const response = await fetch(
+      `${URL}/devolucion`,
 
       {
         method: "PUT",
@@ -2498,7 +2456,8 @@ const getAllRecargos = async (idCooperativa) => {
 const updateRecargo = async (recargo) => {
   try {
     const token = getToken();
-    const response = await fetch(`${URL}/recargo`,
+    const response = await fetch(
+      `${URL}/recargo`,
 
       {
         method: "PUT",
@@ -2526,16 +2485,13 @@ const updateRecargo = async (recargo) => {
 const getRecargo = async (idRecargo) => {
   try {
     const token = getToken();
-    const response = await fetch(
-      `${URL}/recargo/${idRecargo}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${URL}/recargo/${idRecargo}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -2553,16 +2509,13 @@ const getRecargo = async (idRecargo) => {
 const getRecargoBySocio = async (cedulaSocio) => {
   try {
     const token = getToken();
-    const response = await fetch(
-      `${URL}/recargo/socio/${cedulaSocio}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await fetch(`${URL}/recargo/socio/${cedulaSocio}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
 
     if (!response.ok) {
       throw new Error("The petition has failed, response isn't ok");
@@ -2574,7 +2527,6 @@ const getRecargoBySocio = async (cedulaSocio) => {
       !contentType ||
       !contentType.includes("application/json")
     ) {
-     
       return null;
     }
 

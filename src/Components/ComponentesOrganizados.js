@@ -71,8 +71,8 @@ const ComponentesOrganizados = ({
   const [egreso, setEgreso] = useState({});
   const [convenio, setConvenio] = useState({});
   const [cooperativa, setCooperativa] = useState({});
-  const [IdDevolucion , setIdDevolucion] = useState(0);
-  const [idRecargo , setIdRecargo] = useState(0);
+  const [IdDevolucion, setIdDevolucion] = useState(0);
+  const [idRecargo, setIdRecargo] = useState(0);
 
   //Cambiar a futuro esto jaja
   //utilizar diferentes rutas
@@ -107,7 +107,12 @@ const ComponentesOrganizados = ({
       );
     }
     case 4: {
-      return <ModificarSocio socio={socio} />;
+      return (
+        <ModificarSocio
+          socio={socio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
     case 5: {
       return <ModificarVivienda nroViviendaParam={nroVivienda} />;
@@ -140,7 +145,12 @@ const ComponentesOrganizados = ({
       );
     }
     case 10: {
-      return <ModificarSuplente setIdentificadorComponente={setIdentificadorComponente} suplenteParam={suplente} />;
+      return (
+        <ModificarSuplente
+          setIdentificadorComponente={setIdentificadorComponente}
+          suplenteParam={suplente}
+        />
+      );
     }
     case 11: {
       return (
@@ -159,7 +169,9 @@ const ComponentesOrganizados = ({
       );
     }
     case 13: {
-      return <AltaUsuario setIdentificadorComponente={setIdentificadorComponente}/>;
+      return (
+        <AltaUsuario setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
     case 14: {
       return (
@@ -371,26 +383,56 @@ const ComponentesOrganizados = ({
       return <ModificarUsuario usuario={usuario} />;
     }
     case 46: {
-      return <AltaDevolucion  setIdentificadorComponente={setIdentificadorComponente}/>;
+      return (
+        <AltaDevolucion
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
     case 47: {
-      return <ListadoDevoluciones setIdentificadorComponente={setIdentificadorComponente} 
-      setIdDevolucion={setIdDevolucion}/>;
+      return (
+        <ListadoDevoluciones
+          setIdentificadorComponente={setIdentificadorComponente}
+          setIdDevolucion={setIdDevolucion}
+        />
+      );
     }
     case 48: {
-      return <ModificarDevolucion idDevolucionParam={IdDevolucion} setIdentificadorComponente={setIdentificadorComponente}/>;
+      return (
+        <ModificarDevolucion
+          idDevolucionParam={IdDevolucion}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
-    case 49:{
-      return <AltaRecargo setIdentificadorComponente={setIdentificadorComponente} />
+    case 49: {
+      return (
+        <AltaRecargo setIdentificadorComponente={setIdentificadorComponente} />
+      );
     }
-    case 50 : {
-      return <ListadoRecargos setIdRecargo={setIdRecargo} setIdentificadorComponente={setIdentificadorComponente} />
+    case 50: {
+      return (
+        <ListadoRecargos
+          setIdRecargo={setIdRecargo}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
     case 51: {
-      return <ModificarRecargo setIdentificadorComponente={setIdentificadorComponente} idRecargoParam={idRecargo}/>
+      return (
+        <ModificarRecargo
+          setIdentificadorComponente={setIdentificadorComponente}
+          idRecargoParam={idRecargo}
+        />
+      );
     }
     case 52: {
-      return <UpdateConvenio convenio={convenio} setIdentificadorComponente={setIdentificadorComponente}/>
+      return (
+        <UpdateConvenio
+          convenio={convenio}
+          setIdentificadorComponente={setIdentificadorComponente}
+        />
+      );
     }
   }
 };

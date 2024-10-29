@@ -63,7 +63,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
   };
 
   const handleModificar = (convenio) => {
-    setConvenio(convenio)
+    setConvenio(convenio);
     setIdentificadorComponente(52);
   };
 
@@ -214,7 +214,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">Socio: </span>
-                  {convenio.socio.nombreSocio}
+                  {convenio.socio.nombreSocio} {convenio.socio.apellidoSocio}
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
                   <button
@@ -260,9 +260,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                           </MenuItem>
                           <MenuItem>
                             <button
-                              onClick={() =>
-                                handleModificar(convenio)
-                              }
+                              onClick={() => handleModificar(convenio)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Modificar

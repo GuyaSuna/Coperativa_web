@@ -25,8 +25,13 @@ const InformesUsuario = ({}) => {
   }, []);
 
   const handleVerEstadoContable = (estadoContable) => {
-    setEstadoContableSeleccionado(estadoContable);
-    setIsModalOpen(true);
+    console.log("estado contable", estadoContable);
+    if (estadoContable != null) {
+      setEstadoContableSeleccionado(estadoContable);
+      setIsModalOpen(true);
+    } else {
+      alert("No se encontraron Estados Contables");
+    }
   };
 
   const fetchUltimoEstadoContable = async () => {
@@ -112,7 +117,7 @@ const InformesUsuario = ({}) => {
 
     const fechaBalance = new Date(fechaBalanceAnual + "T00:00:00");
     const doc = new jsPDF();
-  
+
     doc.setFontSize(18);
     doc.text(`Balance Anual - ${cooperativaEntity.nombre}`, 14, 22);
 

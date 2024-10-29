@@ -623,7 +623,7 @@ const AltaRecibo = ({ Socio, ur, setComponenenteIndentificador }) => {
               className="block text-sm font-medium mb-2"
               htmlFor="cuotaMensual"
             >
-              Cuota Mensual:
+              Cuota Mensual Total:
             </label>
             <input
               type="number"
