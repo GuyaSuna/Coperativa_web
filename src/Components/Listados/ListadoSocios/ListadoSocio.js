@@ -358,12 +358,16 @@ const ListadoSocio = ({
                           <circle cx={5} cy={12} r={1} />
                         </svg>
                       </MenuButton>
-                      <MenuItems className="absolute right-0 mt-2 w-36 origin-top-right bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <MenuItems
+                        transition
+                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+                      >
+                        {" "}
                         {socio.archivado ? (
                           <>
                             <MenuItem>
                               <button
-                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-700"
                                 onClick={() => handleDevolucionCapital(socio)}
                               >
                                 Asignar devolución de capital
@@ -371,7 +375,7 @@ const ListadoSocio = ({
                             </MenuItem>
                             <MenuItem>
                               <button
-                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-700"
                                 onClick={() => handlePagoDevolucion(socio)}
                               >
                                 Pagar devolución
@@ -385,7 +389,7 @@ const ListadoSocio = ({
                                 miembro.responseBody.socio.cedulaSocio && (
                                 <MenuItem>
                                   <button
-                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                    className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-700"
                                     onClick={() => handleArchivar(socio)}
                                   >
                                     Archivar
@@ -395,7 +399,7 @@ const ListadoSocio = ({
 
                             <MenuItem>
                               <button
-                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-700"
                                 onClick={() => handleModificarSocio(socio)}
                               >
                                 Modificar
@@ -403,7 +407,7 @@ const ListadoSocio = ({
                             </MenuItem>
                             <MenuItem>
                               <button
-                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-900 dark:text-gray-300"
+                                className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-700"
                                 onClick={() => handleCrearRecibo(socio)}
                               >
                                 Crear Recibo

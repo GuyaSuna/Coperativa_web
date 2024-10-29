@@ -667,15 +667,7 @@ const getAllViviendas = async (idCooperativa) => {
   }
 };
 
-const updateVivienda = async (
-  idVivienda,
-  nroVivienda,
-  listaAntiguosTitulares,
-  cantidadDormitorios,
-  cooperativaEntity,
-  valorVivienda,
-  socio
-) => {
+const updateVivienda = async (vivienda) => {
   try {
     const token = getToken();
     const response = await fetch(`${URL}/vivienda`, {
@@ -684,15 +676,7 @@ const updateVivienda = async (
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        idVivienda,
-        nroVivienda,
-        socio,
-        listaAntiguosTitulares,
-        cantidadDormitorios,
-        cooperativaEntity,
-        valorVivienda,
-      }),
+      body: JSON.stringify(vivienda),
     });
     const data = await response.json();
 

@@ -38,8 +38,9 @@ const ListadoViviendas = ({
     }
   };
 
-  const handleModificar = (nroVivienda) => {
-    setNroVivienda(nroVivienda);
+  const handleModificar = (idVivienda) => {
+    console.log(idVivienda);
+    setNroVivienda(idVivienda);
     setIdentificadorComponente(5);
   };
   const handleVerDetalles = (vivienda) => {
@@ -239,7 +240,7 @@ const ListadoViviendas = ({
                           <MenuItem>
                             <button
                               onClick={() =>
-                                handleModificar(vivienda.nroVivienda)
+                                handleModificar(vivienda.idVivienda)
                               }
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
