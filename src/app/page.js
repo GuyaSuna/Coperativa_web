@@ -16,27 +16,26 @@ const Home = () => {
   const { loginMiembro } = useContext(MiembroContext);
   const { login } = useSession();
 
-  
   useEffect(() => {
     const bodyMaster = {
-      username : "Admin",
-      lastname : "Pages" ,
-      firstname : "Admin",
-      password : 1234 ,
-      role : "MASTER"
-    }
+      username: "Admin",
+      lastname: "Pages",
+      firstname: "Admin",
+      password: 1234,
+      role: "MASTER",
+    };
 
     const responseMaster = registerMaster(bodyMaster);
-  },[])
+  }, []);
 
   if (!login) {
     console.error("El contexto de sesión no está disponible.");
-    return null; 
+    return null;
   }
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState(""); // Estado para manejar los mensajes de error
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
@@ -48,7 +47,6 @@ const Home = () => {
         return;
       }
 
-      // Verifica si el rol es de administrador
       if (RequestLogin.responseBody.role !== "ADMIN") {
         setErrorMessage("Las credenciales no corresponden a un administrador.");
         return;
