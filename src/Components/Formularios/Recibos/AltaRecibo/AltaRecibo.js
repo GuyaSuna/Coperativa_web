@@ -23,7 +23,7 @@ import { MiembroContext } from "@/Provider/provider";
 import { Recargo } from "@/Calculos/Calculos.js";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
-const AltaRecibo = ({ Socio, ur }) => {
+const AltaRecibo = ({ Socio, ur, setComponenenteIndentificador }) => {
   const router = useRouter();
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [fechaEmision, setFechaEmision] = useState();
@@ -46,10 +46,10 @@ const AltaRecibo = ({ Socio, ur }) => {
   const [Errores, setErrores] = useState({});
   const [vivienda, setVivienda] = useState({});
   const [ingreso, setIngreso] = useState(null);
-  const [egreso , setEgreso ] = useState(null);
+  const [egreso, setEgreso] = useState(null);
   const [valorConvenio, setValorCovenio] = useState(0);
   const [mostrarModal, setMostrarModal] = useState(false);
-  const [devolucion , setDevolucion] = useState(null);
+  const [devolucion, setDevolucion] = useState(null);
   const [recargoExtraordinario, setRecargoExtraordinario] = useState(null);
   //Nahuel- va en altaRecibo la peticion de ur
 
@@ -80,17 +80,16 @@ const AltaRecibo = ({ Socio, ur }) => {
     });
   }, []);
 
-  const fetchRecargoExtraordinario = async () =>{
+  const fetchRecargoExtraordinario = async () => {
     const response = await getRecargoBySocio(Socio.cedulaSocio);
-    console.log("RECARGO OBTENIDO" , response);
-    setRecargoExtraordinario(response)
-  }
+    console.log("RECARGO OBTENIDO", response);
+    setRecargoExtraordinario(response);
+  };
   const fetchDevolucion = async () => {
     const response = await getDevolucionBySocio(Socio.cedulaSocio);
     console.log("Devolucion obtenida:", response);
     setDevolucion(response);
-  }
-  
+  };
 
   useEffect(() => {
     fetchReajusteAnual();
@@ -156,7 +155,7 @@ const AltaRecibo = ({ Socio, ur }) => {
   useEffect(() => {
     const pagoDevolucion = Number(devolucion?.pagoDevolucion) || 0;
     const pagoRecargo = Number(recargoExtraordinario?.pagoRecargo) || 0;
-  
+
     if (devolucion != null && recargoExtraordinario != null) {
       setValorVivienda(vivienda.valorVivienda + (pagoDevolucion + pagoRecargo));
     } else if (devolucion != null && recargoExtraordinario == null) {
@@ -167,9 +166,6 @@ const AltaRecibo = ({ Socio, ur }) => {
       setValorVivienda(vivienda.valorVivienda);
     }
   }, [vivienda, devolucion, recargoExtraordinario]);
-  
-  
-  
 
   useEffect(() => {
     let valorDormitorios;
@@ -208,7 +204,6 @@ const AltaRecibo = ({ Socio, ur }) => {
     valorEnLetras = valorEnLetras.replace("00/100 M.N.", "");
     setSumaPesos(valorEnLetras);
   }, [valorVivienda, reajuste, subsidio, convenios]);
-
 
   //Cambiar esta funcion por una de traer vivienda por socio
   const fetchCalculos = async () => {
@@ -268,7 +263,6 @@ const AltaRecibo = ({ Socio, ur }) => {
 
     e.preventDefault();
 
-
     if (!validarFormulario()) return;
 
     try {
@@ -288,8 +282,8 @@ const AltaRecibo = ({ Socio, ur }) => {
       );
 
       if (response && response.error) {
-        alert(response.error); 
-        return; 
+        alert(response.error);
+        return;
       }
       let fechaActual = new Date();
       const ingreso = {
@@ -305,12 +299,11 @@ const AltaRecibo = ({ Socio, ur }) => {
         const IngresoResponse = await postIngreso(ingreso);
 
         setIngreso(IngresoResponse);
-        alert("Dado de alta correctamente");
       } catch (error) {
         console.error("Error en el ingreso:", error.message);
         alert("Error al dar de alta el ingreso.");
       }
-      if(devolucion != null){
+      if (devolucion != null) {
         let egreso = {
           subRubro: "Otros",
           denominacion: `Recibo dado de alta el ${fechaEmision}`,
@@ -318,15 +311,15 @@ const AltaRecibo = ({ Socio, ur }) => {
           cooperativaEntity: cooperativa,
           tipoMoneda: "UYU",
           fechaDatosContables: fechaActual,
-        }
+        };
         try {
           const egresoResponse = await postEgreso(egreso);
-          setEgreso(egresoResponse)
+          setEgreso(egresoResponse);
         } catch (error) {
           console.error("Error en el ingreso:", error.message);
           alert("Error al dar de alta el ingreso.");
         }
-    }
+      }
     } catch (error) {
       console.error("Error al enviar los datos del recibo:", error);
       alert("Error al dar de alta el recibo. Por favor, intenta nuevamente.");
@@ -338,24 +331,27 @@ const AltaRecibo = ({ Socio, ur }) => {
   }, [ingreso]);
 
   useEffect(() => {
-    if(devolucion != null){
-          DevolucionUpdate();
+    if (devolucion != null) {
+      DevolucionUpdate();
     }
   }, [egreso]);
 
-  const DevolucionUpdate = async () =>{
-    const devolucionModificar = { ...devolucion }; 
+  const DevolucionUpdate = async () => {
+    const devolucionModificar = { ...devolucion };
 
-  devolucionModificar.totalDevolucionUr -= devolucionModificar.pagoDevolucion;
-  devolucionModificar.vigenciaEnRecibos -= 1;
+    devolucionModificar.totalDevolucionUr -= devolucionModificar.pagoDevolucion;
+    devolucionModificar.vigenciaEnRecibos -= 1;
 
-  try {
-    const responseDev = await updateDevolucion(devolucionModificar);
-    console.log("Respuesta de la actualización de la devolución:", responseDev);
-  } catch (error) {
-    console.error("Error al actualizar la devolución:", error);
-  }
-  }
+    try {
+      const responseDev = await updateDevolucion(devolucionModificar);
+      console.log(
+        "Respuesta de la actualización de la devolución:",
+        responseDev
+      );
+    } catch (error) {
+      console.error("Error al actualizar la devolución:", error);
+    }
+  };
 
   const automaticUpdate = async () => {
     let socioActualizar = Socio;
