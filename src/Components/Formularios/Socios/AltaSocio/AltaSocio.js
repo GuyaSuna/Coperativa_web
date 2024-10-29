@@ -28,9 +28,8 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
-  const [mostrarModal, setMostrarModal] = useState(false); 
-  const [isConfirmed, setIsConfirmed] = useState(false); 
-
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -41,7 +40,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const fetchViviendasDisponibles = async () => {
     try {
       const response = await getAllViviendas(cooperativa.idCooperativa);
- 
+
       let viviendasDisponibles = [];
       response.forEach((vivienda) => {
         if (vivienda.socio == null) {
@@ -49,7 +48,6 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
         }
       });
       setViviendasDisponibles(viviendasDisponibles);
-  
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
@@ -110,20 +108,21 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const handleChangeTieneSuplente = (e) => {
     setTieneSuplente(e.target.checked);
   };
+
   const validarFormulario = () => {
     const errores = {};
-  
+
     const socioExistente = cooperativa.listaSocios.find(
       (socio) => socio.nroSocio == NroSocio && socio.archivado == false
     );
-  
-    if (!CedulaSocio) {
+
+    if (!CedulaSocio || CedulaSocio.trim() === "") {
       errores.cedulaSocio = "La cédula es obligatoria";
     } else if (isNaN(CedulaSocio)) {
       errores.cedulaSocio = "La cédula debe ser un número";
     }
-  
-    if (!NroSocio) {
+
+    if (!NroSocio || NroSocio.trim() === "") {
       errores.nroSocio = "El número de socio es obligatorio";
     } else if (isNaN(NroSocio)) {
       errores.nroSocio = "El número de socio debe ser un número";
@@ -134,87 +133,90 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     }
 
     const regexLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
-  
-    if (!NombreSocio) {
+
+    if (!NombreSocio || NombreSocio.trim() === "") {
       errores.nombreSocio = "El nombre es obligatorio";
     } else if (!regexLetras.test(NombreSocio)) {
       errores.nombreSocio = "El nombre solo debe contener letras y espacios";
     }
-  
-    if (!ApellidoSocio) {
+
+    if (!ApellidoSocio || ApellidoSocio.trim() === "") {
       errores.apellidoSocio = "El apellido es obligatorio";
     } else if (!regexLetras.test(ApellidoSocio)) {
-      errores.apellidoSocio = "El apellido solo debe contener letras y espacios";
+      errores.apellidoSocio =
+        "El apellido solo debe contener letras y espacios";
     }
-  
-    if (!TelefonoSocio) {
+
+    if (!TelefonoSocio || TelefonoSocio.trim() === "") {
       errores.telefonoSocio = "El teléfono es obligatorio";
     } else if (isNaN(TelefonoSocio)) {
       errores.telefonoSocio = "El teléfono debe ser un número";
     }
-  
-    if (!CapitalSocio) {
+
+    if (!CapitalSocio || CapitalSocio.trim() === "") {
       errores.capitalSocio = "El capital es obligatorio";
     } else if (isNaN(CapitalSocio)) {
       errores.capitalSocio = "El capital debe ser un número";
     }
-  
+
     if (!FechaIngresoCooperativa) {
       errores.fechaIngresoCooperativa = "La fecha de ingreso es obligatoria";
     } else {
       const fechaIngreso = new Date(FechaIngresoCooperativa);
       const fechaHoy = new Date();
-  
+
       if (fechaIngreso > fechaHoy) {
-        errores.fechaIngresoCooperativa = "La fecha de ingreso no puede ser mayor a la fecha actual";
+        errores.fechaIngresoCooperativa =
+          "La fecha de ingreso no puede ser mayor a la fecha actual";
       }
     }
-  
+
     if (!SeleccionVivienda) {
       errores.seleccionVivienda = "La selección de vivienda es obligatoria";
     }
-  
+
     if (TieneSuplente) {
-      if (!CedulaSuplente) {
+      if (!CedulaSuplente || CedulaSuplente.trim() === "") {
         errores.cedulaSuplente = "La cédula del suplente es obligatoria";
       } else if (isNaN(CedulaSuplente)) {
         errores.cedulaSuplente = "La cédula del suplente debe ser un número";
       }
-  
-      if (!NombreSuplente) {
+
+      if (!NombreSuplente || NombreSuplente.trim() === "") {
         errores.nombreSuplente = "El nombre del suplente es obligatorio";
       } else if (!regexLetras.test(NombreSuplente)) {
-        errores.nombreSuplente = "El nombre del suplente solo debe contener letras y espacios";
+        errores.nombreSuplente =
+          "El nombre del suplente solo debe contener letras y espacios";
       }
-  
-      if (!ApellidoSuplente) {
+
+      if (!ApellidoSuplente || ApellidoSuplente.trim() === "") {
         errores.apellidoSuplente = "El apellido del suplente es obligatorio";
       } else if (!regexLetras.test(ApellidoSuplente)) {
-        errores.apellidoSuplente = "El apellido del suplente solo debe contener letras y espacios";
+        errores.apellidoSuplente =
+          "El apellido del suplente solo debe contener letras y espacios";
       }
-  
-      if (!TelefonoSuplente) {
+
+      if (!TelefonoSuplente || TelefonoSuplente.trim() === "") {
         errores.telefonoSuplente = "El teléfono del suplente es obligatorio";
       } else if (isNaN(TelefonoSuplente)) {
-        errores.telefonoSuplente = "El teléfono del suplente debe ser un número";
+        errores.telefonoSuplente =
+          "El teléfono del suplente debe ser un número";
       } else if (TelefonoSuplente < 1) {
-        errores.telefonoSuplente = "El teléfono del suplente no puede ser un valor negativo";
+        errores.telefonoSuplente =
+          "El teléfono del suplente no puede ser un valor negativo";
       }
     }
-  
+
     setErrores(errores);
-  
+
     return Object.keys(errores).length === 0;
   };
-  
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validarFormulario()) return;
 
-    
     setMostrarModal(true);
   };
 
@@ -241,7 +243,6 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
     };
 
     try {
- 
       const response = await postSocio(
         SocioData,
         SeleccionVivienda,
@@ -253,10 +254,9 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
 
       if (TieneSuplente) {
         const responseSuplente = await postSuplente(SuplenteData, CedulaSocio);
-
       }
 
-      setIdentificadorComponente(0); 
+      setIdentificadorComponente(0);
     } catch (error) {
       console.error("Error al enviar los datos del socio:", error);
     }
@@ -378,7 +378,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
               className="block text-sm font-medium mb-2"
               htmlFor="capitalSocio"
             >
-              Capital:
+              Capital UR:
             </label>
             <input
               type="text"
@@ -416,7 +416,7 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
             )}
           </div>
         </div>
-      
+
         <div className="mb-4">
           <label
             className="block text-sm font-medium mb-2"
