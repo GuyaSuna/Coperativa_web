@@ -24,10 +24,14 @@ import {
   FaHouseUser,
   FaClipboardList,
 } from "react-icons/fa";
-import { useTheme } from "../Provider/ThemeProvider"; 
+import { useTheme } from "../Provider/ThemeProvider";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente }) => {
+const Header = ({
+  selectedOption,
+  setSelectedOption,
+  setIdentificadorComponente,
+}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [miembroUsername, setMiembroUsername] = useState("");
   const { miembro, logoutMiembro } = useContext(MiembroContext);
@@ -66,7 +70,8 @@ const Header = ({ selectedOption,setSelectedOption,setIdentificadorComponente })
     <header className="h-16 flex justify-between w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
       <div className="flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <button
-          className="lg:hidden text-white focus:outline-none"
+          className="lg:hidden dark:text-white text-dark
+           focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <svg
