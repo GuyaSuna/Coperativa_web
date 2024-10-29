@@ -51,7 +51,6 @@ const MyDocument = ({ estadoContable }) => (
       </Text>
     </View>
 
-    {/* Ingresos en Pesos */}
     <View style={styles.section}>
       <Text style={styles.text}>Ingresos en Pesos:</Text>
       <View style={styles.table}>
@@ -74,7 +73,6 @@ const MyDocument = ({ estadoContable }) => (
       </View>
     </View>
 
-    {/* Ingresos en Dólares */}
     <View style={styles.section}>
       <Text style={styles.text}>Ingresos en Dólares:</Text>
       <View style={styles.table}>
@@ -97,7 +95,6 @@ const MyDocument = ({ estadoContable }) => (
       </View>
     </View>
 
-    {/* Egresos en Pesos */}
     <View style={styles.section}>
       <Text style={styles.text}>Egresos en Pesos:</Text>
       <View style={styles.table}>
@@ -120,7 +117,6 @@ const MyDocument = ({ estadoContable }) => (
       </View>
     </View>
 
-    {/* Egresos en Dólares */}
     <View style={styles.section}>
       <Text style={styles.text}>Egresos en Dólares:</Text>
       <View style={styles.table}>
@@ -143,7 +139,6 @@ const MyDocument = ({ estadoContable }) => (
       </View>
     </View>
 
-    {/* Saldos finales */}
     <View style={styles.section}>
       <Text style={styles.text}>
         Saldo Final en Pesos: {estadoContable.saldoFinalEnPesos}

@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { updateAdministrador } from "@/Api/api";
 
-const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) => {
+const ModificarAdministrador = ({ administrador, setIdentificadorComponente }) => {
   const [nombreMiembro, setNombreMiembro] = useState("");
   const [contraseña, setContraseña] = useState("");
   const [email, setEmail] = useState("");
   const [tipoAdministrador, setTipoAdministrador] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [errores, setErrores] = useState({});
 
   const router = useRouter();
 
@@ -28,8 +29,48 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
     fetchData();
   }, [administrador]);
 
+  const validarCampos = () => {
+    const nuevosErrores = {};
+    const regexTexto = /^[a-zA-ZÀ-ÿñÑ]+(?:\s[a-zA-ZÀ-ÿñÑ]+)*$/; // No permite solo espacios
+    const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    if (!nombreMiembro.trim()) {
+      nuevosErrores.nombreMiembro = "El nombre es obligatorio";
+    } else if (!regexTexto.test(nombreMiembro.trim())) {
+      nuevosErrores.nombreMiembro = "El nombre solo puede contener letras y no debe ser solo espacios";
+    }
+  
+    if (!contraseña.trim()) {
+      nuevosErrores.contraseña = "La contraseña es obligatoria";
+    } else if (contraseña.trim().length < 6) {
+      nuevosErrores.contraseña = "La contraseña debe tener al menos 6 caracteres";
+    }
+  
+    if (!email.trim()) {
+      nuevosErrores.email = "El email es obligatorio";
+    } else if (!regexEmail.test(email.trim())) {
+      nuevosErrores.email = "El email no es válido";
+    }
+  
+    if (!tipoAdministrador.trim()) {
+      nuevosErrores.tipoAdministrador = "El tipo de administrador es obligatorio";
+    } else if (!regexTexto.test(tipoAdministrador.trim())) {
+      nuevosErrores.tipoAdministrador = "El tipo solo puede contener letras y no debe ser solo espacios";
+    }
+  
+    setErrores(nuevosErrores);
+    return Object.keys(nuevosErrores).length === 0;
+  };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validarCampos()) {
+      setMensaje("Hay errores en el formulario");
+      return;
+    }
+
     const data = {
       idMiembro: administrador.idMiembro,
       nombreMiembro,
@@ -39,10 +80,9 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
     };
 
     try {
-      const response = await updateAdministrador(data);
-
+      await updateAdministrador(data);
       setMensaje("Administrador modificado con éxito");
-      setIdentificadorComponente(27);  // Cambia el identificador según corresponda
+      setIdentificadorComponente(27);
     } catch (error) {
       console.error("Error al modificar el administrador:", error);
       setMensaje("Error al modificar el administrador");
@@ -67,6 +107,7 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
             onChange={(e) => setNombreMiembro(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.nombreMiembro && <p className="text-red-600">{errores.nombreMiembro}</p>}
         </div>
 
         <div className="mb-4">
@@ -81,6 +122,7 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
             onChange={(e) => setContraseña(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.contraseña && <p className="text-red-600">{errores.contraseña}</p>}
         </div>
 
         <div className="mb-4">
@@ -95,6 +137,7 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.email && <p className="text-red-600">{errores.email}</p>}
         </div>
 
         <div className="mb-4">
@@ -109,6 +152,7 @@ const ModificarAdministrador = ({ administrador , setIdentificadorComponente }) 
             onChange={(e) => setTipoAdministrador(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
+          {errores.tipoAdministrador && <p className="text-red-600">{errores.tipoAdministrador}</p>}
         </div>
 
         <button
