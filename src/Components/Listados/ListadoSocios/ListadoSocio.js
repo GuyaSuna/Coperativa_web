@@ -39,8 +39,8 @@ const ListadoSocio = ({
   const [verArchivados, setVerArchivados] = useState(false);
 
   useEffect(() => {
-    const filteredSocios = allSocios.filter(
-      (socio) => (!verArchivados ? !socio.archivado : socio.archivado) // Filtra por archivados o no
+    const filteredSocios = allSocios.filter((socio) =>
+      !verArchivados ? !socio.archivado : socio.archivado
     );
     setBuscadorFiltrado(filteredSocios);
   }, [allSocios, verArchivados]);
@@ -106,10 +106,8 @@ const ListadoSocio = ({
           };
         }
 
-        await updateSocio(socioActualizado);
-
         const viviedaResponse = await getViviendaPorSocio(socio.cedulaSocio);
-
+        await updateSocio(socioActualizado, viviedaResponse.idVivienda);
         viviedaResponse.socio = null;
 
         await updateVivienda(
@@ -418,31 +416,31 @@ const ListadoSocio = ({
                   </div>
                 </td>
                 <td className="px-2 py-2 flex justify-end gap-1 sm:flex-wrap md:hidden">
-  <button
-    onClick={() => handleArchivar(socio)}
-    className="bg-red-500 text-white px-2 py-1 rounded-lg text-xs"
-  >
-    Archivar
-  </button>
-  <button
-    onClick={() => handleModificarSocio(socio)}
-    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
-  >
-    Modificar
-  </button>
-  <button
-    onClick={() => handleCrearRecibo(socio)}
-    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
-  >
-    Crear Recibo
-  </button>
-  <button
-    onClick={() => handleDevolucionCapital(socio)}
-    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
-  >
-    Pagar Devolución
-  </button>
-</td>
+                  <button
+                    onClick={() => handleArchivar(socio)}
+                    className="bg-red-500 text-white px-2 py-1 rounded-lg text-xs"
+                  >
+                    Archivar
+                  </button>
+                  <button
+                    onClick={() => handleModificarSocio(socio)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
+                  >
+                    Modificar
+                  </button>
+                  <button
+                    onClick={() => handleCrearRecibo(socio)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
+                  >
+                    Crear Recibo
+                  </button>
+                  <button
+                    onClick={() => handleDevolucionCapital(socio)}
+                    className="bg-yellow-500 text-white px-2 py-1 rounded-lg text-xs"
+                  >
+                    Pagar Devolución
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
