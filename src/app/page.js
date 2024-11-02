@@ -122,8 +122,7 @@ const Home = () => {
     loginMiembro(RequestLogin, cooperativaLoginRequest);
     login(token);
   };
-
-  // Funciones de manejo de entrada
+  
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
