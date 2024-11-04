@@ -6,6 +6,7 @@ import { MiembroProvider } from "@/Provider/provider";
 import { SessionProvider } from "@/Provider/loginProvider";
 import SessionManager from "@/Components/session/sessionManager";
 import { ThemeProvider } from "@/Provider/ThemeProvider";
+import QueryProvider from "@/Provider/TanStackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,12 +20,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider>
+          <QueryProvider>
           <MiembroProvider>
             <SessionProvider>
               <SessionManager />
               {children}
             </SessionProvider>
           </MiembroProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
