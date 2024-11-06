@@ -414,33 +414,35 @@ const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
 //   return [year, month, day].join("-");
 // };
 
-const updateSocio = async (socioEntity, idVivienda) => {
-  let cedulaSocio = socioEntity.cedulaSocio;
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/socio/${cedulaSocio}/${idVivienda}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(socioEntity),
-    });
+export const updateSocio = async (socioEntity, idVivienda) => (await api.get(`/socio/${cedulaSocio}/${idVivienda}`, { needsAuth: true })).data;
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Error en la solicitud: ${response.status} - ${errorText}`
-      );
-    }
+// const updateSocio = async (socioEntity, idVivienda) => {
+//   let cedulaSocio = socioEntity.cedulaSocio;
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/socio/${cedulaSocio}/${idVivienda}`, {
+//       method: "PUT",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(socioEntity),
+//     });
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`El error ocurrio en updateSocio: ${error.message}`);
-    throw error;
-  }
-};
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(
+//         `Error en la solicitud: ${response.status} - ${errorText}`
+//       );
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error(`El error ocurrio en updateSocio: ${error.message}`);
+//     throw error;
+//   }
+// };
 
 const deleteSocio = async (cedulaSocio, idCooperativa) => {
   try {
