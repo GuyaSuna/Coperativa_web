@@ -30,8 +30,6 @@ const ListadoSocio = ({
   setIdentificadorComponente,
   setSocioRecibo,
 }) => {
-
-
   const { miembro, cooperativa } = useContext(MiembroContext);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
@@ -39,6 +37,7 @@ const ListadoSocio = ({
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [recibos, setRecibos] = useState([]);
   const [verArchivados, setVerArchivados] = useState(false);
+
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
@@ -59,6 +58,7 @@ const ListadoSocio = ({
       console.error("Error al obtener los socios:", error);
     }
   };
+  
 
   const { data: allSocios = [], error, isLoading } = useQuery({
     queryKey: ['socios'],
