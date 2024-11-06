@@ -5,6 +5,7 @@ import {
   getAllEgresosByMes,
   getAllIngresosByMes,
   postEstadoContable,
+  getUltimoEstadoContable,
 } from "../../../Api/api";
 import { MiembroContext } from "../../../Provider/provider";
 import "../../Formularios/EstadosContables/StyleEstadoContable.css";
@@ -40,6 +41,7 @@ const AltaEstadoContable = () => {
   const [listaIngresos, setListaIngresos] = useState([]);
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
+
   useEffect(() => {
     fetchDatos();
   }, [fecha]);
@@ -47,7 +49,27 @@ const AltaEstadoContable = () => {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFecha(today);
+    fetchUltimoEstadoContable();
   }, []);
+
+  const fetchUltimoEstadoContable = async () => {
+    const response = await getUltimoEstadoContable(cooperativa.idCooperativa);
+    if (
+      response.estadoCuentaBancariaActualEnPesos == null &&
+      response.estadoCuentaBancariaActualEnDolares == null
+    ) {
+      setEstadoCuentaBancariaAnteriorEnDolares(0);
+      setEstadoCuentaBancariaAnteriorEnPesos(0);
+    } else {
+      setEstadoCuentaBancariaAnteriorEnPesos(
+        response.estadoCuentaBancariaActualEnPesos
+      );
+      setEstadoCuentaBancariaAnteriorEnDolares(
+        response.estadoCuentaBancariaAnteriorEnDolares
+      );
+    }
+  };
+
   const fetchDatos = async () => {
     try {
       if (fecha) {
@@ -100,6 +122,7 @@ const AltaEstadoContable = () => {
     setSaldoFinalPesos(sumaIngresosPesos - sumaEgresosPesos);
     setSaldoFinalDolares(sumaIngresosDolares - sumaEgresosDolares);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -107,6 +130,7 @@ const AltaEstadoContable = () => {
 
     setMostrarModal(true);
   };
+
   const handleConfirmacion = async (e) => {
     e.preventDefault();
     setMostrarModal(false);
@@ -129,6 +153,7 @@ const AltaEstadoContable = () => {
       console.error("Error al agregar estado contable:", error);
     }
   };
+
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];

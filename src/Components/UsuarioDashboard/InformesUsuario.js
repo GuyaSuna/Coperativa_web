@@ -10,7 +10,7 @@ import { MiembroContext } from "@/Provider/provider";
 import { jsPDF } from "jspdf";
 
 const InformesUsuario = ({}) => {
-  const { cooperativa, miembro } = useContext(MiembroContext);
+  const { cooperativa } = useContext(MiembroContext);
   const [estadoContable, setEstadoContable] = useState({});
   const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
     useState(null);
@@ -31,13 +31,12 @@ const InformesUsuario = ({}) => {
 
   const fetchUltimoEstadoContable = async () => {
     try {
-      const response = await getUltimoEstadoContable();
+      const response = await getUltimoEstadoContable(cooperativa.idCooperativa);
       setEstadoContable(response);
     } catch (error) {
       console.error("Error al obtener los Estados Contables:", error);
     }
   };
-
 
   const descargarPdfReajuste = (reajuste) => {
     const fechaReajuste = new Date(reajuste.fechaReajuste + "T00:00:00");
@@ -50,8 +49,24 @@ const InformesUsuario = ({}) => {
     doc.text("Detalles del Reajuste:", 14, 30);
 
     const data = [
-      [ `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '2 D', (reajuste.cuotaMensualDosHabitacionesEnPesos/reajuste.valorUr).toFixed(2), reajuste.valorUr.toFixed(2), reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)],
-      [`${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`, '3 D',(reajuste.cuotaMensualTresHabitacionesEnPesos/reajuste.valorUr).toFixed(2),reajuste.valorUr.toFixed(2), reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)]
+      [
+        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
+        "2 D",
+        (
+          reajuste.cuotaMensualDosHabitacionesEnPesos / reajuste.valorUr
+        ).toFixed(2),
+        reajuste.valorUr.toFixed(2),
+        reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2),
+      ],
+      [
+        `${fechaReajuste.getFullYear()}/${fechaReajuste.getFullYear() + 1}`,
+        "3 D",
+        (
+          reajuste.cuotaMensualTresHabitacionesEnPesos / reajuste.valorUr
+        ).toFixed(2),
+        reajuste.valorUr.toFixed(2),
+        reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2),
+      ],
     ];
 
     doc.autoTable({
@@ -80,68 +95,82 @@ const InformesUsuario = ({}) => {
   };
 
   const descargarPdfBalanceAnual = () => {
-  
     if (!ultimoBalance) {
       alert("No se encontraron datos de balance anual para generar el PDF.");
       return;
     }
-  
-    const { cooperativaEntity, egresoTotal, ingresoTotal, resultadoFinal, listaEgresos, listaIngresos, fechaBalanceAnual } = ultimoBalance;
-  
+
+    const {
+      cooperativaEntity,
+      egresoTotal,
+      ingresoTotal,
+      resultadoFinal,
+      listaEgresos,
+      listaIngresos,
+      fechaBalanceAnual,
+    } = ultimoBalance;
+
     const fechaBalance = new Date(fechaBalanceAnual + "T00:00:00");
     const doc = new jsPDF();
-  
+
     // Título principal
     doc.setFontSize(18);
     doc.text(`Balance Anual - ${cooperativaEntity.nombre}`, 14, 22);
-  
+
     doc.setFontSize(12);
-    doc.text(`Año: ${fechaBalance.getFullYear()}`, 170, 22, { align: 'right' });
-    
-  
+    doc.text(`Año: ${fechaBalance.getFullYear()}`, 170, 22, { align: "right" });
 
     const ingresosStartY = 40;
     doc.setFontSize(14);
     doc.text("Ingresos:", 14, ingresosStartY);
-  
+
     doc.autoTable({
       head: [["SubRubro", "Monto"]],
-      body: listaIngresos.length > 0 
-        ? listaIngresos.map(ingreso => [ingreso.subRubro, ingreso.ingreso?.toFixed(2)]) 
-        : [["Sin ingresos", "0.00"]],
-      startY: ingresosStartY + 5, 
+      body:
+        listaIngresos.length > 0
+          ? listaIngresos.map((ingreso) => [
+              ingreso.subRubro,
+              ingreso.ingreso?.toFixed(2),
+            ])
+          : [["Sin ingresos", "0.00"]],
+      startY: ingresosStartY + 5,
       theme: "grid",
-      
     });
-  
 
     const egresosStartY = doc.autoTable.previous.finalY + 10;
     doc.setFontSize(14);
     doc.text("Egresos:", 14, egresosStartY);
-  
 
     doc.autoTable({
       head: [["SubRubro", "Monto"]],
-      body: listaEgresos.length > 0 
-        ? listaEgresos.map(egreso => [egreso.subRubro, egreso.egreso?.toFixed(2)]) 
-        : [["Sin egresos", "0.00"]],
+      body:
+        listaEgresos.length > 0
+          ? listaEgresos.map((egreso) => [
+              egreso.subRubro,
+              egreso.egreso?.toFixed(2),
+            ])
+          : [["Sin egresos", "0.00"]],
       startY: egresosStartY + 5,
       theme: "grid",
     });
-  
+
     // Totales y resultado final
     const totalsStartY = doc.autoTable.previous.finalY + 10;
     doc.setFontSize(12);
     doc.text(
-      `Total Ingresos: ${ingresoTotal?.toFixed(2)} - Total Egresos: ${egresoTotal?.toFixed(2)} - Resultado: ${resultadoFinal.toFixed(2)}`,
+      `Total Ingresos: ${ingresoTotal?.toFixed(
+        2
+      )} - Total Egresos: ${egresoTotal?.toFixed(
+        2
+      )} - Resultado: ${resultadoFinal.toFixed(2)}`,
       14,
       totalsStartY
     );
-  
+
     // Guarda el archivo PDF con el nombre adecuado
     doc.save(`Balance_Anual_${fechaBalance.getFullYear()}.pdf`);
   };
-  
+
   const fetchUltimoBalanceAnual = async () => {
     try {
       const balance = await getUltimoBalanceAnual(cooperativa.idCooperativa);
@@ -190,7 +219,7 @@ const InformesUsuario = ({}) => {
             </span>
           </p>
           <div className="flex items-center justify-center mt-6">
-          <button
+            <button
               onClick={() => descargarPdfBalanceAnual()}
               className="bg-blue-600 hover:bg-blue-700 px-8 py-2 text-sm text-gray-200 uppercase rounded font-bold transition duration-150"
               title="Purchase"
