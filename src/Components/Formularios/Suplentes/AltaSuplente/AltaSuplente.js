@@ -10,7 +10,7 @@ import {
 import { MiembroContext } from "../../../../Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
-const AltaSuplente = ({setIdentificadorComponente}) => {
+const AltaSuplente = ({ setIdentificadorComponente }) => {
   const router = useRouter();
   const { cooperativa } = useContext(MiembroContext);
 
@@ -32,19 +32,23 @@ const AltaSuplente = ({setIdentificadorComponente}) => {
     try {
       const suplentesResponse = await getAllSuplentes();
       setAllSuplentes(suplentesResponse);
-  
+
       const response = await getAllSocios(cooperativa.idCooperativa);
-  
-      const sociosSinArchivar = response.filter(socio => socio.archivado === false);
-  
-      let sociosSinSuplente = sociosSinArchivar.filter(socioTitular => !socioTitular.suplenteEntity);
-  
+
+      const sociosSinArchivar = response.filter(
+        (socio) => socio.archivado === false
+      );
+
+      let sociosSinSuplente = sociosSinArchivar.filter(
+        (socioTitular) => !socioTitular.suplenteEntity
+      );
+
       setSociosDisponibles(sociosSinSuplente);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
   };
-  
+
   const handleChangeSocioDelSuplente = (e) => {
     setSocioDelSuplente(e.target.value);
   };
@@ -118,7 +122,6 @@ const AltaSuplente = ({setIdentificadorComponente}) => {
       if (response.status === 201) {
         alert("Error al agregar suplente");
       } else {
-        alert("Suplente agregado exitosamente");
         setIdentificadorComponente(9);
       }
     } catch (error) {

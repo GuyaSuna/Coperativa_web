@@ -11,7 +11,7 @@ import { MiembroContext } from "../../../Provider/provider";
 import "../../Formularios/EstadosContables/StyleEstadoContable.css";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
-const AltaEstadoContable = () => {
+const AltaEstadoContable = ({setIdentificadorComponente}) => {
   const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
   const [fecha, setFecha] = useState("");
   const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
@@ -149,6 +149,7 @@ const AltaEstadoContable = () => {
         nuevoEstadoContable,
         cooperativa.idCooperativa
       );
+      setIdentificadorComponente(35)
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
     }

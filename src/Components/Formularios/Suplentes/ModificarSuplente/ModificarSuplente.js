@@ -5,7 +5,7 @@ import "./FormStyle.css";
 import { getAllSuplentes, updateSuplente } from "../../../../Api/api";
 import { MiembroContext } from "../../../../Provider/provider";
 
-const ModificarSuplente = ({ suplenteParam }) => {
+const ModificarSuplente = ({ suplenteParam , setIdentificadorComponente }) => {
   const [cedulaSuplente, setCedulaSuplente] = useState(0);
   const [nombreSuplente, setNombreSuplente] = useState("");
   const [apellidoSuplente, setApellidoSuplente] = useState("");
@@ -71,12 +71,16 @@ const ModificarSuplente = ({ suplenteParam }) => {
     e.preventDefault();
     if (!validarFormulario()) return;
     try {
-      await updateSuplente(
+     const response = await updateSuplente(
         cedulaSuplente,
         apellidoSuplente,
         nombreSuplente,
         telefonoSuplente
       );
+
+      if(response){
+        setIdentificadorComponente(9);
+      }
     } catch (error) {
       console.error("Error al actualizar suplente:", error);
     }

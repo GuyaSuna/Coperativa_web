@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { useRouter } from "next/navigation";
 import React, { useContext, useState, useEffect } from "react";
 import { getAllSocios, getUr } from "@/Api/api";
@@ -35,7 +35,42 @@ const UsuarioHome = () => {
   const fetchUr = async () => {
     try {
       const response = await getUr();
-      setUr(response);
+      const fechaActual = new Date();
+      let mesActual = fechaActual.getMonth();
+      const meses = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Setiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+      ];
+      let mesActualNombre = meses[mesActual];
+      let urEncontrado = false;
+
+      response.forEach((element) => {
+        if (element.mes === mesActualNombre) {
+          setUr(element?.valorUr);
+          urEncontrado = true;
+        }
+      });
+
+      if (!urEncontrado) {
+        let mesAnterior = mesActual - 1;
+        if (mesAnterior < 0) mesAnterior = 11;
+        let mesAnteriorNombre = meses[mesAnterior];
+        response.forEach((element) => {
+          if (element.mes === mesAnteriorNombre) {
+            setUr(element?.valorUr);
+          }
+        });
+      }
     } catch (error) {
       console.error("Error al obtener las unidades reajustables:", error);
     }
@@ -44,7 +79,7 @@ const UsuarioHome = () => {
   return (
     <>
       {cooperativa && (
-        <div className="bg-gray-100 dark:bg-gray-900 dark:text-white text-gray-600 min-h-screen flex flex-col text-sm">
+        <div className="bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-white min-h-screen flex flex-col text-sm">
           <div className="flex-grow overflow-hidden flex flex-col">
             <HeaderUsuario
               setIdentificadorComponente={setIdentificadorComponente}

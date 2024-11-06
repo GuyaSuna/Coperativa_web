@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { FaMoon } from "react-icons/fa";
 import { BsSunFill } from "react-icons/bs";
-import Image from "next/image"; // assuming you're using Next.js
-import logoDark from "/public/logoVisoftDark.png";
-import logoLight from "/public/logoVisoftLigth.png";
+
 const ThemeToggle = () => {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false); // Modo día como predeterminado
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
-    if (theme === "dark") setDarkMode(true);
+    if (theme === "dark") {
+      setDarkMode(true);
+    }
   }, []);
 
   useEffect(() => {

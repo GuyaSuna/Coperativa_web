@@ -3,16 +3,16 @@
 import React, { useState, useContext, useEffect } from "react";
 import { postIngreso } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider.js";
-import { ModalConfirmacion } from "@/Components/ModalConfirmacion"; // Importa el modal de confirmación
+import { ModalConfirmacion } from "@/Components/ModalConfirmacion"; 
 
-const AltaIngreso = () => {
+const AltaIngreso = ({setIdentificadorComponente}) => {
   const [subRubro, setSubRubro] = useState("");
   const [denominacion, setDenominacion] = useState("");
   const [ingreso, setIngreso] = useState("");
   const [errores, setErrores] = useState({});
   const [tipoMoneda, setTipoMoneda] = useState("UYU");
   const [fechaDatosContables, setFechaDatosContables] = useState("");
-  const [mostrarModal, setMostrarModal] = useState(false); // Estado para mostrar el modal
+  const [mostrarModal, setMostrarModal] = useState(false); 
 
   const { cooperativa } = useContext(MiembroContext);
 
@@ -34,6 +34,7 @@ const AltaIngreso = () => {
     if (!subRubro) errores.subRubro = "El subrubro es obligatorio";
     if (!denominacion) errores.denominacion = "La denominación es obligatoria";
     if (!ingreso) errores.ingreso = "El ingreso es obligatorio";
+    else if(isNaN(ingreso)) errores.ingreso = "El ingreso debe ser un numero";
     if (!fechaDatosContables) {
       errores.fechaDatosContables = "La fecha del Ingreso es obligatoria";
     } else if (fechaDatosContables > fechaHoy) {
@@ -76,6 +77,7 @@ const AltaIngreso = () => {
 
     try {
       const response = await postIngreso(ingresoData);
+      setIdentificadorComponente(20);
     } catch (error) {
       console.error("Error al enviar los datos del Ingreso:", error);
       alert("Error interno del servidor");

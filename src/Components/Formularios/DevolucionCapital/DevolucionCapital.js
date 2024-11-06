@@ -12,32 +12,35 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
   const [descripcionDescuento, setDescripcionDescuento] = useState("");
   const [listaDeudas, setListaDeudas] = useState([]);
 
-  const handleChangeCapitalDescuento = (e) => setCapitalDescuento(e.target.value);
+  const handleChangeCapitalDescuento = (e) =>
+    setCapitalDescuento(e.target.value);
   const handleChangeRazonRetiro = (e) => setRazonRetiro(e.target.value);
   const handleChangeTipoRetiro = (e) => setTipoRetiro(e.target.value);
   const handleChangeMontoDescuento = (e) => setMontoDescuento(e.target.value);
-  const handleChangeDescripcionDescuento = (e) => setDescripcionDescuento(e.target.value);
-
+  const handleChangeDescripcionDescuento = (e) =>
+    setDescripcionDescuento(e.target.value);
 
   const validarFormulario = () => {
     const errores = {};
-  
+
     if (!capitalDescuento) {
       errores.capitalDescuento = "El descuento de capital es obligatorio";
     } else if (isNaN(capitalDescuento)) {
       errores.capitalDescuento = "El descuento de capital debe ser un número";
     } else if (parseFloat(capitalDescuento) < 0) {
-      errores.capitalDescuento = "El descuento de capital debe ser un número positivo";
+      errores.capitalDescuento =
+        "El descuento de capital debe ser un número positivo";
     }
-  
+
     if (!razonRetiro) {
       errores.razonRetiro = "La razón del retiro es obligatoria";
     }
-  
+
     if (!tipoRetiro) {
       errores.tipoRetiro = "Debe especificar el tipo de retiro";
     } else if (tipoRetiro !== "True" && tipoRetiro !== "False") {
-      errores.tipoRetiro = "El tipo de retiro debe ser 'expulsion' o 'decisionPropia'";
+      errores.tipoRetiro =
+        "El tipo de retiro debe ser 'expulsion' o 'decisionPropia'";
     }
 
     setErrores(errores);
@@ -45,12 +48,22 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
   };
 
   const agregarDescuento = () => {
-    if (montoDescuento && descripcionDescuento && !isNaN(montoDescuento) && parseFloat(montoDescuento) > 0) {
-      setListaDeudas([...listaDeudas, { monto: montoDescuento, descripcion: descripcionDescuento }]);
+    if (
+      montoDescuento &&
+      descripcionDescuento &&
+      !isNaN(montoDescuento) &&
+      parseFloat(montoDescuento) > 0
+    ) {
+      setListaDeudas([
+        ...listaDeudas,
+        { monto: montoDescuento, descripcion: descripcionDescuento },
+      ]);
       setMontoDescuento("");
       setDescripcionDescuento("");
     } else {
-      alert("Por favor, ingresa un monto y descripción válidos para el descuento.");
+      alert(
+        "Por favor, ingresa un monto y descripción válidos para el descuento."
+      );
     }
   };
 
@@ -70,7 +83,7 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
 
     try {
       const response = await postDevolucionCapital(devolucionData);
-
+      setIdentificadorComponente(0);
     } catch (error) {
       console.error("Error al enviar los datos de la devolución:", error);
       alert("Error interno del servidor");
@@ -85,19 +98,30 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
           className="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
         >
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Nombre: {socio.nombreSocio}</label>
+            <label className="block text-sm font-medium mb-2">
+              Nombre: {socio.nombreSocio}
+            </label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Apellido: {socio.apellidoSocio}</label>
+            <label className="block text-sm font-medium mb-2">
+              Apellido: {socio.apellidoSocio}
+            </label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Cédula: {socio.cedulaSocio}</label>
+            <label className="block text-sm font-medium mb-2">
+              Cédula: {socio.cedulaSocio}
+            </label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Capital: {socio.capitalSocio.toFixed(2)}</label>
+            <label className="block text-sm font-medium mb-2">
+              Capital: {socio.capitalSocio.toFixed(2)}
+            </label>
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="capitalDescuento">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="capitalDescuento"
+            >
               Porcentaje de Descuento de Capital:
             </label>
             <input
@@ -108,12 +132,17 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
             {errores.capitalDescuento && (
-              <span className="text-red-500 text-sm">{errores.capitalDescuento}</span>
+              <span className="text-red-500 text-sm">
+                {errores.capitalDescuento}
+              </span>
             )}
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2" htmlFor="razonRetiro">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="razonRetiro"
+            >
               Razón del Retiro:
             </label>
             <textarea
@@ -123,12 +152,16 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
               className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
             />
             {errores.razonRetiro && (
-              <span className="text-red-500 text-sm">{errores.razonRetiro}</span>
+              <span className="text-red-500 text-sm">
+                {errores.razonRetiro}
+              </span>
             )}
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-2">Tipo de Retiro:</label>
+            <label className="block text-sm font-medium mb-2">
+              Tipo de Retiro:
+            </label>
             <select
               value={tipoRetiro}
               onChange={handleChangeTipoRetiro}
@@ -171,11 +204,14 @@ const DevolucionCapital = ({ socio, setIdentificadorComponente }) => {
 
           {/* Lista de listaDeudas */}
           <div className="mb-4">
-            <h3 className="text-lg font-medium">Lista de listaDeudas o Deudas:</h3>
+            <h3 className="text-lg font-medium">
+              Lista de listaDeudas o Deudas:
+            </h3>
             <ul className="list-disc pl-5">
               {listaDeudas.map((descuento, index) => (
                 <li key={index}>
-                  {descuento.descripcion}: {parseFloat(descuento.monto).toFixed(2)} 
+                  {descuento.descripcion}:{" "}
+                  {parseFloat(descuento.monto).toFixed(2)}
                 </li>
               ))}
             </ul>

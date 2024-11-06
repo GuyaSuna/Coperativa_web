@@ -28,7 +28,7 @@ const ListadoUsuario = ({
   const fetchAllUsuarios = async () => {
     try {
       const response = await getAllUsuarios(cooperativa.idCooperativa);
- 
+
       setAllUsuarios(response);
     } catch (error) {
       console.error("Error al obtener los usuarios:", error);
@@ -142,15 +142,15 @@ const ListadoUsuario = ({
                 key={usuario.id}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Nombre</span>
+                  <span className="sm:hidden font-semibold">Nombre:{"  "}</span>
                   {usuario.firstname}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Apellido</span>
+                  <span className="sm:hidden font-semibold">Apellido:{"  "}</span>
                   {usuario.lastname}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">Socio</span>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Socio:{"  "}</span>
                   {usuario?.socio?.nombreSocio && usuario?.socio?.apellidoSocio
                     ? `${usuario.socio.nombreSocio} ${usuario.socio.apellidoSocio}`
                     : "Sin socio"}

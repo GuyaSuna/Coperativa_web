@@ -25,8 +25,13 @@ const InformesUsuario = ({}) => {
   }, []);
 
   const handleVerEstadoContable = (estadoContable) => {
-    setEstadoContableSeleccionado(estadoContable);
-    setIsModalOpen(true);
+    console.log("estado contable", estadoContable);
+    if (estadoContable != null) {
+      setEstadoContableSeleccionado(estadoContable);
+      setIsModalOpen(true);
+    } else {
+      alert("No se encontraron Estados Contables");
+    }
   };
 
   const fetchUltimoEstadoContable = async () => {
@@ -113,7 +118,6 @@ const InformesUsuario = ({}) => {
     const fechaBalance = new Date(fechaBalanceAnual + "T00:00:00");
     const doc = new jsPDF();
 
-    // Título principal
     doc.setFontSize(18);
     doc.text(`Balance Anual - ${cooperativaEntity.nombre}`, 14, 22);
 
@@ -183,12 +187,12 @@ const InformesUsuario = ({}) => {
   return (
     <div className="w-full 2xl:w-3/4 flex items-start justify-center px-8 md:px-32 lg:px-16 2xl:px-0 mx-auto mt-28">
       <div className="w-full grid grid-cols-1 xl:grid-cols-3 gap-8">
-        <div className="dark:bg-white bg-slate-500 text-white dark:text-black shadow-4xl rounded-lg py-4 ">
-          <p className="text-xl text-center font-bold text-white dark:text-blue-600">
+        <div className="bg-white dark:bg-slate-500 dark:text-white text-black shadow-4xl rounded-lg py-4 ">
+          <p className="text-xl text-center font-bold dark:text-white text-blue-600">
             Informe
           </p>
           <p className="text-center py-8">
-            <span className="text-4xl font-bold text-white dark:text-black">
+            <span className="text-4xl font-bold dark:text-white text-black">
               <span x-text="basicPrice">Estado Contable</span>
             </span>
           </p>
@@ -209,12 +213,12 @@ const InformesUsuario = ({}) => {
             )}
           </div>
         </div>
-        <div className="dark:bg-white bg-slate-500 shadow-2xl rounded-lg py-4">
-          <p className="text-xl text-center font-bold text-white dark:text-blue-600">
+        <div className="bg-white dark:bg-slate-500 shadow-2xl rounded-lg py-4">
+          <p className="text-xl text-center font-bold dark:text-white text-blue-600">
             Informe
           </p>
           <p className="text-center py-8">
-            <span className="text-4xl font-bold text-white dark:text-black">
+            <span className="text-4xl font-bold dark:text-white text-black">
               <span x-text="basicPrice">Balance Anual</span>
             </span>
           </p>
@@ -228,12 +232,12 @@ const InformesUsuario = ({}) => {
             </button>
           </div>
         </div>
-        <div className="dark:bg-white bg-slate-500 shadow-2xl rounded-lg py-4">
-          <p className="text-xl text-center font-bold text-white dark:text-blue-600">
+        <div className="bg-white dark:bg-slate-500 shadow-2xl rounded-lg py-4">
+          <p className="text-xl text-center font-bold dark:text-white text-blue-600">
             Informe
           </p>
           <p className="text-center py-8">
-            <span className="text-4xl font-bold text-white dark:text-black">
+            <span className="text-4xl font-bold dark:text-white text-black">
               <span x-text="basicPrice">Reajuste anual de cuota mensual</span>
             </span>
           </p>

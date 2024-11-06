@@ -155,7 +155,7 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
       <div className="overflow-y-auto h-screen">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
-            <tr>
+            <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3 ">
                 Fecha Reajuste
               </th>
@@ -174,14 +174,24 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
             {buscadorFiltrado?.map((reajuste) => (
               <tr
                 key={reajuste.idReajuste}
-                className="border-b dark:border-gray-700"
+                className="border-b dark:border-gray-700 sm:table-row"
               >
-                <td className="px-4 py-3">{reajuste.fechaReajuste}</td>
-                <td className="px-4 py-3">{reajuste.valorUr}</td>
-                <td className="px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Fecha Reajuste:{" "}
+                  </span>
+                  {reajuste.fechaReajuste}
+                </td>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Valor UR: </span>
+                  {reajuste.valorUr}
+                </td>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Cuota 2 Hab: </span>
                   {reajuste.cuotaMensualDosHabitacionesEnPesos.toFixed(2)}
                 </td>
-                <td className="px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Cuota 3 Hab: </span>
                   {reajuste.cuotaMensualTresHabitacionesEnPesos.toFixed(2)}
                 </td>
                 <td className="block sm:table-cell px-4 py-3">
@@ -193,10 +203,10 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
                     Ver
                   </button>
                 </td>
-                <td className="px-4 py-3 flex items-center justify-end md:table-cell">
-                  <div className="relative inline-block text-left ml-2">
+                <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
+                  <div className="relative inline-block text-left">
                     <Menu as="div" className="relative inline-block text-left">
-                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                      <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
                         <svg
                           viewBox="0 0 24 24"
                           className="w-5"
@@ -222,13 +232,21 @@ const ListadoReajustes = ({ setIdentificadorComponente }) => {
                               onClick={() => descargarPdf(reajuste)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
-                              Descargar Pdf
+                              Descargar PDF
                             </button>
                           </MenuItem>
                         </div>
                       </MenuItems>
                     </Menu>
                   </div>
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => descargarPdf(reajuste)}
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Descargar PDF
+                  </button>
                 </td>
               </tr>
             ))}

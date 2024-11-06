@@ -34,27 +34,23 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Validaciones
     if (!selectedSocio || !nombreMiembro || !contraseña || !email) {
       setError("Por favor, completa todos los campos requeridos.");
       return;
     }
 
-    // Validar que el nombre de usuario no contenga números
     const hasNumbers = /\d/;
     if (hasNumbers.test(nombreMiembro)) {
       setError("El nombre de usuario no puede contener números.");
       return;
     }
 
-    // Validar formato del email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       setError("Por favor, introduce un email válido.");
       return;
     }
 
-    // Reiniciar el mensaje de error
     setError("");
 
     let SocioEncontrado = socios.find(
@@ -83,7 +79,6 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
       );
       setMensaje("Administrador creado con éxito");
       setIdentificadorComponente(27);
-      // Resetear los campos del formulario si es necesario
       setSelectedSocio("");
       setNombreMiembro("");
       setContraseña("");

@@ -30,7 +30,6 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
     }
   };
 
-
   const handleVerIngreso = (ingreso) => {
     console.log("Ingreso seleccionado:", ingreso);
     setIngresoSeleccionado(ingreso);
@@ -117,16 +116,16 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <th scope="col" className="px-4 py-3">
                 Sub Rubro
               </th>
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <th scope="col" className="px-4 py-3">
                 Denominación
               </th>
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800">
+              <th scope="col" className="px-4 py-3">
                 Monto Ingreso
               </th>
-              <th className="font-normal px-3 pt-0 pb-3 border-b border-gray-200 dark:border-gray-800"></th>
+              <th scope="col" className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -136,16 +135,18 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
                 key={ingreso.id}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Sub Rubro:</span>
+                  <span className="sm:hidden font-semibold">Sub Rubro: </span>
                   {ingreso.subRubro}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  <span className="sm:hidden font-semibold">Denominacion:</span>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Denominacion:{" "}
+                  </span>
                   {ingreso.denominacion}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">
-                    Monto Ingreso:
+                    Monto Ingreso:{" "}
                   </span>
                   {ingreso.ingreso}
                 </td>
@@ -189,7 +190,6 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
                               Eliminar
                             </button>
                           </MenuItem>
- 
                         </div>
                       </MenuItems>
                     </Menu>
@@ -197,18 +197,11 @@ const ListadoIngresos = ({ setIngreso, setIdentificadorComponente }) => {
                 </td>
                 <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
                   <button
-                    onClick={() => handleEliminar(vivienda.nroVivienda)}
+                    onClick={() => handleEliminar(ingreso.id)}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
                   >
                     Eliminar
                   </button>
-                  <button
-                    onClick={() => handleModificar(vivienda.nroVivienda)}
-                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
-                  >
-                    Modificar
-                  </button>
-
                   <button
                     onClick={() => handleVerIngreso(ingreso)}
                     className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"

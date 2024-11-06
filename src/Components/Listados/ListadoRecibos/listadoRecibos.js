@@ -25,18 +25,17 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
   }, []);
 
   const handleArchivadosToggle = () => {
-    setArchivados(!archivados); // Cambiar entre ver archivados y activos
+    setArchivados(!archivados); 
   };
 
   const fetchAllRecibos = async () => {
     try {
       const response = await getAllRecibos(miembro.responseBody.id);
-      // Filtra los recibos para excluir aquellos cuyos socios están archivados
       const recibosActivos = response.filter(
         (recibo) => !recibo.socio.archived
       );
       setAllRecibos(recibosActivos);
-      setBuscadorFiltrado(recibosActivos); // Inicialmente muestra todos los recibos activos
+      setBuscadorFiltrado(recibosActivos);
     } catch (error) {
       console.error("Error al obtener los socios:", error);
     }
@@ -106,7 +105,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
   const handleDescargarPDF = (recibo) => {
     const doc = new jsPDF();
 
-    // Título principal
     doc.setFontSize(16);
     doc.text("COVIAMUROS", 105, 20, null, null, "center");
     doc.setFontSize(12);
@@ -114,7 +112,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
     doc.text("AYUDA MUTUA ROSARIO", 105, 32, null, null, "center");
     doc.text("ROSARIO - Dpto. de Colonia", 105, 38, null, null, "center");
 
-    // Información del recibo
     doc.setFontSize(12);
     doc.text("RECIBO", 160, 50);
     doc.text(`${recibo.nroRecibo}`, 160, 56);
@@ -124,25 +121,23 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
     doc.text("Número de CI:", 20, 60);
     doc.text(`${recibo.socio.ci}`, 60, 60);
 
-    // Calcular el total de convenios
-    const listaConvenios = recibo.listaConvenio || []; // Asegúrate de que recibo.listaConvenio exista
+    const listaConvenios = recibo.listaConvenio || []; 
     const totalConvenios = listaConvenios.reduce(
       (total, convenio) => total + (convenio.urPorMes || 0),
       0
     );
 
-    // Tabla con conceptos
     doc.autoTable({
       startY: 70,
       head: [["Conceptos", "Importes"]],
       body: [
         ["Ahorro/Mes", `${recibo.cuotaMensual}`],
         ["Cuota Social", `${recibo.cuotaSocial}`],
-        ["Convenio", `${(totalConvenios * ur).toFixed(2)}`], // Suma de todos los convenios
+        ["Convenio", `${(totalConvenios * ur).toFixed(2)}`],
         [
           "Subsidio",
-          `${(recibo.subsidio?.cuotaApagarUr * ur).toFixed(2) || 0}`,
-        ], // Manejo seguro del subsidio
+         `${recibo.subsidio && recibo.subsidio.cuotaApagarUr ? (recibo.subsidio.cuotaApagarUr * ur).toFixed(2) : 0}`
+        ], 
         ["Recargo", `${recibo.recargo}`],
         ["Interés", `${recibo.interes}`],
         ["Capital", `${recibo.capital}`],
@@ -155,7 +150,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
       },
     });
 
-    // Total y firma
     const totalY = doc.previousAutoTable.finalY + 10;
     doc.setFontSize(12);
     doc.text(`TOTAL: $${recibo.cuotaMensual}`, 150, totalY);
@@ -170,7 +164,6 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
     doc.text("La suma de $:", 20, totalY + 15);
     doc.text(`${recibo.sumaEnPesos}`, 60, totalY + 15);
 
-    // Tesorería
     doc.text("TESORERO", 150, totalY + 30);
     doc.text(
       `${recibo.tesorero.firstname} ${recibo.tesorero.lastname}`,
@@ -178,9 +171,9 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
       totalY + 35
     );
 
-    // Guardar el PDF
     doc.save(`Recibo_${recibo.fechaPago}.pdf`);
   };
+
 
   return (
     <div className="sm:p-7 p-4">
@@ -189,27 +182,25 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
           <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
         <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-          <div className="flex items-center space-x-3 w-full md:w-auto">
-            <button
-              type="button"
-              onClick={handleArchivadosToggle}
-              className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
-            >
-              {archivados ? "Ver Activos" : "Ver Archivados"}
-            </button>
-            <OrdenarPor
-              options={ordenarOptions}
-              buttonText="Ordenar por"
-              onOptionSelect={handleSortChange}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={handleArchivadosToggle}
+            className="flex items-center justify-center text-white bg-green-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+          >
+            {archivados ? "Ver Activos" : "Ver Archivados"}
+          </button>
+          <OrdenarPor
+            options={ordenarOptions}
+            buttonText="Ordenar por"
+            onOptionSelect={handleSortChange}
+          />
         </div>
       </div>
 
       <div className="overflow-y-auto h-screen">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 block md:table">
           <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b hidden md:table-header-group">
-            <tr>
+            <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3">
                 Nro Recibo
               </th>
@@ -230,44 +221,46 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
               </th>
             </tr>
           </thead>
-          <tbody className="block md:table-row-group">
+          <tbody>
             {buscadorFiltrado?.map((recibo) => (
               <tr
-                className="border-b dark:border-gray-700 block md:table-row"
+                className="border-b dark:border-gray-700 sm:table-row"
                 key={recibo.nroRecibo}
               >
-                <th
-                  scope="row"
-                  className="px-4 py-3 text-center font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell"
-                >
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">NroRecibo: </span>
                   {recibo.nroRecibo}
-                </th>
-                <th
-                  scope="row"
-                  className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white block md:table-cell"
-                >
-                  {recibo.socio.nombreSocio} {recibo.socio.apellidoSocio}
-                </th>
-                <td className="px-4 py-3 block md:table-cell">
-                  $ {recibo.cuotaMensual}
                 </td>
-                <td className="px-4 py-3 block md:table-cell">
-                  {recibo.fechaRecibo}
-                </td>
-                <td className="px-4 py-3 block md:table-cell">
-                  <span
-                    className={`bg-gradient-to-br ${
-                      recibo.estaImpago
-                        ? "from-red-600 to-red-500"
-                        : "from-green-600 to-green-500"
-                    } text-white text-xs font-medium px-2.5 py-0.5 rounded-md`}
-                  >
-                    {recibo.estaImpago ? "Impago" : "Pago"}
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Nombre Socio:{" "}
                   </span>
+                  {recibo.socio.nombreSocio}
+                  <span> </span>
+                  {recibo.socio.apellidoSocio}
                 </td>
-                <td className="px-4 py-3 flex items-center justify-center space-x-1 block md:table-cell">
-                  <Menu as="div" className="relative inline-block text-left">
-                    <div>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Monto: </span>$
+                  {recibo.cuotaMensual}
+                </td>
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Fecha de Recibo:{" "}
+                  </span>
+                  {recibo.fechaPago}
+                </td>
+                <td className="block sm:table-cell px-4 py-3">
+                  <button
+                    type="button"
+                    onClick={() => handleVerRecibo(recibo)}
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
+                  >
+                    Ver
+                  </button>
+                </td>
+                <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
+                  <div className="relative inline-block text-left">
+                    <Menu as="div" className="relative inline-block text-left">
                       <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
                         <svg
                           viewBox="0 0 24 24"
@@ -283,30 +276,46 @@ const ListadoRecibos = ({ setCedulaSocio, setIdentificadorComponente, ur }) => {
                           <circle cx={5} cy={12} r={1} />
                         </svg>
                       </MenuButton>
-                    </div>
 
-                    <MenuItems className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                      <div className="py-1">
-                        <MenuItem onClick={() => handleVerRecibo(recibo)}>
-                          <span className="text-gray-700 block px-4 py-2 text-sm">
-                            Ver Recibo
-                          </span>
-                        </MenuItem>
-                        <MenuItem onClick={() => handleDescargarPDF(recibo)}>
-                          <span className="text-gray-700 block px-4 py-2 text-sm">
-                            Descargar PDF
-                          </span>
-                        </MenuItem>
-                        <MenuItem
-                          onClick={() => handleEliminar(recibo.nroRecibo)}
-                        >
-                          <span className="text-gray-700 block px-4 py-2 text-sm">
-                            Eliminar
-                          </span>
-                        </MenuItem>
-                      </div>
-                    </MenuItems>
-                  </Menu>
+                      <MenuItems
+                        transition
+                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
+                      >
+                        <div className="py-1">
+                          <MenuItem>
+                            <button
+                              onClick={() => handleEliminar(recibo.nroRecibo)}
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                            >
+                              Eliminar
+                            </button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button
+                              onClick={() => handleDescargarPDF(recibo)}
+                              className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
+                            >
+                              Descargar Pdf
+                            </button>
+                          </MenuItem>
+                        </div>
+                      </MenuItems>
+                    </Menu>
+                  </div>
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => handleEliminar(recibo.nroRecibo)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    onClick={() => handleDescargarPDF(recibo)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Descargar Pdf
+                  </button>
                 </td>
               </tr>
             ))}

@@ -53,7 +53,8 @@ const ListadoBalanceAnual = () => {
       label: "Año",
       key: "fechaBalanceAnual",
       icon: <SortIcon />,
-      comparator: (a, b) => new Date(a.fechaBalanceAnual) - new Date(b.fechaBalanceAnual),
+      comparator: (a, b) =>
+        new Date(a.fechaBalanceAnual) - new Date(b.fechaBalanceAnual),
     },
     {
       label: "Monto",
@@ -69,63 +70,77 @@ const ListadoBalanceAnual = () => {
   };
 
   const descargarPdfBalanceAnual = (ultimoBalance) => {
-  
     if (!ultimoBalance) {
       alert("No se encontraron datos de balance anual para generar el PDF.");
       return;
     }
-  
-    const { cooperativaEntity, egresoTotal, ingresoTotal, resultadoFinal, listaEgresos, listaIngresos, fechaBalanceAnual } = ultimoBalance;
-  
+
+    const {
+      cooperativaEntity,
+      egresoTotal,
+      ingresoTotal,
+      resultadoFinal,
+      listaEgresos,
+      listaIngresos,
+      fechaBalanceAnual,
+    } = ultimoBalance;
+
     const fechaBalance = new Date(fechaBalanceAnual + "T00:00:00");
     const doc = new jsPDF();
-  
+
     doc.setFontSize(18);
     doc.text(`Balance Anual - ${cooperativaEntity.nombre}`, 14, 22);
-  
+
     doc.setFontSize(12);
-    doc.text(`Año: ${fechaBalance.getFullYear()}`, 170, 22, { align: 'right' });
-    
-  
+    doc.text(`Año: ${fechaBalance.getFullYear()}`, 170, 22, { align: "right" });
 
     const ingresosStartY = 40;
     doc.setFontSize(14);
     doc.text("Ingresos:", 14, ingresosStartY);
-  
+
     doc.autoTable({
       head: [["SubRubro", "Monto"]],
-      body: listaIngresos.length > 0 
-        ? listaIngresos.map(ingreso => [ingreso.subRubro, ingreso.ingreso?.toFixed(2)]) 
-        : [["Sin ingresos", "0.00"]],
-      startY: ingresosStartY + 5, 
+      body:
+        listaIngresos.length > 0
+          ? listaIngresos.map((ingreso) => [
+              ingreso.subRubro,
+              ingreso.ingreso?.toFixed(2),
+            ])
+          : [["Sin ingresos", "0.00"]],
+      startY: ingresosStartY + 5,
       theme: "grid",
-      
     });
-  
 
     const egresosStartY = doc.autoTable.previous.finalY + 10;
     doc.setFontSize(14);
     doc.text("Egresos:", 14, egresosStartY);
-  
 
     doc.autoTable({
       head: [["SubRubro", "Monto"]],
-      body: listaEgresos.length > 0 
-        ? listaEgresos.map(egreso => [egreso.subRubro, egreso.egreso?.toFixed(2)]) 
-        : [["Sin egresos", "0.00"]],
+      body:
+        listaEgresos.length > 0
+          ? listaEgresos.map((egreso) => [
+              egreso.subRubro,
+              egreso.egreso?.toFixed(2),
+            ])
+          : [["Sin egresos", "0.00"]],
       startY: egresosStartY + 5,
       theme: "grid",
     });
-  
+
     // Totales y resultado final
     const totalsStartY = doc.autoTable.previous.finalY + 10;
     doc.setFontSize(12);
     doc.text(
-      `Total Ingresos: ${ingresoTotal?.toFixed(2)} - Total Egresos: ${egresoTotal?.toFixed(2)} - Resultado: ${resultadoFinal.toFixed(2)}`,
+      `Total Ingresos: ${ingresoTotal?.toFixed(
+        2
+      )} - Total Egresos: ${egresoTotal?.toFixed(
+        2
+      )} - Resultado: ${resultadoFinal.toFixed(2)}`,
       14,
       totalsStartY
     );
-  
+
     // Guarda el archivo PDF con el nombre adecuado
     doc.save(`Balance_Anual_${fechaBalance.getFullYear()}.pdf`);
   };
@@ -136,16 +151,18 @@ const ListadoBalanceAnual = () => {
         <div className="w-full md:w-1/2">
           <Buscador value={buscador} onChange={handleChangeBuscador} />
         </div>
-        <OrdenarPor
-          options={ordenarOptions}
-          buttonText="Ordenar por"
-          onOptionSelect={handleSortChange}
-        />
+        <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+          <OrdenarPor
+            options={ordenarOptions}
+            buttonText="Ordenar por"
+            onOptionSelect={handleSortChange}
+          />
+        </div>
       </div>
 
       <div className="overflow-y-auto h-screen">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-          <thead className="text-xs text-gray-700 uppercase dark:text-white border-b">
+          <thead className="text-xs text-gray-700 uppercase dark:text-white dark:border-gray-700 border-gray-700 border-b">
             <tr className="hidden sm:table-row">
               <th scope="col" className="px-4 py-3 text-center">
                 Año
@@ -163,21 +180,34 @@ const ListadoBalanceAnual = () => {
           </thead>
           <tbody>
             {buscadorFiltrado?.map((balance) => (
-              <tr className="border-b dark:border-gray-700 sm:table-row" key={balance.idBalanceAnual}>
+              <tr
+                className="border-b dark:border-gray-700 sm:table-row"
+                key={balance.idBalanceAnual}
+              >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Fecha: </span>
                   {balance.fechaBalanceAnual}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Ingresos Totales:{" "}
+                  </span>
                   ${balance.ingresoTotal}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Egresos Totales:{" "}
+                  </span>
                   ${balance.egresoTotal}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Resultado Final:{" "}
+                  </span>
                   ${balance.resultadoFinal}
                 </td>
-                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"></td>
-                <div className="relative inline-block text-left">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <div className="relative inline-block text-left">
                     <Menu as="div" className="relative inline-block text-left">
                       <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
                         <svg
@@ -201,9 +231,7 @@ const ListadoBalanceAnual = () => {
                         <div className="py-1">
                           <MenuItem>
                             <button
-                              onClick={() =>
-                                descargarPdfBalanceAnual(balance)
-                              }
+                              onClick={() => descargarPdfBalanceAnual(balance)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Descargar Pdf
@@ -213,11 +241,18 @@ const ListadoBalanceAnual = () => {
                       </MenuItems>
                     </Menu>
                   </div>
-                  
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => descargarPdfBalanceAnual(balance)}
+                    className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Descargar PDF
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
-        
         </table>
       </div>
     </div>

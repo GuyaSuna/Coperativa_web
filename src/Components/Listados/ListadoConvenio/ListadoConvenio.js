@@ -62,13 +62,12 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
     setArchivados(!archivados);
   };
 
-  const handleModificar = (cedula) => {
-    setCedulaSocio(cedula);
-    setIdentificadorComponente(4);
+  const handleModificar = (convenio) => {
+    setConvenio(convenio);
+    setIdentificadorComponente(52);
   };
 
-  const handleCrearConvenio = (convenio) => {
-    setConvenio(convenio);
+  const handleCrearConvenio = () => {
     setIdentificadorComponente(18);
   };
 
@@ -141,7 +140,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
             onClick={handleCrearConvenio}
             className="flex items-center justify-center text-white bg-blue-600 hover:bg-gray-500 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
           >
-            Agregar Convenio
+            AGREGAR CONVENIO
           </button>
 
           <button
@@ -192,24 +191,36 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                 key={convenio.idConvenio}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Nro Convenio:{" "}
+                  </span>
                   {convenio.idConvenio}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Deuda en UR: </span>
                   {convenio.deudaEnUrOriginal} UR
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Pago por mes:{" "}
+                  </span>
                   {convenio.urPorMes} UR
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">
+                    Fecha Inicio:{" "}
+                  </span>
                   {formatDate(convenio.fechaInicioConvenio)}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
-                  {convenio.socio.nombreSocio}
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <span className="sm:hidden font-semibold">Socio: </span>
+                  {convenio.socio.nombreSocio} {convenio.socio.apellidoSocio}
                 </td>
-                <td className="px-4 py-3 text-center">
+                <td className="block sm:table-cell px-4 py-3">
                   <button
+                    type="button"
                     onClick={() => handleVerConvenio(convenio)}
-                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1"
+                    className="text-white bg-gradient-to-br from-slate-400 to-slate-600 font-medium rounded-lg text-sm px-3 py-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.02] transition-transform"
                   >
                     Ver
                   </button>
@@ -249,9 +260,7 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                           </MenuItem>
                           <MenuItem>
                             <button
-                              onClick={() =>
-                                handleModificar(convenio.idConvenio)
-                              }
+                              onClick={() => handleModificar(convenio)}
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
                               Modificar
@@ -261,6 +270,20 @@ const ListadoConvenio = ({ setConvenio, setIdentificadorComponente }) => {
                       </MenuItems>
                     </Menu>
                   </div>
+                </td>
+                <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                  <button
+                    onClick={() => handleEliminar(convenio.idConvenio)}
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Eliminar
+                  </button>
+                  <button
+                    onClick={() => handleModificar(convenio.idConvenio)}
+                    className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                  >
+                    Modificar
+                  </button>
                 </td>
               </tr>
             ))}

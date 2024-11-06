@@ -33,14 +33,14 @@ const ListadoViviendas = ({
     try {
       const response = await getAllViviendas(cooperativa.idCooperativa);
       setAllViviendas(response);
-
     } catch (error) {
       console.error("Error al obtener las viviendas:", error);
     }
   };
 
-  const handleModificar = (nroVivienda) => {
-    setNroVivienda(nroVivienda);
+  const handleModificar = (idVivienda) => {
+    console.log(idVivienda);
+    setNroVivienda(idVivienda);
     setIdentificadorComponente(5);
   };
   const handleVerDetalles = (vivienda) => {
@@ -49,9 +49,9 @@ const ListadoViviendas = ({
     setIsModalOpen(true);
   };
 
-  const handleEliminar = async (nroVivienda) => {
+  const handleEliminar = async (idVivienda) => {
     try {
-      const data = await deleteVivienda(nroVivienda);
+      const data = await deleteVivienda(idVivienda);
 
       fetchAllViviendas();
     } catch (e) {
@@ -174,19 +174,23 @@ const ListadoViviendas = ({
                 key={vivienda.nroVivienda}
               >
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Nro Vivienda:</span>
+                  <span className="sm:hidden font-semibold">
+                    Nro Vivienda:{" "}
+                  </span>
                   {vivienda.nroVivienda}
                 </td>
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  <span className="sm:hidden font-semibold">Nombre Socio:</span>
+                  <span className="sm:hidden font-semibold">
+                    Nombre Socio:{"  "}
+                  </span>
                   {vivienda?.socio?.nombreSocio &&
                   vivienda?.socio?.apellidoSocio
                     ? `${vivienda.socio.nombreSocio} ${vivienda.socio.apellidoSocio}`
                     : "Sin socio"}
                 </td>
-                <td className="block sm:table-cell px-4 py-3">
+                <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">
-                    Cantidad Dormitorios:
+                    Cantidad Dormitorios:{" "}
                   </span>
                   {vivienda.cantidadDormitorios}
                 </td>
@@ -226,7 +230,7 @@ const ListadoViviendas = ({
                           <MenuItem>
                             <button
                               onClick={() =>
-                                handleEliminar(vivienda.nroVivienda)
+                                handleEliminar(vivienda.idVivienda)
                               }
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
@@ -236,7 +240,7 @@ const ListadoViviendas = ({
                           <MenuItem>
                             <button
                               onClick={() =>
-                                handleModificar(vivienda.nroVivienda)
+                                handleModificar(vivienda.idVivienda)
                               }
                               className="block px-4 py-2 text-sm text-gray-700 focus:bg-gray-100 focus:text-gray-900"
                             >
@@ -250,7 +254,7 @@ const ListadoViviendas = ({
                 </td>
                 <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
                   <button
-                    onClick={() => handleEliminar(vivienda.nroVivienda)}
+                    onClick={() => handleEliminar(vivienda.idVivienda)}
                     className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
                   >
                     Eliminar

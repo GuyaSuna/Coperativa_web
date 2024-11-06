@@ -24,20 +24,20 @@ import {
   FaHouseUser,
   FaClipboardList,
 } from "react-icons/fa";
-import { useTheme } from "../Provider/ThemeProvider"; // Importar el contexto de tema
+import { useTheme } from "../Provider/ThemeProvider";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
-const Header = ({ setIdentificadorComponente }) => {
+const Header = ({
+  selectedOption,
+  setSelectedOption,
+  setIdentificadorComponente,
+}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [miembroUsername, setMiembroUsername] = useState("");
   const { miembro, logoutMiembro } = useContext(MiembroContext);
-  const [selectedOption, setSelectedOption] = useState(null);
   const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [openSecondDropdown, setOpenSecondDropdown] = useState(null); // Estado para el segundo dropdown
-  const [openThirdDropdown, setOpenThirdDropdown] = useState(null);
 
-  // Acceder al estado del tema
   const { darkMode } = useTheme();
 
   const handleSelection = (option) => {
@@ -65,18 +65,13 @@ const Header = ({ setIdentificadorComponente }) => {
     setOpenDropdown(openDropdown === dropdown ? null : dropdown);
   };
 
-  const toggleSecondDropdown = () => {
-    setOpenSecondDropdown(!openSecondDropdown); // Alterna el estado del segundo dropdown
-  };
-  const toggleThirdDropdown = () => {
-    setOpenThirdDropdown(openThirdDropdown ? null : true); // Alterna el tercer desplegable
-  };
   const initial = miembroUsername.charAt(0).toUpperCase();
   return (
     <header className="h-16 flex justify-between w-full border-b border-gray-200 dark:border-gray-800 px-4 lg:px-10 z-50 relative">
       <div className="flex text-gray-600 dark:text-gray-400 w-full lg:w-auto">
         <button
-          className="lg:hidden text-white focus:outline-none"
+          className="lg:hidden dark:text-white text-dark
+           focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
         >
           <svg
@@ -106,7 +101,7 @@ const Header = ({ setIdentificadorComponente }) => {
           } lg:hidden`}
           style={{ width: "250px" }}
         >
-          <div className="flex flex-col h-full p-4">
+          <div className="flex flex-col h-full p-4 overflow-y-auto">
             <Image
               className="logo-Img hover:scale-90 transform duration-700"
               src={darkMode ? logoDark : logoLight}
@@ -122,8 +117,10 @@ const Header = ({ setIdentificadorComponente }) => {
                     selectedOption === 43 ? "bg-blue-500 text-white" : ""
                   }`}
                 >
-                  <FaHouseUser className="mr-2 text-2xl" />{" "}
-                  <span className="text-base">Ver Cooperativa</span>
+                  <div className="flex items-center">
+                    <FaHouseUser className="mr-2 text-2xl" />{" "}
+                    <span className="text-base">Ver Cooperativa</span>
+                  </div>
                 </button>
 
                 <button
@@ -210,9 +207,9 @@ const Header = ({ setIdentificadorComponente }) => {
               {/* Segundo desplegable */}
               <div className="relative">
                 <button
-                  onClick={toggleSecondDropdown}
+                  onClick={() => toggleDropdown(2)}
                   className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                    openSecondDropdown ? "bg-blue-500 text-white" : ""
+                    openDropdown === 2 ? "bg-blue-500 text-white" : ""
                   }`}
                 >
                   <div className="flex items-center">
@@ -222,16 +219,15 @@ const Header = ({ setIdentificadorComponente }) => {
                   <span
                     className="transform transition-transform duration-200 text-1xl"
                     style={{
-                      transform: openSecondDropdown
-                        ? "rotate(180deg)"
-                        : "rotate(0)",
+                      transform:
+                        openDropdown === 2 ? "rotate(180deg)" : "rotate(0)",
                     }}
                   >
                     ▼
                   </span>
                 </button>
 
-                {openSecondDropdown && (
+                {openDropdown === 2 && (
                   <div className="mt-2 space-y-2 ml-4">
                     <button
                       onClick={() => handleSelection(8)}
@@ -300,14 +296,32 @@ const Header = ({ setIdentificadorComponente }) => {
                       <FaFileSignature className="mr-2 text-2xl" />{" "}
                       <span className="text-base">Agregar Balance Anual</span>
                     </button>
+                    <button
+                      onClick={() => handleSelection(46)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 46 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileSignature className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Agregar devolucion</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(49)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 49 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaFileSignature className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Agregar Recargo</span>
+                    </button>
                   </div>
                 )}
               </div>
               <div className="relative">
                 <button
-                  onClick={toggleThirdDropdown}
+                  onClick={() => toggleDropdown(3)}
                   className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center justify-between dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
-                    openThirdDropdown ? "bg-blue-500 text-white" : ""
+                    openDropdown === 3 ? "bg-blue-500 text-white" : ""
                   }`}
                 >
                   <div className="flex items-center">
@@ -317,16 +331,15 @@ const Header = ({ setIdentificadorComponente }) => {
                   <span
                     className="transform transition-transform duration-200 text-1xl"
                     style={{
-                      transform: openThirdDropdown
-                        ? "rotate(180deg)"
-                        : "rotate(0)",
+                      transform:
+                        openDropdown === 3 ? "rotate(180deg)" : "rotate(0)",
                     }}
                   >
                     ▼
                   </span>
                 </button>
 
-                {openThirdDropdown && (
+                {openDropdown === 3 && (
                   <div className="mt-2 space-y-2 ml-4">
                     <button
                       onClick={() => handleSelection(35)}
@@ -375,6 +388,24 @@ const Header = ({ setIdentificadorComponente }) => {
                       <FaMoneyBill className="mr-2 text-2xl" />{" "}
                       <span className="text-base">Listado Egresos</span>
                     </button>
+                    <button
+                      onClick={() => handleSelection(47)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 47 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Listado Devoluciones</span>
+                    </button>
+                    <button
+                      onClick={() => handleSelection(50)}
+                      className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                        selectedOption === 50 ? "bg-blue-500 text-white" : ""
+                      }`}
+                    >
+                      <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                      <span className="text-base">Listado Recargos</span>
+                    </button>
                   </div>
                 )}
               </div>
@@ -390,7 +421,7 @@ const Header = ({ setIdentificadorComponente }) => {
           <div>
             <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold dark:text-gray-300 text-gray-900 shadow-sm border dark:border-gray-600 border-gray-200">
               <span className="relative flex-shrink-0 bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
-                {initial} {/* Muestra la inicial del nombre */}
+                {initial}
               </span>
               <span className="ml-2 md:text-xs  text-dark dark:text-white self-center">
                 {miembroUsername}

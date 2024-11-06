@@ -3,17 +3,21 @@
 import React, { useState, useEffect, useContext } from "react";
 import { postPagoDevolucionCapital, postEgreso } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
-const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => {
+const PagoDevolucionCapitalForm = ({
+  socio,
+  ur,
+  setIdentificadorComponente,
+}) => {
   const [montoPago, setMontoPago] = useState("");
   const [tipoMoneda, setTipoMoneda] = useState("UR");
   const [fechaPago, setFechaPago] = useState("");
   const [errores, setErrores] = useState({});
-  const {cooperativa} = useContext(MiembroContext);
-  
+  const { cooperativa } = useContext(MiembroContext);
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFechaPago(today);
-  },[])
+  }, []);
   const validarFormulario = () => {
     const newErrores = {};
 
@@ -27,26 +31,26 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!validarFormulario()) return;
-  
+
     const pagoDevolucionData = {
-      montoPago, 
-      tipoMoneda, 
-      fechaPago, 
+      montoPago,
+      tipoMoneda,
+      fechaPago,
       socio,
     };
-  
+
     try {
       const result = await postPagoDevolucionCapital(pagoDevolucionData);
-  
+
       if (!result) {
         alert("No se pudo registrar el pago de devolución");
         return;
       }
-      
+
       let montoEgreso = montoPago * ur;
-  
+
       const egreso = {
         subRubro: "Devolución de Capital",
         denominacion: `Pago de devolución registrado el ${fechaPago}`,
@@ -55,11 +59,10 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
         tipoMoneda: "UYU",
         fechaDatosContables: fechaPago,
       };
-  
+
       try {
         const egresoResponse = await postEgreso(egreso);
-
-        alert("Pago de devolución y egreso registrados correctamente");
+        setIdentificadorComponente(0);
       } catch (error) {
         console.error("Error al registrar el egreso:", error);
         alert("Error al registrar el egreso contable");
@@ -69,7 +72,7 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
       alert("Error al registrar el pago de devolución");
     }
   };
-  
+
   return (
     <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
       <form
@@ -77,10 +80,7 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
         className="w-full min-w-md bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
       >
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="montoPago"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="montoPago">
             Monto de Pago:
           </label>
           <input
@@ -118,10 +118,7 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
         </div>
 
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="fechaPago"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="fechaPago">
             Fecha de Pago:
           </label>
           <input
@@ -138,10 +135,7 @@ const PagoDevolucionCapitalForm = ({ socio, ur ,setIdentificadorComponente}) => 
         </div>
 
         <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="socio"
-          >
+          <label className="block text-sm font-medium mb-2" htmlFor="socio">
             Socio:
           </label>
           <input

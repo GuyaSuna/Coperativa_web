@@ -22,10 +22,12 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
 
   useEffect(() => {
     const fetchVivienda = async () => {
+      console.log(nroVivienda);
       try {
         const data = await getVivienda(nroVivienda);
         if (data) {
           setCantidadDormitorios(data.cantidadDormitorios);
+          setVivienda(data);
         }
         if (data.socioTitular) {
           const dataSocio = await getSocio(data.socioTitular.cedulaSocio);
@@ -70,15 +72,19 @@ const ModificarVivienda = ({ nroViviendaParam }) => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("ACA", vivienda);
     e.preventDefault();
     if (!validarFormulario()) return;
     try {
-      const result = await updateVivienda(
+      const updatedVivienda = {
+        ...vivienda,
         nroVivienda,
         cantidadDormitorios,
-        cooperativa.idCooperativa,
-        socioTitular
-      );
+        socioTitular,
+        cooperativa: { idCooperativa: cooperativa.idCooperativa },
+      };
+      const result = await updateVivienda(updatedVivienda);
+      setIdentificadorComponente(1);
     } catch (error) {
       console.error("Error al actualizar vivienda:", error);
     }

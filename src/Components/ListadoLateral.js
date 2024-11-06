@@ -22,8 +22,7 @@ import { useTheme } from "../Provider/ThemeProvider";
 import logoDark from "../../public/logoVisoftDark.png";
 import logoLight from "../../public/logoVisoftLigth.png";
 
-const ListadoLateral = ({ setIdentificadorComponente }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const ListadoLateral = ({ selectedOption , setSelectedOption, setIdentificadorComponente }) => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const { darkMode } = useTheme();
 
@@ -228,6 +227,24 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
                 <FaFileSignature className="mr-2 text-2xl" />{" "}
                 <span className="text-base">Agregar Balance Anual</span>
               </button>
+              <button
+                onClick={() => handleSelection(46)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 46 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaFileSignature className="mr-2 text-2xl" />{" "}
+                <span className="text-base">Agregar devolucion</span>
+              </button>
+              <button
+                onClick={() => handleSelection(49)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 49 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaFileSignature className="mr-2 text-2xl" />{" "}
+                <span className="text-base">Agregar Recargo</span>
+              </button>
             </div>
           )}
         </div>
@@ -300,6 +317,24 @@ const ListadoLateral = ({ setIdentificadorComponente }) => {
               >
                 <FaMoneyBill className="mr-2 text-2xl" />{" "}
                 <span className="text-base">Listado Egresos</span>
+              </button>
+              <button
+                onClick={() => handleSelection(47)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 47 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                <span className="text-base">Listado Devoluciones</span>
+              </button>
+              <button
+                onClick={() => handleSelection(50)}
+                className={`w-full py-2 px-4 rounded-md text-left font-semibold flex items-center dark:text-white text-black hover:bg-blue-900 hover:text-white dark:hover:bg-blue-100 dark:hover:text-black  ${
+                  selectedOption === 50 ? "bg-blue-500 text-white" : ""
+                }`}
+              >
+                <FaMoneyBill className="mr-2 text-2xl" />{" "}
+                <span className="text-base">Listado Recargos</span>
               </button>
             </div>
           )}

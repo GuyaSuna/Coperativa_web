@@ -144,7 +144,7 @@ const AltaVivienda = ({ setIdentificadorComponente }) => {
           type="submit"
           className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
         >
-          Submit
+          Agregar Vivienda
         </button>
         {mostrarModal && (
           <ModalConfirmacion

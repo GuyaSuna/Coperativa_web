@@ -42,8 +42,6 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
 
       setAllSocios(sociosResponse);
       setAllSuplentes(suplentesArchivados);
-
-
     } catch (error) {
       console.error("Error al obtener los datos:", error);
     }
@@ -55,7 +53,6 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
 
   const handleVerSuplente = (suplente, socio) => {
-
     setSuplenteSeleccionado(suplente);
     setSocioSeleccionado(socio);
     setIsModalOpen(true);
@@ -72,7 +69,6 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
   };
 
   const getSocioPorSuplente = (cedulaSuplente) => {
-
     const socio = allSocios.find(
       (socio) => socio.suplenteEntity?.cedulaSuplente === cedulaSuplente
     );
@@ -179,15 +175,21 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                   key={suplente.cedulaSuplente}
                 >
                   <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <span className="sm:hidden font-semibold">Cédula:</span>
+                    <span className="sm:hidden font-semibold">
+                      Cédula:{"  "}{" "}
+                    </span>
                     {suplente.cedulaSuplente}
                   </td>
                   <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <span className="sm:hidden font-semibold">Nombre:</span>
+                    <span className="sm:hidden font-semibold">
+                      Nombre:{"  "}
+                    </span>
                     {suplente.nombreSuplente} {suplente.apellidoSuplente}
                   </td>
                   <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <span className="sm:hidden font-semibold">Socio:</span>
+                    <span className="sm:hidden font-semibold">
+                      Socio:{"  "}
+                    </span>
                     {socio?.nombreSocio} {socio?.apellidoSocio}
                   </td>
                   <td className="block sm:table-cell px-4 py-3">
@@ -205,7 +207,7 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                         as="div"
                         className="relative inline-block text-left"
                       >
-                        <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center">
+                        <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
                           <svg
                             viewBox="0 0 24 24"
                             className="w-5"
@@ -221,7 +223,10 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                           </svg>
                         </MenuButton>
 
-                        <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <MenuItems
+                          transition
+                          className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                        >
                           <div className="py-1">
                             <MenuItem>
                               <button
@@ -245,6 +250,20 @@ const ListadoSuplentes = ({ setSuplente, setIdentificadorComponente }) => {
                         </MenuItems>
                       </Menu>
                     </div>
+                  </td>
+                  <td className="px-4 py-3 flex justify-end gap-2 md:hidden">
+                    <button
+                      onClick={() => handleEliminar(suplente.cedulaSuplente)}
+                      className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Eliminar
+                    </button>
+                    <button
+                      onClick={() => handleModificar(suplente)}
+                      className="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm"
+                    >
+                      Modificar
+                    </button>
                   </td>
                 </tr>
               );

@@ -153,23 +153,21 @@ const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
                           as="div"
                           className="relative inline-block text-left"
                         >
-                          <div>
-                            <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md px-3 py-2 text-sm font-semibold text-gray-300 shadow-sm">
-                              <svg
-                                viewBox="0 0 24 24"
-                                className="w-5"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                                fill="none"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <circle cx={12} cy={12} r={1} />
-                                <circle cx={19} cy={12} r={1} />
-                                <circle cx={5} cy={12} r={1} />
-                              </svg>
-                            </MenuButton>
-                          </div>
+                          <MenuButton className="focus:outline-none font-medium rounded-lg text-sm px-2 py-2 text-center inline-flex items-center hidden md:inline-flex">
+                            <svg
+                              viewBox="0 0 24 24"
+                              className="w-5"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                              fill="none"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <circle cx={12} cy={12} r={1} />
+                              <circle cx={19} cy={12} r={1} />
+                              <circle cx={5} cy={12} r={1} />
+                            </svg>
+                          </MenuButton>
 
                           <MenuItems
                             transition
