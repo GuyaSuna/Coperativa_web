@@ -1,4 +1,5 @@
 import { getToken } from "./getToken";
+import api from "./apiConfiguration";
 const URL = "http://localhost:5000";
 
 //logins
@@ -306,70 +307,76 @@ const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
   }
 };
 
-const getAllSocios = async (idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+// const getAllSocios = async (idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/socio/allSocios/${idCooperativa}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    // Formatear la fecha de cada socio
-    const sociosConFechaFormateada = data.map((socio) => {
-      if (socio.FechaIngreso) {
-        const fechaISO = parseISO(socio.FechaIngreso);
-        const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-        return {
-          ...socio,
-          FechaIngreso: fechaFormateada,
-        };
-      } else {
-        return socio;
-      }
-    });
+//     const sociosConFechaFormateada = data.map((socio) => {
+//       if (socio.FechaIngreso) {
+//         const fechaISO = parseISO(socio.FechaIngreso);
+//         const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
+//         return {
+//           ...socio,
+//           FechaIngreso: fechaFormateada,
+//         };
+//       } else {
+//         return socio;
+//       }
+//     });
 
-    return sociosConFechaFormateada;
-  } catch (error) {
-    console.error("Error en getAllSocios:", error);
-    throw new Error("Error al obtener los datos de los Socios.");
-  }
-};
+//     return sociosConFechaFormateada;
+//   } catch (error) {
+//     console.error("Error en getAllSocios:", error);
+//     throw new Error("Error al obtener los datos de los Socios.");
+//   }
+// };
 
-const getAllSociosImpagos = async (idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(
-      `${URL}/socio/SociosImpagos/${idCooperativa}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+export const getAllSocios = async (idCooperativa) => (await api.get(`/socio/allSocios/${idCooperativa}`, { needsAuth: true })).data;
+ 
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+// const getAllSociosImpagos = async (idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(
+//       `${URL}/socio/SociosImpagos/${idCooperativa}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
 
-    const data = await response.json();
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-    return data;
-  } catch (error) {
-    console.error("Error en getAllSociosImpagos:", error);
-    throw new Error("Error al obtener los datos de los Socios.");
-  }
-};
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllSociosImpagos:", error);
+//     throw new Error("Error al obtener los datos de los Socios.");
+//   }
+// };
+
+
+export const getAllSociosImpagos = async (idCooperativa) => (await api.get(`/socio/SociosImpagos/${idCooperativa}`, { needsAuth: true })).data;
+
 
 const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
   try {
@@ -2528,7 +2535,7 @@ export {
   getSocio,
   getRecibosImpagosSocio,
   postSocio,
-  getAllSocios,
+  // getAllSocios,
   updateSocio,
   deleteSocio,
   postSuplente,

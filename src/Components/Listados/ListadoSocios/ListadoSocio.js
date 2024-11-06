@@ -62,28 +62,28 @@ const ListadoSocio = ({
 
   const { data: allSocios = [], error, isLoading } = useQuery({
     queryKey: ['socios'],
-    queryFn: fetchAllSocios,
+    queryFn: async () => await fetchAllSocios(),
   });
   
-  useEffect(() => {
-    const filteredSocios = allSocios.filter((socio) =>
-      !verArchivados ? !socio.archivado : socio.archivado
-    );
-    setBuscadorFiltrado(filteredSocios);
-  }, [allSocios, verArchivados]);
+  // useEffect(() => {
+  //   const filteredSocios = allSocios.filter((socio) =>
+  //     !verArchivados ? !socio.archivado : socio.archivado
+  //   );
+  //   setBuscadorFiltrado(filteredSocios);
+  // }, [allSocios, verArchivados]);
 
   const handleVerArchivados = () => {
     setVerArchivados(!verArchivados);
   };
-  useEffect(() => {
-    if (cooperativa?.idCooperativa) {
-      fetchAllData();
-    }
-  }, [cooperativa]);
+  // useEffect(() => {
+  //   if (cooperativa?.idCooperativa) {
+  //     fetchAllData();
+  //   }
+  // }, [cooperativa]);
 
-  const fetchAllData = async () => {
-    await Promise.all([fetchRecibos(), fetchAllSocios()]);
-  };
+  // const fetchAllData = async () => {
+  //   await Promise.all([fetchRecibos(), fetchAllSocios()]);
+  // };
 
   const fetchRecibos = async () => {
     const reciboResponse = await getAllRecibos(cooperativa.idCooperativa);
@@ -143,16 +143,16 @@ const ListadoSocio = ({
     setIsModalOpen(true);
   };
 
-  useEffect(() => {
-    if (buscador == "") {
-      setBuscadorFiltrado(allSocios);
-    } else {
-      const buscadorFiltrado = allSocios.filter((socio) =>
-        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
-      );
-      setBuscadorFiltrado(buscadorFiltrado);
-    }
-  }, [allSocios, buscador]);
+  // useEffect(() => {
+  //   if (buscador == "") {
+  //     setBuscadorFiltrado(allSocios);
+  //   } else {
+  //     const buscadorFiltrado = allSocios.filter((socio) =>
+  //       socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
+  //     );
+  //     setBuscadorFiltrado(buscadorFiltrado);
+  //   }
+  // }, [allSocios, buscador]);
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
@@ -188,18 +188,18 @@ const ListadoSocio = ({
     },
   ];
 
-  useEffect(() => {
-    if (buscador == "") {
-      setBuscadorFiltrado(allSocios.filter((socio) => !socio.archivado));
-    } else {
-      const buscadorFiltrado = allSocios.filter(
-        (socio) =>
-          socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase()) &&
-          !socio.archivado
-      );
-      setBuscadorFiltrado(buscadorFiltrado);
-    }
-  }, [allSocios, buscador]);
+  // useEffect(() => {
+  //   if (buscador == "") {
+  //     setBuscadorFiltrado(allSocios.filter((socio) => !socio.archivado));
+  //   } else {
+  //     const buscadorFiltrado = allSocios.filter(
+  //       (socio) =>
+  //         socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase()) &&
+  //         !socio.archivado
+  //     );
+  //     setBuscadorFiltrado(buscadorFiltrado);
+  //   }
+  // }, [allSocios, buscador]);
 
   const handleSortChange = (option) => {
     let sociosFiltrados = [...allSocios];
