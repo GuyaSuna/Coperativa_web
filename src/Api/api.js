@@ -251,15 +251,12 @@ export const updateIngreso = async (ingreso) =>
   (await api.put(`/ingresos`, ingreso, { needsAuth: true })).data;
 
 export const getAllIngresos = async (idCooperativa) =>
-  (
-    await api.delete(`/ingresos/allIngresos/${idCooperativa}`, {
-      needsAuth: true,
-    })
-  ).data;
+  (await api.get(`/ingresos/allIngresos/${idCooperativa}`, { needsAuth: true }))
+    .data;
 
 export const getAllIngresosByMes = async (fecha, idCooperativa) =>
   (
-    await api.put(`/ingresos/allIngresosByMes/${fecha}/${idCooperativa}`, {
+    await api.get(`/ingresos/allIngresosByMes/${fecha}/${idCooperativa}`, {
       needsAuth: true,
     })
   ).data;
