@@ -19,12 +19,13 @@ export const Login = async (username, password) => {
 
 export const LoginMaster = async (username, password) => {
   const body = { username, password };
-  const data = (await api.post(/auth/loginMaster, body, { needsAuth: false })).data;
+  const data = (await api.post(`/auth/loginMaster`, body, { needsAuth: false }))
+    .data;
 
   if (data.token) {
-    document.cookie = token=`${data.token}; path=/; max-age=86400`;
+    document.cookie = `token=${data.token}; path=/; max-age=1440`;
   } else {
-    throw new Error("No se recibió el token en la respuesta.");
+    throw new Error("No se recibio el token en la respuesta.");
   }
 
   return data;

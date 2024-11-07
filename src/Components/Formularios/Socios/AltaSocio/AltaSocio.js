@@ -252,7 +252,6 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <>
       <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
         <form
           onSubmit={handleSubmit}
@@ -567,7 +566,6 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
           )}
         </form>
       </div>
-    </>
   );
 };
 export default AltaSocio;
