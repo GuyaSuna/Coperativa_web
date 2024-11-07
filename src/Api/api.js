@@ -1850,6 +1850,38 @@ const getAllEstadosContables = async () => {
   }
 };
 
+const getUltimoBalanceAnual = async (idCooperativa) => {
+  try {
+    const token = getToken();
+    const response = await fetch(
+      `${URL}/balanceAnual/ultimo/${idCooperativa}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (response == null) {
+      return response;
+    }
+    if (!response.ok) {
+      if (response.status === 404) {
+        console.warn("Balance anual no encontrado (404).");
+        return null;
+      }
+      throw new Error(`Error de servidor: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en getUltimoBalance:", error);
+    return null;
+  }
+};
+
 //Interes
 
 const getInteresAnual = async (fecha, idCooperativa) => {
@@ -2145,38 +2177,6 @@ const deleteRecibo = async (nroRecibo) => {
   } catch (error) {
     console.error("Error en deleteSocio:", error);
     throw new Error("Error al eliminar el socio");
-  }
-};
-
-const getUltimoBalanceAnual = async (idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(
-      `${URL}/balanceAnual/ultimo/${idCooperativa}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (response == null) {
-      return response;
-    }
-    if (!response.ok) {
-      if (response.status === 404) {
-        console.warn("Balance anual no encontrado (404).");
-        return null;
-      }
-      throw new Error(`Error de servidor: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error en getUltimoBalance:", error);
-    return null;
   }
 };
 
