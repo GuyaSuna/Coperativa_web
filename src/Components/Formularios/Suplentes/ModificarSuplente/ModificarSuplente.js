@@ -71,11 +71,13 @@ const ModificarSuplente = ({ suplenteParam , setIdentificadorComponente }) => {
     e.preventDefault();
     if (!validarFormulario()) return;
     try {
-     const response = await updateSuplente(
+     const response = await updateSuplente( suplenteEntity ={
         cedulaSuplente,
         apellidoSuplente,
         nombreSuplente,
         telefonoSuplente
+     }
+        
       );
 
       if(response){
