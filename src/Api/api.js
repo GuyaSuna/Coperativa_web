@@ -131,9 +131,9 @@ export const deleteIngreso = async (idIngreso) => (await api.delete(`/ingresos/$
 
 export const updateIngreso = async (ingreso) => (await api.put(`/ingresos`,ingreso,{ needsAuth: true })).data;
 
-export const getAllIngresos = async (idCooperativa) => (await api.delete(`/ingresos/allIngresos/${idCooperativa}`,{ needsAuth: true })).data;
+export const getAllIngresos = async (idCooperativa) => (await api.get(`/ingresos/allIngresos/${idCooperativa}`,{ needsAuth: true })).data;
 
-export const getAllIngresosByMes = async (fecha, idCooperativa) => (await api.put(`/ingresos/allIngresosByMes/${fecha}/${idCooperativa}`,{ needsAuth: true })).data;
+export const getAllIngresosByMes = async (fecha, idCooperativa) => (await api.get(`/ingresos/allIngresosByMes/${fecha}/${idCooperativa}`,{ needsAuth: true })).data;
 
 export const deleteConvenio = async (idConvenio) => (await api.put(`/convenios/${idConvenio}`,{ needsAuth: true })).data;
 
