@@ -2,14 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllUsuarios } from "@/Api/api";
 
 const useUsuarios = (idCooperativa) => {
-  return useQuery(
-    ["usuarios", idCooperativa],
-    () => getAllUsuarios(idCooperativa),
-    {
-      enabled: !!idCooperativa, // Solo se ejecuta si idCooperativa tiene un valor válido
-      staleTime: 5 * 60 * 1000, // Opcional: cachear los datos por 5 minutos
-    }
-  );
+  return useQuery({
+    queryKey: ["usuarios", idCooperativa], // Define la clave de la consulta
+    queryFn: () => getAllUsuarios(idCooperativa), // Función que obtiene los datos
+    enabled: !!idCooperativa, // Solo se ejecuta si idCooperativa tiene un valor válido
+  });
 };
 
 export default useUsuarios;
