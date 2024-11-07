@@ -30,7 +30,6 @@ export const LoginMaster = async (username, password) => {
 
   return data;
 };
-
 export const register = async (RegisterRequest, cedulaSocio, idCooperativa) =>
   (
     await api.post(
