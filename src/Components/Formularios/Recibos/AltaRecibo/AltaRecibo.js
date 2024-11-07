@@ -264,22 +264,23 @@ const AltaRecibo = ({ Socio, ur, setComponenenteIndentificador }) => {
     e.preventDefault();
 
     if (!validarFormulario()) return;
-
+    
     try {
-      const response = await postRecibo(
+      const response = await postRecibo(recibo = {
         fechaEmision,
         fechaPago,
         recargo,
         interes,
         capital,
         cuotaSocial,
-        convenios,
-        subsidio,
+        convenios: convenios === 0 ? null : convenios,
+        subsidio: subsidio === 0 ? null : subsidio,
         cuotaMensual,
         sumaPesos,
         Socio,
-        miembro.responseBody
-      );
+        tesorero: miembro.responseBody
+      });
+      
 
       if (response && response.error) {
         alert(response.error);
