@@ -8,6 +8,7 @@ import VerVivienda from "@/Components/VerDetalles/VerVivienda/VerVivienda.js";
 import Buscador from "@/Components/Buscador.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
+import { useAllViviendas } from "@/Hooks/useViviendasDisponibles.js";
 
 const ListadoViviendas = ({
   setVivienda,
@@ -15,27 +16,17 @@ const ListadoViviendas = ({
   setIdentificadorComponente,
 }) => {
   const { cooperativa } = useContext(MiembroContext);
-  const [viviendas, setAllViviendas] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [viviendaSeleccionada, setViviendaSeleccionada] = useState(null);
   const [buscador, setBuscador] = useState("");
+  const {data: viviendas =[], isLoading, error,} = useAllViviendas(cooperativa.idCooperativa);
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(viviendas);
   const [selectedOption, setSelectedOption] = useState(null);
+
+
   const handleSelection = (option) => {
     setSelectedOption(option);
     setIdentificadorComponente(option);
-  };
-  useEffect(() => {
-    fetchAllViviendas();
-  }, []);
-
-  const fetchAllViviendas = async () => {
-    try {
-      const response = await getAllViviendas(cooperativa.idCooperativa);
-      setAllViviendas(response);
-    } catch (error) {
-      console.error("Error al obtener las viviendas:", error);
-    }
   };
 
   const handleModificar = (idVivienda) => {
@@ -113,6 +104,10 @@ const ListadoViviendas = ({
     setIdentificadorComponente(2);
   };
   return (
+    <>
+    {isLoading && <div>cargando...</div>}
+    {error && <div>Ah ocurrido un error</div>}
+    {viviendas && !isLoading && !error &&
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
@@ -278,7 +273,8 @@ const ListadoViviendas = ({
           vivienda={viviendaSeleccionada}
         />
       )}
-    </div>
+    </div>}
+</>
   );
 };
 

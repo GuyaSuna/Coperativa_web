@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllViviendas } from "../Api/api"; 
+import { getAllViviendas  } from "../Api/api"; 
 
 export const useViviendasDisponibles = (idCooperativa) => {
   return useQuery({
@@ -9,4 +9,11 @@ export const useViviendasDisponibles = (idCooperativa) => {
       return response.filter((vivienda) => vivienda.socio == null);
     },
   });
+};
+
+export const useAllViviendas = (idCooperativa) => {
+  return useQuery({
+    queryKey: ['viviendas', idCooperativa],
+    queryFn: async () => await getAllViviendas(idCooperativa),
+});
 };

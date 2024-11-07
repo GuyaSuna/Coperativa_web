@@ -5,14 +5,12 @@ import { getAllEstadosContables, deleteEstadoContable } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContablePDF/VerEstadoContablePDF";
-import Buscador from "@/Components/Buscador.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
 
 const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
   const [allEstadosContables, setAllEstadosContables] = useState([]);
-  const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
-    useState(null);
+  const [estadoContableSeleccionado, setEstadoContableSeleccionado] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(null);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allEstadosContables);

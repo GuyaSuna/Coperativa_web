@@ -23,7 +23,7 @@ import Buscador from "@/Components/Buscador.js";
 import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
-import { useQuery } from "@tanstack/react-query";
+import { useGetAllSocios } from "@/Hooks/useAllSocios.js";
 
 const ListadoSocio = ({
   setSocio,
@@ -31,13 +31,15 @@ const ListadoSocio = ({
   setSocioRecibo,
 }) => {
   const { miembro, cooperativa } = useContext(MiembroContext);
+
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [recibos, setRecibos] = useState([]);
   const [verArchivados, setVerArchivados] = useState(false);
-
+  const {data: allSocios =[], isLoading, error,} = useGetAllSocios(cooperativa.idCooperativa);
+  
   const fetchAllSocios = async () => {
     try {
       const response = await getAllSocios(cooperativa.idCooperativa);
@@ -59,31 +61,25 @@ const ListadoSocio = ({
     }
   };
   
-
-  const { data: allSocios = [], error, isLoading } = useQuery({
-    queryKey: ['socios'],
-    queryFn: async () => await fetchAllSocios(),
-  });
-  
-  // useEffect(() => {
-  //   const filteredSocios = allSocios.filter((socio) =>
-  //     !verArchivados ? !socio.archivado : socio.archivado
-  //   );
-  //   setBuscadorFiltrado(filteredSocios);
-  // }, [allSocios, verArchivados]);
+  useEffect(() => {
+    const filteredSocios = allSocios.filter((socio) =>
+      !verArchivados ? !socio.archivado : socio.archivado
+    );
+    setBuscadorFiltrado(filteredSocios);
+  }, [allSocios, verArchivados]);
 
   const handleVerArchivados = () => {
     setVerArchivados(!verArchivados);
   };
-  // useEffect(() => {
-  //   if (cooperativa?.idCooperativa) {
-  //     fetchAllData();
-  //   }
-  // }, [cooperativa]);
+  useEffect(() => {
+    if (cooperativa?.idCooperativa) {
+      fetchAllData();
+    }
+  }, [cooperativa]);
 
-  // const fetchAllData = async () => {
-  //   await Promise.all([fetchRecibos(), fetchAllSocios()]);
-  // };
+  const fetchAllData = async () => {
+    await Promise.all([fetchRecibos(), fetchAllSocios()]);
+  };
 
   const fetchRecibos = async () => {
     const reciboResponse = await getAllRecibos(cooperativa.idCooperativa);
@@ -143,16 +139,16 @@ const ListadoSocio = ({
     setIsModalOpen(true);
   };
 
-  // useEffect(() => {
-  //   if (buscador == "") {
-  //     setBuscadorFiltrado(allSocios);
-  //   } else {
-  //     const buscadorFiltrado = allSocios.filter((socio) =>
-  //       socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
-  //     );
-  //     setBuscadorFiltrado(buscadorFiltrado);
-  //   }
-  // }, [allSocios, buscador]);
+  useEffect(() => {
+    if (buscador == "") {
+      setBuscadorFiltrado(allSocios);
+    } else {
+      const buscadorFiltrado = allSocios.filter((socio) =>
+        socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase())
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allSocios, buscador]);
   const handleChangeBuscador = (event) => {
     setBuscador(event.target.value);
   };
@@ -188,18 +184,18 @@ const ListadoSocio = ({
     },
   ];
 
-  // useEffect(() => {
-  //   if (buscador == "") {
-  //     setBuscadorFiltrado(allSocios.filter((socio) => !socio.archivado));
-  //   } else {
-  //     const buscadorFiltrado = allSocios.filter(
-  //       (socio) =>
-  //         socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase()) &&
-  //         !socio.archivado
-  //     );
-  //     setBuscadorFiltrado(buscadorFiltrado);
-  //   }
-  // }, [allSocios, buscador]);
+  useEffect(() => {
+    if (buscador == "") {
+      setBuscadorFiltrado(allSocios.filter((socio) => !socio.archivado));
+    } else {
+      const buscadorFiltrado = allSocios.filter(
+        (socio) =>
+          socio.nombreSocio.toLowerCase().includes(buscador.toLowerCase()) &&
+          !socio.archivado
+      );
+      setBuscadorFiltrado(buscadorFiltrado);
+    }
+  }, [allSocios, buscador]);
 
   const handleSortChange = (option) => {
     let sociosFiltrados = [...allSocios];
@@ -243,6 +239,10 @@ const ListadoSocio = ({
     setIdentificadorComponente(6);
   };
   return (
+    <>
+    {isLoading && <div>cargando...</div>}
+    {error && <div>Ah ocurrido un error</div>}
+    {allSocios && !isLoading && !error &&
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
@@ -460,7 +460,8 @@ const ListadoSocio = ({
           socio={socioSeleccionado}
         />
       )}
-    </div>
+    </div>}
+    </>
   );
 };
 
