@@ -5,7 +5,6 @@ import "./FormStyle.css";
 import {
   postSocio,
   postSuplente,
-  getAllViviendas,
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllViviendas } from "../Api/api"; // Asegúrate de tener la función `getAllViviendas` importada
+import { getAllViviendas } from "../Api/api"; 
 
 export const useViviendasDisponibles = (idCooperativa) => {
   return useQuery({
