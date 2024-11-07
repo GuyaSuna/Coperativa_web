@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAllSocios, register } from "@/Api/api";
+import { register } from "@/Api/api";
+import { useActiveSocios } from "@/Hooks/useSociosActivos";
 
 const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
-  const [socios, setSocios] = useState([]);
   const [selectedSocio, setSelectedSocio] = useState("");
   const [nombreMiembro, setNombreMiembro] = useState("");
   const [contraseña, setContraseña] = useState("");
@@ -16,24 +16,15 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
 
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchSociosData = async () => {
-      try {
-        const response = await getAllSocios(cooperativa.idCooperativa);
-        // Filtrar socios archivados
-        const activeSocios = response.filter(socio => !socio.archivado);
-        setSocios(activeSocios);
-      } catch (error) {
-        console.error("Error al cargar los socios:", error);
-      }
-    };
-
-    fetchSociosData();
-  }, [cooperativa.idCooperativa]);
+  const {
+    data: socios,
+    isLoading,
+    error: sociosError,
+  } = useActiveSocios(cooperativa.idCooperativa);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!selectedSocio || !nombreMiembro || !contraseña || !email) {
       setError("Por favor, completa todos los campos requeridos.");
       return;
@@ -56,7 +47,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
     let SocioEncontrado = socios.find(
       (socio) => socio.cedulaSocio == selectedSocio
     );
-    
+
     if (!SocioEncontrado) {
       setError("Socio no encontrado.");
       return;
@@ -107,16 +98,21 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
             <option value="">Seleccione un socio</option>
-            {socios.map((socio) => (
-              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {socio.nombreSocio} {socio.apellidoSocio} ({socio.cedulaSocio})
-              </option>
-            ))}
+            {!isLoading &&
+              !sociosError &&
+              socios?.map((socio) => (
+                <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
+                  {socio.nombreSocio} {socio.apellidoSocio} ({socio.cedulaSocio}
+                  )
+                </option>
+              ))}
           </select>
         </div>
-
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nombreMiembro">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="nombreMiembro"
+          >
             Nombre de Usuario:
           </label>
           <input
@@ -128,9 +124,11 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
-
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="contraseña">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="contraseña"
+          >
             Contraseña:
           </label>
           <input
@@ -142,7 +140,6 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
-
         <div className="mb-4">
           <label className="block text-sm font-medium mb-2" htmlFor="email">
             Email:
@@ -156,9 +153,11 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           />
         </div>
-
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="tipoAdministrador">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="tipoAdministrador"
+          >
             Tipo de Administrador:
           </label>
           <select
@@ -172,7 +171,6 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             <option value="OTRO">OTRO</option>
           </select>
         </div>
-
         <button
           type="submit"
           className="w-full mt-6 py-2 px-4 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
@@ -180,7 +178,8 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
           Crear Administrador
         </button>
         {mensaje && <p className="mt-4 text-red-600">{mensaje}</p>}
-        {error && <p className="mt-4 text-red-600">{error}</p>} {/* Mensaje de error */}
+        {error && <p className="mt-4 text-red-600">{error}</p>}{" "}
+        {/* Mensaje de error */}
       </form>
     </div>
   );

@@ -1,32 +1,23 @@
 "use client";
 
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { postAviso, getAllUsuarios, postAvisoToAll } from "../../../Api/api.js"; // postAvisoToAll es una nueva función para enviar a todos
+import { postAviso, postAvisoToAll } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
+import useUsuarios from "../../../Hooks/useUsuarios";
 
 const AltaAviso = () => {
   const { miembro, cooperativa } = useContext(MiembroContext);
+
+  const {
+    data: usuarios,
+    isLoading,
+    error: errorUsuarios,
+  } = useUsuarios(cooperativa.idCooperativa);
   const [Mensaje, setMensaje] = useState("");
   const [usuario, setUsuario] = useState(0);
-  const [usuarios, setUsuarios] = useState([]);
-  const [error, setError] = useState(null); // Estado para manejar errores de validación
-  const [success, setSuccess] = useState(null); // Estado para manejar éxito en el envío
-
-  useEffect(() => {
-    fetchUsuarios();
-  }, []);
-
-  const fetchUsuarios = async () => {
-    try {
-      const response = await getAllUsuarios(cooperativa.idCooperativa);
-
-      setUsuarios(response);
-    } catch (error) {
-      console.error("Error al recibir los datos de los usuarios:", error);
-      setError("Error al cargar los usuarios, inténtelo más tarde.");
-    }
-  };
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
 
   const handleChangeMensaje = (e) => {
     setMensaje(e.target.value);
@@ -34,7 +25,6 @@ const AltaAviso = () => {
   const handleChangeUsuario = (e) => {
     const selectedUser = parseInt(e.target.value);
     setUsuario(selectedUser);
-
   };
 
   const handleSubmit = async (e) => {
@@ -60,11 +50,19 @@ const AltaAviso = () => {
 
     try {
       if (usuario === -1) {
-        const response = await postAvisoToAll(data, miembro.responseBody.id, cooperativa.idCooperativa);
+        const response = await postAvisoToAll(
+          data,
+          miembro.responseBody.id,
+          cooperativa.idCooperativa
+        );
 
         setSuccess("El aviso ha sido enviado a todos los miembros.");
       } else {
-        const response = await postAviso(data, miembro.responseBody.id, usuario);
+        const response = await postAviso(
+          data,
+          miembro.responseBody.id,
+          usuario
+        );
 
         setSuccess("El aviso ha sido enviado al usuario.");
       }
@@ -95,7 +93,10 @@ const AltaAviso = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="seleccionUsuario">
+          <label
+            className="block text-sm font-medium mb-2"
+            htmlFor="seleccionUsuario"
+          >
             Seleccionar usuario:
           </label>
           <select
@@ -106,25 +107,23 @@ const AltaAviso = () => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
             <option value="0">Seleccione un usuario</option>
-            <option value={-1}>Todos los miembros</option> 
-            {usuarios.map((usuario) => (
-              <option key={usuario.id} value={usuario.id}>
-                {`Usuario: ${usuario.firstname} ${usuario.lastname}`}
-              </option>
-            ))}
+            <option value={-1}>Todos los miembros</option>
+            {isLoading ? (
+              <option>Cargando usuarios...</option>
+            ) : errorUsuarios ? (
+              <option>Error al cargar los usuarios</option>
+            ) : (
+              usuarios?.map((usuario) => (
+                <option key={usuario.id} value={usuario.id}>
+                  {`Usuario: ${usuario.firstname} ${usuario.lastname}`}
+                </option>
+              ))
+            )}
           </select>
         </div>
 
-        {error && (
-          <div className="mb-4 text-red-500">
-            {error}
-          </div>
-        )}
-        {success && (
-          <div className="mb-4 text-green-500">
-            {success}
-          </div>
-        )}
+        {error && <div className="mb-4 text-red-500">{error}</div>}
+        {success && <div className="mb-4 text-green-500">{success}</div>}
 
         <button
           type="submit"

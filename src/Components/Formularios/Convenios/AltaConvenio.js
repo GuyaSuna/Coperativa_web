@@ -356,8 +356,6 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
             <span className="text-red-500">{errores.urPorMes}</span>
           )}
         </div>
-
-        {/* Botón para dar de alta */}
         <button
           type="submit"
           className="w-full bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-md"

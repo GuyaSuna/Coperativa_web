@@ -75,7 +75,6 @@ const ComponentesOrganizados = ({
   const [idRecargo, setIdRecargo] = useState(0);
 
   //Cambiar a futuro esto jaja
-  //utilizar diferentes rutas
 
   switch (identificador) {
     case 0: {
