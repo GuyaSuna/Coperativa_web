@@ -27,7 +27,6 @@ export const LoginMaster = async (username, password) => {
 
   return data;
 };
-
 export const register = async (RegisterRequest, cedulaSocio, idCooperativa) => (await api.post(`/auth/register/${cedulaSocio}/${idCooperativa}`, RegisterRequest,{ needsAuth: false })).data;
 
 export const updateAdministrador = async (administradorEntity) => (await api.put(`/administrador`, administradorEntity,{ needsAuth: false })).data;
