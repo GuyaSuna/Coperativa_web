@@ -1,8 +1,4 @@
-import { getToken } from "./getToken";
 import api from "./apiConfiguration";
-const URL = "http://localhost:5000";
-
-
 
 export const registerMaster = async (bodymaster) => (await api.post(`/auth/registerMaster`, bodymaster,{ needsAuth: false })).data;
 
@@ -19,7 +15,18 @@ export const Login = async (username, password) => {
   return data;
 };
 
-export const LoginMaster = async () => (await api.post(`/auth/loginMaster`,body = { username: username, password: password} ,{ needsAuth: false })).data;
+export const LoginMaster = async (username, password) => {
+  const body = { username, password };
+  const data = (await api.post(`/auth/loginMaster`, body, { needsAuth: false })).data;
+
+  if (data.token) {
+    document.cookie = `token=${data.token}; path=/; max-age=1440`;
+  } else {
+    throw new Error("No se recibió el token en la respuesta.");
+  }
+
+  return data;
+};
 
 export const register = async (RegisterRequest, cedulaSocio, idCooperativa) => (await api.post(`/auth/register/${cedulaSocio}/${idCooperativa}`, RegisterRequest,{ needsAuth: false })).data;
 
