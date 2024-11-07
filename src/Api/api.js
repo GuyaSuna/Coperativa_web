@@ -2,310 +2,320 @@ import { getToken } from "./getToken";
 import api from "./apiConfiguration";
 const URL = "http://localhost:5000";
 
-//logins
 
-const registerMaster = async (bodymaster) => {
-  try {
-    const response = await fetch(`${URL}/auth/registerMaster`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(bodymaster),
-    });
 
-    const contentType = response.headers.get("Content-Type");
-    if (!contentType || !contentType.includes("application/json")) {
-      return null;
-    }
+// const registerMaster = async (bodymaster) => {
+//   try {
+//     const response = await fetch(`${URL}/auth/registerMaster`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(bodymaster),
+//     });
 
-    const data = await response.json();
+//     const contentType = response.headers.get("Content-Type");
+//     if (!contentType || !contentType.includes("application/json")) {
+//       return null;
+//     }
 
-    return data;
-  } catch (error) {
-    console.error("Error en register master:", error);
-    throw new Error("Error al generar master.");
-  }
-};
+//     const data = await response.json();
 
-const Login = async (username, password) => {
-  try {
-    const body = {
-      username: username,
-      password: password,
-    };
-    const response = await fetch(`${URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+//     return data;
+//   } catch (error) {
+//     console.error("Error en register master:", error);
+//     throw new Error("Error al generar master.");
+//   }
+// };
+export const registerMaster = async (bodymaster) => (await api.post(`/auth/registerMaster`, bodymaster,{ needsAuth: false })).data;
 
-    if (!response.ok) {
-      if (response.status === 400) {
-        return "Usuario o contraseña incorrectos.";
-      } else {
-        throw new Error("Error en la solicitud de inicio de sesión.");
-      }
-    }
+// const Login = async (username, password) => {
+//   try {
+//     const body = {
+//       username: username,
+//       password: password,
+//     };
+//     const response = await fetch(`${URL}/auth/login`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(body),
+//     });
 
-    const data = await response.json();
+//     if (!response.ok) {
+//       if (response.status === 400) {
+//         return "Usuario o contraseña incorrectos.";
+//       } else {
+//         throw new Error("Error en la solicitud de inicio de sesión.");
+//       }
+//     }
 
-    if (data.token) {
-      document.cookie = `token=${data.token}; path=/; max-age=1440`;
-    } else {
-      throw new Error("No se recibió el token en la respuesta.");
-    }
+//     const data = await response.json();
 
-    return data;
-  } catch (error) {
-    console.error("Error en LogIn:", error);
-    throw new Error("Error al intentar iniciar sesión.");
-  }
-};
-const LoginMaster = async (username, password) => {
-  try {
-    const body = {
-      username: username,
-      password: password,
-    };
-    const response = await fetch(`${URL}/auth/loginMaster`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+//     if (data.token) {
+//       document.cookie = `token=${data.token}; path=/; max-age=1440`;
+//     } else {
+//       throw new Error("No se recibió el token en la respuesta.");
+//     }
 
-    if (!response.ok) {
-      if (response.status === 400) {
-        return "Usuario o contraseña incorrectos.";
-      } else {
-        throw new Error("Error en la solicitud de inicio de sesión.");
-      }
-    }
+//     return data;
+//   } catch (error) {
+//     console.error("Error en LogIn:", error);
+//     throw new Error("Error al intentar iniciar sesión.");
+//   }
+// };
+export const Login = async (username, password) => (await api.post(`/auth/login`, body = {  username: username, password: password },{ needsAuth: false })).data;
 
-    const data = await response.json();
+// const LoginMaster = async (username, password) => {
+//   try {
+//     const body = {
+//       username: username,
+//       password: password,
+//     };
+//     const response = await fetch(`${URL}/auth/loginMaster`, {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(body),
+//     });
 
-    if (data.token) {
-      // Guardar el token en la cookie
-      document.cookie = `token=${data.token}; path=/; max-age=${
-        7 * 24 * 60 * 60
-      }`;
-    } else {
-      throw new Error("No se recibió el token en la respuesta.");
-    }
+//     if (!response.ok) {
+//       if (response.status === 400) {
+//         return "Usuario o contraseña incorrectos.";
+//       } else {
+//         throw new Error("Error en la solicitud de inicio de sesión.");
+//       }
+//     }
 
-    return data;
-  } catch (error) {
-    console.error("Error en LogIn:", error);
-    throw new Error("Error al intentar iniciar sesión.");
-  }
-};
+//     const data = await response.json();
 
-const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
-  try {
-    const response = await fetch(
-      `${URL}/auth/register/${cedulaSocio}/${idCooperativa}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(RegisterRequest),
-      }
-    );
+//     if (data.token) {
+//       // Guardar el token en la cookie
+//       document.cookie = `token=${data.token}; path=/; max-age=${
+//         7 * 24 * 60 * 60
+//       }`;
+//     } else {
+//       throw new Error("No se recibió el token en la respuesta.");
+//     }
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     return data;
+//   } catch (error) {
+//     console.error("Error en LogIn:", error);
+//     throw new Error("Error al intentar iniciar sesión.");
+//   }
+// };
+export const LoginMaster = async () => (await api.post(`/auth/loginMaster`,body = { username: username, password: password} ,{ needsAuth: false })).data;
 
-    const data = await response.json();
+// const register = async (RegisterRequest, cedulaSocio, idCooperativa) => {
+//   try {
+//     const response = await fetch(
+//       `${URL}/auth/register/${cedulaSocio}/${idCooperativa}`,
+//       {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(RegisterRequest),
+//       }
+//     );
 
-    return data;
-  } catch (error) {
-    console.error("Error en register:", error);
-    throw new Error("Error al enviar los datos del administrador");
-  }
-};
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-const updateAdministrador = async (administradorEntity) => {
-  try {
-    const response = await fetch(`${URL}/administrador`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(administradorEntity),
-    });
+//     const data = await response.json();
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Error en la solicitud: ${response.status} - ${errorText}`
-      );
-    }
+//     return data;
+//   } catch (error) {
+//     console.error("Error en register:", error);
+//     throw new Error("Error al enviar los datos del administrador");
+//   }
+// };
+export const register = async (RegisterRequest, cedulaSocio, idCooperativa) => (await api.post(`/auth/register/${cedulaSocio}/${idCooperativa}`, RegisterRequest,{ needsAuth: false })).data;
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`El error ocurrio en updateAdministrador: ${error.message}`);
-    throw error;
-  }
-};
+// const updateAdministrador = async (administradorEntity) => {
+//   try {
+//     const response = await fetch(`${URL}/administrador`, {
+//       method: "PUT",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(administradorEntity),
+//     });
 
-// api.js (frontend)
-const getAllCooperativas = async () => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(
+//         `Error en la solicitud: ${response.status} - ${errorText}`
+//       );
+//     }
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error(`El error ocurrio en updateAdministrador: ${error.message}`);
+//     throw error;
+//   }
+// };
+export const updateAdministrador = async (administradorEntity) => (await api.put(`/administrador`, administradorEntity,{ needsAuth: false })).data;
 
-    const data = await response.json();
+// const getAllCooperativas = async () => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/cooperativa/allCooperativas`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
 
-    return data;
-  } catch (error) {
-    console.error("Error en getAllCooperativas:", error);
-    throw new Error("Error al obtener los datos de las Cooperativas.");
-  }
-};
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-const postCooperativa = async (cooperativaEntity) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/cooperativa`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cooperativaEntity),
-    });
+//     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllCooperativas:", error);
+//     throw new Error("Error al obtener los datos de las Cooperativas.");
+//   }
+// };
+export const getAllCooperativas = async () => (await api.get(`/cooperativa/allCooperativas`, { needsAuth: true })).data;
 
-    const data = await response.json();
+// const postCooperativa = async (cooperativaEntity) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/cooperativa`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(cooperativaEntity),
+//     });
 
-    return data;
-  } catch (error) {
-    console.error("Error en postCooperativa:", error);
-    throw new Error("Error al enviar los datos de la cooperativa");
-  }
-};
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-const updateCooperativa = async (cooperativaEntity) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/cooperativa`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cooperativaEntity),
-    });
+//     const data = await response.json();
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Error en la solicitud: ${response.status} - ${errorText}`
-      );
-    }
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postCooperativa:", error);
+//     throw new Error("Error al enviar los datos de la cooperativa");
+//   }
+// };
+export const postCooperativa = async (cooperativaEntity) => (await api.post(`/cooperativa`,cooperativaEntity ,{ needsAuth: true })).data;
 
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(`El error ocurrio en updateCooperativa: ${error.message}`);
-    throw error;
-  }
-};
+// const updateCooperativa = async (cooperativaEntity) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/cooperativa`, {
+//       method: "PUT",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(cooperativaEntity),
+//     });
 
-const getUser = async (id) => {
-  try {
-    const response = await fetch(`${URL}/auth/getUser${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(
+//         `Error en la solicitud: ${response.status} - ${errorText}`
+//       );
+//     }
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error(`El error ocurrio en updateCooperativa: ${error.message}`);
+//     throw error;
+//   }
+// };
+export const updateCooperativa = async (cooperativaEntity) => (await api.put(`/cooperativa`, cooperativaEntity, { needsAuth: true})).data;
 
-    const data = await response.json();
+// const getUser = async (id) => {
+//   try {
+//     const response = await fetch(`${URL}/auth/getUser${id}`, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
 
-    return data;
-  } catch (error) {
-    console.error("Error en getAdministrador:", error);
-    throw new Error("Error al obtener los datos del administrador");
-  }
-};
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-//socio
-const getSocio = async (cedulaSocio) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+//     const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAdministrador:", error);
+//     throw new Error("Error al obtener los datos del administrador");
+//   }
+// };
+export const getUser = async (id) => (await api.get(`/auth/getUser${id}`, { needsAuth: false })).data;
 
-    const data = await response.json();
+// const getSocio = async (cedulaSocio) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/socio/${cedulaSocio}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
 
-    return data;
-  } catch (error) {
-    console.error("Error en getSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
-  }
-};
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
-  try {
-    const token = getToken();
+//     const data = await response.json();
 
-    const response = await fetch(
-      `${URL}/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getSocio:", error);
+//     throw new Error("Error al obtener los datos del socio");
+//   }
+// };
+export const getSocio = async (cedulaSocio) => (await api.get(`/socio/${cedulaSocio}`, { needsAuth: true })).data;
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+// const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
+//   try {
+//     const token = getToken();
 
-    const data = await response.json();
+//     const response = await fetch(
+//       `${URL}/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
 
-    return data;
-  } catch (error) {
-    console.error("Error en getRecibosImpagosSocio:", error);
-    throw new Error("Error al obtener los datos del socio");
-  }
-};
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getRecibosImpagosSocio:", error);
+//     throw new Error("Error al obtener los datos del socio");
+//   }
+// };
+export const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => (await api.get(`/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`, { needsAuth: true })).data;
 
 // const getAllSocios = async (idCooperativa) => {
 //   try {
@@ -343,10 +353,8 @@ const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => {
 //     throw new Error("Error al obtener los datos de los Socios.");
 //   }
 // };
-
 export const getAllSocios = async (idCooperativa) => (await api.get(`/socio/allSocios/${idCooperativa}`, { needsAuth: true })).data;
  
-
 // const getAllSociosImpagos = async (idCooperativa) => {
 //   try {
 //     const token = getToken();
@@ -373,48 +381,37 @@ export const getAllSocios = async (idCooperativa) => (await api.get(`/socio/allS
 //     throw new Error("Error al obtener los datos de los Socios.");
 //   }
 // };
-
-
 export const getAllSociosImpagos = async (idCooperativa) => (await api.get(`/socio/SociosImpagos/${idCooperativa}`, { needsAuth: true })).data;
 
+// const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
+  
+//   try {
+//     const token = getToken();
+//     const response = await fetch(
+//       `${URL}/socio/${nroVivienda}/${idCooperativa}`,
+//       {
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(socioEntity),
+//       }
+//     );
 
-const postSocio = async (socioEntity, nroVivienda, idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(
-      `${URL}/socio/${nroVivienda}/${idCooperativa}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(socioEntity),
-      }
-    );
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
 
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
+//     const data = await response.json();
 
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postSocio:", error);
-    throw new Error("Error al enviar los datos del socio");
-  }
-};
-
-// const formatDateToSQL = (date) => {
-//   const d = new Date(date);
-//   const month = `${d.getMonth() + 1}`.padStart(2, "0");
-//   const day = `${d.getDate()}`.padStart(2, "0");
-//   const year = d.getFullYear();
-//   return [year, month, day].join("-");
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postSocio:", error);
+//     throw new Error("Error al enviar los datos del socio");
+//   }
 // };
-
-export const updateSocio = async (socioEntity, idVivienda) => (await api.get(`/socio/${cedulaSocio}/${idVivienda}`, { needsAuth: true })).data;
+export const postSocio = async (socioEntity, nroVivienda , idCooperativa) => (await api.post(`/socio/${nroVivienda}/${idCooperativa}`,socioEntity, { needsAuth: true })).data;
 
 // const updateSocio = async (socioEntity, idVivienda) => {
 //   let cedulaSocio = socioEntity.cedulaSocio;
@@ -443,781 +440,751 @@ export const updateSocio = async (socioEntity, idVivienda) => (await api.get(`/s
 //     throw error;
 //   }
 // };
-
-const deleteSocio = async (cedulaSocio, idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(
-      `${URL}/socio/${cedulaSocio}/${idCooperativa}`,
-      {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("Error en la solicitud de borrado");
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error en deleteSocio:", error);
-    throw new Error("Error al eliminar el socio");
-  }
-};
-
-// suplente
-const postSuplente = async (suplenteEntity, CedulaSocio) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(suplenteEntity),
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postSuplente:", error);
-    throw new Error("Error al enviar los datos del socio");
-  }
-};
-
-const getAllSuplentes = async () => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/suplente/allSuplentes`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllSuplentes:", error);
-    throw new Error("Error al obtener los datos de los suplentes.");
-  }
-};
-
-const getSuplente = async (cedulaSuplente) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getSuplente:", error);
-    throw new Error("Error al obtener los datos del suplente");
-  }
-};
-
-const deleteSuplente = async (cedulaSuplente) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error en la solicitud de borrado");
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error en deleteSuplente:", error);
-    throw new Error("Error al eliminar la vivienda.");
-  }
-};
-
-const updateSuplente = async (
-  cedulaSuplente,
-  nombreSuplente,
-  apellidoSuplente,
-  telefonoSuplente
-) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/suplente`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cedulaSuplente,
-        nombreSuplente,
-        apellidoSuplente,
-        telefonoSuplente,
-      }),
-    });
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error("Error al actualizar el suplente.");
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error en updateSuplente:", error);
-    throw error;
-  }
-};
-
-//vivienda
-const postVivienda = async (viviendaEntity, idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(viviendaEntity),
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postVivienda:", error);
-    throw new Error("Error al enviar los datos de la vivienda");
-  }
-};
-
-const getVivienda = async (nroVivienda) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getVivienda:", error);
-    throw new Error("Error al obtener los datos de la vivienda");
-  }
-};
-
-const getAllViviendas = async (idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(
-      `${URL}/vivienda/allViviendas/${idCooperativa}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllViviendas:", error);
-    throw new Error("Error al obtener los datos de las viviendas.");
-  }
-};
-
-const updateVivienda = async (vivienda) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/vivienda`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(vivienda),
-    });
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error("Error al actualizar la vivienda");
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error en updateVivienda:", error);
-    throw error;
-  }
-};
-
-const deleteVivienda = async (nroVivienda) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error en la solicitud de borrado");
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error en deleteVivienda:", error);
-    throw new Error("Error al eliminar la vivienda.");
-  }
-};
-
-const getViviendaPorSocio = async (cedulaSocio) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/vivienda/socio/${cedulaSocio}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error al obtener la vivienda del socio");
-    }
-
-    const vivienda = await response.json();
-    return vivienda;
-  } catch (error) {
-    console.error("Error en getViviendaPorSocio:", error);
-    throw new Error(
-      "Error al obtener los datos de la la vivienda por el socio."
-    );
-  }
-};
-
-// cooperativas
-const getCooperativaPorAdmin = async (id) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/cooperativa/Admin/${id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error("Error en getCooperativasPorAdmin:", error);
-    throw new Error("Error al obtener los datos de la Cooperativa");
-  }
-};
-
-const getCooperativaPorSocio = async (cedulaSocio) => {
-  try {
-    const response = await fetch(`${URL}/cooperativa/Socio/${cedulaSocio}`, {
-      method: "GET",
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getCooperativasPorSocio:", error);
-    throw new Error("Error al obtener los datos de la Cooperativa");
-  }
-};
-
-const getUr = async () => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/scraping`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    // Verifica si la respuesta tiene contenido
-    const responseText = await response.text();
-
-    // Si la respuesta está vacía, maneja el caso
-    if (!responseText) {
-      throw new Error("La respuesta está vacía.");
-    }
-
-    // Si la respuesta no es un JSON válido, lanza un error
-    const data = JSON.parse(responseText);
-
-    if (!response.ok) {
-      throw new Error("La petición ha fallado, el response no es 'ok'");
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error en getUr:", error);
-    throw new Error("Error al obtener los datos de las UR");
-  }
-};
-
-const getAllRecibos = async (id) => {
-  try {
-    const token = getToken();
-
-    const response = await fetch(
-      `${URL}/recibo/getAllRecibosPorCooperativa/${id}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (!response.ok) {
-      console.error("Error response:", response);
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllRecibos:", error.message, error.response);
-    throw new Error("Error al obtener los datos de los Recibos.");
-  }
-};
-
-const getRecibo = async (nroRecibo) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/recibo/${nroRecibo}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getRecibo:", error);
-    throw new Error("Error al obtener los datos del recibo");
-  }
-};
-
-const postRecibo = async (
-  fechaRecibo,
-  fechaPago,
-  recargo,
-  interes,
-  capital,
-  cuotaSocial,
-  listaConvenio,
-  subsidio,
-  cuotaMensual,
-  sumaEnPesos,
-  socio,
-  tesorero
-) => {
-  try {
-    if (subsidio === 0) {
-      subsidio = null;
-    }
-    if (convenio === 0) {
-      convenio = null;
-    }
-
-    const reciboData = {
-      fechaRecibo,
-      fechaPago,
-      recargo,
-      interes,
-      capital,
-      cuotaSocial,
-      listaConvenio,
-      subsidio,
-      cuotaMensual,
-      sumaEnPesos,
-      socio,
-      tesorero,
-    };
-
-    const token = getToken();
-    const response = await fetch(`${URL}/recibo`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(reciboData),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json(); // Aquí capturas el mensaje de error específico
-      throw new Error(
-        errorData.message ||
-          "La solicitud ha fallado, la respuesta no es válida"
-      );
-    }
-
-    const contentType = response.headers.get("Content-Type");
-    if (
-      response.status === 204 ||
-      !contentType ||
-      !contentType.includes("application/json")
-    ) {
-      return null;
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error en postRecibo:", error);
-    return { error: error.message }; // Devolver el mensaje de error específico
-  }
-};
-
-const getAllRecibosPorSocio = async (cedulaSocio) => {
-  try {
-    const token = getToken();
-
-    const response = await fetch(
-      `${URL}/recibo/getAllRecibosPorSocios/${cedulaSocio}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllRecibosPorSocio:", error);
-    throw new Error("Error al obtener los datos de los recibos.");
-  }
-};
-
-const getAllAvisosPorUsuario = async (idUsuario) => {
-  try {
-    const token = getToken();
-
-    const response = await fetch(
-      `${URL}/aviso/getAllAvisosPorUsuario/${idUsuario}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllAvisosPorUsuario:", error);
-    throw new Error("Error al obtener los datos de los Avisos.");
-  }
-};
-
-const postAviso = async (aviso, idAdmin, idUsuario) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(aviso),
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postSocio:", error);
-    throw new Error("Error al enviar los datos del aviso");
-  }
-};
-
-const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(
-      `${URL}/aviso/All/${idAdmin}/${idCooperativa}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(aviso),
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en postSocio:", error);
-    throw new Error("Error al enviar los datos del aviso");
-  }
-};
-
-// usuario
-const postUsuario = async (usuarioEntity) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/usuario`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(usuarioEntity),
-    });
-
-    if (!response.ok) {
-      throw new Error("Error en la solicitud");
-    }
-
-    return response;
-  } catch (error) {
-    console.error("Error al enviar la solicitud:", error);
-    throw error;
-  }
-};
-
-const getAllUsuarios = async (idCooperativa) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/auth/getAllUsers/${idCooperativa}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllUsuarios:", error);
-    throw new Error("Error al obtener los datos de los Usuarios.");
-  }
-};
-
-const deleteUsuario = async (idMiembro) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/usuario/${idMiembro}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error en la solicitud de borrado");
-    }
-
-    return true;
-  } catch (error) {
-    console.error("Error en deleteUsuario:", error);
-    throw new Error("Error al eliminar el usuario.");
-  }
-};
-
-//Subsidio
-const postSubsidio = async (subsidioEntity) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/subsidio`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(subsidioEntity),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Error interno del servidor");
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Error al crear el subsidio:", error);
-    throw error;
-  }
-};
-
-const getAllSubsidios = async () => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/subsidio/allSubsidios`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-    if (!response.ok) {
-      throw new Error("The petition has failed, response isn't ok");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error en getAllSubsidios:", error);
-    throw new Error("Error al obtener los datos de los subsidios.");
-  }
-};
-
-const updateSubsidio = async (
-  idSubsidio,
-  cuotaTotalUr,
-  cuotaApagarUr,
-  subsidioUr,
-  porcentaje,
-  vigenciaEnMeses,
-  fechaOtorgado,
-  fechaExpira,
-  socio
-) => {
-  try {
-    const token = getToken();
-    const response = await fetch(`${URL}/subsidio`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idSubsidio,
-        cuotaTotalUr,
-        cuotaApagarUr,
-        subsidioUr,
-        porcentaje,
-        vigenciaEnMeses,
-        fechaOtorgado,
-        fechaExpira,
-        socio,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error("Error al actualizar el subsidio");
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error en updateSubsidio:", error);
-    throw error;
-  }
-};
+export const updateSocio = async (socioEntity, idVivienda) => (await api.put(`/socio/${socioEntity.cedulaSocio}/${idVivienda}`, socioEntity ,{ needsAuth: true })).data;
+
+// const deleteSocio = async (cedulaSocio, idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(
+//       `${URL}/socio/${cedulaSocio}/${idCooperativa}`,
+//       {
+//         method: "DELETE",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error("Error en la solicitud de borrado");
+//     }
+
+//     return true;
+//   } catch (error) {
+//     console.error("Error en deleteSocio:", error);
+//     throw new Error("Error al eliminar el socio");
+//   }
+// };
+export const deleteSocio = async (cedulaSocio, idCooperativa) => (await api.delete(`/socio/${cedulaSocio}/${idCooperativa}`, { needsAuth: true })).data;
+
+// const postSuplente = async (suplenteEntity, CedulaSocio) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/suplente/${CedulaSocio}`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(suplenteEntity),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postSuplente:", error);
+//     throw new Error("Error al enviar los datos del socio");
+//   }
+// };
+export const postSuplente = async (suplenteEntity, cedulaSocio) => (await api.post(`/suplente/${cedulaSocio}`, suplenteEntity, { needsAuth: true })).data;
+
+// const getAllSuplentes = async () => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/suplente/allSuplentes`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllSuplentes:", error);
+//     throw new Error("Error al obtener los datos de los suplentes.");
+//   }
+// };
+export const getAllSuplentes = async () => (await api.get(`/suplente/allSuplentes`, { needsAuth: true })).data;
+
+// const getSuplente = async (cedulaSuplente) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getSuplente:", error);
+//     throw new Error("Error al obtener los datos del suplente");
+//   }
+// };
+export const getSuplente = async (cedulaSuplente) => (await api.get(`/suplente/${cedulaSuplente}`, { needsAuth: true })).data;
+
+// const deleteSuplente = async (cedulaSuplente) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/suplente/${cedulaSuplente}`, {
+//       method: "DELETE",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Error en la solicitud de borrado");
+//     }
+
+//     return true;
+//   } catch (error) {
+//     console.error("Error en deleteSuplente:", error);
+//     throw new Error("Error al eliminar la vivienda.");
+//   }
+// };
+export const deleteSuplente = async (cedulaSuplente) => (await api.delete(`/suplente/${cedulaSuplente}`, { needsAuth: true })).data;
+
+// const updateSuplente = async (
+// suplemteEntity
+// ) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/suplente`, {
+//       method: "PUT",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         cedulaSuplente,
+//         nombreSuplente,
+//         apellidoSuplente,
+//         telefonoSuplente,
+//       }),
+//     });
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       throw new Error("Error al actualizar el suplente.");
+//     }
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en updateSuplente:", error);
+//     throw error;
+//   }
+// };
+export const updateSuplente = async (suplenteEntity) => (await api.put(`/suplente`, suplenteEntity,{ needsAuth: true })).data;
+
+// const postVivienda = async (viviendaEntity, idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/vivienda/${idCooperativa}`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(viviendaEntity),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postVivienda:", error);
+//     throw new Error("Error al enviar los datos de la vivienda");
+//   }
+// };
+export const postVivienda = async (viviendaEntity, idCooperativa) => (await api.post(`/vivienda/${idCooperativa}`, viviendaEntity,{ needsAuth: true })).data;
+
+// const getVivienda = async (nroVivienda) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getVivienda:", error);
+//     throw new Error("Error al obtener los datos de la vivienda");
+//   }
+// };
+export const getVivienda = async (nroVivienda) => (await api.get(`/vivienda/${nroVivienda}`,{ needsAuth: true })).data;
+
+// const getAllViviendas = async (idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(
+//       `${URL}/vivienda/allViviendas/${idCooperativa}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllViviendas:", error);
+//     throw new Error("Error al obtener los datos de las viviendas.");
+//   }
+// };
+export const getAllVivienda = async (idCooperativa) => (await api.get(`/vivienda/allViviendas/${idCooperativa}`,{ needsAuth: true })).data;
+
+// const updateVivienda = async (vivienda) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/vivienda`, {
+//       method: "API",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(vivienda),
+//     });
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       throw new Error("Error al actualizar la vivienda");
+//     }
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en updateVivienda:", error);
+//     throw error;
+//   }
+// };
+export const updateVivienda = async (vivienda) => (await api.put(`/vivienda`,vivienda,{ needsAuth: true })).data;
+
+// const deleteVivienda = async (nroVivienda) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/vivienda/${nroVivienda}`, {
+//       method: "DELETE",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Error en la solicitud de borrado");
+//     }
+
+//     return true;
+//   } catch (error) {
+//     console.error("Error en deleteVivienda:", error);
+//     throw new Error("Error al eliminar la vivienda.");
+//   }
+// };
+export const deleteVivienda = async (nroVivienda) => (await api.delete(`/vivienda/${nroVivienda}`,{ needsAuth: true })).data;
+
+// const getViviendaPorSocio = async (cedulaSocio) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/vivienda/socio/${cedulaSocio}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Error al obtener la vivienda del socio");
+//     }
+
+//     const vivienda = await response.json();
+//     return vivienda;
+//   } catch (error) {
+//     console.error("Error en getViviendaPorSocio:", error);
+//     throw new Error(
+//       "Error al obtener los datos de la la vivienda por el socio."
+//     );
+//   }
+// };
+export const getViviendaPorSocio = async (cedulaSocio) => (await api.get(`/vivienda/socio/${cedulaSocio}`,{ needsAuth: true })).data;
+
+// const getCooperativaPorAdmin = async (id) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/cooperativa/Admin/${id}`, {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+//     console.log(data);
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getCooperativasPorAdmin:", error);
+//     throw new Error("Error al obtener los datos de la Cooperativa");
+//   }
+// };
+export const getCooperativaPorAdmin = async (id) => (await api.get(`/cooperativa/Admin/${id}`,{ needsAuth: false })).data;
+
+// const getCooperativaPorSocio = async (cedulaSocio) => {
+//   try {
+//     const response = await fetch(`${URL}/cooperativa/Socio/${cedulaSocio}`, {
+//       method: "GET",
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getCooperativasPorSocio:", error);
+//     throw new Error("Error al obtener los datos de la Cooperativa");
+//   }
+// };
+export const getCooperativaPorSocio = async (cedulaSocio) => (await api.get(`/cooperativa/Socio/${cedulaSocio}`,{ needsAuth: false })).data;
+
+// const getUr = async () => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/scraping`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     // Verifica si la respuesta tiene contenido
+//     const responseText = await response.text();
+
+//     // Si la respuesta está vacía, maneja el caso
+//     if (!responseText) {
+//       throw new Error("La respuesta está vacía.");
+//     }
+
+//     // Si la respuesta no es un JSON válido, lanza un error
+//     const data = JSON.parse(responseText);
+
+//     if (!response.ok) {
+//       throw new Error("La petición ha fallado, el response no es 'ok'");
+//     }
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getUr:", error);
+//     throw new Error("Error al obtener los datos de las UR");
+//   }
+// };
+export const getUr = async () => (await api.get(`/scraping`,{ needsAuth: true })).data;
+
+// const getAllRecibos = async (id) => {
+//   try {
+//     const token = getToken();
+
+//     const response = await fetch(
+//       `${URL}/recibo/getAllRecibosPorCooperativa/${id}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+//     if (!response.ok) {
+//       console.error("Error response:", response);
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllRecibos:", error.message, error.response);
+//     throw new Error("Error al obtener los datos de los Recibos.");
+//   }
+// };
+export const getAllRecibos = async (id) => (await api.get(`/recibo/getAllRecibosPorCooperativa/${id}`,{ needsAuth: true })).data;
+
+// const getRecibo = async (nroRecibo) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/recibo/${nroRecibo}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getRecibo:", error);
+//     throw new Error("Error al obtener los datos del recibo");
+//   }
+// };
+export const getRecibo = async (nroRecibo) => (await api.get(`/recibo/${nroRecibo}`,{ needsAuth: true })).data;
+
+// const postRecibo = async (
+//   recibo
+// ) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/recibo`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(recibo),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json(); 
+//       throw new Error(
+//         errorData.message ||
+//           "La solicitud ha fallado, la respuesta no es válida"
+//       );
+//     }
+
+//     const contentType = response.headers.get("Content-Type");
+//     if (
+//       response.status === 204 ||
+//       !contentType ||
+//       !contentType.includes("application/json")
+//     ) {
+//       return null;
+//     }
+
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postRecibo:", error);
+//     return { error: error.message }; // Devolver el mensaje de error específico
+//   }
+// };
+export const postRecibo = async (recibo) => (await api.post(`/recibo`,recibo,{ needsAuth: true })).data;
+
+// const getAllRecibosPorSocio = async (cedulaSocio) => {
+//   try {
+//     const token = getToken();
+
+//     const response = await fetch(
+//       `${URL}/recibo/getAllRecibosPorSocios/${cedulaSocio}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllRecibosPorSocio:", error);
+//     throw new Error("Error al obtener los datos de los recibos.");
+//   }
+// };
+export const getAllRecibosPorSocio = async (cedulaSocio) => (await api.get(`/recibo/getAllRecibosPorSocios/${cedulaSocio}`,{ needsAuth: true })).data;
+
+// const getAllAvisosPorUsuario = async (idUsuario) => {
+//   try {
+//     const token = getToken();
+
+//     const response = await fetch(
+//       `${URL}/aviso/getAllAvisosPorUsuario/${idUsuario}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllAvisosPorUsuario:", error);
+//     throw new Error("Error al obtener los datos de los Avisos.");
+//   }
+// };
+export const getAllAvisosPorUsuario = async (idUsuario) => (await api.post(`/aviso/getAllAvisosPorUsuario/${idUsuario}`,{ needsAuth: true })).data;
+
+// const postAviso = async (aviso, idAdmin, idUsuario) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/aviso/${idAdmin}/${idUsuario}`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(aviso),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postSocio:", error);
+//     throw new Error("Error al enviar los datos del aviso");
+//   }
+// };
+export const postAviso = async (aviso, idAdmin, idUsuario) => (await api.post(`/aviso/${idAdmin}/${idUsuario}`,aviso,{ needsAuth: true })).data;
+
+// const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(
+//       `${URL}/aviso/All/${idAdmin}/${idCooperativa}`,
+//       {
+//         method: "POST",
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify(aviso),
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en postSocio:", error);
+//     throw new Error("Error al enviar los datos del aviso");
+//   }
+// };
+export const postAvisoToAll = async (aviso, idAdmin, idCooperativa) => (await api.post(`/aviso/All/${idAdmin}/${idCooperativa}`,aviso,{ needsAuth: true })).data;
+
+// const postUsuario = async (usuarioEntity) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/usuario`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(usuarioEntity),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Error en la solicitud");
+//     }
+
+//     return response;
+//   } catch (error) {
+//     console.error("Error al enviar la solicitud:", error);
+//     throw error;
+//   }
+// };
+export const postUsuario = async (usuarioEntity) => (await api.post(`/usuario`,usuarioEntity,{ needsAuth: true })).data;
+
+// const getAllUsuarios = async (idCooperativa) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/auth/getAllUsers/${idCooperativa}`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllUsuarios:", error);
+//     throw new Error("Error al obtener los datos de los Usuarios.");
+//   }
+// };
+export const getAllUsuarios = async (idCooperativa) => (await api.get(`/auth/getAllUsers/${idCooperativa}`,{ needsAuth: true })).data;
+
+// const deleteUsuario = async (idMiembro) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/usuario/${idMiembro}`, {
+//       method: "DELETE",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Error en la solicitud de borrado");
+//     }
+
+//     return true;
+//   } catch (error) {
+//     console.error("Error en deleteUsuario:", error);
+//     throw new Error("Error al eliminar el usuario.");
+//   }
+// };
+export const deleteUsuario = async (idMiembro) => (await api.delete(`/usuario/${idMiembro}`,{ needsAuth: true })).data;
+
+// const postSubsidio = async (subsidioEntity) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/subsidio`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(subsidioEntity),
+//     });
+
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       throw new Error(errorData.message || "Error interno del servidor");
+//     }
+
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error al crear el subsidio:", error);
+//     throw error;
+//   }
+// };
+export const postSubsidio = async (subsidioEntity) => (await api.post(`/subsidio`,subsidioEntity,{ needsAuth: true })).data;
+
+// const getAllSubsidios = async () => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/subsidio/allSubsidios`, {
+//       method: "GET",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     if (!response.ok) {
+//       throw new Error("The petition has failed, response isn't ok");
+//     }
+
+//     const data = await response.json();
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en getAllSubsidios:", error);
+//     throw new Error("Error al obtener los datos de los subsidios.");
+//   }
+// };
+export const getAllSubsidios = async () => (await api.get(`/subsidio/allSubsidios`,{ needsAuth: true })).data;
+
+// const updateSubsidio = async (
+// subsidio
+// ) => {
+//   try {
+//     const token = getToken();
+//     const response = await fetch(`${URL}/subsidio`, {
+//       method: "PUT",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(subsidio),
+//     });
+
+//     const data = await response.json();
+
+//     if (!response.ok) {
+//       throw new Error("Error al actualizar el subsidio");
+//     }
+
+//     return data;
+//   } catch (error) {
+//     console.error("Error en updateSubsidio:", error);
+//     throw error;
+//   }
+// };
+export const updateSubsidio = async () => (await api.put(`/subsidio`,subsidio,{ needsAuth: true })).data;
 
 const deleteSubsidio = async (idSubsidio) => {
   try {
@@ -2536,12 +2503,12 @@ export {
   Login,
   getSocio,
   getRecibosImpagosSocio,
-  postSocio,
+  // postSocio,
   // getAllSocios,
-  updateSocio,
-  deleteSocio,
-  postSuplente,
-  getAllSuplentes,
+  // updateSocio,
+  // deleteSocio,
+  // postSuplente,
+  // getAllSuplentes,
   getSuplente,
   updateSuplente,
   deleteSuplente,
@@ -2595,7 +2562,7 @@ export {
   getAllEstadosContables,
   getInteresAnual,
   loginMaster,
-  getAllSociosImpagos,
+  // getAllSociosImpagos,
   postDevolucionCapital,
   postPagoDevolucionCapital,
   getDevolucionCapital,
