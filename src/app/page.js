@@ -15,6 +15,9 @@ const Home = () => {
   const router = useRouter();
   const { loginMiembro } = useContext(MiembroContext);
   const { login } = useSession();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     const bodyMaster = {
@@ -32,10 +35,6 @@ const Home = () => {
     console.error("El contexto de sesión no está disponible.");
     return null;
   }
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSubmitAdministrador = async (e) => {
     e.preventDefault();
