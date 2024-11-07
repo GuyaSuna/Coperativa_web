@@ -22,10 +22,24 @@ const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
     fetchAllEstadosContables();
   }, []);
 
+  const ajustarFecha = (fechaString) => {
+    const date = new Date(fechaString);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); 
+    return date.toISOString().split('T')[0]; 
+  };
+
   const fetchAllEstadosContables = async () => {
     try {
       const response = await getAllEstadosContables(cooperativa.idCooperativa);
-      setAllEstadosContables(response);
+
+      const estadosAjustados = response.map((estado) => {
+        if (estado.fecha) {
+          estado.fecha = ajustarFecha(estado.fecha);
+        }
+        return estado;
+      });
+  
+      setAllEstadosContables(estadosAjustados);
     } catch (error) {
       console.error("Error al obtener los Estados Contables:", error);
     }

@@ -176,7 +176,7 @@ export const getDevolucionCapital = async (cedulaSocio) =>(await api.get(`/devol
   
 export const postPagoDevolucionCapital = async (pagoDevolucionCapital) => (await api.post(`/pagoCapital`, pagoDevolucionCapital, { needsAuth: true })).data;
 
-export const getUltimoEstadoContable = async () =>(await api.get(`/estadoContable/getUltimoEstadoContable`, { needsAuth: true })).data;
+export const getUltimoEstadoContable = async (idCooperativa) =>(await api.get(`/estadoContable/getUltimoEstadoContable/${idCooperativa}`, { needsAuth: true })).data;
   
 export const getAllInteresAnual = async (idCooperativa) =>(await api.get(`/interesAnual/getAll/${idCooperativa}`, { needsAuth: true })).data;
 
