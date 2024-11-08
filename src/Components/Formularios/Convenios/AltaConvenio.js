@@ -10,6 +10,7 @@ import {
 } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
+import { useSociosActivos } from "@/Hooks/Socios/useSociosActivos.js";
 
 const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const { cooperativa } = useContext(MiembroContext);
@@ -18,7 +19,7 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const [urPorMes, setUrPorMes] = useState("");
   const [fechaInicioConvenio, setFechaInicioConvenio] = useState("");
   const [socioSeleccionado, setSocioSeleccionado] = useState("");
-  const [sociosDisponibles, setSociosDisponibles] = useState([]);
+
   const [recibosImpagos, setRecibosImpagos] = useState([]);
   const [tipoDeuda, setTipoDeuda] = useState("");
   const [vigenciaEnRecibos, setVigenciaEnRecibos] = useState(12);
@@ -27,11 +28,19 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
 
+  const {
+    data: sociosActivos,
+    isLoading,
+    isError,
+    error,
+  } = useSociosActivos(cooperativa.idCooperativa);
+
+  console.log("Socios Activos", sociosActivos);
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFechaInicioConvenio(today);
     fetchSociosImpagos();
-    fetchAllSocios();
   }, []);
 
   useEffect(() => {
@@ -39,11 +48,6 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
       fetchRecibosImpagos(socioSeleccionado);
     }
   }, [tipoDeuda, socioSeleccionado]);
-
-  const fetchAllSocios = async () => {
-    const response = await getAllSocios(cooperativa.idCooperativa);
-    setAllSocios(response);
-  };
 
   const fetchSociosImpagos = async () => {
     try {
@@ -54,12 +58,6 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
       console.error("Error al obtener los socios", error);
     }
   };
-
-  useEffect(() => {
-    if (tipoDeuda === "recibo" && socioSeleccionado) {
-      fetchRecibosImpagos(socioSeleccionado);
-    }
-  }, [tipoDeuda, socioSeleccionado]);
 
   useEffect(() => {
     if (deudaEnUrOriginal && vigenciaEnRecibos > 0) {
@@ -199,27 +197,30 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
     }
   };
 
-  useEffect(() => {
-    const fetchSocios = async () => {
-      try {
-        if (tipoDeuda === "recibo") {
-          const sociosSinArchivar = allSociosImpagos.filter(
-            (socio) => !socio.archivado
-          );
-          setSociosDisponibles(sociosSinArchivar);
-        } else if (tipoDeuda === "otro") {
-          const sociosSinArchivar = allSocios.filter(
-            (socio) => !socio.archivado
-          );
-          setSociosDisponibles(sociosSinArchivar);
-        }
-      } catch (error) {
-        console.error("Error al obtener los socios", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchSocios = async () => {
+  //     try {
+  //       if (tipoDeuda === "recibo") {
+  //         const sociosSinArchivar = allSociosImpagos.filter(
+  //           (socio) => !socio.archivado
+  //         );
+  //         setSociosDisponibles(sociosSinArchivar);
+  //       } else if (tipoDeuda === "otro") {
+  //         const sociosSinArchivar = allSocios.filter(
+  //           (socio) => !socio.archivado
+  //         );
+  //         setSociosDisponibles(sociosSinArchivar);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error al obtener los socios", error);
+  //     }
+  //   };
 
-    fetchSocios();
-  }, [tipoDeuda, cooperativa.idCooperativa]);
+  //   fetchSocios();
+  // }, [tipoDeuda, cooperativa.idCooperativa]);
+
+  if (isLoading) return <p>Cargando socios...</p>;
+  if (isError) return <p>Error al cargar socios: {error.message}</p>;
 
   return (
     <div className="max-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
@@ -264,15 +265,15 @@ const AltaConvenio = ({ ur, setIdentificadorComponente }) => {
             className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
           >
             <option value="">Seleccione un socio</option>
-            {sociosDisponibles.map((socio) => (
-              <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
-                {socio.nombreSocio} {socio.apellidoSocio}
-              </option>
-            ))}
+            {!isLoading &&
+              !isError &&
+              sociosActivos?.map((socio) => (
+                <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
+                  {socio.nombreSocio} {socio.apellidoSocio} ({socio.cedulaSocio}
+                  )
+                </option>
+              ))}
           </select>
-          {errores.socioSeleccionado && (
-            <span className="text-red-500">{errores.socioSeleccionado}</span>
-          )}
         </div>
 
         {/* Fecha de Inicio del Convenio */}
