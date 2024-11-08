@@ -8,7 +8,8 @@ import VerVivienda from "@/Components/VerDetalles/VerVivienda/VerVivienda.js";
 import Buscador from "@/Components/Buscador.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
-import { useAllViviendas } from "@/Hooks/useViviendasDisponibles.js";
+import { useAllViviendas , useViviendasDisponibles} from "@/Hooks/useViviendas.js";
+import { useGetAllSocios } from "@/Hooks/useSocios.js";
 
 const ListadoViviendas = ({
   setVivienda,

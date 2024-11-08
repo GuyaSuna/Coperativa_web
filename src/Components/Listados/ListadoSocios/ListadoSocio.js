@@ -23,7 +23,7 @@ import Buscador from "@/Components/Buscador.js";
 import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
-import { useGetAllSocios } from "@/Hooks/useAllSocios.js";
+import { useGetAllSocios } from "@/Hooks/useSocios.js";
 
 const ListadoSocio = ({
   setSocio,
@@ -40,26 +40,6 @@ const ListadoSocio = ({
   const [verArchivados, setVerArchivados] = useState(false);
   const {data: allSocios =[], isLoading, error,} = useGetAllSocios(cooperativa.idCooperativa);
   
-  const fetchAllSocios = async () => {
-    try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConFechaFormateada = response.map((socio) => {
-        if (socio.fechaIngresoCooeprativa) {
-          const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
-          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          return {
-            ...socio,
-            fechaIngresoCooeprativa: fechaFormateada,
-          };
-        } else {
-          return socio;
-        }
-      });
-      setBuscadorFiltrado(sociosConFechaFormateada);
-    } catch (error) {
-      console.error("Error al obtener los socios:", error);
-    }
-  };
   
   useEffect(() => {
     const filteredSocios = allSocios.filter((socio) =>
@@ -67,6 +47,8 @@ const ListadoSocio = ({
     );
     setBuscadorFiltrado(filteredSocios);
   }, [allSocios, verArchivados]);
+
+
 
   const handleVerArchivados = () => {
     setVerArchivados(!verArchivados);
@@ -78,7 +60,7 @@ const ListadoSocio = ({
   }, [cooperativa]);
 
   const fetchAllData = async () => {
-    await Promise.all([fetchRecibos(), fetchAllSocios()]);
+    await Promise.all([fetchRecibos()]);
   };
 
   const fetchRecibos = async () => {
