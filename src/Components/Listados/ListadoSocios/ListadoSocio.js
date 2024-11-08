@@ -42,7 +42,7 @@ const ListadoSocio = ({
   
   
   useEffect(() => {
-    const filteredSocios = allSocios.filter((socio) =>
+    const filteredSocios = allSocios?.filter((socio) =>
       !verArchivados ? !socio.archivado : socio.archivado
     );
     setBuscadorFiltrado(filteredSocios);
