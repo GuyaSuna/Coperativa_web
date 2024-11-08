@@ -31,24 +31,20 @@ const ListadoSocio = ({
   setSocioRecibo,
 }) => {
   const { miembro, cooperativa } = useContext(MiembroContext);
-
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [recibos, setRecibos] = useState([]);
   const [verArchivados, setVerArchivados] = useState(false);
-  const {data: allSocios =[], isLoading, error,} = useGetAllSocios(cooperativa.idCooperativa);
-  
+  const {data: allSocios =[], isLoading, error, refetch} = useGetAllSocios(cooperativa.idCooperativa);
   
   useEffect(() => {
     const filteredSocios = allSocios?.filter((socio) =>
-      !verArchivados ? !socio.archivado : socio.archivado
+      !verArchivados ? !socio?.archivado : socio?.archivado
     );
     setBuscadorFiltrado(filteredSocios);
   }, [allSocios, verArchivados]);
-
-
 
   const handleVerArchivados = () => {
     setVerArchivados(!verArchivados);
@@ -168,7 +164,7 @@ const ListadoSocio = ({
 
   useEffect(() => {
     if (buscador == "") {
-      setBuscadorFiltrado(allSocios.filter((socio) => !socio.archivado));
+      setBuscadorFiltrado(allSocios.filter((socio) => !socio?.archivado));
     } else {
       const buscadorFiltrado = allSocios.filter(
         (socio) =>
@@ -223,7 +219,7 @@ const ListadoSocio = ({
   return (
     <>
     {isLoading && <div>cargando...</div>}
-    {error && <div>Ah ocurrido un error</div>}
+    {error && <div>Ah ocurrido un error </div>}
     {allSocios && !isLoading && !error &&
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -291,29 +287,25 @@ const ListadoSocio = ({
             {buscadorFiltrado?.map((socio) => (
               <tr
                 className="border-b dark:border-gray-700 sm:table-row"
-                key={socio.cedulaSocio}
+                key={socio?.cedulaSocio}
               >
-                {/* NroSocio */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">NroSocio:</span>
-                  {socio.nroSocio}
+                  {socio?.nroSocio}
                 </td>
 
-                {/* Nombre */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">Nombre:</span>
-                  {socio.nombreSocio} {socio.apellidoSocio}
+                  {socio?.nombreSocio} {socio?.apellidoSocio}
                 </td>
 
-                {/* Fecha Ingreso */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <span className="sm:hidden font-semibold">
                     Fecha Ingreso:
                   </span>
-                  {socio.fechaIngresoCooperativa}
+                  {socio?.fechaIngresoCooperativa}
                 </td>
 
-                {/* Actions */}
                 <td className="block sm:table-cell px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   <button
                     onClick={() => handleVerSocio(socio)}
@@ -323,7 +315,6 @@ const ListadoSocio = ({
                   </button>
                 </td>
 
-                {/* Opciones adicionales */}
                 <td className="px-4 py-3 flex items-center justify-end  md:table-cell">
                   <div className="relative inline-block text-left">
                     <Menu as="div" className="relative inline-block text-left">
@@ -347,7 +338,7 @@ const ListadoSocio = ({
                         className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none"
                       >
                         {" "}
-                        {socio.archivado ? (
+                        {socio?.archivado ? (
                           <>
                             <MenuItem>
                               <button
@@ -369,8 +360,8 @@ const ListadoSocio = ({
                         ) : (
                           <>
                             {miembro?.responseBody != null &&
-                              socio.cedulaSocio !==
-                                miembro.responseBody.socio.cedulaSocio && (
+                              socio?.cedulaSocio !==
+                                miembro.responseBody.socio?.cedulaSocio && (
                                 <MenuItem>
                                   <button
                                     className="group flex rounded-md items-center w-full px-2 py-2 text-sm text-gray-700"

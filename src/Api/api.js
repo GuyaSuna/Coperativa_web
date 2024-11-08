@@ -46,7 +46,7 @@ export const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => (awa
 export const getAllSocios = async (idCooperativa, page = 0, size = 10) => {
   const response = await api.get(`/socio/allSocios/${idCooperativa}?page=${page}&size=${size}`, { needsAuth: true });
   console.log("RespuestaGetAllSocio",response.data)
-  return response.data;
+  return response.data.content.filter(socio => socio != null);
 };
 
 export const getAllSociosImpagos = async (idCooperativa) => (await api.get(`/socio/SociosImpagos/${idCooperativa}`, { needsAuth: true })).data;
