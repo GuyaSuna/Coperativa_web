@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { updateIngreso } from "@/Api/api";
 
 const ModificarIngreso = ({ ingresoData }) => {
   const [subRubro, setSubRubro] = useState(ingresoData.subRubro);
@@ -33,9 +34,10 @@ const ModificarIngreso = ({ ingresoData }) => {
       denominacion,
       ingreso,
     };
-
+    
     try {
-      console.log("Ingreso modificado:", updatedIngreso);
+      const response = await updateIngreso(updatedIngreso);
+      console.log("Ingreso modificado:", response);
     } catch (error) {
       console.error("Error al modificar el ingreso:", error);
     }

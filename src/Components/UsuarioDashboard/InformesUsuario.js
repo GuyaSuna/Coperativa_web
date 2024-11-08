@@ -10,7 +10,7 @@ import { MiembroContext } from "@/Provider/provider";
 import { jsPDF } from "jspdf";
 
 const InformesUsuario = ({}) => {
-  const { cooperativa, miembro } = useContext(MiembroContext);
+  const { cooperativa } = useContext(MiembroContext);
   const [estadoContable, setEstadoContable] = useState({});
   const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
     useState(null);
@@ -36,7 +36,7 @@ const InformesUsuario = ({}) => {
 
   const fetchUltimoEstadoContable = async () => {
     try {
-      const response = await getUltimoEstadoContable();
+      const response = await getUltimoEstadoContable(cooperativa.idCooperativa);
       setEstadoContable(response);
     } catch (error) {
       console.error("Error al obtener los Estados Contables:", error);

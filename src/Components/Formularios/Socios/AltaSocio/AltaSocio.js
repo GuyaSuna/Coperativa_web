@@ -5,10 +5,10 @@ import "./FormStyle.css";
 import {
   postSocio,
   postSuplente,
-  getAllViviendas,
 } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
+import { useViviendasDisponibles } from "@/Hooks/useViviendas";
 
 const AltaSocio = ({ setIdentificadorComponente }) => {
   const { miembro, cooperativa, loginMiembro } = useContext(MiembroContext);
@@ -25,33 +25,21 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   const [TelefonoSuplente, setTelefonoSuplente] = useState();
   const [Descuento, setDescuento] = useState(0);
   const [TieneSuplente, setTieneSuplente] = useState(false);
-  const [ViviendasDisponibles, setViviendasDisponibles] = useState([]);
   const [SeleccionVivienda, setSeleccionVivienda] = useState("");
   const [Errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
+  const {
+    data: ViviendasDisponibles,
+    isLoading,
+    error,
+  } = useViviendasDisponibles(cooperativa.idCooperativa);
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFechaIngresoCooperativa(today);
-    fetchViviendasDisponibles();
   }, []);
-
-  const fetchViviendasDisponibles = async () => {
-    try {
-      const response = await getAllViviendas(cooperativa.idCooperativa);
-
-      let viviendasDisponibles = [];
-      response.forEach((vivienda) => {
-        if (vivienda.socio == null) {
-          viviendasDisponibles.push(vivienda);
-        }
-      });
-      setViviendasDisponibles(viviendasDisponibles);
-    } catch (error) {
-      console.error("Error al obtener las viviendas:", error);
-    }
-  };
 
   const handleChangeSeleccionVivienda = async (e) => {
     setSeleccionVivienda(e.target.value);
@@ -263,311 +251,322 @@ const AltaSocio = ({ setIdentificadorComponente }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
-      <form
-        onSubmit={handleSubmit}
-        className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
-      >
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-2" htmlFor="nroSocio">
-            Nro. Socio:
-          </label>
-          <input
-            type="text"
-            id="nroSocio"
-            name="nroSocio"
-            value={NroSocio}
-            onChange={handleChangeNroSocio}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          />
-          {Errores.nroSocio && (
-            <span className="text-red-500 text-sm">{Errores.nroSocio}</span>
-          )}
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="nombreSocio"
-            >
-              Nombres:
-            </label>
-            <input
-              type="text"
-              id="nombreSocio"
-              name="nombreSocio"
-              value={NombreSocio}
-              onChange={handleChangeNombreSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.nombreSocio && (
-              <span className="text-red-500 text-sm">
-                {Errores.nombreSocio}
-              </span>
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="apellidoSocio"
-            >
-              Apellidos:
-            </label>
-            <input
-              type="text"
-              id="apellidoSocio"
-              name="apellidoSocio"
-              value={ApellidoSocio}
-              onChange={handleChangeApellidoSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.apellidoSocio && (
-              <span className="text-red-500 text-sm">
-                {Errores.apellidoSocio}
-              </span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="cedulaSocio"
-            >
-              Número de CI.:
-            </label>
-            <input
-              type="text"
-              id="cedulaSocio"
-              name="cedulaSocio"
-              value={CedulaSocio}
-              onChange={handleChangeCedulaSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.cedulaSocio && (
-              <span className="text-red-500 text-sm">
-                {Errores.cedulaSocio}
-              </span>
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="telefonoSocio"
-            >
-              Teléfono:
-            </label>
-            <input
-              type="text"
-              id="telefonoSocio"
-              name="telefonoSocio"
-              value={TelefonoSocio}
-              onChange={handleChangeTelefonoSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.telefonoSocio && (
-              <span className="text-red-500 text-sm">
-                {Errores.telefonoSocio}
-              </span>
-            )}
-          </div>
-        </div>
-        <div className="grid md:grid-cols-2 md:gap-6">
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="capitalSocio"
-            >
-              Capital UR:
-            </label>
-            <input
-              type="text"
-              id="capitalSocio"
-              name="capitalSocio"
-              value={CapitalSocio}
-              onChange={handleChangeCapitalSocio}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.capitalSocio && (
-              <span className="text-red-500 text-sm">
-                {Errores.capitalSocio}
-              </span>
-            )}
-          </div>
-          <div className="mb-4">
-            <label
-              className="block text-sm font-medium mb-2"
-              htmlFor="fechaIngreso"
-            >
-              Fecha de Ingreso a La Cooperativa:
-            </label>
-            <input
-              type="date"
-              id="fechaIngreso"
-              name="fechaIngreso"
-              value={FechaIngresoCooperativa}
-              onChange={handleChangeFechaIngreso}
-              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-            />
-            {Errores.fechaIngresoCooperativa && (
-              <span className="text-red-500 text-sm">
-                {Errores.fechaIngresoCooperativa}
-              </span>
-            )}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="seleccionVivienda"
-          >
-            Seleccione una vivienda:
-          </label>
-          <select
-            id="seleccionVivienda"
-            name="seleccionVivienda"
-            value={SeleccionVivienda}
-            onChange={handleChangeSeleccionVivienda}
-            className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-          >
-            <option value="">Seleccione una vivienda</option>
-            {ViviendasDisponibles.map((vivienda) => (
-              <option key={vivienda.nroVivienda} value={vivienda.nroVivienda}>
-                {`Vivienda Nro.: ${vivienda.nroVivienda} - ${vivienda.cantidadDormitorios} dormitorios`}
-              </option>
-            ))}
-          </select>
-          {Errores.seleccionVivienda && (
-            <span className="text-red-500 text-sm">
-              {Errores.seleccionVivienda}
-            </span>
-          )}
-        </div>
-
-        <div className="mb-4">
-          <label
-            className="block text-sm font-medium mb-2"
-            htmlFor="tieneSuplente"
-          >
-            Suplente:
-          </label>
-          <input
-            type="checkbox"
-            id="tieneSuplente"
-            name="tieneSuplente"
-            checked={TieneSuplente}
-            onChange={handleChangeTieneSuplente}
-            className="mr-2"
-          />
-        </div>
-        {TieneSuplente && (
-          <>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="mb-4">
-                <label
-                  className="block text-sm font-medium mb-2"
-                  htmlFor="nombreSuplente"
-                >
-                  Nombre del Suplente:
-                </label>
-                <input
-                  type="text"
-                  id="nombreSuplente"
-                  name="nombreSuplente"
-                  value={NombreSuplente}
-                  onChange={handleChangeNombreSuplente}
-                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                />
-                {Errores.nombreSuplente && (
-                  <span className="text-red-500 text-sm">
-                    {Errores.nombreSuplente}
-                  </span>
-                )}
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-sm font-medium mb-2"
-                  htmlFor="apellidoSuplente"
-                >
-                  Apellido del Suplente:
-                </label>
-                <input
-                  type="text"
-                  id="apellidoSuplente"
-                  name="apellidoSuplente"
-                  value={ApellidoSuplente}
-                  onChange={handleChangeApellidoSuplente}
-                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                />
-                {Errores.apellidoSuplente && (
-                  <span className="text-red-500 text-sm">
-                    {Errores.apellidoSuplente}
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="grid md:grid-cols-2 md:gap-6">
-              <div className="mb-4">
-                <label
-                  className="block text-sm font-medium mb-2"
-                  htmlFor="cedulaSuplente"
-                >
-                  Número de CI del Suplente:
-                </label>
-                <input
-                  type="text"
-                  id="cedulaSuplente"
-                  name="cedulaSuplente"
-                  value={CedulaSuplente}
-                  onChange={handleChangeCedulaSuplente}
-                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                />
-                {Errores.cedulaSuplente && (
-                  <span className="text-red-500 text-sm">
-                    {Errores.cedulaSuplente}
-                  </span>
-                )}
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-sm font-medium mb-2"
-                  htmlFor="telefonoSuplente"
-                >
-                  Teléfono del Suplente:
-                </label>
-                <input
-                  type="text"
-                  id="telefonoSuplente"
-                  name="telefonoSuplente"
-                  value={TelefonoSuplente}
-                  onChange={handleChangeTelefonoSuplente}
-                  className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
-                />
-                {Errores.telefonoSuplente && (
-                  <span className="text-red-500 text-sm">
-                    {Errores.telefonoSuplente}
-                  </span>
-                )}
-              </div>
-            </div>
-          </>
-        )}
-        <button
-          type="submit"
-          className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+    <>
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-800 text-black dark:text-white">
+        <form
+          onSubmit={handleSubmit}
+          className="w-full min-h-screen min-w-lg bg-gray-100 dark:bg-gray-900 p-8 rounded-lg shadow-md"
         >
-          Agregar
-        </button>
-        {mostrarModal && (
-          <ModalConfirmacion
-            mensaje="¿Está seguro de que desea dar de alta este socio?"
-            onConfirm={handleConfirmacion}
-            onCancel={() => setMostrarModal(false)}
-          />
-        )}
-      </form>
-    </div>
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="nroSocio"
+            >
+              Nro. Socio:
+            </label>
+            <input
+              type="text"
+              id="nroSocio"
+              name="nroSocio"
+              value={NroSocio}
+              onChange={handleChangeNroSocio}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+            {Errores.nroSocio && (
+              <span className="text-red-500 text-sm">{Errores.nroSocio}</span>
+            )}
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="nombreSocio"
+              >
+                Nombres:
+              </label>
+              <input
+                type="text"
+                id="nombreSocio"
+                name="nombreSocio"
+                value={NombreSocio}
+                onChange={handleChangeNombreSocio}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {Errores.nombreSocio && (
+                <span className="text-red-500 text-sm">
+                  {Errores.nombreSocio}
+                </span>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="apellidoSocio"
+              >
+                Apellidos:
+              </label>
+              <input
+                type="text"
+                id="apellidoSocio"
+                name="apellidoSocio"
+                value={ApellidoSocio}
+                onChange={handleChangeApellidoSocio}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {Errores.apellidoSocio && (
+                <span className="text-red-500 text-sm">
+                  {Errores.apellidoSocio}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="cedulaSocio"
+              >
+                Número de CI.:
+              </label>
+              <input
+                type="text"
+                id="cedulaSocio"
+                name="cedulaSocio"
+                value={CedulaSocio}
+                onChange={handleChangeCedulaSocio}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {Errores.cedulaSocio && (
+                <span className="text-red-500 text-sm">
+                  {Errores.cedulaSocio}
+                </span>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="telefonoSocio"
+              >
+                Teléfono:
+              </label>
+              <input
+                type="text"
+                id="telefonoSocio"
+                name="telefonoSocio"
+                value={TelefonoSocio}
+                onChange={handleChangeTelefonoSocio}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {Errores.telefonoSocio && (
+                <span className="text-red-500 text-sm">
+                  {Errores.telefonoSocio}
+                </span>
+              )}
+            </div>
+          </div>
+          <div className="grid md:grid-cols-2 md:gap-6">
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="capitalSocio"
+              >
+                Capital UR:
+              </label>
+              <input
+                type="text"
+                id="capitalSocio"
+                name="capitalSocio"
+                value={CapitalSocio}
+                onChange={handleChangeCapitalSocio}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {Errores.capitalSocio && (
+                <span className="text-red-500 text-sm">
+                  {Errores.capitalSocio}
+                </span>
+              )}
+            </div>
+            <div className="mb-4">
+              <label
+                className="block text-sm font-medium mb-2"
+                htmlFor="fechaIngreso"
+              >
+                Fecha de Ingreso a La Cooperativa:
+              </label>
+              <input
+                type="date"
+                id="fechaIngreso"
+                name="fechaIngreso"
+                value={FechaIngresoCooperativa}
+                onChange={handleChangeFechaIngreso}
+                className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+              />
+              {Errores.fechaIngresoCooperativa && (
+                <span className="text-red-500 text-sm">
+                  {Errores.fechaIngresoCooperativa}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="seleccionVivienda"
+            >
+              Seleccione una vivienda:
+            </label>
+            <select
+              id="seleccionVivienda"
+              name="seleccionVivienda"
+              value={SeleccionVivienda}
+              onChange={handleChangeSeleccionVivienda}
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="">Seleccione una vivienda</option>
+              {!isLoading &&
+                !error &&
+                ViviendasDisponibles &&
+                ViviendasDisponibles.map((vivienda) => (
+                  <option
+                    key={vivienda.nroVivienda}
+                    value={vivienda.nroVivienda}
+                  >
+                    {`Vivienda Nro.: ${vivienda.nroVivienda} - ${vivienda.cantidadDormitorios} dormitorios`}
+                  </option>
+                ))}
+            </select>
+            {Errores.seleccionVivienda && (
+              <span className="text-red-500 text-sm">
+                {Errores.seleccionVivienda}
+              </span>
+            )}
+          </div>
+
+          <div className="mb-4">
+            <label
+              className="block text-sm font-medium mb-2"
+              htmlFor="tieneSuplente"
+            >
+              Suplente:
+            </label>
+            <input
+              type="checkbox"
+              id="tieneSuplente"
+              name="tieneSuplente"
+              checked={TieneSuplente}
+              onChange={handleChangeTieneSuplente}
+              className="mr-2"
+            />
+          </div>
+          {TieneSuplente && (
+            <>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="nombreSuplente"
+                  >
+                    Nombre del Suplente:
+                  </label>
+                  <input
+                    type="text"
+                    id="nombreSuplente"
+                    name="nombreSuplente"
+                    value={NombreSuplente}
+                    onChange={handleChangeNombreSuplente}
+                    className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  />
+                  {Errores.nombreSuplente && (
+                    <span className="text-red-500 text-sm">
+                      {Errores.nombreSuplente}
+                    </span>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="apellidoSuplente"
+                  >
+                    Apellido del Suplente:
+                  </label>
+                  <input
+                    type="text"
+                    id="apellidoSuplente"
+                    name="apellidoSuplente"
+                    value={ApellidoSuplente}
+                    onChange={handleChangeApellidoSuplente}
+                    className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  />
+                  {Errores.apellidoSuplente && (
+                    <span className="text-red-500 text-sm">
+                      {Errores.apellidoSuplente}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="grid md:grid-cols-2 md:gap-6">
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="cedulaSuplente"
+                  >
+                    Número de CI del Suplente:
+                  </label>
+                  <input
+                    type="text"
+                    id="cedulaSuplente"
+                    name="cedulaSuplente"
+                    value={CedulaSuplente}
+                    onChange={handleChangeCedulaSuplente}
+                    className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  />
+                  {Errores.cedulaSuplente && (
+                    <span className="text-red-500 text-sm">
+                      {Errores.cedulaSuplente}
+                    </span>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <label
+                    className="block text-sm font-medium mb-2"
+                    htmlFor="telefonoSuplente"
+                  >
+                    Teléfono del Suplente:
+                  </label>
+                  <input
+                    type="text"
+                    id="telefonoSuplente"
+                    name="telefonoSuplente"
+                    value={TelefonoSuplente}
+                    onChange={handleChangeTelefonoSuplente}
+                    className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+                  />
+                  {Errores.telefonoSuplente && (
+                    <span className="text-red-500 text-sm">
+                      {Errores.telefonoSuplente}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+          <button
+            type="submit"
+            className="w-full py-2 mb-14 bg-blue-500 hover:bg-blue-700 text-white font-semibold rounded-md transition duration-200"
+          >
+            Agregar
+          </button>
+          {mostrarModal && (
+            <ModalConfirmacion
+              mensaje="¿Está seguro de que desea dar de alta este socio?"
+              onConfirm={handleConfirmacion}
+              onCancel={() => setMostrarModal(false)}
+            />
+          )}
+        </form>
+      </div>
+    </>
   );
 };
 export default AltaSocio;

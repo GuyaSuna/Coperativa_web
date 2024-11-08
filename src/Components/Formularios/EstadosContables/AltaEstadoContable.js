@@ -5,14 +5,14 @@ import {
   getAllEgresosByMes,
   getAllIngresosByMes,
   postEstadoContable,
+  getUltimoEstadoContable,
 } from "../../../Api/api";
 import { MiembroContext } from "../../../Provider/provider";
 import "../../Formularios/EstadosContables/StyleEstadoContable.css";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
 
-const AltaEstadoContable = ({setIdentificadorComponente}) => {
-  const { cooperativa } = useContext(MiembroContext); // Obteniendo datos del contexto
-  const [id, setId] = useState(0);
+const AltaEstadoContable = ({ setIdentificadorComponente }) => {
+  const { cooperativa } = useContext(MiembroContext); 
   const [fecha, setFecha] = useState("");
   const [saldoFinalEnPesos, setSaldoFinalPesos] = useState(0);
   const [saldoFinalEnDolares, setSaldoFinalDolares] = useState(0);
@@ -20,11 +20,28 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
   const [totalIngresosDolares, setTotalIngresosDolares] = useState(0);
   const [totalEgresosPesos, setTotalEgresosPesos] = useState(0);
   const [totalEgresosDolares, setTotalEgresosDolares] = useState(0);
+  const [
+    estadoCuentaBancariaAnteriorEnPesos,
+    setEstadoCuentaBancariaAnteriorEnPesos,
+  ] = useState();
+  const [
+    estadoCuentaBancariaActualEnPesos,
+    setEstadoCuentaBancariaActualEnPesos,
+  ] = useState();
+  const [
+    estadoCuentaBancariaAnteriorEnDolares,
+    setEstadoCuentaBancariaAnteriorEnDolares,
+  ] = useState();
+  const [
+    estadoCuentaBancariaActualEnDolares,
+    setEstadoCuentaBancariaActualEnDolares,
+  ] = useState();
 
   const [listaEgresos, setListaEgresos] = useState([]);
   const [listaIngresos, setListaIngresos] = useState([]);
   const [errores, setErrores] = useState({});
   const [mostrarModal, setMostrarModal] = useState(false);
+
   useEffect(() => {
     fetchDatos();
   }, [fecha]);
@@ -32,7 +49,40 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setFecha(today);
+    fetchUltimoEstadoContable();
   }, []);
+
+  const ajustarFecha = (fechaString) => {
+    const date = new Date(fechaString);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); 
+    return date.toISOString().split('T')[0]; 
+  };
+  
+  const fetchUltimoEstadoContable = async () => {
+    const response = await getUltimoEstadoContable(cooperativa.idCooperativa);
+    console.log("ultimo estado contable", response);
+  
+    if (response && response.fecha) {
+      response.fecha = ajustarFecha(response.fecha);
+    }
+  
+    if (
+      response == null ||
+      (response.estadoCuentaBancariaActualEnPesos == null &&
+        response.estadoCuentaBancariaActualEnDolares == null)
+    ) {
+      setEstadoCuentaBancariaAnteriorEnDolares(0);
+      setEstadoCuentaBancariaAnteriorEnPesos(0);
+    } else {
+      setEstadoCuentaBancariaAnteriorEnPesos(
+        response.estadoCuentaBancariaActualEnDolares
+      );
+      setEstadoCuentaBancariaAnteriorEnDolares(
+        response.estadoCuentaBancariaActualEnPesos
+      );
+    }
+  };
+
   const fetchDatos = async () => {
     try {
       if (fecha) {
@@ -45,7 +95,6 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
           cooperativa.idCooperativa
         );
 
-
         setListaEgresos(egresos);
         setListaIngresos(ingresos);
 
@@ -55,11 +104,9 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
       console.error("Error al obtener los datos:", error);
     }
   };
-  // const handleId = (e) => setId(e.target.value);
   const handleChangeFecha = (e) => setFecha(e.target.value);
 
   const calcularTotales = (egresos, ingresos) => {
-    // Filtrar y sumar los ingresos y egresos por tipo de moneda
     const sumaIngresosPesos = ingresos
       .filter((ingreso) => ingreso.tipoMoneda === "UYU")
       .reduce((total, ingreso) => total + ingreso.ingreso, 0);
@@ -76,16 +123,15 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
       .filter((egreso) => egreso.tipoMoneda === "USD")
       .reduce((total, egreso) => total + egreso.egreso, 0);
 
-    // Establecer los totales
     setTotalIngresosPesos(sumaIngresosPesos);
     setTotalIngresosDolares(sumaIngresosDolares);
     setTotalEgresosPesos(sumaEgresosPesos);
     setTotalEgresosDolares(sumaEgresosDolares);
 
-    // Calcular saldo final por separado para cada moneda
     setSaldoFinalPesos(sumaIngresosPesos - sumaEgresosPesos);
     setSaldoFinalDolares(sumaIngresosDolares - sumaEgresosDolares);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -93,6 +139,7 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
 
     setMostrarModal(true);
   };
+
   const handleConfirmacion = async (e) => {
     e.preventDefault();
     setMostrarModal(false);
@@ -100,22 +147,30 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
     if (!validarFormulario()) return;
 
     const nuevoEstadoContable = {
-      fecha,
+      fecha: typeof fecha === 'string'
+        ? fecha 
+        : fecha?.toISOString().split('T')[0], 
       saldoFinalEnPesos,
       saldoFinalEnDolares,
       listaEgresos,
       listaIngresos,
+      estadoCuentaBancariaActualEnPesos,
+      estadoCuentaBancariaAnteriorEnPesos,
+      estadoCuentaBancariaActualEnDolares,
+      estadoCuentaBancariaAnteriorEnDolares
     };
+    console.log("Aca",nuevoEstadoContable)
     try {
       const response = await postEstadoContable(
         nuevoEstadoContable,
         cooperativa.idCooperativa
       );
-      setIdentificadorComponente(35)
+      setIdentificadorComponente(35);
     } catch (error) {
       console.error("Error al agregar estado contable:", error);
     }
   };
+
   const validarFormulario = () => {
     const errores = {};
     const fechaHoy = new Date().toISOString().split("T")[0];
@@ -137,8 +192,29 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg md:max-w-4xl bg-gray-100 dark:bg-gray-900 p-6 md:p-8 rounded-lg shadow-md"
       >
+        <div>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Anterior (Pesos):
+            <input
+              type="number"
+              value={estadoCuentaBancariaAnteriorEnPesos}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Anterior (Dólares):
+            <input
+              type="number"
+              value={estadoCuentaBancariaAnteriorEnDolares}
+              disabled
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+        </div>
+
         <label className="block text-sm font-medium mb-4">
-          FECHA:
+          Fecha Estado Contable:
           <input
             type="date"
             name="fecha"
@@ -277,6 +353,31 @@ const AltaEstadoContable = ({setIdentificadorComponente}) => {
         <h3 className="mt-2 text-lg font-bold">
           Saldo Final en Dólares: {saldoFinalEnDolares}
         </h3>
+
+        <div>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Actual (Pesos):
+            <input
+              type="number"
+              value={estadoCuentaBancariaActualEnPesos}
+              onChange={(e) =>
+                setEstadoCuentaBancariaActualEnPesos(e.target.value)
+              }
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+          <label className="block text-sm font-medium mb-4">
+            Estado de Cuenta Bancaria Actual (Dólares):
+            <input
+              type="number"
+              value={estadoCuentaBancariaActualEnDolares}
+              onChange={(e) =>
+                setEstadoCuentaBancariaActualEnDolares(e.target.value)
+              }
+              className="w-full p-2 border border-gray-300 rounded-md dark:border-gray-700 dark:bg-gray-800 dark:text-white"
+            />
+          </label>
+        </div>
 
         <button
           type="submit"

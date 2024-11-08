@@ -67,6 +67,7 @@ const Home = () => {
         cooperativaLoginRequest,
         RequestLogin.token
       );
+      
       router.push("./AdministradorHome");
     } catch (error) {
       console.error(error);
@@ -121,8 +122,7 @@ const Home = () => {
     loginMiembro(RequestLogin, cooperativaLoginRequest);
     login(token);
   };
-
-  // Funciones de manejo de entrada
+  
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };

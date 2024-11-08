@@ -23,27 +23,32 @@ import Buscador from "@/Components/Buscador.js";
 import VerSocio from "@/Components/VerDetalles/VerSocio/VerSocio.js";
 import SortIcon from "@mui/icons-material/Sort";
 import OrdenarPor from "@/Components/OrdenarPor.js";
+import { useGetAllSocios } from "@/Hooks/useSocios.js";
 
 const ListadoSocio = ({
   setSocio,
   setIdentificadorComponente,
   setSocioRecibo,
 }) => {
-  const [allSocios, setAllSocios] = useState([]);
   const { miembro, cooperativa } = useContext(MiembroContext);
+
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [recibos, setRecibos] = useState([]);
   const [verArchivados, setVerArchivados] = useState(false);
-
+  const {data: allSocios =[], isLoading, error,} = useGetAllSocios(cooperativa.idCooperativa);
+  
+  
   useEffect(() => {
     const filteredSocios = allSocios.filter((socio) =>
       !verArchivados ? !socio.archivado : socio.archivado
     );
     setBuscadorFiltrado(filteredSocios);
   }, [allSocios, verArchivados]);
+
+
 
   const handleVerArchivados = () => {
     setVerArchivados(!verArchivados);
@@ -55,7 +60,7 @@ const ListadoSocio = ({
   }, [cooperativa]);
 
   const fetchAllData = async () => {
-    await Promise.all([fetchRecibos(), fetchAllSocios()]);
+    await Promise.all([fetchRecibos()]);
   };
 
   const fetchRecibos = async () => {
@@ -63,29 +68,8 @@ const ListadoSocio = ({
     setRecibos(reciboResponse);
   };
 
-  const fetchAllSocios = async () => {
-    try {
-      const response = await getAllSocios(cooperativa.idCooperativa);
-      const sociosConFechaFormateada = response.map((socio) => {
-        if (socio.fechaIngresoCooeprativa) {
-          const fechaISO = parseISO(socio.fechaIngresoCooeprativa);
-          const fechaFormateada = format(fechaISO, "yyyy-MM-dd");
-          return {
-            ...socio,
-            fechaIngresoCooeprativa: fechaFormateada,
-          };
-        } else {
-          return socio;
-        }
-      });
 
-      setAllSocios(sociosConFechaFormateada);
-      setBuscadorFiltrado(sociosConFechaFormateada);
-    } catch (error) {
-      console.error("Error al obtener los socios:", error);
-    }
-  };
-
+  
   const handleArchivar = async (socio) => {
     const confirmacion = window.confirm(
       `¿Estás seguro de que deseas archivar al socio ${socio.nombreSocio} ${socio.apellidoSocio}? No podra ser desarchivado luego`
@@ -120,9 +104,7 @@ const ListadoSocio = ({
           viviedaResponse.socio
         );
 
-        setAllSocios((prevSocios) =>
-          prevSocios.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
-        );
+       
         setBuscadorFiltrado((prevFiltrado) =>
           prevFiltrado.filter((s) => s.cedulaSocio !== socio.cedulaSocio)
         );
@@ -201,10 +183,8 @@ const ListadoSocio = ({
     let sociosFiltrados = [...allSocios];
 
     if (option.key === "archivados") {
-      // Mostrar solo los archivados al seleccionar esta opción
       sociosFiltrados = sociosFiltrados.filter((socio) => socio.archivado);
     } else {
-      // Filtrar para excluir archivados por defecto al ordenar por otras opciones
       sociosFiltrados = sociosFiltrados.filter((socio) => !socio.archivado);
     }
 
@@ -241,6 +221,10 @@ const ListadoSocio = ({
     setIdentificadorComponente(6);
   };
   return (
+    <>
+    {isLoading && <div>cargando...</div>}
+    {error && <div>Ah ocurrido un error</div>}
+    {allSocios && !isLoading && !error &&
     <div className="sm:p-7 p-4">
       <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
         <div className="w-full md:w-1/2">
@@ -458,7 +442,8 @@ const ListadoSocio = ({
           socio={socioSeleccionado}
         />
       )}
-    </div>
+    </div>}
+    </>
   );
 };
 

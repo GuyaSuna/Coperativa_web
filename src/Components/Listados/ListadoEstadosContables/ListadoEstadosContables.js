@@ -5,14 +5,12 @@ import { getAllEstadosContables, deleteEstadoContable } from "@/Api/api";
 import { MiembroContext } from "@/Provider/provider";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import VerEstadoContable from "@/Components/VerDetalles/VerEstadoContablePDF/VerEstadoContablePDF";
-import Buscador from "@/Components/Buscador.js";
 import OrdenarPor from "@/Components/OrdenarPor.js";
 import SortIcon from "@mui/icons-material/Sort";
 
 const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
   const [allEstadosContables, setAllEstadosContables] = useState([]);
-  const [estadoContableSeleccionado, setEstadoContableSeleccionado] =
-    useState(null);
+  const [estadoContableSeleccionado, setEstadoContableSeleccionado] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(null);
   const [buscador, setBuscador] = useState("");
   const [buscadorFiltrado, setBuscadorFiltrado] = useState(allEstadosContables);
@@ -22,10 +20,24 @@ const ListadoEstadoContables = ({ setIdentificadorComponente }) => {
     fetchAllEstadosContables();
   }, []);
 
+  const ajustarFecha = (fechaString) => {
+    const date = new Date(fechaString);
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); 
+    return date.toISOString().split('T')[0]; 
+  };
+
   const fetchAllEstadosContables = async () => {
     try {
       const response = await getAllEstadosContables(cooperativa.idCooperativa);
-      setAllEstadosContables(response);
+
+      const estadosAjustados = response.map((estado) => {
+        if (estado.fecha) {
+          estado.fecha = ajustarFecha(estado.fecha);
+        }
+        return estado;
+      });
+  
+      setAllEstadosContables(estadosAjustados);
     } catch (error) {
       console.error("Error al obtener los Estados Contables:", error);
     }
