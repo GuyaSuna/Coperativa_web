@@ -4,7 +4,7 @@ import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { postAviso, postAvisoToAll } from "../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
-import useUsuarios from "../../../Hooks/useUsuarios";
+import useUsuarios from "../../../Hooks/Usuarios/useUsuarios";
 
 const AltaAviso = () => {
   const { miembro, cooperativa } = useContext(MiembroContext);

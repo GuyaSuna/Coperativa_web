@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { register } from "@/Api/api";
-import { useActiveSocios } from "@/Hooks/useSociosActivos";
+import { useSociosActivos } from "@/Hooks/Socios/useSociosActivos";
 
 const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
   const [selectedSocio, setSelectedSocio] = useState("");
@@ -17,10 +17,10 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
   const router = useRouter();
 
   const {
-    data: socios,
+    data: sociosActivos,
     isLoading,
     error: sociosError,
-  } = useActiveSocios(cooperativa.idCooperativa);
+  } = useSociosActivos(cooperativa.idCooperativa);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,7 +100,7 @@ const AltaAdministrador = ({ cooperativa, setIdentificadorComponente }) => {
             <option value="">Seleccione un socio</option>
             {!isLoading &&
               !sociosError &&
-              socios?.map((socio) => (
+              sociosActivos?.map((socio) => (
                 <option key={socio.cedulaSocio} value={socio.cedulaSocio}>
                   {socio.nombreSocio} {socio.apellidoSocio} ({socio.cedulaSocio}
                   )

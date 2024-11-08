@@ -5,7 +5,7 @@ import "./FormStyle.css";
 import { postSocio, postSuplente } from "../../../../Api/api.js";
 import { MiembroContext } from "@/Provider/provider";
 import { ModalConfirmacion } from "@/Components/ModalConfirmacion";
-import { useViviendasDisponibles } from "@/Hooks/useViviendasDisponibles";
+import { useViviendasDisponibles } from "@/Hooks/Viviendas/useViviendasDisponibles";
 
 const AltaSocio = ({ setIdentificadorComponente }) => {
   const { miembro, cooperativa, loginMiembro } = useContext(MiembroContext);
