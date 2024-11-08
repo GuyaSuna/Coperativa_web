@@ -37,7 +37,7 @@ const ListadoSocio = ({
   const [socioSeleccionado, setSocioSeleccionado] = useState(null);
   const [recibos, setRecibos] = useState([]);
   const [verArchivados, setVerArchivados] = useState(false);
-  const {data: allSocios =[], isLoading, error, refetch} = useGetAllSocios(cooperativa.idCooperativa);
+  const {data: allSocios =[], isLoading, error} = useGetAllSocios(cooperativa.idCooperativa);
   
   useEffect(() => {
     const filteredSocios = allSocios?.filter((socio) =>
