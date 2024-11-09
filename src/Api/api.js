@@ -43,11 +43,13 @@ export const getSocio = async (cedulaSocio) => (await api.get(`/socio/${cedulaSo
 
 export const getRecibosImpagosSocio = async (cedulaSocio, idCooperativa) => (await api.get(`/recibo/getRecibosImpagos/${cedulaSocio}/${idCooperativa}`, { needsAuth: true })).data;
 
+//Sacar modificaciones de este metodo y hacer uno nuevo solo para las listas
 export const getAllSocios = async (idCooperativa, page = 0, size = 10) => {
   const response = await api.get(`/socio/allSocios/${idCooperativa}?page=${page}&size=${size}`, { needsAuth: true });
   console.log("RespuestaGetAllSocio",response.data)
   return response.data.content.filter(socio => socio != null);
 };
+
 
 export const getAllSociosImpagos = async (idCooperativa) => (await api.get(`/socio/SociosImpagos/${idCooperativa}`, { needsAuth: true })).data;
 
